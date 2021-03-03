@@ -1,0 +1,5 @@
+madcoders_rma_authcode:
+    prefix: /rma/authcode
+    resource: |
+        alias: madcoders.authcode
+    type: sylius.resource_api
