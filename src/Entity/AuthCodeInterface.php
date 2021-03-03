@@ -1,5 +1,10 @@
 <?php
-
+/*
+ * This file is part of the Madcoders RMA Plugin.
+ *
+ * (c) Piotr Lewandowski
+ *
+ */
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
@@ -49,4 +54,5 @@ interface AuthCodeInterface
     /**
      * @param \DateTimeInterface|null $expiresAt
      */
+    public function setExpiresAt(?\DateTimeInterface $expiresAt): void;
 }
