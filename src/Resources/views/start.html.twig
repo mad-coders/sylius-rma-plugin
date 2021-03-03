@@ -1,0 +1,27 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
+
+{% block content %}
+    <div class="ui hidden divider"></div>
+    <div class="ui two column centered stackable grid">
+        <div class="column">
+            <h1 class="ui header">
+                <i class="circular truck icon"></i>
+                <div class="content">
+                    {{ 'sylius.ui.return'|trans }}
+                    <div class="sub header">{{ 'sylius.ui.return'|trans }}</div>
+                </div>
+            </h1>
+            <div class="ui segment">
+
+                starty
+                {{ form_start(form, {'action': path('madcoders_rma_start'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+                {{ form_row(form.orderNumber, sylius_test_form_attribute('return-orderNumber')) }}
+                {{ form_row(form._token) }}
+                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'sylius.ui.send'|trans }}</button>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
