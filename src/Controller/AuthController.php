@@ -33,17 +33,13 @@ final class AuthController extends AbstractController
     /** @var EngineInterface|Environment */
     private $templatingEngine;
 
-    /**
-     * @var ChannelContextInterface
-     */
+    /** @var ChannelContextInterface */
     private $channelContext;
 
     /** @var RouterInterface */
     private $router;
 
-    /**
-     * @var AuthCodeEmailSenderInterface
-     */
+    /** @var AuthCodeEmailSenderInterface */
     private $authCodeEmailManager;
 
     /**
@@ -124,5 +120,4 @@ final class AuthController extends AbstractController
 
         return $attributes[$attributeName] ?? $default;
     }
-
 }
