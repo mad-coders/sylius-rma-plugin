@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
+use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
 
 final class AuthController extends AbstractController
 {
@@ -41,20 +42,26 @@ final class AuthController extends AbstractController
     private $router;
 
     /**
+     * @var AuthCodeEmailSenderInterface
+     */
+    private $authCodeEmailManager;
+
+    /**
      * AuthController constructor.
      * @param FormFactoryInterface $formFactory
      * @param EngineInterface|Environment $templatingEngine
      * @param ChannelContextInterface $channelContext
      * @param RouterInterface $router
+     * @param AuthCodeEmailSenderInterface $authCodeEmailManager
      */
-    public function __construct(FormFactoryInterface $formFactory, $templatingEngine, ChannelContextInterface $channelContext, RouterInterface $router)
+    public function __construct(FormFactoryInterface $formFactory, $templatingEngine, ChannelContextInterface $channelContext, RouterInterface $router, AuthCodeEmailSenderInterface $authCodeEmailManager)
     {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->channelContext = $channelContext;
         $this->router = $router;
+        $this->authCodeEmailManager = $authCodeEmailManager;
     }
-
 
     public function start(Request $request, string $template): Response
     {
@@ -85,6 +92,7 @@ final class AuthController extends AbstractController
                 $authCodeData->setExpiresAt($startDate->add($dateInterval));
 
                 $entityManager->persist($authCodeData);
+                $this->authCodeEmailManager->sendAuthCodeEmail($authCodeData, $customerEmail);
 
             }
             $entityManager->flush();

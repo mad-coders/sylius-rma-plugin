@@ -14,7 +14,7 @@ final class AuthCodeEmailSender  implements AuthCodeEmailSenderInterface
 
 
     public function __construct(
-        SenderInterface $emailSender,
+        SenderInterface $emailSender
     ) {
         $this->emailSender = $emailSender;
 
