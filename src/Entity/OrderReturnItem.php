@@ -19,6 +19,11 @@ class OrderReturnItem implements ResourceInterface
     private $id;
 
     /**
+     * @var OrderReturn
+     */
+    private $orderReturn;
+
+    /**
      * @var string
      */
     private $productName;
@@ -47,6 +52,22 @@ class OrderReturnItem implements ResourceInterface
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return OrderReturn
+     */
+    public function getOrderReturn(): OrderReturn
+    {
+        return $this->orderReturn;
+    }
+
+    /**
+     * @param OrderReturn $orderReturn
+     */
+    public function setOrderReturn(OrderReturn $orderReturn): void
+    {
+        $this->orderReturn = $orderReturn;
     }
 
     /**

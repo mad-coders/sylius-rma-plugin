@@ -14,6 +14,8 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="id" field="items" />
+
         <field name="orderNumber" column="order_number" type="text" />
         <field name="channelCode" column="channel_code" type="string" />
         <field name="returnReason" column="return_reason" type="text" />
