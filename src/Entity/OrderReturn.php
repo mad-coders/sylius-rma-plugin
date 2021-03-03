@@ -11,9 +11,10 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
+use Sylius\Component\Resource\Model\TimestampableInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
-class OrderReturn implements OrderReturnInterface, ResourceInterface
+class OrderReturn implements OrderReturnInterface, ResourceInterface, TimestampableInterface
 {
     use TimestampableTrait;
 
@@ -40,12 +41,12 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
     /**
      * @var string|null
      */
-    private $firstName;
+    private $firstname;
 
     /**
      * @var string|null
      */
-    private $lastName;
+    private $lastname;
 
     /**
      * @var string|null
@@ -98,12 +99,12 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
     private $customerIp;
 
     /**
-     * @var int
+     * @var bool
      */
-    private $orderReturnConsent;
+    private $orderReturnConsent = false;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $orderReturnConsentLabel;
 
@@ -158,49 +159,49 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnReason(): string
+    public function getReturnReason(): ?string
     {
         return $this->returnReason;
     }
 
     /**
-     * @param string $returnReason
+     * @param string|null $returnReason
      */
-    public function setReturnReason(string $returnReason): void
+    public function setReturnReason(?string $returnReason): void
     {
         $this->returnReason = $returnReason;
     }
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getOrderReturnConsent(): int
+    public function getOrderReturnConsent(): bool
     {
         return $this->orderReturnConsent;
     }
 
     /**
-     * @param int $orderReturnConsent
+     * @param bool $orderReturnConsent
      */
-    public function setOrderReturnConsent(int $orderReturnConsent): void
+    public function setOrderReturnConsent(bool $orderReturnConsent): void
     {
         $this->orderReturnConsent = $orderReturnConsent;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOrderReturnConsentLabel(): string
+    public function getOrderReturnConsentLabel(): ?string
     {
         return $this->orderReturnConsentLabel;
     }
 
     /**
-     * @param string $orderReturnConsentLabel
+     * @param string|null $orderReturnConsentLabel
      */
-    public function setOrderReturnConsentLabel(string $orderReturnConsentLabel): void
+    public function setOrderReturnConsentLabel(?string $orderReturnConsentLabel): void
     {
         $this->orderReturnConsentLabel = $orderReturnConsentLabel;
     }
@@ -210,15 +211,15 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
      */
     public function getFirstName(): ?string
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
     /**
-     * @param string|null $firstName
+     * @param string|null $firstname
      */
-    public function setFirstName(?string $firstName): void
+    public function setFirstName(?string $firstname): void
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
     }
 
     /**
@@ -226,15 +227,15 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
      */
     public function getLastName(): ?string
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
     /**
-     * @param string|null $lastName
+     * @param string|null $lastname
      */
-    public function setLastName(?string $lastName): void
+    public function setLastName(?string $lastname): void
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
     }
 
     /**
@@ -398,51 +399,31 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return OrderReturnInterface[]
      */
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTimeInterface|null $createdAt
-     */
-    public function setCreatedAt(?\DateTimeInterface $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTimeInterface|null $updatedAt
-     */
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * @return OrderReturnItem[]
-     */
-    public function getItems()
+    public function getItems(): iterable
     {
         return $this->items;
     }
 
     /**
-     * @param OrderReturnItem[] $items
+     * @param OrderReturnInterface $item
      */
-    public function setItems($items): void
+    public function addItem(OrderReturnInterface $item): void
     {
-        $this->items = $items;
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+        }
+    }
+
+    /**
+     * @param OrderReturnInterface $item
+     */
+    public function removeItem(OrderReturnInterface $item): void
+    {
+        if ($this->items->contains($item)) {
+            $this->items->removeElement($item);
+        }
     }
 
 }

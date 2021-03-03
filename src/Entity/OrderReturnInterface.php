@@ -49,34 +49,34 @@ interface OrderReturnInterface
     public function setChannelCode(string $channelCode): void;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReturnReason(): string;
+    public function getReturnReason(): ?string;
 
     /**
-     * @param string $returnReason
+     * @param string|null $returnReason
      */
-    public function setReturnReason(string $returnReason): void;
+    public function setReturnReason(?string $returnReason): void;
 
     /**
-     * @return int
+     * @return bool
      */
-    public function getOrderReturnConsent(): int;
+    public function getOrderReturnConsent(): bool;
 
     /**
-     * @param int $orderReturnConsent
+     * @param bool $orderReturnConsent
      */
-    public function setOrderReturnConsent(int $orderReturnConsent): void;
+    public function setOrderReturnConsent(bool $orderReturnConsent): void;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOrderReturnConsentLabel(): string;
+    public function getOrderReturnConsentLabel(): ?string;
 
     /**
-     * @param string $orderReturnConsentLabel
+     * @param string|null $orderReturnConsentLabel
      */
-    public function setOrderReturnConsentLabel(string $orderReturnConsentLabel): void;
+    public function setOrderReturnConsentLabel(?string $orderReturnConsentLabel): void;
 
     /**
      * @return string|null
@@ -84,9 +84,9 @@ interface OrderReturnInterface
     public function getFirstName(): ?string;
 
     /**
-     * @param string|null $firstName
+     * @param string|null $firstname
      */
-    public function setFirstName(?string $firstName): void;
+    public function setFirstName(?string $firstname): void;
 
     /**
      * @return string|null
@@ -94,9 +94,9 @@ interface OrderReturnInterface
     public function getLastName(): ?string;
 
     /**
-     * @param string|null $lastName
+     * @param string|null $lastname
      */
-    public function setLastName(?string $lastName): void;
+    public function setLastName(?string $lastname): void;
 
     /**
      * @return string|null
@@ -199,22 +199,17 @@ interface OrderReturnInterface
     public function setCustomerIp(string $customerIp): void;
 
     /**
-     * @return \DateTimeInterface|null
+     * @return OrderReturnInterface[]
      */
-    public function getCreatedAt(): ?\DateTimeInterface;
+    public function getItems(): iterable;
 
     /**
-     * @param \DateTimeInterface|null $createdAt
+     * @param OrderReturnInterface $item
      */
-    public function setCreatedAt(?\DateTimeInterface $createdAt): void;
+    public function addItem(OrderReturnInterface $item): void;
 
     /**
-     * @return \DateTimeInterface|null
+     * @param OrderReturnInterface $item
      */
-    public function getUpdatedAt(): ?\DateTimeInterface;
-
-    /**
-     * @param \DateTimeInterface|null $updatedAt
-     */
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void;
+    public function removeItem(OrderReturnInterface $item): void;
 }

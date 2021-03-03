@@ -51,11 +51,14 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         $orderReturn = new OrderReturn();
         $orderReturn->setOrderNumber($options['order_number']);
         $orderReturn->setChannelCode($options['channel_code']);
-        $orderReturn->setCustomerIp($options['customer_ip']);
+        $orderReturn->setReturnReason($options['return_reason']);
+        $orderReturn->setOrderReturnConsent($options['return_consent']);
+        $orderReturn->setOrderReturnConsentLabel($options['return_consent_label']);
         $orderReturn->setCity($options['city']);
         $orderReturn->setPostcode($options['postcode']);
         $orderReturn->setStreet($options['street']);
         $orderReturn->setPhoneNumber($options['phone_number']);
+        $orderReturn->setCustomerIp($options['customer_ip']);
 
         return $orderReturn;
     }
@@ -72,35 +75,39 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
             ->setRequired('order_number')
             ->setAllowedTypes('order_number', 'string')
 
-            ->setRequired('customer_ip')
-            ->setAllowedTypes('customer_ip', 'string')
-            ->setDefault('customer_ip', function (): string {
-                return $this->faker->ipv4;
-            })
+            ->setRequired('return_consent')
+            ->setAllowedTypes('return_consent', 'bool')
 
-            ->setRequired('city')
-            ->setAllowedTypes('city', 'string|null')
-            ->setDefault('city', function (): string {
+            ->setRequired('return_consent_label')
+            ->setAllowedTypes('return_consent_label', ['string', 'null'])
+
+            ->setRequired('return_reason')
+            ->setAllowedTypes('return_reason', 'string')
+
+            ->setDefault('customer_ip', function (Options $options): string {
+                return (string) $this->faker->ipv4;
+            })
+            ->setAllowedTypes('customer_ip', 'string')
+
+            ->setDefault('city', function (Options $options): string {
                 return $this->faker->city;
             })
+            ->setAllowedTypes('city', 'string')
 
-            ->setRequired('postcode')
+            ->setDefault('postcode', function (Options $options): string {
+                return (string) $this->faker->postcode;
+            })
             ->setAllowedTypes('postcode', 'string')
-            ->setDefault('postcode', function (): string {
-                return $this->faker->postcode;
-            })
 
-            ->setRequired('street')
+            ->setDefault('street', function (Options $options): string {
+                return (string) $this->faker->postcode;
+            })
             ->setAllowedTypes('street', 'string')
-            ->setDefault('street', function (): string {
-                return $this->faker->postcode;
-            })
 
-            ->setRequired('phone_number')
-            ->setAllowedTypes('phone_number', 'string')
-            ->setDefault('phone_number', function (): string {
-                return $this->faker->phoneNumber;
+            ->setDefault('phone_number', function (Options $options): string {
+                return (string) $this->faker->phoneNumber;
             })
+            ->setAllowedTypes('phone_number', 'string')
         ;
     }
 }
