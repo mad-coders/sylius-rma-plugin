@@ -1,0 +1,14 @@
+madcoders_rma_shop:
+    resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing/shop_routing.yml"
+    prefix: /{_locale}
+    requirements:
+        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
+
+madcoders_rma_admin:
+    resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing/admin_routing.yml"
+    prefix: /admin
+
+madcoders_rma_authcode:
+    resource: |
+        alias: madcoders.authcode
+    type: sylius.resource_api

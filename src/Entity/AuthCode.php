@@ -11,7 +11,7 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
-class AuthCode implements ResourceInterface
+class AuthCode implements ResourceInterface, AuthCodeInterface
 {
 
     /**
@@ -40,19 +40,11 @@ class AuthCode implements ResourceInterface
     private $expiresAt;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
