@@ -1,5 +1,5 @@
 {
-    "name": "madcoders/rma-sylius-plugin",
+    "name": "madcoders/sylius-rma-plugin",
     "type": "sylius-plugin",
     "description": "RMA Plugin",
     "authors": [
