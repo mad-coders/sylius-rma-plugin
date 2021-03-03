@@ -115,14 +115,6 @@ class OrderReturn implements ResourceInterface
     }
 
     /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
      * @return string
      */
     public function getOrderNumber(): string
