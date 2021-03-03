@@ -1,0 +1,5 @@
+sylius_mailer:
+  emails:
+    authcode_generated:
+      subject: sylius.emails.authcode_generated.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/authCodeGenerated.html.twig"

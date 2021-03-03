@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
