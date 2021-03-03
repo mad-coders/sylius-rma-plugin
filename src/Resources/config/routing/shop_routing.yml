@@ -1,0 +1,8 @@
+madcoders_rma_start:
+    path: /rma-start
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.auth_controller:start
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/start.html.twig'
+        _sylius:
+            redirect: sylius_shop_homepage

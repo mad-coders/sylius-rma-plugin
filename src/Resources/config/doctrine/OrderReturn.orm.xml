@@ -22,43 +22,19 @@
         <field name="orderReturnConsent" column="order_consent" type="integer" />
         <field name="orderReturnConsentLabel" column="order_consent_label" type="text" />
 
-        <field name="firstName" column="first_name" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="lastName" column="last_name" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="phoneNumber" column="phone_number" type="string" nullable="true">
-            <gedmo:versioned/>
-        </field>
-        <field name="countryCode" column="country_code" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="provinceCode" column="province_code" type="string" nullable="true">
-            <gedmo:versioned/>
-        </field>
-        <field name="provinceName" column="province_name" type="string" nullable="true">
-            <gedmo:versioned/>
-        </field>
-        <field name="street" column="street" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="company" column="company" type="string" nullable="true">
-            <gedmo:versioned/>
-        </field>
-        <field name="city" column="city" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="postcode" column="postcode" type="string">
-            <gedmo:versioned/>
-        </field>
+        <field name="firstName" column="first_name" type="string"/>
+        <field name="lastName" column="last_name" type="string"/>
+        <field name="phoneNumber" column="phone_number" type="string" nullable="true"/>
+        <field name="countryCode" column="country_code" type="string"/>
+        <field name="provinceCode" column="province_code" type="string" nullable="true"/>
+        <field name="provinceName" column="province_name" type="string" nullable="true"/>
+        <field name="street" column="street" type="string"/>
+        <field name="company" column="company" type="string" nullable="true"/>
+        <field name="city" column="city" type="string"/>
+        <field name="postcode" column="postcode" type="string"/>
 
-        <field name="orderReturnStatus" column="order_return_status" type="string">
-            <gedmo:versioned/>
-        </field>
-        <field name="customerIp" column="customer_ip" type="string">
-            <gedmo:versioned/>
-        </field>
+        <field name="orderReturnStatus" column="order_return_status" type="string"/>
+        <field name="customerIp" column="customer_ip" type="string"/>
 
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>

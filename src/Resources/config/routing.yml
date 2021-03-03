@@ -7,8 +7,3 @@ madcoders_rma_shop:
 madcoders_rma_admin:
     resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing/admin_routing.yml"
     prefix: /admin
-
-madcoders_rma_authcode:
-    resource: |
-        alias: madcoders.authcode
-    type: sylius.resource_api

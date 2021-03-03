@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
@@ -105,6 +107,16 @@ class OrderReturn implements ResourceInterface
      * @var string
      */
     private $orderReturnConsentLabel;
+
+    /**
+     * @var OrderReturnItem[]
+     */
+    private $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -416,6 +428,22 @@ class OrderReturn implements ResourceInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return OrderReturnItem[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param OrderReturnItem[] $items
+     */
+    public function setItems($items): void
+    {
+        $this->items = $items;
     }
 
 }
