@@ -1,12 +1,26 @@
 {
-    "name": "sylius/plugin-skeleton",
+    "name": "madcoders/rma-sylius-plugin",
     "type": "sylius-plugin",
-    "description": "Acme example plugin for Sylius.",
+    "description": "RMA Plugin",
+    "authors": [
+        {
+            "name": "Piotr Lewandowski",
+            "email": "p.lewandowski@madcoders.pl",
+            "homepage": "https://www.madcoders.pl",
+            "role": "Developer"
+        },
+        {
+            "name": "Leonid Moshko",
+            "email": "l.moshko@madcoders.pl",
+            "homepage": "https://www.madcoders.pl",
+            "role": "Developer"
+        }
+     ],
     "keywords": [
         "sylius",
         "sylius-plugin"
     ],
-    "license": "MIT",
+    "license": "proprietary",
     "require": {
         "php": "^7.3",
         "sylius/sylius": "~1.8.0 || ~1.9.0"
