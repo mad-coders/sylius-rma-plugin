@@ -68,8 +68,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Acme\\SyliusExamplePlugin\\": "src/",
-            "Tests\\Acme\\SyliusExamplePlugin\\": "tests/"
+            "Madcoders\\SyliusRmaPlugin\\": "src/",
+            "Tests\\Madcoders\\SyliusRmaPlugin\\": "tests/"
         }
     },
     "autoload-dev": {
