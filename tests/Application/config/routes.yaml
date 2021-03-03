@@ -1,9 +1,2 @@
-madcoders_rma_shop:
-    resource: "@MadcodersSyliusRmaPlugin/Resources/config/shop_routing.yml"
-    prefix: /{_locale}
-    requirements:
-        _locale: ^[a-z]{2}(?:_[A-Z]{2})?$
-
-madcoders_rma_admin:
-    resource: "@MadcodersSyliusRmaPlugin/Resources/config/admin_routing.yml"
-    prefix: /admin
+madcoders_rma:
+    resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing.yml"
