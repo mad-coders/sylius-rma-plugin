@@ -13,7 +13,6 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class AuthCode implements ResourceInterface, AuthCodeInterface
 {
-
     /**
      * @var int
      */
@@ -110,5 +109,4 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
     {
         $this->expiresAt = $expiresAt;
     }
-
 }
