@@ -8,5 +8,5 @@ use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 
 interface AuthCodeEmailSenderInterface
 {
-    public function sendAuthCodeEmail(AuthCodeInterface $invoice, string $customerEmail): void;
+    public function sendAuthCodeEmail(AuthCodeInterface $authCodeInterface, string $customerEmail): void;
 }
