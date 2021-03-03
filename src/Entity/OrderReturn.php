@@ -12,7 +12,7 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
-class OrderReturn implements ResourceInterface
+class OrderReturn implements OrderReturnInterface, ResourceInterface
 {
     use TimestampableTrait;
 
@@ -89,7 +89,7 @@ class OrderReturn implements ResourceInterface
     /**
      * @var string
      */
-    private $orderReturnStatus;
+    private $orderReturnStatus = self::STATUS_DRAFT;
 
     /**
      * @var string

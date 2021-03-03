@@ -11,6 +11,18 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 interface OrderReturnInterface
 {
+    const STATUS_DRAFT = 'draft';
+    const STATUS_NEW = 'new';
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REJECTED = 'rejected';
+
+    const STATUS_LIST = [
+        self::STATUS_DRAFT,
+        self::STATUS_NEW,
+        self::STATUS_ACCEPTED,
+        self::STATUS_REJECTED,
+    ];
+
     /**
      * @return int
      */
@@ -70,6 +82,7 @@ interface OrderReturnInterface
      * @return string|null
      */
     public function getFirstName(): ?string;
+
     /**
      * @param string|null $firstName
      */

@@ -26,6 +26,11 @@ final class OrderReturnFixture extends AbstractResourceFixture
             ->children()
                 ->scalarNode('channel_code')->cannotBeEmpty()->end()
                 ->scalarNode('order_number')->cannotBeEmpty()->end()
+                ->scalarNode('city')->end()
+                ->scalarNode('postcode')->end()
+                ->scalarNode('street')->end()
+                ->scalarNode('phone_number')->end()
+                ->scalarNode('customer_ip')->end()
         ;
     }
 }
