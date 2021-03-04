@@ -4,6 +4,7 @@
     <services>
         <defaults autoconfigure="true" autowire="true" public="true" />
 
+        <!-- Order Return -->
         <service id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return" class="Madcoders\SyliusRmaPlugin\Fixture\Factory\OrderReturnFixtureFactory">
             <argument id="sylius.repository.channel" type="service"/>
         </service>
@@ -11,6 +12,17 @@
         <service id="madcoders.sylius_rma_plugin.fixture.order_return" class="Madcoders\SyliusRmaPlugin\Fixture\OrderReturnFixture">
             <argument id="sylius.manager.channel" type="service"/>
             <argument id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return" type="service"/>
+            <tag name="sylius_fixtures.fixture"/>
+        </service>
+
+        <!-- Order Return Item-->
+        <service id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_item" class="Madcoders\SyliusRmaPlugin\Fixture\Factory\OrderReturnItemFixtureFactory">
+            <argument id="madcoders_rma.repository.order_return" type="service"/>
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.fixture.order_return_item" class="Madcoders\SyliusRmaPlugin\Fixture\OrderReturnItemFixture">
+            <argument id="sylius.manager.channel" type="service"/>
+            <argument id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_item" type="service"/>
             <tag name="sylius_fixtures.fixture"/>
         </service>
     </services>

@@ -26,6 +26,7 @@ final class OrderReturnFixture extends AbstractResourceFixture
             ->children()
                 ->scalarNode('channel_code')->cannotBeEmpty()->end()
                 ->scalarNode('order_number')->cannotBeEmpty()->end()
+                ->scalarNode('return_number')->cannotBeEmpty()->end()
                 ->scalarNode('return_reason')->cannotBeEmpty()->end()
                 ->scalarNode('return_consent')->cannotBeEmpty()->end()
                 ->scalarNode('return_consent_label')->end()

@@ -31,6 +31,11 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     /**
      * @var string
      */
+    private $returnNumber;
+
+    /**
+     * @var string
+     */
     private $channelCode;
 
     /**
@@ -140,6 +145,22 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     public function setOrderNumber(string $orderNumber): void
     {
         $this->orderNumber = $orderNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReturnNumber(): string
+    {
+        return $this->returnNumber;
+    }
+
+    /**
+     * @param string $returnNumber
+     */
+    public function setReturnNumber(string $returnNumber): void
+    {
+        $this->returnNumber = $returnNumber;
     }
 
     /**

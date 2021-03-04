@@ -41,6 +41,16 @@ interface OrderReturnInterface
     /**
      * @return string
      */
+    public function getReturnNumber(): string;
+
+    /**
+     * @param string $returnNumber
+     */
+    public function setReturnNumber(string $returnNumber): void;
+
+    /**
+     * @return string
+     */
     public function getChannelCode(): string;
 
     /**
