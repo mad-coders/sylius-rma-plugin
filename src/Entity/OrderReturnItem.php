@@ -11,7 +11,7 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
-class OrderReturnItem implements ResourceInterface
+class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
 {
     /**
      * @var int
@@ -22,6 +22,11 @@ class OrderReturnItem implements ResourceInterface
      * @var OrderReturn
      */
     private $orderReturn;
+
+    /**
+     * @var string
+     */
+    private $productSku;
 
     /**
      * @var string
@@ -60,6 +65,22 @@ class OrderReturnItem implements ResourceInterface
     public function setOrderReturn(OrderReturn $orderReturn): void
     {
         $this->orderReturn = $orderReturn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductSku(): string
+    {
+        return $this->productSku;
+    }
+
+    /**
+     * @param string $productSku
+     */
+    public function setProductSku(string $productSku): void
+    {
+        $this->productSku = $productSku;
     }
 
     /**

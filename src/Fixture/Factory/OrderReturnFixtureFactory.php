@@ -50,6 +50,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
 
         $orderReturn = new OrderReturn();
         $orderReturn->setOrderNumber($options['order_number']);
+        $orderReturn->setReturnNumber($options['return_number']);
         $orderReturn->setChannelCode($options['channel_code']);
         $orderReturn->setReturnReason($options['return_reason']);
         $orderReturn->setOrderReturnConsent($options['return_consent']);
@@ -74,6 +75,9 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
 
             ->setRequired('order_number')
             ->setAllowedTypes('order_number', 'string')
+
+            ->setRequired('return_number')
+            ->setAllowedTypes('return_number', 'string')
 
             ->setRequired('return_consent')
             ->setAllowedTypes('return_consent', 'bool')

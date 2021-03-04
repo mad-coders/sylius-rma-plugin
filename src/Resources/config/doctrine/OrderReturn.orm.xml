@@ -7,7 +7,6 @@
 
     <mapped-superclass
             name="Madcoders\SyliusRmaPlugin\Entity\OrderReturn"
-            repository-class="Madcoders\SyliusRmaPlugin\Entity\OrderReturn\OrderReturnRepository"
             table="madcoders_rma_order_return"
     >
         <id name="id" type="integer" column="id">
@@ -16,7 +15,8 @@
 
         <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="id" field="items" />
 
-        <field name="orderNumber" column="order_number" type="text" />
+        <field name="orderNumber" unique="true" column="order_number" type="string" />
+        <field name="returnNumber" unique="true" column="return_number" type="string" />
         <field name="channelCode" column="channel_code" type="string" />
         <field name="returnReason" column="return_reason" type="string" />
         <field name="orderReturnConsent" column="order_consent" nullable="false" type="boolean" />
@@ -28,13 +28,13 @@
         <field name="countryCode" column="country_code" type="string" nullable="true" />
         <field name="provinceCode" column="province_code" type="string" nullable="true"/>
         <field name="provinceName" column="province_name" type="string" nullable="true"/>
-        <field name="street" column="street" type="string"/>
+        <field name="street" column="street" type="string" nullable="true"/>
         <field name="company" column="company" type="string" nullable="true"/>
-        <field name="city" column="city" type="string"/>
-        <field name="postcode" column="postcode" type="string"/>
+        <field name="city" column="city" type="string" nullable="true"/>
+        <field name="postcode" column="postcode" type="string" nullable="true"/>
 
         <field name="orderReturnStatus" column="order_return_status" type="string"/>
-        <field name="customerIp" column="customer_ip" type="string"/>
+        <field name="customerIp" column="customer_ip" type="string" nullable="true"/>
 
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>
