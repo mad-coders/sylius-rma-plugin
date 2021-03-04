@@ -1,0 +1,14 @@
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                madcoders_rma_order_return:
+                    options:
+                        custom:
+                            draft_order_return:
+                                order_number: "00000011"
+                                channel_code: "FASHION_WEB"
+                                return_reason: "damaged"
+                                return_consent: false
+                                return_consent_label: null
+

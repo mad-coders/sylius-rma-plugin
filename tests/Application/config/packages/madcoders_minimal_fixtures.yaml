@@ -1,0 +1,11 @@
+sylius_fixtures:
+    suites:
+        minimal:
+            fixtures:
+                madcoders_rma_order_return:
+                    options:
+                        custom:
+                            draft_order_return:
+                                order_number: "00000011"
+                                channel_code: "DEFAULT"
+
