@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
 
-use Madcoders\SyliusRmaPlugin\Entity\OrderItemReturnRequest;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturnRequest;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItem;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
+use Exception;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
 {
@@ -18,19 +21,59 @@ class ReturnRequestBuilder
      */
     private $orderRepository;
 
-    public function __construct(OrderRepositoryInterface $orderRepository)
+    /**
+     * @var RepositoryInterface
+     */
+    private $orderReturnRepository;
+
+    public function __construct(OrderRepositoryInterface $orderRepository, RepositoryInterface $orderReturnRepository)
     {
         $this->orderRepository = $orderRepository;
+        $this->orderReturnRepository = $orderReturnRepository;
     }
 
-    public function build(string $orderNumber): OrderReturn
+    /**
+     * @param string $orderNumber
+     * @return OrderReturnInterface
+     * @throws Exception
+     */
+    public function build(string $orderNumber): OrderReturnInterface
     {
         $order = $this->orderRepository->findOneByNumber($orderNumber);
-        $orderRequest = new OrderReturnRequest();
 
-        /**
-         * @var OrderItem $item
-         */
+        if (!$order instanceof OrderInterface) {
+            throw new Exception(sprintf('$order must implement %s interface', OrderInterface::class));
+        }
+
+        $c = [ 'orderNumber' => $orderNumber, 'orderReturnStatus' => OrderReturnInterface::STATUS_DRAFT ];
+        $orderReturn = $this->orderReturnRepository->findOneBy($c);
+
+        // if draft order already exists then return it
+        // ONLY ONE draft order return object per sales order is allowed
+        if ($orderReturn instanceof OrderReturnInterface) {
+            return $orderReturn;
+        }
+
+        $orderReturn = new OrderReturn();
+
+        // populate order data
+        $orderReturn->setReturnNumber('R' . $orderNumber . '-1');
+        $orderReturn->setChannelCode($order->getChannel()->getCode());
+        $orderReturn->setOrderNumber($order->getNumber());
+
+        // check if address exists
+        if (!$address = $order->getBillingAddress()) {
+            throw new Exception('Customer address is missing');
+        }
+
+        // populate address
+        $orderReturn->setStreet($address->getStreet());
+        $orderReturn->setPostcode($address->getPostcode());
+        $orderReturn->setCity($address->getCity());
+        $orderReturn->setCountryCode($address->getCountryCode());
+        $orderReturn->setPhoneNumber($address->getPhoneNumber());
+        $orderReturn->setCompany($address->getCompany());
+
         foreach ($order->getItems() as $item) {
             $orderItemVariant = $item->getVariant();
 
@@ -42,16 +85,21 @@ class ReturnRequestBuilder
                 throw new \Exception('Cannot create OrderItemReturnRequest for OrderItem without code.');
             }
 
-            $orderItemReturnRequest = new OrderItemReturnRequest(
-                $item->getProductName(),
-                $orderItemVariant->getCode(),
-                $item->getQuantity(),
-                0,
-            );
+            // TODO: $maxQty should be calculated based on following pattern: $qtyOrdered(orShipped) - $qtyAlreadyReturned
+            $maxQty = $item->getQuantity();
 
-            $orderRequest->addItem($orderItemReturnRequest);
-         }
+            $orderReturnItem= new OrderReturnItem();
+            $orderReturnItem->setUnitPrice($item->getUnitPrice());
+            $orderReturnItem->setProductName($item->getProductName());
+            $orderReturnItem->setProductSku($orderItemVariant->getCode());
+            $orderReturnItem->setMaxQty($maxQty);
+            $orderReturnItem->setReturnQty($maxQty);
 
-        return $orderRequest;
+            $orderReturn->addItem($orderReturnItem);
+        }
+
+        $this->orderReturnRepository->add($orderReturn);
+
+        return $orderReturn;
     }
 }

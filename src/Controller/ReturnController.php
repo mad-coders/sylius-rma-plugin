@@ -75,8 +75,8 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $orderReturnRequest = $this->returnRequestBuilder->build($orderNumber);
-        $form = $this->formFactory->create($formType, $orderReturnRequest);
+        $orderReturn = $this->returnRequestBuilder->build($orderNumber);
+        $form = $this->formFactory->create($formType, $orderReturn);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             var_dump($form->getData());

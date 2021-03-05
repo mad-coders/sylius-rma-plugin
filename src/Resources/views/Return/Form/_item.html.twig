@@ -1,7 +1,10 @@
 {% block madcoders_rma_return_item_widget %}
     {% apply spaceless %}
         <tr>
-            <td>{{ form_row(form.itemToReturn) }}</td>
+            <td>
+                {{ form_row(form.itemToReturn) }}
+                {{ form_row(form.id) }}
+            </td>
             <td class="single line">{{ form.vars.value.productName }}</td>
             <td class="left aligned">
                 {{ form.vars.value.productSku }}
@@ -10,6 +13,5 @@
                 <span class="sylius-quantity" style="display: inline-block" >{{ form_row(form.returnQty) }} </span> <span>/ {{ form.vars.value.maxQty }}</span>
             </td>
         </tr>
-        {{ form_row(form.productSku) }}
     {% endapply %}
 {% endblock %}

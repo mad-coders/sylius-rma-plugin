@@ -434,6 +434,7 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
+            $item->setOrderReturn($this);
         }
     }
 

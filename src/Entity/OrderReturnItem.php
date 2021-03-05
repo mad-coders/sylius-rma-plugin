@@ -21,12 +21,12 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     /**
      * @var int
      */
-    private $maxQty = 0;
+    private $id;
 
     /**
      * @var int
      */
-    private $id;
+    private $maxQty = 0;
 
     /**
      * @var OrderReturn
@@ -39,14 +39,14 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     private $productSku;
 
     /**
-     * @var ?string
+     * @var string|null
      */
     private $productName;
 
     /**
      * @var int
      */
-    private $returnQty;
+    private $returnQty = 0;
 
     /**
      * @var int
@@ -126,7 +126,7 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     }
 
     /**
-     * @return ?string
+     * @return string|null
      */
     public function getProductName(): ?string
     {
@@ -134,7 +134,7 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     }
 
     /**
-     * @param ?string $productName
+     * @param string|null $productName
      */
     public function setProductName(?string $productName): void
     {

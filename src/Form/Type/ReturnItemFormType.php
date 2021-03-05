@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderItemReturnRequest;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -23,18 +24,17 @@ final class ReturnItemFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('itemToReturn', CheckboxType::class, [
+            ->add('id', HiddenType::class, [
                 'label' => false,
-                'mapped' => false,
                 'required' => false,
             ])
-            ->add('productSku', HiddenType::class, [
+            ->add('itemToReturn', CheckboxType::class, [
+                'label' => false,
                 'required' => false,
             ])
             ->add('returnQty', NumberType::class, [
                 'label'       => false,
                 'required'    => true,
-                'data' => 0,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.return.not_blank',
@@ -49,7 +49,7 @@ final class ReturnItemFormType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class',  OrderItemReturnRequest::class);
+        $resolver->setDefault('data_class',  OrderReturnItem::class);
     }
 
     public function getBlockPrefix(): string
