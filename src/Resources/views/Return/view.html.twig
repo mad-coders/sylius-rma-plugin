@@ -18,8 +18,6 @@
             <div class="ui segment">
                 {{ form_start(form, {'action': path('madcoders_rma_return_form'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
 
-                {{ form_row(form.id) }}
-
                 <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }} class="ui very basic celled table">
                     <thead>
                     <tr>

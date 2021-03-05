@@ -18,6 +18,7 @@
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
             <argument type="service" id="session" />
+            <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
         </service>
 

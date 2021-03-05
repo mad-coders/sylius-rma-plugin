@@ -24,10 +24,6 @@ final class ReturnItemFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id', HiddenType::class, [
-                'label' => false,
-                'required' => false,
-            ])
             ->add('itemToReturn', CheckboxType::class, [
                 'label' => false,
                 'required' => false,

@@ -24,10 +24,6 @@ final class ReturnFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id', HiddenType::class, [
-                'label' => false,
-                'required' => false,
-            ])
             ->add('items', CollectionType::class, [
                 'entry_type' => ReturnItemFormType::class,
                 'label'    => false,

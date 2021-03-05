@@ -12,6 +12,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,6 +44,9 @@ final class ReturnController extends AbstractController
     /** @var ReturnRequestBuilder */
     private $returnRequestBuilder;
 
+    /** @var RepositoryInterface  */
+    private $orderReturnRepository;
+
     /**
      * ReturnController constructor.
      * @param FormFactoryInterface $formFactory
@@ -50,6 +54,7 @@ final class ReturnController extends AbstractController
      * @param ChannelContextInterface $channelContext
      * @param RouterInterface $router
      * @param SessionInterface $session
+     * @param RepositoryInterface $orderReturnRepository
      * @param ReturnRequestBuilder $returnRequestBuilder
      */
     public function __construct(
@@ -58,6 +63,7 @@ final class ReturnController extends AbstractController
         ChannelContextInterface $channelContext,
         RouterInterface $router,
         SessionInterface $session,
+        RepositoryInterface $orderReturnRepository,
         ReturnRequestBuilder $returnRequestBuilder)
     {
         $this->formFactory = $formFactory;
@@ -66,6 +72,7 @@ final class ReturnController extends AbstractController
         $this->router = $router;
         $this->session = $session;
         $this->returnRequestBuilder = $returnRequestBuilder;
+        $this->orderReturnRepository = $orderReturnRepository;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -79,7 +86,7 @@ final class ReturnController extends AbstractController
         $form = $this->formFactory->create($formType, $orderReturn);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            var_dump($form->getData());
+            $this->orderReturnRepository->add($orderReturn);
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
