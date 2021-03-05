@@ -12,7 +12,7 @@
         <many-to-one target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturn" inversed-by="items" field="orderReturn"/>
 
         <field name="productSku" column="product_sku" type="text" />
-        <field name="productName" column="product_name" type="text" />
+        <field name="productName" column="product_name" type="text" nullable="true" />
         <field name="returnQty" column="return_qty" type="integer" />
         <field name="unitPrice" column="unit_price" type="integer" />
 

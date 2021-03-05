@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
-use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
-
-class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
+class OrderItemReturnRequest
 {
     /**
      * @var bool
@@ -26,12 +24,7 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     /**
      * @var int
      */
-    private $id;
-
-    /**
-     * @var OrderReturn
-     */
-    private $orderReturn;
+    private $returnQty = 0;
 
     /**
      * @var string
@@ -39,19 +32,23 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     private $productSku;
 
     /**
-     * @var ?string
+     * @var string|null
      */
     private $productName;
 
-    /**
-     * @var int
-     */
-    private $returnQty;
-
-    /**
-     * @var int
-     */
-    private $unitPrice;
+    public function __construct(
+        ?string $productName,
+        string $productSku,
+        int $maxQty,
+        int $returnQty,
+        bool $itemToReturn = false)
+    {
+        $this->productName = $productName;
+        $this->productSku = $productSku;
+        $this->maxQty = $maxQty;
+        $this->returnQty = $returnQty;
+        $this->itemToReturn = $itemToReturn;
+    }
 
     /**
      * @return bool
@@ -88,25 +85,17 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getReturnQty(): int
     {
-        return $this->id;
+        return $this->returnQty;
     }
 
     /**
-     * @return OrderReturn
+     * @param int $returnQty
      */
-    public function getOrderReturn(): OrderReturn
+    public function setReturnQty(int $returnQty): void
     {
-        return $this->orderReturn;
-    }
-
-    /**
-     * @param OrderReturn $orderReturn
-     */
-    public function setOrderReturn(OrderReturn $orderReturn): void
-    {
-        $this->orderReturn = $orderReturn;
+        $this->returnQty = $returnQty;
     }
 
     /**
@@ -141,35 +130,7 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
         $this->productName = $productName;
     }
 
-    /**
-     * @return int
-     */
-    public function getReturnQty(): int
-    {
-        return $this->returnQty;
-    }
 
-    /**
-     * @param int $returnQty
-     */
-    public function setReturnQty(int $returnQty): void
-    {
-        $this->returnQty = $returnQty;
-    }
 
-    /**
-     * @return int
-     */
-    public function getUnitPrice(): int
-    {
-        return $this->unitPrice;
-    }
 
-    /**
-     * @param int $unitPrice
-     */
-    public function setUnitPrice(int $unitPrice): void
-    {
-        $this->unitPrice = $unitPrice;
-    }
 }

@@ -37,14 +37,14 @@ interface OrderReturnItemInterface
     public function setProductSku(string $productSku): void;
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getProductName(): string;
+    public function getProductName(): ?string;
 
     /**
-     * @param string $productName
+     * @param ?string $productName
      */
-    public function setProductName(string $productName): void;
+    public function setProductName(?string $productName): void;
 
     /**
      * @return int

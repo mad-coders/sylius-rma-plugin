@@ -1,0 +1,11 @@
+madcoders_rma:
+    ui:
+        return_reason: 'Return reason'
+        order_number: 'Podaj numer zamówienia'
+        return:
+            create_return_form: 'Create return form'
+            order_number_not_valid: 'No order that meets the criteria'
+            code_not_valid: 'code_not_valid'
+            enter_code_you_received: 'Enter the code you received'
+        auth_code:
+            not_blank: 'To pole nie moze być puste'

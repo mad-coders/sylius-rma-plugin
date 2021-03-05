@@ -10,22 +10,22 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-final class ReturnAuthStartType extends AbstractType
+final class ReturnAuthVerificationType extends AbstractType
 
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('orderNumber', TextType::class, [
-                'label'       => 'madcoders_rma.ui.order_number',
+            ->add('authCode', IntegerType::class, [
+                'label'       => 'madcoders_rma.ui.return.enter_code_you_received',
                 'required'    => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'madcoders_rma.order_number.not_blank',
+                        'message' => 'madcoders_rma.auth_code.not_blank',
                     ])
                 ],
             ]);
@@ -33,6 +33,6 @@ final class ReturnAuthStartType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'madcoders_rma_auth_start';
+        return 'madcoders_rma_auth_verification';
     }
 }

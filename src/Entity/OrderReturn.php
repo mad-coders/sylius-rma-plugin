@@ -420,7 +420,7 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     }
 
     /**
-     * @return OrderReturnInterface[]
+     * @return OrderReturnItemInterface[]
      */
     public function getItems(): iterable
     {
@@ -428,9 +428,9 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     }
 
     /**
-     * @param OrderReturnInterface $item
+     * @param OrderReturnItemInterface $item
      */
-    public function addItem(OrderReturnInterface $item): void
+    public function addItem(OrderReturnItemInterface $item): void
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
@@ -438,9 +438,9 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     }
 
     /**
-     * @param OrderReturnInterface $item
+     * @param OrderReturnItemInterface $item
      */
-    public function removeItem(OrderReturnInterface $item): void
+    public function removeItem(OrderReturnItemInterface $item): void
     {
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);

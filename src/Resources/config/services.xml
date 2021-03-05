@@ -6,6 +6,8 @@
     </imports>
 
     <services>
-        <!-- Put your services here -->
+        <service id="madcoders.sylius_rma_plugin.return_request_builder" class="Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder">
+            <argument type="service" id="sylius.repository.order" />
+        </service>
     </services>
 </container>
