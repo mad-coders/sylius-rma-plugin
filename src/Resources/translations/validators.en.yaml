@@ -1,0 +1,3 @@
+madcoders_rma:
+    validator:
+        return_qty_less_or_equal: 'You cannot return more than {{ compared_value }}.'

@@ -17,6 +17,26 @@ interface OrderReturnItemInterface
     public function getId(): ?int;
 
     /**
+     * @return bool
+     */
+    public function isItemToReturn(): bool;
+
+    /**
+     * @param bool $itemToReturn
+     */
+    public function setItemToReturn(bool $itemToReturn): void;
+
+    /**
+     * @return int
+     */
+    public function getMaxQty(): int;
+
+    /**
+     * @param int $maxQty
+     */
+    public function setMaxQty(int $maxQty): void;
+
+    /**
      * @return OrderReturn
      */
     public function getOrderReturn(): OrderReturn;
