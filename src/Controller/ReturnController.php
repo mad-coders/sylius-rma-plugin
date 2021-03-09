@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
+use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
@@ -77,21 +79,40 @@ final class ReturnController extends AbstractController
 
     public function viewIndex(Request $request, string $template): Response
     {
-        $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class);
+        $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class, );
         if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
             return $this->createMissingOrderNumberResponse($request);
         }
-
         $orderReturn = $this->returnRequestBuilder->build($orderNumber);
+        $returnNumber = $orderReturn->getReturnNumber();
         $form = $this->formFactory->create($formType, $orderReturn);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $this->orderReturnRepository->add($orderReturn);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_return_form_accept', ['returnNumber' => $returnNumber ]));
         }
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber,'form' => $form->createView()]));
+    }
+
+    public function acceptIndex(Request $request, string $template): Response
+    {
+        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
+
+        $returnOrder = $this->getDoctrine()
+            ->getRepository(OrderReturn::class)
+            ->findOneBy(array('returnNumber' => $request->attributes->get('returnNumber')));
+
+        $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class, );
+        $form = $this->formFactory->create($formType, $returnOrder);
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
-        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'form' => $form->createView()]));
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'returnOrder'=> $returnOrder, 'form' => $form->createView()]));
     }
 
     private function createMissingOrderNumberResponse(Request $request): RedirectResponse
@@ -105,13 +126,6 @@ final class ReturnController extends AbstractController
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('error', $errorMessage);
-
-        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'referer');
-        $redirectCode = $this->getSyliusAttribute($request, 'code', 'referer');
-
-        if ($redirectRoute) {
-            return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $redirectCode]));
-        }
 
         return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }

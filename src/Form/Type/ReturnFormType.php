@@ -11,6 +11,8 @@ namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
+use Sylius\Bundle\AddressingBundle\Form\Type\AddressType;
+use Sylius\Bundle\AddressingBundle\Form\Type\CountryCodeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -33,13 +35,45 @@ final class ReturnFormType extends AbstractType
             ])
             ->add('returnReason', TextType::class, [
                 'label'    => 'madcoders_rma.ui.return_reason',
-                'required' => false,
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.order_number.not_blank',
                     ])
                 ],
-            ]);
+            ])
+            ->add('firstName', TextType::class, [
+                'label' => 'sylius.form.address.first_name',
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'sylius.form.address.last_name',
+            ])
+            ->add('phoneNumber', TextType::class, [
+                'required' => false,
+                'label' => 'sylius.form.address.phone_number',
+            ])
+            ->add('company', TextType::class, [
+                'required' => false,
+                'label' => 'sylius.form.address.company',
+            ])
+            ->add('countryCode', CountryCodeChoiceType::class, [
+                'label' => 'sylius.form.address.country',
+                'enabled' => true,
+            ])
+            ->add('street', TextType::class, [
+                'label' => 'sylius.form.address.street',
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'sylius.form.address.city',
+            ])
+            ->add('postcode', TextType::class, [
+                'label' => 'sylius.form.address.postcode',
+            ])
+            ->add('provinceName', TextType::class, [
+                'label' => 'sylius.form.province.name',
+            ])
+
+        ;
     }
 
     /**
