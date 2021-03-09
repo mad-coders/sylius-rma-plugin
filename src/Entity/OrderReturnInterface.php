@@ -16,6 +16,12 @@ interface OrderReturnInterface
     const STATUS_ACCEPTED = 'accepted';
     const STATUS_REJECTED = 'rejected';
 
+    const TRANSITION_NEW = 'new';
+    const TRANSITION_ACCEPT = 'accept';
+    const TRANSITION_REJECT = 'reject';
+
+    const GRAPH = 'return_status';
+
     const STATUS_LIST = [
         self::STATUS_DRAFT,
         self::STATUS_NEW,

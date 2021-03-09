@@ -3,3 +3,40 @@ sylius_mailer:
     authcode_generated:
       subject: sylius.emails.authcode_generated.subject
       template: "@MadcodersSyliusRmaPlugin/Email/authCodeGenerated.html.twig"
+
+
+
+# order return state machine
+
+winzou_state_machine:
+  order_return:
+    class: 'Madcoders\SyliusRmaPlugin\Entity\OrderReturn'
+    graph: return_status
+    property_path: orderReturnStatus
+    state_machine_class: "%sylius.state_machine.class%"
+    states:
+      draft: ~
+      new: ~
+      accepted: ~
+      rejected: ~
+
+    transitions:
+      new:
+        from: ['draft']
+        to: new
+      accept:
+        from: ['new']
+        to: accepted
+      reject:
+        from: ['new']
+        to: rejected
+
+# HOW TO USE ORDER RETURN STATE MACHINE
+
+#  $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
+#    if (!$orderReturnStateMachine->can(OrderReturnInterface::TRANSITION_ACCEPT)) {
+#       return;
+#     }
+#
+#  $orderReturnStateMachine->apply(OrderReturnInterface::TRANSITION_ACCEPT));
+#  $this->orderReturnRepository->add($orderReturn);
