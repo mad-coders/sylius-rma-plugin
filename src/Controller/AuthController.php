@@ -15,6 +15,7 @@ use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\Order;
+use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -88,45 +89,50 @@ final class AuthController extends AbstractController
                 ->findOneBy(array('number' => $orderNumber));
 
             if ($order) {
-                /** @var CustomerInterface $customer */
-                $customer = $order->getCustomer();
-                $customerEmail = $customer->getEmail();
-                $authCode = mt_rand(100000, 999999);
-                $hash = hash('sha256', $orderNumber.time());
-                $startDate =  new \DateTime();
-                $dateInterval = new \DateInterval('PT5M');
-
-                $authCodeData = new AuthCode();
-                $authCodeData->setOrderNumber($orderNumber);
-                $authCodeData->setAuthCode($authCode);
-                $authCodeData->setHash($hash);
-                $authCodeData->setExpiresAt($startDate->add($dateInterval));
-
-                $entityManager->persist($authCodeData);
-                $this->authCodeEmailManager->sendAuthCodeEmail($authCodeData, $customerEmail);
-
-                $entityManager->flush();
-
-                $successMessage = $this->getSyliusAttribute(
-                    $request,
-                    'success_flash',
-                    'madcoders_rma.order.sending_auth_code_success'
-                );
-
-                /** @var FlashBagInterface $flashBag */
-                $flashBag = $request->getSession()->getBag('flashes');
-                $flashBag->add('success', $successMessage);
-
-                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
-
-                if ($redirectRoute) {
-                    return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
-                }
-
                 return $this->errorRedirect($request, $errorMessage);
             }
 
+            if ($order->getState() === OrderInterface::STATE_FULFILLED) {
+                return $this->errorRedirect($request, 'madcoders_rma.ui.return.order_not_fullfiled_yet');
+            }
+
+            /** @var CustomerInterface $customer */
+            $customer = $order->getCustomer();
+            $customerEmail = $customer->getEmail();
+            $authCode = mt_rand(100000, 999999);
+            $hash = hash('sha256', $orderNumber.time());
+            $startDate =  new \DateTime();
+            $dateInterval = new \DateInterval('PT5M');
+
+            $authCodeData = new AuthCode();
+            $authCodeData->setOrderNumber($orderNumber);
+            $authCodeData->setAuthCode($authCode);
+            $authCodeData->setHash($hash);
+            $authCodeData->setExpiresAt($startDate->add($dateInterval));
+
+            $entityManager->persist($authCodeData);
+            $this->authCodeEmailManager->sendAuthCodeEmail($authCodeData, $customerEmail);
+
+            $entityManager->flush();
+
+            $successMessage = $this->getSyliusAttribute(
+                $request,
+                'success_flash',
+                'madcoders_rma.order.sending_auth_code_success'
+            );
+
+            /** @var FlashBagInterface $flashBag */
+            $flashBag = $request->getSession()->getBag('flashes');
+            $flashBag->add('success', $successMessage);
+
+            $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
+
+            if ($redirectRoute) {
+                return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
+            }
+
             return $this->errorRedirect($request, $errorMessage);
+
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
