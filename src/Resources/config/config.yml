@@ -35,6 +35,7 @@ winzou_state_machine:
 
 #  $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
 #    if (!$orderReturnStateMachine->can(OrderReturnInterface::TRANSITION_ACCEPT)) {
+#       // just do nothign or throw exception depending on the situation
 #       return;
 #     }
 #
