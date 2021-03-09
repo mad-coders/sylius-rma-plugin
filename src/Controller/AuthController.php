@@ -125,7 +125,7 @@ final class AuthController extends AbstractController
             $flashBag = $request->getSession()->getBag('flashes');
             $flashBag->add('success', $successMessage);
 
-            $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
+            $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
 
             if ($redirectRoute) {
                 return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
@@ -146,8 +146,8 @@ final class AuthController extends AbstractController
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('error', $errorMessage);
 
-        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'referer');
-        $redirectCode = $this->getSyliusAttribute($request, 'code', 'referer');
+        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
+        $redirectCode = $this->getSyliusAttribute($request, 'code', '');
         if ($redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $redirectCode]));
         }
@@ -174,7 +174,7 @@ final class AuthController extends AbstractController
             $authDataCode = $authData->getAuthCode();
             if ($authDataCode === $authCode) {
 
-                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
+                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
 
                 if ($redirectRoute) {
                     $this->session->set('madcoders_rma_allowed_order', $orderNumber);

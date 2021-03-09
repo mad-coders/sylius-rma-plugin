@@ -31,7 +31,14 @@ madcoders_rma_return_form:
         _sylius:
             error_redirect: madcoders_rma_verification
             redirect: sylius_shop_homepage
-#            repository:
-#                method: findOneByCode
-#                arguments:
-#                    - $code
+
+madcoders_rma_return_form_accept:
+    path: /rma-summary/{returnNumber}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.return_controller:acceptIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/summary.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber

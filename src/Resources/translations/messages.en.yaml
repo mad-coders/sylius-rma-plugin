@@ -2,10 +2,17 @@ madcoders_rma:
     ui:
         return_reason: 'Return reason'
         order_number: 'Podaj numer zamówienia'
+        return_number: 'Numer zwrotu'
         return:
             create_return_form: 'Create return form'
             order_number_not_valid: 'No order that meets the criteria'
             code_not_valid: 'code_not_valid'
             enter_code_you_received: 'Enter the code you received'
+            verife_your_form: 'Verife your form'
+            return_form: 'Forma zwrotu'
+            consent_text: 'Akceptuje warunki zwrotu'
+            selecte_items_to_return_form: 'Wybierz producty do zwrotu'
+            provide_reason: 'Provide the reason for the return'
+            return_qty: 'Iłość zwracana'
         auth_code:
             not_blank: 'To pole nie moze być puste'
