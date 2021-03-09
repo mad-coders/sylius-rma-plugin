@@ -9,11 +9,15 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <many-to-one target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturn" inversed-by="items" field="orderReturn"/>
+        <many-to-one target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturn" inversed-by="items" field="orderReturn">
+            <join-column name="order_return_id" referenced-column-name="id" nullable="false" />
+        </many-to-one>
 
+        <field name="itemToReturn" column="item_to_return" type="boolean" nullable="false" />
         <field name="productSku" column="product_sku" type="text" />
-        <field name="productName" column="product_name" type="text" />
+        <field name="productName" column="product_name" type="text" nullable="true" />
         <field name="returnQty" column="return_qty" type="integer" />
+        <field name="maxQty" column="max_qty" type="integer" />
         <field name="unitPrice" column="unit_price" type="integer" />
 
     </mapped-superclass>

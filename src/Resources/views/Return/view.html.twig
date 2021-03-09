@@ -1,0 +1,43 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
+
+{% block content %}
+    {% form_theme form.items '@MadcodersSyliusRmaPlugin/Return/Form/_item.html.twig' %}
+
+    <div class="ui hidden divider"></div>
+    <div class="ui one column centered stackable grid">
+        <div class="column">
+            <h1 class="ui header">
+                <i class="circular truck icon"></i>
+                <div class="content">
+                    {{ 'sylius.ui.return'|trans }} {{ 'sylius.ui.order'|trans }} - {{ orderNumber }}
+                    <div class="sub header">{{ 'madcoders_rm.ui.return.create_return_form'|trans }}</div>
+                </div>
+            </h1>
+            <div class="ui segment">
+                {{ form_start(form, {'action': path('madcoders_rma_return_form'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+
+                <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }} class="ui very basic celled table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{ 'sylius.ui.item'|trans }}</th>
+                        <th>{{ 'sylius.ui.sku'|trans }}</th>
+                        <th>{{ 'sylius.ui.qty'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{ form_row(form.items) }}
+                     </tbody>
+                </table>
+
+                {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
+                {{ form_row(form._token) }}
+                <br/>
+                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'sylius.ui.send'|trans }}</button>
+                {{ form_end(form, {'render_rest': false}) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

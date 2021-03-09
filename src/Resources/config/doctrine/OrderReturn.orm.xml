@@ -13,14 +13,19 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="id" field="items" />
+        <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="orderReturn" field="items">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
 
         <field name="orderNumber" unique="true" column="order_number" type="string" />
         <field name="returnNumber" unique="true" column="return_number" type="string" />
         <field name="channelCode" column="channel_code" type="string" />
-        <field name="returnReason" column="return_reason" type="string" />
-        <field name="orderReturnConsent" column="order_consent" nullable="false" type="boolean" />
-        <field name="orderReturnConsentLabel" column="order_consent_label" nullable="true" type="text" />
+        <field name="returnReason" column="return_reason" type="string" nullable="true" />
+        <field name="orderReturnConsent" column="order_consent" type="boolean"  nullable="false" />
+        <field name="orderReturnConsentLabel" column="order_consent_label" type="text" nullable="true"  />
 
         <field name="firstname" column="firstname" type="string" nullable="true" />
         <field name="lastname" column="lastname" type="string" nullable="true" />

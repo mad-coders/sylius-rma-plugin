@@ -8,6 +8,18 @@
             <argument type="service" id="twig" />
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
+            <argument type="service" id="session" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.controller.return_controller" class="Madcoders\SyliusRmaPlugin\Controller\ReturnController">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="twig" />
+            <argument id="sylius.context.channel" />
+            <argument type="service" id="router" />
+            <argument type="service" id="session" />
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
         </service>
 
     </services>

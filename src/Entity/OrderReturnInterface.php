@@ -209,17 +209,17 @@ interface OrderReturnInterface
     public function setCustomerIp(string $customerIp): void;
 
     /**
-     * @return OrderReturnInterface[]
+     * @return OrderReturnItemInterface[]
      */
     public function getItems(): iterable;
 
     /**
-     * @param OrderReturnInterface $item
+     * @param OrderReturnItemInterface $item
      */
-    public function addItem(OrderReturnInterface $item): void;
+    public function addItem(OrderReturnItemInterface $item): void;
 
     /**
-     * @param OrderReturnInterface $item
+     * @param OrderReturnItemInterface $item
      */
-    public function removeItem(OrderReturnInterface $item): void;
+    public function removeItem(OrderReturnItemInterface $item): void;
 }

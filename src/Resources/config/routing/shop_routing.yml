@@ -3,6 +3,35 @@ madcoders_rma_start:
     methods: [ GET, POST ]
     controller: madcoders.sylius_rma_plugin.controller.auth_controller:start
     defaults:
-        template: '@MadcodersSyliusRmaPlugin/start.html.twig'
+        template: '@MadcodersSyliusRmaPlugin/Auth/start.html.twig'
         _sylius:
+            error_redirect: madcoders_rma_start
+            redirect: madcoders_rma_verification
+
+madcoders_rma_verification:
+    path: /rma-start/{code}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.auth_controller:verification
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Auth/verification.html.twig'
+        _sylius:
+            error_redirect: madcoders_rma_verification
+            redirect: madcoders_rma_return_form
+            repository:
+                method: findOneByCode
+                arguments:
+                    - $code
+
+madcoders_rma_return_form:
+    path: /rma-form
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.return_controller:viewIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/view.html.twig'
+        _sylius:
+            error_redirect: madcoders_rma_verification
             redirect: sylius_shop_homepage
+#            repository:
+#                method: findOneByCode
+#                arguments:
+#                    - $code

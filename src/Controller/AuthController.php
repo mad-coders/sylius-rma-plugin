@@ -11,6 +11,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthStartType;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
+use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\Order;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
@@ -42,6 +44,9 @@ final class AuthController extends AbstractController
     /** @var AuthCodeEmailSenderInterface */
     private $authCodeEmailManager;
 
+    /** @var SessionInterface */
+    private $session;
+
     /**
      * AuthController constructor.
      * @param FormFactoryInterface $formFactory
@@ -49,15 +54,18 @@ final class AuthController extends AbstractController
      * @param ChannelContextInterface $channelContext
      * @param RouterInterface $router
      * @param AuthCodeEmailSenderInterface $authCodeEmailManager
+     * @param SessionInterface $session
      */
-    public function __construct(FormFactoryInterface $formFactory, $templatingEngine, ChannelContextInterface $channelContext, RouterInterface $router, AuthCodeEmailSenderInterface $authCodeEmailManager)
+    public function __construct(FormFactoryInterface $formFactory, $templatingEngine, ChannelContextInterface $channelContext, RouterInterface $router, AuthCodeEmailSenderInterface $authCodeEmailManager, SessionInterface $session)
     {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->channelContext = $channelContext;
         $this->router = $router;
         $this->authCodeEmailManager = $authCodeEmailManager;
+        $this->session = $session;
     }
+
 
     public function start(Request $request, string $template): Response
     {
@@ -67,11 +75,18 @@ final class AuthController extends AbstractController
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
+            $errorMessage = $this->getSyliusAttribute(
+                $request,
+                'error_flash',
+                'madcoders_rma.ui.return.order_number_not_valid'
+            );
+
             $data = $form->getData();
             $orderNumber = $data['orderNumber'];
             $order = $this->getDoctrine()
                 ->getRepository(Order::class)
                 ->findOneBy(array('number' => $orderNumber));
+
             if ($order) {
                 /** @var CustomerInterface $customer */
                 $customer = $order->getCustomer();
@@ -90,28 +105,93 @@ final class AuthController extends AbstractController
                 $entityManager->persist($authCodeData);
                 $this->authCodeEmailManager->sendAuthCodeEmail($authCodeData, $customerEmail);
 
+                $entityManager->flush();
+
+                $successMessage = $this->getSyliusAttribute(
+                    $request,
+                    'success_flash',
+                    'madcoders_rma.order.sending_auth_code_success'
+                );
+
+                /** @var FlashBagInterface $flashBag */
+                $flashBag = $request->getSession()->getBag('flashes');
+                $flashBag->add('success', $successMessage);
+
+                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
+
+                if ($redirectRoute) {
+                    return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
+                }
+
+                return $this->errorRedirect($request, $errorMessage);
             }
-            $entityManager->flush();
 
-            $successMessage = $this->getSyliusAttribute(
-                $request,
-                'success_flash',
-                'madcoders_rma.order.sending_auth_code_success'
-            );
-
-            /** @var FlashBagInterface $flashBag */
-            $flashBag = $request->getSession()->getBag('flashes');
-            $flashBag->add('success', $successMessage);
-
-            $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
-
-            return new RedirectResponse($this->router->generate($redirectRoute));
-
+            return $this->errorRedirect($request, $errorMessage);
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
         return new Response($this->templatingEngine->render($templateWithAttribute, ['form' => $form->createView()]));
+    }
+
+    private function errorRedirect(Request $request, $errorMessage): Response
+    {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $errorMessage);
+
+        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'referer');
+        $redirectCode = $this->getSyliusAttribute($request, 'code', 'referer');
+        if ($redirectRoute) {
+            return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $redirectCode]));
+        }
+        return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
+    }
+
+    public function verification(Request $request, string $template, string $code): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthVerificationType::class);
+        $form = $this->formFactory->create($formType);
+
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+
+            $data = $form->getData();
+            $authCode = $data['authCode'];
+
+            $authData = $this->getDoctrine()
+                ->getRepository(AuthCode::class)
+                ->findOneBy(array('hash' => $code));
+
+            $orderNumber = $authData->getOrderNumber();
+
+            $authDataCode = $authData->getAuthCode();
+            if ($authDataCode === $authCode) {
+
+                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'referer');
+
+                if ($redirectRoute) {
+                    $this->session->set('madcoders_rma_allowed_order', $orderNumber);
+                    return new RedirectResponse($this->router->generate($redirectRoute));
+                }
+
+                return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
+            }
+
+            $errorMessage = $this->getSyliusAttribute(
+                $request,
+                'error_flash',
+                'madcoders_rma.ui.return.code_not_valid'
+            );
+
+            return $this->errorRedirect($request, $errorMessage);
+
+        }
+
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['code' => $code, 'form' => $form->createView()]));
+
     }
 
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string

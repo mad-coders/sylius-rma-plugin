@@ -14,9 +14,19 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
 {
     /**
+     * @var bool
+     */
+    private $itemToReturn = false;
+
+    /**
      * @var int
      */
     private $id;
+
+    /**
+     * @var int
+     */
+    private $maxQty = 0;
 
     /**
      * @var OrderReturn
@@ -29,19 +39,51 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     private $productSku;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $productName;
 
     /**
      * @var int
      */
-    private $returnQty;
+    private $returnQty = 0;
 
     /**
      * @var int
      */
     private $unitPrice;
+
+    /**
+     * @return bool
+     */
+    public function isItemToReturn(): bool
+    {
+        return $this->itemToReturn;
+    }
+
+    /**
+     * @param bool $itemToReturn
+     */
+    public function setItemToReturn(bool $itemToReturn): void
+    {
+        $this->itemToReturn = $itemToReturn;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxQty(): int
+    {
+        return $this->maxQty;
+    }
+
+    /**
+     * @param int $maxQty
+     */
+    public function setMaxQty(int $maxQty): void
+    {
+        $this->maxQty = $maxQty;
+    }
 
     /**
      * @return int
@@ -84,17 +126,17 @@ class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductName(): string
+    public function getProductName(): ?string
     {
         return $this->productName;
     }
 
     /**
-     * @param string $productName
+     * @param string|null $productName
      */
-    public function setProductName(string $productName): void
+    public function setProductName(?string $productName): void
     {
         $this->productName = $productName;
     }

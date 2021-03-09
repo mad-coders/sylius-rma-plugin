@@ -17,6 +17,26 @@ interface OrderReturnItemInterface
     public function getId(): ?int;
 
     /**
+     * @return bool
+     */
+    public function isItemToReturn(): bool;
+
+    /**
+     * @param bool $itemToReturn
+     */
+    public function setItemToReturn(bool $itemToReturn): void;
+
+    /**
+     * @return int
+     */
+    public function getMaxQty(): int;
+
+    /**
+     * @param int $maxQty
+     */
+    public function setMaxQty(int $maxQty): void;
+
+    /**
      * @return OrderReturn
      */
     public function getOrderReturn(): OrderReturn;
@@ -37,14 +57,14 @@ interface OrderReturnItemInterface
     public function setProductSku(string $productSku): void;
 
     /**
-     * @return string
+     * @return ?string
      */
-    public function getProductName(): string;
+    public function getProductName(): ?string;
 
     /**
-     * @param string $productName
+     * @param ?string $productName
      */
-    public function setProductName(string $productName): void;
+    public function setProductName(?string $productName): void;
 
     /**
      * @return int
