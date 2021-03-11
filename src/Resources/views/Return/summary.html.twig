@@ -25,7 +25,11 @@
                         <strong>{{ 'sylius.ui.created_at'|trans }}:</strong>  {{ returnOrder.createdAt |date }}<br/>
                         <strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ returnOrder.firstname }} {{ returnOrder.lastname }}<br/>
                         <strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ returnOrder.customerEmail }} <br/>
+                        {% if returnOrder.phoneNumber is defined  %}
                         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}<br/>
+                        {% endif %}
+                        <strong>{{ 'madcoders_rma.ui.return.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}<br/>
+
                     </div>
                     <div class="column">
                         {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_address.html.twig' with {'returnOrder': returnOrder} %}
@@ -39,7 +43,7 @@
                             <thead>
                             <tr>
                                 <th>{{ 'sylius.ui.item'|trans }}</th>
-                                <th>{{ 'sylius.ui.sku'|trans }}</th>
+                                <th>{{ 'sylius.ui.product_options'|trans }}</th>
                                 <th>{{ 'madcoders_rma.ui.return.return_qty'|trans }}</th>
                             </tr>
                             </thead>

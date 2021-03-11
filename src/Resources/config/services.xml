@@ -10,5 +10,9 @@
             <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
         </service>
+        <service id="madcoders.sylius_rma_plugin.rma_product_view_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaProductViewExtension">
+            <argument type="service" id="sylius.repository.product_variant" />
+            <tag name="twig.extension"/>
+        </service>
     </services>
 </container>

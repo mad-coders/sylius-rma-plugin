@@ -1,12 +1,16 @@
 {% block madcoders_rma_return_item_widget %}
     {% apply spaceless %}
+    {% set variant = rma_product_view(form.vars.value.productSku) %}
+
         <tr>
 {#            <td>#}
 {#                {{ form_row(form.itemToReturn) }}#}
 {#            </td>#}
-            <td class="single line">{{ form.vars.value.productName }}</td>
+            <td class="single line">
+                {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_info.html.twig' with {'variant': variant} %}
+            </td>
             <td class="left aligned">
-                {{ form.vars.value.productSku }}
+                {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_options.html.twig' with {'variant': variant} %}
             </td>
             <td class="center line">
                 <span class="sylius-quantity" style="display: inline-block" >{{ form_row(form.returnQty) }} </span> <span>/ {{ form.vars.value.maxQty }}</span>

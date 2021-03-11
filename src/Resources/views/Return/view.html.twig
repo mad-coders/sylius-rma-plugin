@@ -27,7 +27,7 @@
                     <thead>
                     <tr>
                         <th>{{ 'sylius.ui.item'|trans }}</th>
-                        <th>{{ 'sylius.ui.sku'|trans }}</th>
+                        <th>{{ 'sylius.ui.product_options'|trans }}</th>
                         <th>{{ 'sylius.ui.qty'|trans }}</th>
                     </tr>
                     </thead>
@@ -47,10 +47,19 @@
                 <div>
                     <h3 class="ui dividing header">
                         {{ 'madcoders_rma.ui.return_reason'|trans }}
-                        <div class="sub header">{{ 'madcoders_rm.ui.return.provide_reason'|trans }}</div>
+                        <div class="sub header">{{ 'madcoders_rma.ui.return.provide_reason'|trans }}</div>
                     </h3>
 
                     {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
+                </div>
+                <br/>
+                <div>
+                    <h3 class="ui dividing header">
+                        {{ 'madcoders_rma.ui.return.bank_account_number'|trans }}
+                        <div class="sub header">{{ 'madcoders_rma.ui.return.provide_bank_account_number'|trans }}</div>
+                    </h3>
+
+                    {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-returnReason')) }}
                 </div>
 
                 {{ form_row(form._token) }}
