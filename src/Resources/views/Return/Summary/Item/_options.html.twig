@@ -1,0 +1,11 @@
+{% set product = variant.product %}
+
+{% if product.hasOptions() %}
+    <div class="ui horizontal divided list sylius-product-options" {{ sylius_test_html_attribute('product-options') }}>
+        {% for optionValue in variant.optionValues %}
+            <div class="item" data-sylius-option-name="{{ optionValue.name }}" {{ sylius_test_html_attribute('option-name', optionValue.name) }}>
+                <strong>{{ optionValue.name }}:</strong> {{ optionValue.value }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

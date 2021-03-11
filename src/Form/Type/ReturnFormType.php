@@ -10,15 +10,13 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
-use Sylius\Bundle\AddressingBundle\Form\Type\AddressType;
 use Sylius\Bundle\AddressingBundle\Form\Type\CountryCodeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ReturnFormType extends AbstractType
@@ -38,7 +36,7 @@ final class ReturnFormType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'madcoders_rma.order_number.not_blank',
+                        'message' => 'madcoders_rma.validator.order_number.not_blank',
                     ])
                 ],
             ])
@@ -76,7 +74,18 @@ final class ReturnFormType extends AbstractType
             ->add('provinceName', TextType::class, [
                 'label' => 'sylius.form.province.name',
             ])
-
+            ->add('bankAccountNumber', TextType::class, [
+                'label' => 'madcoders_rma.ui.return.bank_account_number',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.bank_account_number.not_blank',
+                    ]),
+                    new Iban([
+                        'message' => 'madcoders_rma.validator.bank_account_number.not_a_valid',
+                    ])
+                ],
+            ])
         ;
     }
 

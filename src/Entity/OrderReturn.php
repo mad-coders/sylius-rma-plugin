@@ -118,6 +118,9 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
      */
     private $orderReturnConsentLabel;
 
+    /** @var string|null */
+    private $bankAccountNumber;
+
     /**
      * @var OrderReturnItem[]
      */
@@ -467,6 +470,22 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBankAccountNumber(): ?string
+    {
+        return $this->bankAccountNumber;
+    }
+
+    /**
+     * @param string|null $bankAccountNumber
+     */
+    public function setBankAccountNumber(?string $bankAccountNumber): void
+    {
+        $this->bankAccountNumber = $bankAccountNumber;
     }
 
 }

@@ -14,5 +14,5 @@ madcoders_rma:
             selecte_items_to_return_form: 'Wybierz producty do zwrotu'
             provide_reason: 'Provide the reason for the return'
             return_qty: 'Iłość zwracana'
-        auth_code:
-            not_blank: 'To pole nie moze być puste'
+            bank_account_number: 'Bank account number'
+            provide_bank_account_number: 'Provide you Bank Account Number'

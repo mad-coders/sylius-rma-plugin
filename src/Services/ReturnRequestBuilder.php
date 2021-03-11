@@ -61,7 +61,7 @@ class ReturnRequestBuilder
         $orderReturn->setOrderNumber($order->getNumber());
 
         // check if customer exists
-        if (!$customer= $order->getCustomer()) {
+        if (!$customer = $order->getCustomer()) {
             throw new Exception('Customer is missing');
         }
 
