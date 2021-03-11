@@ -6,7 +6,6 @@ namespace Madcoders\SyliusRmaPlugin\Services;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Core\Model\OrderItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Sylius\Component\Core\Model\ProductVariantInterface;
@@ -61,12 +60,22 @@ class ReturnRequestBuilder
         $orderReturn->setChannelCode($order->getChannel()->getCode());
         $orderReturn->setOrderNumber($order->getNumber());
 
+        // check if customer exists
+        if (!$customer= $order->getCustomer()) {
+            throw new Exception('Customer is missing');
+        }
+
+        // populate customer email
+        $orderReturn->setCustomerEmail($customer->getEmail());
+
         // check if address exists
         if (!$address = $order->getBillingAddress()) {
             throw new Exception('Customer address is missing');
         }
 
         // populate address
+        $orderReturn->setFirstName($address->getFirstName());
+        $orderReturn->setLastName($address->getLastName());
         $orderReturn->setStreet($address->getStreet());
         $orderReturn->setPostcode($address->getPostcode());
         $orderReturn->setCity($address->getCity());

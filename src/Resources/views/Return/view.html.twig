@@ -26,7 +26,6 @@
                        class="ui very basic celled table">
                     <thead>
                     <tr>
-                        <th></th>
                         <th>{{ 'sylius.ui.item'|trans }}</th>
                         <th>{{ 'sylius.ui.sku'|trans }}</th>
                         <th>{{ 'sylius.ui.qty'|trans }}</th>
@@ -48,7 +47,7 @@
                 <div>
                     <h3 class="ui dividing header">
                         {{ 'madcoders_rma.ui.return_reason'|trans }}
-                        <div class="sub header">{{ 'sylius.ui.madcoders_rm.ui.return.provide_reason'|trans }}</div>
+                        <div class="sub header">{{ 'madcoders_rm.ui.return.provide_reason'|trans }}</div>
                     </h3>
 
                     {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
