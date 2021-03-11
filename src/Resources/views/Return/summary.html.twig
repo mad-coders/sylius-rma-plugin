@@ -4,8 +4,6 @@
 {% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
 
 {% block content %}
-    {% import "@SyliusUi/Macro/flags.html.twig" as flags %}
-
     <div class="ui hidden divider"></div>
     <div class="ui one column centered stackable grid">
         <div class="column">
@@ -13,33 +11,24 @@
                 <i class="circular truck icon"></i>
                 <div class="content">
                     {{ 'sylius.ui.return'|trans }} {{ 'sylius.ui.order'|trans }} - {{ orderNumber }}
-                    <div class="sub header">{{ 'madcoders_rm.ui.return.verife_your_form'|trans }}</div>
+                    <div class="sub header">{{ 'madcoders_rma.ui.return.verife_your_form'|trans }}</div>
                 </div>
             </h1>
             <div class="ui segment">
                 <h3 class="ui dividing header">
-                    {{ 'madcoders_rma.ui.return_form'|trans }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.verife_your_form'|trans }}</div>
+                    {{ 'madcoders_rma.ui.return.return_form'|trans }}
+                    <div class="sub header">{{ 'madcoders_rma.ui.return.verife_your_form'|trans }}</div>
                 </h3>
                 <div class="ui two column centered stackable grid">
                     <div class="column">
                         <strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ returnOrder.returnNumber }}<br/>
                         <strong>{{ 'sylius.ui.created_at'|trans }}:</strong>  {{ returnOrder.createdAt |date }}<br/>
                         <strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ returnOrder.firstname }} {{ returnOrder.lastname }}<br/>
-                        <strong>{{ 'sylius.ui.email'|trans }}:</strong><br/>
+                        <strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ returnOrder.customerEmail }} <br/>
                         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}<br/>
                     </div>
                     <div class="column">
-                        <strong>{{ 'sylius.ui.address'|trans }}:</strong>
-                        <address>
-                            {% if returnOrder.company is not null %}
-                                {{ returnOrder.company }}<br>
-                            {% endif %}
-                            {{ returnOrder.street }}<br/>
-                            {{ returnOrder.city }}, {{ returnOrder.postcode }}<br/>
-                            {{ flags.fromCountryCode(returnOrder.countryCode) }}
-                            {{ returnOrder.countryCode|sylius_country_name|upper }}
-                        </address>
+                        {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_address.html.twig' with {'returnOrder': returnOrder} %}
                     </div>
                 </div>
                 <div class="ui one column centered stackable grid">
@@ -56,15 +45,7 @@
                             </thead>
                             <tbody>
                             {% for item in returnOrder.items if item.returnQty > 0 %}
-                                <tr>
-                                    <td class="single line">{{ item.productName }}</td>
-                                    <td class="left aligned">
-                                        {{ item.productSku }}
-                                    </td>
-                                    <td class="center line">
-                                        {{ item.returnQty }}
-                                    </td>
-                                </tr>
+                                {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_item.html.twig' with {'item': item} %}
                             {% endfor %}
                             </tbody>
                         </table>
@@ -72,6 +53,7 @@
                 </div>
                 <div class="ui one column centered stackable grid">
                     <div class="column">
+                        <strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong><br/>
                         {{ returnOrder.returnReason }}
                     </div>
                 </div>
@@ -81,7 +63,10 @@
                         {{ form_row(form.orderReturnConsent, sylius_test_form_attribute('return-order_consent')) }}
                         {{ form_row(form._token) }}
                         <br/>
-                        <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'sylius.ui.create'|trans }}</button>
+                        <a href="{{ path('madcoders_rma_return_form') }}" class="ui large floated button">{{ 'sylius.ui.edit'|trans }}</a>
+                        <button type="submit" class="ui large right primary submit button" {{ sylius_test_html_attribute('send-button') }}>
+                            {{ 'sylius.ui.accept'|trans }}
+                        </button>
                         {{ form_end(form, {'render_rest': false}) }}
                     </div>
                 </div>

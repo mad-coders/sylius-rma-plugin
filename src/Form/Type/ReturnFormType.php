@@ -52,6 +52,10 @@ final class ReturnFormType extends AbstractType
                 'required' => false,
                 'label' => 'sylius.form.address.phone_number',
             ])
+            ->add('customerEmail', TextType::class, [
+                'required' => true,
+                'label' => 'sylius.ui.email',
+            ])
             ->add('company', TextType::class, [
                 'required' => false,
                 'label' => 'sylius.form.address.company',

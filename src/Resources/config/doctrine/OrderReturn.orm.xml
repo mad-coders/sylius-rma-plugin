@@ -30,6 +30,7 @@
         <field name="firstname" column="firstname" type="string" nullable="true" />
         <field name="lastname" column="lastname" type="string" nullable="true" />
         <field name="phoneNumber" column="phone_number" type="string" nullable="true" />
+        <field name="customerEmail" column="customer_email" type="string" nullable="true" />
         <field name="countryCode" column="country_code" type="string" nullable="true" />
         <field name="provinceCode" column="province_code" type="string" nullable="true"/>
         <field name="provinceName" column="province_name" type="string" nullable="true"/>

@@ -61,6 +61,11 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     /**
      * @var string|null
      */
+    private $customerEmail;
+
+    /**
+     * @var string|null
+     */
     private $company;
 
     /**
@@ -273,6 +278,22 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     public function setPhoneNumber(?string $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerEmail(): ?string
+    {
+        return $this->customerEmail;
+    }
+
+    /**
+     * @param string|null $customerEmail
+     */
+    public function setCustomerEmail(?string $customerEmail): void
+    {
+        $this->customerEmail = $customerEmail;
     }
 
     /**
