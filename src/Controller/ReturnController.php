@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
+use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 
 final class ReturnController extends AbstractController
 {
@@ -46,8 +48,11 @@ final class ReturnController extends AbstractController
     /** @var ReturnRequestBuilder */
     private $returnRequestBuilder;
 
-    /** @var RepositoryInterface  */
+    /** @var RepositoryInterface */
     private $orderReturnRepository;
+
+    /** @var StateMachineFactoryInterface */
+    private $stateMachineFactory;
 
     /**
      * ReturnController constructor.
@@ -58,6 +63,7 @@ final class ReturnController extends AbstractController
      * @param SessionInterface $session
      * @param RepositoryInterface $orderReturnRepository
      * @param ReturnRequestBuilder $returnRequestBuilder
+     * @param StateMachineFactoryInterface $stateMachineFactory
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -66,7 +72,9 @@ final class ReturnController extends AbstractController
         RouterInterface $router,
         SessionInterface $session,
         RepositoryInterface $orderReturnRepository,
-        ReturnRequestBuilder $returnRequestBuilder)
+        ReturnRequestBuilder $returnRequestBuilder,
+        StateMachineFactoryInterface $stateMachineFactory
+    )
     {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
@@ -75,6 +83,7 @@ final class ReturnController extends AbstractController
         $this->session = $session;
         $this->returnRequestBuilder = $returnRequestBuilder;
         $this->orderReturnRepository = $orderReturnRepository;
+        $this->stateMachineFactory = $stateMachineFactory;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -103,16 +112,69 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $returnOrder = $this->getDoctrine()
+        $orderReturn = $this->getDoctrine()
             ->getRepository(OrderReturn::class)
             ->findOneBy(array('returnNumber' => $request->attributes->get('returnNumber')));
 
-        $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class, );
-        $form = $this->formFactory->create($formType, $returnOrder);
+        $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class);
+        $form = $this->formFactory->create($formType);
+
+        // Customer accepted returnOrder, orderOrder has new status
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+
+            $data = $form->getData();
+            $orderReturn->setOrderReturnConsent($data['orderReturnConsent']);
+            $orderReturn->setOrderReturnConsentLabel($data['orderReturnConsentLabel']);
+
+            $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
+
+            if (!$orderReturnStateMachine->can(OrderReturnInterface::STATUS_NEW)) {
+
+                return $this->createInvalidStateResponse($request);
+            }
+
+            $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
+            $this->orderReturnRepository->add($orderReturn);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_return_form_success', ['returnNumber' => $orderReturn->getReturnNumber()]));
+        }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
-        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'returnOrder'=> $returnOrder, 'form' => $form->createView()]));
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'returnOrder'=> $orderReturn, 'form' => $form->createView()]));
+    }
+
+    public function successIndex(Request $request, string $template): Response
+    {
+        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
+        $returnNumber = $request->attributes->get('returnNumber');
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['returnNumber' => $returnNumber]));
+    }
+
+    public function printIndex(Request $request, string $template): Response
+    {
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        return new Response($this->templatingEngine->render($templateWithAttribute));
+    }
+
+    private function createInvalidStateResponse(Request $request): RedirectResponse
+    {
+        $errorMessage = $this->getSyliusAttribute(
+            $request,
+            'error_flash',
+            'madcoders_rma.ui.return.invalid_state'
+        );
+
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $errorMessage);
+
+        return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }
 
     private function createMissingOrderNumberResponse(Request $request): RedirectResponse

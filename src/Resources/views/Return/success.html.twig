@@ -1,0 +1,26 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
+
+{% block content %}
+   <div class="ui hidden divider"></div>
+   <div class="ui grid">
+      <div class="center aligned sixteen wide column">
+         <h1 class="ui icon header">
+            <i class="circular rocket icon"></i>
+            <div class="content" id="sylius-thank-you" {{ sylius_test_html_attribute('thank-you') }}>
+               {{ 'sylius.ui.thank_you'|trans }}
+               <div class="sub header">{{ 'madcoders_rma.ui.return.created_an_order_return'|trans }}</div>
+            </div>
+         </h1>
+         <div class="ui segment">
+            <strong>{{ 'madcoders_rma.ui.return_number'|trans }}: {{ returnNumber }}</strong><br/>
+            {{ 'madcoders_rma.ui.return.created_an_order_return_instruction'|trans }}
+            <div class="ui hidden divider"></div>
+            <a href="{{ path('madcoders_rma_return_form_print', { 'returnNumber': returnNumber }) }}" class="ui large primary button">
+               {{ 'madcoders_rma.ui.return.print_order_return_form'|trans }}
+            </a>
+         </div>
+      </div>
+   </div>
+{% endblock %}
