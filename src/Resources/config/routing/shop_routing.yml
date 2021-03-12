@@ -59,7 +59,6 @@ madcoders_rma_return_form_print:
     methods: [ GET ]
     controller: madcoders.sylius_rma_plugin.controller.return_controller:printIndex
     defaults:
-        template: '@MadcodersSyliusRmaPlugin/Return/success.html.twig'
         _sylius:
             repository:
                 arguments:

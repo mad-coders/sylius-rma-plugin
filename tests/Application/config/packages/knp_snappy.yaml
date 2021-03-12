@@ -1,0 +1,11 @@
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     '%env(WKHTMLTOPDF_PATH)%'
+        options:
+            - { name: 'enable-local-file-access', value: true }
+    image:
+        enabled:    true
+        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        options:
+            - { name: 'enable-local-file-access', value: true }
