@@ -2,7 +2,7 @@ madcoders_rma:
     ui:
         return_reason: 'Return reason'
         order_number: 'Podaj numer zamówienia'
-        return_number: 'Numer zwrotu'
+        return_number: 'Order return number'
         return:
             create_return_form: 'Create return form'
             order_number_not_valid: 'No order that meets the criteria'
@@ -16,3 +16,6 @@ madcoders_rma:
             return_qty: 'Iłość zwracana'
             bank_account_number: 'Bank account number'
             provide_bank_account_number: 'Provide you Bank Account Number'
+            created_an_order_return: 'You have successfully created an order return. '
+            created_an_order_return_instruction: 'Print the return form and put it in the package with the returned products. We also sent the form to the email address provided'
+            print_order_return_form: 'Print order return form'

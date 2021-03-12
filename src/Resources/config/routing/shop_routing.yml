@@ -42,3 +42,25 @@ madcoders_rma_return_form_accept:
             repository:
                 arguments:
                     - $returnNumber
+
+madcoders_rma_return_form_success:
+    path: /rma-success/{returnNumber}
+    methods: [ GET ]
+    controller: madcoders.sylius_rma_plugin.controller.return_controller:successIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/success.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
+
+madcoders_rma_return_form_print:
+    path: /rma-form-print/{returnNumber}
+    methods: [ GET ]
+    controller: madcoders.sylius_rma_plugin.controller.return_controller:printIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/success.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
