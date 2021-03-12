@@ -21,7 +21,7 @@ final class ReturnAuthStartType extends AbstractType
     {
         $builder
             ->add('orderNumber', TextType::class, [
-                'label'       => 'madcoders_rma.ui.order_number',
+                'label'       => 'madcoders_rma.ui.return.enter_order_number',
                 'required'    => true,
                 'constraints' => [
                     new NotBlank([

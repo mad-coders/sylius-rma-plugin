@@ -13,6 +13,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
+use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -27,6 +28,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Webmozart\Assert\Assert;
 
 final class ReturnController extends AbstractController
 {
@@ -54,6 +56,9 @@ final class ReturnController extends AbstractController
     /** @var StateMachineFactoryInterface */
     private $stateMachineFactory;
 
+    /** @var OrderReturnFormPdfFileGeneratorInterface */
+    private $orderReturnFormPdfFileGenerator;
+
     /**
      * ReturnController constructor.
      * @param FormFactoryInterface $formFactory
@@ -64,6 +69,7 @@ final class ReturnController extends AbstractController
      * @param RepositoryInterface $orderReturnRepository
      * @param ReturnRequestBuilder $returnRequestBuilder
      * @param StateMachineFactoryInterface $stateMachineFactory
+     * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -73,7 +79,8 @@ final class ReturnController extends AbstractController
         SessionInterface $session,
         RepositoryInterface $orderReturnRepository,
         ReturnRequestBuilder $returnRequestBuilder,
-        StateMachineFactoryInterface $stateMachineFactory
+        StateMachineFactoryInterface $stateMachineFactory,
+        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
     )
     {
         $this->formFactory = $formFactory;
@@ -84,6 +91,7 @@ final class ReturnController extends AbstractController
         $this->returnRequestBuilder = $returnRequestBuilder;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->stateMachineFactory = $stateMachineFactory;
+        $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -149,17 +157,33 @@ final class ReturnController extends AbstractController
         if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
             return $this->createMissingOrderNumberResponse($request);
         }
+
         $returnNumber = $request->attributes->get('returnNumber');
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+        $this->session->remove('madcoders_rma_allowed_order');
+        $this->session->set('madcoders_rma_allowed_order_return', $returnNumber);
 
         return new Response($this->templatingEngine->render($templateWithAttribute, ['returnNumber' => $returnNumber]));
     }
 
-    public function printIndex(Request $request, string $template): Response
+    public function printIndex(Request $request): Response
     {
-        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+        if (!$returnNumber = (string) $this->session->get('madcoders_rma_allowed_order_return')) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
 
-        return new Response($this->templatingEngine->render($templateWithAttribute));
+        /** @var OrderReturnInterface|null $orderReturn */
+        $orderReturn = $this->orderReturnRepository->findOneBy(array('returnNumber' => $returnNumber));
+        Assert::notNull($orderReturn);
+
+        $orderReturnPdf = $this->orderReturnFormPdfFileGenerator->generate($orderReturn);
+
+        $response = new Response($orderReturnPdf->content(), Response::HTTP_OK, ['Content-Type' => 'application/pdf']);
+        $response->headers->add([
+            'Content-Disposition' => $response->headers->makeDisposition('attachment', $orderReturnPdf->filename()),
+        ]);
+
+        return $response;
     }
 
     private function createInvalidStateResponse(Request $request): RedirectResponse

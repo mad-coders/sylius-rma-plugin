@@ -20,6 +20,8 @@
             <argument type="service" id="session" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
+            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.generator.order_return_form_pdf_file_generator" />
         </service>
 
     </services>

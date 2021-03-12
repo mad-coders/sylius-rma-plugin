@@ -1,0 +1,194 @@
+{% set orderReturnFormData = orderReturnForm %}
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        .madcoders-rma { max-width: 800px; margin: auto; padding: 20px; font-size: 16px; line-height: 24px; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #555 }
+        .madcoders-rma table { width: 100%; line-height: inherit; text-align: left; }
+        .madcoders-rma table td { padding: 5px; vertical-align: top; text-align: right; }
+        .madcoders-rma table tr td:nth-child(1) { text-align: left; }
+        .madcoders-rma table tr.top table td { padding-bottom: 20px; }
+        .madcoders-rma table tr.top table td.title { font-size: 45px; line-height: 45px; color: #333; }
+        .madcoders-rma table tr.information table td { padding-bottom: 40px; }
+        .madcoders-rma table tr.heading td { background: #eee; border-bottom: 1px solid #ddd; font-weight: bold; }
+        .madcoders-rma table tr.details td { padding-bottom: 20px; }
+        .madcoders-rma table tr.item td{ border-bottom: 1px solid #eee; }
+        .madcoders-rma table tr.item.last td { border-bottom: none; }
+        .madcoders-rma table tr.total td { border-top: 2px solid #eee; font-weight: bold; }
+        .madcoders-rma-dare td > * {
+            vertical-align : bottom;
+        }
+    </style>
+</head>
+
+<body>
+<div class="madcoders-rma">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td colspan="2" class="title">
+                            <img src="{{ orderReturnFormLogoPath }}" style="width:200px;">
+                        </td>
+
+                        <td style="border-right: 6px solid red; color: darkred" >
+                            <strong>{{ 'madcoders_rma.ui.return.return_sending_address'|trans }}:</strong><br/>
+                            Genslerstraße 84<br/>
+                            13359 Berlin<br/>
+                            Germany<br/>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h2>
+                                <strong>{{ 'madcoders_rma.ui.return.return_form' |trans }}</strong>
+                            </h2>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h4>
+                                <strong>{{ 'madcoders_rma.ui.return.customer_information' |trans }}</strong>
+                            </h4>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="information">
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td>
+                            <strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ orderReturnFormData.returnNumber }}<br/>
+                            <strong>{{ 'sylius.ui.created_at'|trans }}:</strong>  {{ orderReturnFormData.createdAt |date }}<br/>
+                            <strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ orderReturnFormData.firstname }} {{ orderReturnFormData.lastname }}<br/>
+                            <strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ orderReturnFormData.customerEmail }} <br/>
+                            {% if orderReturnFormData.phoneNumber is defined  %}
+                                <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ orderReturnFormData.phoneNumber }}<br/>
+                            {% endif %}
+                            <strong>{{ 'madcoders_rma.ui.return.bank_account_number'|trans }}:</strong> {{ orderReturnFormData.bankAccountNumber }}<br/>
+                        </td>
+                        <td>
+                            {% import "@SyliusUi/Macro/flags.html.twig" as flags %}
+                            <strong>{{ 'sylius.ui.address'|trans }}:</strong>
+                            <address>
+                                {% if orderReturnFormData.company is not null %}
+                                    {{ orderReturnFormData.company }}<br>
+                                {% endif %}
+                                {{ orderReturnFormData.street }}<br/>
+                                {{ orderReturnFormData.city }}, {{ orderReturnFormData.postcode }}<br/>
+                                {{ flags.fromCountryCode(orderReturnFormData.countryCode) }}
+                                {{ orderReturnFormData.countryCode|sylius_country_name|upper }}
+                            </address>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h4>
+                                <strong>{{ 'madcoders_rma.ui.return.return_items_list' |trans }}</strong>
+                            </h4>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="heading">
+            <td>{{ 'sylius.ui.item'|trans }}</td>
+            <td>{{ 'sylius.ui.product_options'|trans }}</td>
+            <td>{{ 'madcoders_rma.ui.return.return_qty'|trans }}</td>
+        </tr>
+
+        {% for item in orderReturnFormData.items %}
+            {% set variant = rma_product_view(item.productSku) %}
+            {% set product = variant.product %}
+            <tr class="item">
+                <td>
+                    <table>
+                        <tr>
+                            <td style="border: none;">
+                                {% if variant.hasImages %}
+                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': variant, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}
+                                {% else %}
+                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}
+                                {% endif %}
+                            </td>
+                            <td style="text-align: left; border: none;">
+                            <div class="sylius-product-name">{{ product.name }}</div>
+                            <span>
+                                <strong>{{ 'sylius.ui.sku'|trans }}:</strong> {{ variant.code }}
+                            </span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="left aligned">
+                {% if product.hasOptions() %}
+                 {% for optionValue in variant.optionValues %}
+                    <div class="item" data-sylius-option-name="{{ optionValue.name }}" {{ sylius_test_html_attribute('option-name', optionValue.name) }}>
+                        <strong>{{ optionValue.name }}:</strong> {{ optionValue.value }}
+                    </div>
+                {% endfor %}
+                 {% endif %}
+                </td>
+                <td class="center line">
+                    {{ item.returnQty }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td style="text-align: center;">
+                            <h4>
+                                <strong style="text-transform: uppercase;">{{ 'madcoders_rma.ui.return_reason' |trans }}</strong>
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;">
+                            <span>{{ orderReturnFormData.returnReason }}</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <td colspan="4">
+            <table>
+                <tr>
+                    <td style="text-align: center;">
+                        <p style="vertical-align: bottom"><strong>{{ 'sylius.ui.date'|trans }}:</strong> {{ "now"|date("m/d/Y") }}</p>
+                    </td>
+                    <td style="text-align: center; border: 1px solid #ccc!important; border-radius: 16px; background-color: #eeeeee">
+                        <p style="margin-top: 2.5em; margin-bottom: 2.5em; color: #dddddd">{{ 'madcoders_rma.ui.return.signatured_place' |trans }}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <br/>
+    </table>
+</div>
+</body>
+</html>

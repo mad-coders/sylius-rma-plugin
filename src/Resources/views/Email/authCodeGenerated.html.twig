@@ -2,12 +2,11 @@
     Invoice generated
 {% endblock %}
 
-<br/><br/>
-
 {% block body %}
+    {% set url = channel.hostname is not null ? 'https://' ~ channel.hostname ~ path('madcoders_rma_verification', { 'code': code }) : url('madcoders_rma_verification', { 'code': code }) %}
+
     {% autoescape %}
-        Invoice with id {{ authCodeInterface.authCode }} was generated for order with number #{{ authCodeInterface.orderNumber }}.
-        <br/><br/>
-        You can find the document in this email's attachments.
+        Hello,
+        to continue return process please enter {{ authCodeInterface.authCode }} code on <a target="_blank" href="{{ url }}">verification page</a>.
     {% endautoescape %}
 {% endblock %}
