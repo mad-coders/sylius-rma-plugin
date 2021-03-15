@@ -3,7 +3,9 @@ sylius_mailer:
     authcode_generated:
       subject: sylius.emails.authcode_generated.subject
       template: "@MadcodersSyliusRmaPlugin/Email/authCodeGenerated.html.twig"
-
+    return_generated:
+      subject: sylius.emails.return_generated.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/returnFormGenerated.html.twig"
 
 
 # order return state machine

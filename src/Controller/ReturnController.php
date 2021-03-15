@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
@@ -16,6 +17,7 @@ use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -59,6 +61,9 @@ final class ReturnController extends AbstractController
     /** @var OrderReturnFormPdfFileGeneratorInterface */
     private $orderReturnFormPdfFileGenerator;
 
+    /** @var ReturnFormEmailSenderInterface */
+    private $orderReturnFormPdfEmailSender;
+
     /**
      * ReturnController constructor.
      * @param FormFactoryInterface $formFactory
@@ -70,6 +75,7 @@ final class ReturnController extends AbstractController
      * @param ReturnRequestBuilder $returnRequestBuilder
      * @param StateMachineFactoryInterface $stateMachineFactory
      * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
+     * @param ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -80,7 +86,8 @@ final class ReturnController extends AbstractController
         RepositoryInterface $orderReturnRepository,
         ReturnRequestBuilder $returnRequestBuilder,
         StateMachineFactoryInterface $stateMachineFactory,
-        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
+        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
+        ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
     )
     {
         $this->formFactory = $formFactory;
@@ -92,6 +99,7 @@ final class ReturnController extends AbstractController
         $this->orderReturnRepository = $orderReturnRepository;
         $this->stateMachineFactory = $stateMachineFactory;
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
+        $this->orderReturnFormPdfEmailSender = $orderReturnFormPdfEmailSender;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -120,9 +128,11 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $orderReturn = $this->getDoctrine()
+        if (!$orderReturn = $this->getDoctrine()
             ->getRepository(OrderReturn::class)
-            ->findOneBy(array('returnNumber' => $request->attributes->get('returnNumber')));
+            ->findOneBy(array('returnNumber' => $request->attributes->get('returnNumber')))) {
+            return $this->createMissingOrderNumberResponse($request);
+        };
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class);
         $form = $this->formFactory->create($formType);
@@ -143,6 +153,11 @@ final class ReturnController extends AbstractController
 
             $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
             $this->orderReturnRepository->add($orderReturn);
+
+            /** @var ChannelInterface $channelVariable */
+            $channel = $this->channelContext->getChannel();
+            $customerEmail = $orderReturn->getCustomerEmail();
+            $this->orderReturnFormPdfEmailSender->sendReturnOrderFormEmail($orderReturn, $channel, $customerEmail);
 
             return new RedirectResponse($this->router->generate('madcoders_rma_return_form_success', ['returnNumber' => $orderReturn->getReturnNumber()]));
         }
