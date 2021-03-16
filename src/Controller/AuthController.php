@@ -44,7 +44,7 @@ final class AuthController extends AbstractController
     private $router;
 
     /** @var AuthCodeEmailSenderInterface */
-    private $authCodeEmailManager;
+    private $authCodeEmailSender;
 
     /** @var SessionInterface */
     private $session;
@@ -55,16 +55,23 @@ final class AuthController extends AbstractController
      * @param EngineInterface|Environment $templatingEngine
      * @param ChannelContextInterface $channelContext
      * @param RouterInterface $router
-     * @param AuthCodeEmailSenderInterface $authCodeEmailManager
+     * @param AuthCodeEmailSenderInterface $authCodeEmailSender
      * @param SessionInterface $session
      */
-    public function __construct(FormFactoryInterface $formFactory, $templatingEngine, ChannelContextInterface $channelContext, RouterInterface $router, AuthCodeEmailSenderInterface $authCodeEmailManager, SessionInterface $session)
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        $templatingEngine,
+        ChannelContextInterface $channelContext,
+        RouterInterface $router,
+        AuthCodeEmailSenderInterface $authCodeEmailSender,
+        SessionInterface $session
+    )
     {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->channelContext = $channelContext;
         $this->router = $router;
-        $this->authCodeEmailManager = $authCodeEmailManager;
+        $this->authCodeEmailSender = $authCodeEmailSender;
         $this->session = $session;
     }
 
@@ -109,7 +116,7 @@ final class AuthController extends AbstractController
             /** @var ChannelInterface $channelVariable */
             $channel = $this->channelContext->getChannel();
 
-            $this->authCodeEmailManager->sendAuthCodeEmail($authCodeData, $channel, $hash, $customerEmail);
+            $this->authCodeEmailSender->sendAuthCodeEmail($authCodeData, $channel, $hash, $customerEmail);
 
             $entityManager->flush();
 
@@ -191,7 +198,7 @@ final class AuthController extends AbstractController
             $redirectCode = $this->getSyliusAttribute($request, 'code', '');
 
             if ($redirectRoute) {
-                return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $redirectCode]));
+                return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
             }
 
             return new RedirectResponse($this->router->generate('sylius_shop_homepage'));        }

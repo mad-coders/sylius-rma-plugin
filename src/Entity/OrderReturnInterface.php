@@ -50,6 +50,16 @@ interface OrderReturnInterface
     public function getReturnNumber(): string;
 
     /**
+     * @return string
+     */
+    public function getCustomerEmail(): string;
+
+    /**
+     * @param string $customerEmail
+     */
+    public function setCustomerEmail(string $customerEmail): void;
+
+    /**
      * @param string $returnNumber
      */
     public function setReturnNumber(string $returnNumber): void;
