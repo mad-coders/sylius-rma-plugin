@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
 use Sylius\Component\Core\Model\OrderInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
@@ -15,20 +16,30 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $orderReturnRepository;
 
-    public function __construct(OrderRepositoryInterface $orderRepository, RepositoryInterface $orderReturnRepository)
+    /** @var ReturnNumberGenerator */
+    private $orderReturnGenerator;
+
+    /**
+     * ReturnRequestBuilder constructor.
+     * @param OrderRepositoryInterface $orderRepository
+     * @param RepositoryInterface $orderReturnRepository
+     * @param ReturnNumberGenerator $orderReturnGenerator
+     */
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        RepositoryInterface $orderReturnRepository,
+        ReturnNumberGenerator $orderReturnGenerator
+    )
     {
         $this->orderRepository = $orderRepository;
         $this->orderReturnRepository = $orderReturnRepository;
+        $this->orderReturnGenerator = $orderReturnGenerator;
     }
 
     /**
@@ -56,7 +67,8 @@ class ReturnRequestBuilder
         $orderReturn = new OrderReturn();
 
         // populate order data
-        $orderReturn->setReturnNumber('R' . $orderNumber . '-1');
+        $orderReturnNumber = $this->orderReturnGenerator->returnNumberGenerate($orderNumber);
+        $orderReturn->setReturnNumber($orderReturnNumber);
         $orderReturn->setChannelCode($order->getChannel()->getCode());
         $orderReturn->setOrderNumber($order->getNumber());
 

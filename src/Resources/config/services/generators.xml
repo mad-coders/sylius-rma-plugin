@@ -12,5 +12,9 @@
             <argument>@MadcodersSyliusRmaPlugin/Resources/pdf/sylius-logo.png</argument>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.generator.return_number_generator" class="Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator">
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+        </service>
+
      </services>
 </container>
