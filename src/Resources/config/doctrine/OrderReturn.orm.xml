@@ -13,6 +13,10 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <indexes>
+            <index columns="order_number"/>
+        </indexes>
+
         <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="orderReturn" field="items">
             <cascade>
                 <cascade-persist/>
@@ -20,7 +24,7 @@
             </cascade>
         </one-to-many>
 
-        <field name="orderNumber" unique="true" column="order_number" type="string" />
+        <field name="orderNumber" column="order_number" type="string" />
         <field name="returnNumber" unique="true" column="return_number" type="string" />
         <field name="channelCode" column="channel_code" type="string" />
         <field name="returnReason" column="return_reason" type="string" nullable="true" />
