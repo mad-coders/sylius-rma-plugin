@@ -25,21 +25,22 @@ class ReturnRequestBuilder
     /** @var ReturnNumberGenerator */
     private $orderReturnGenerator;
 
+    /** @var MaxQtyCalculator */
+    private $maxQtyCalculator;
+
     /**
      * ReturnRequestBuilder constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param RepositoryInterface $orderReturnRepository
      * @param ReturnNumberGenerator $orderReturnGenerator
+     * @param MaxQtyCalculator $maxQtyCalculator
      */
-    public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        RepositoryInterface $orderReturnRepository,
-        ReturnNumberGenerator $orderReturnGenerator
-    )
+    public function __construct(OrderRepositoryInterface $orderRepository, RepositoryInterface $orderReturnRepository, ReturnNumberGenerator $orderReturnGenerator, MaxQtyCalculator $maxQtyCalculator)
     {
         $this->orderRepository = $orderRepository;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->orderReturnGenerator = $orderReturnGenerator;
+        $this->maxQtyCalculator = $maxQtyCalculator;
     }
 
     /**
@@ -55,13 +56,13 @@ class ReturnRequestBuilder
             throw new Exception(sprintf('$order must implement %s interface', OrderInterface::class));
         }
 
-        $c = [ 'orderNumber' => $orderNumber, 'orderReturnStatus' => OrderReturnInterface::STATUS_DRAFT ];
-        $orderReturn = $this->orderReturnRepository->findOneBy($c);
+        $draftOrderSearchData = [ 'orderNumber' => $orderNumber, 'orderReturnStatus' => OrderReturnInterface::STATUS_DRAFT ];
+        $draftOrderReturn = $this->orderReturnRepository->findOneBy($draftOrderSearchData);
 
         // if draft order already exists then return it
         // ONLY ONE draft order return object per sales order is allowed
-        if ($orderReturn instanceof OrderReturnInterface) {
-            return $orderReturn;
+        if ($draftOrderReturn instanceof OrderReturnInterface) {
+            return $draftOrderReturn;
         }
 
         $orderReturn = new OrderReturn();
@@ -70,7 +71,7 @@ class ReturnRequestBuilder
         $orderReturnNumber = $this->orderReturnGenerator->returnNumberGenerate($orderNumber);
         $orderReturn->setReturnNumber($orderReturnNumber);
         $orderReturn->setChannelCode($order->getChannel()->getCode());
-        $orderReturn->setOrderNumber($order->getNumber());
+        $orderReturn->setOrderNumber($orderNumber);
 
         // check if customer exists
         if (!$customer = $order->getCustomer()) {
@@ -102,12 +103,13 @@ class ReturnRequestBuilder
                 throw new \Exception(sprintf('$item->getVariant() must return %s', ProductVariantInterface::class));
             }
 
-            if (!$orderItemVariant->getCode()) {
+            if (!$itemVariantCode = $orderItemVariant->getCode()) {
                 throw new \Exception('Cannot create OrderItemReturnRequest for OrderItem without code.');
             }
 
             // TODO: $maxQty should be calculated based on following pattern: $qtyOrdered(orShipped) - $qtyAlreadyReturned
-            $maxQty = $item->getQuantity();
+            $originalQty = $item->getQuantity();
+            $maxQty = $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);
 
             $orderReturnItem= new OrderReturnItem();
             $orderReturnItem->setUnitPrice($item->getUnitPrice());
