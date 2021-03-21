@@ -1,7 +1,8 @@
 {% block madcoders_rma_return_item_widget %}
     {% apply spaceless %}
-    {% set variant = rma_product_view(form.vars.value.productSku) %}
 
+        {% set variant = rma_product_view(form.vars.value.productSku) %}
+        {% if form.vars.value.maxQty > 0 %}
         <tr>
 {#            <td>#}
 {#                {{ form_row(form.itemToReturn) }}#}
@@ -16,5 +17,7 @@
                 <span class="sylius-quantity" style="display: inline-block" >{{ form_row(form.returnQty) }} </span> <span>/ {{ form.vars.value.maxQty }}</span>
             </td>
         </tr>
+        {% endif %}
+
     {% endapply %}
 {% endblock %}
