@@ -8,7 +8,17 @@ madcoders_rma_admin_order_return:
     grid: madcoders_rma_admin_return_orders
     vars:
         all:
-            subheader: madcoders_rma.ui.mainslider
+            subheader: madcoders_rma.ui.return_list
         index:
             icon: 'file dolly outline'
   type: sylius.resource
+
+madcoders_rma_admin_order_return_show:
+  path: /order-returns/{id}
+  methods: [GET]
+  defaults:
+    _controller: madcoders_rma.controller.order_return:showAction
+    _sylius:
+      section: admin
+      permission: true
+      template: "@MadcodersSyliusRmaPlugin/Admin/Return/show.html.twig"

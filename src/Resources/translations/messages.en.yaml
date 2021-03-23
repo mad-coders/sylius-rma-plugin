@@ -2,8 +2,13 @@ madcoders_rma:
     ui:
         return_reason: 'Return reason'
         order_number: 'Order Number'
-        return_number: 'Order return number'
-        return_list: 'List of Returns Order'
+        return_number: 'Return number'
+        return_list: 'Returns'
+        customer_note: "Customer's Note"
+        customer_consent: "Customer's Consent"
+        return_management: 'Management of return'
+        timeline: 'Time Line'
+        add_notes: 'Add Notes'
         return:
             enter_order_number: 'Please enter your order number'
             create_return_form: 'Create return form'
@@ -11,7 +16,7 @@ madcoders_rma:
             code_not_valid: 'code_not_valid'
             enter_code_you_received: 'Enter the code you received'
             verife_your_form: 'Verife your form'
-            return_form: 'RETOURENSCHEIN / MUSTER-WIDERRUFSFORMULAR'
+            return_form: 'Return Form'
             consent_text: 'Akceptuje warunki zwrotu'
             selecte_items_to_return_form: 'Wybierz producty do zwrotu'
             provide_reason: 'Provide the reason for the return'
@@ -25,3 +30,6 @@ madcoders_rma:
             customer_information: 'PERSONAL INFORMATION'
             return_sending_address: 'Please send your return to'
             signatured_place: 'signature place'
+    state:
+        draft: 'Draft'
+        accepted: 'Accepted'

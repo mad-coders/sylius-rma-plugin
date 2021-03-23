@@ -1,0 +1,11 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+<div class="ui stackable two column grid">
+    <div class="ten wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_header.html.twig' %}
+    </div>
+    <div class="six wide right aligned column">
+        {% set path = path('madcoders_rma_admin_order_return_index') %}
+        {{ buttons.default(path, '', 'back', 'arrow alternate circle left outline') }}
+    </div>
+</div>

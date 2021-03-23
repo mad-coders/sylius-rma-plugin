@@ -17,7 +17,7 @@ class AdminMenuListener
 
         $newRmaSubmenu
             ->addChild('return-manager-list', ['route' => 'madcoders_rma_admin_order_return_index'])
-            ->setLabel('List of return orders')
+            ->setLabel('Returns')
             ->setLabelAttribute('icon', 'dolly')
         ;
     }

@@ -1,0 +1,49 @@
+<div class="ui stackable segment grid">
+    <div class="sixteen wide column">
+        <h3 class="ui dividing header">
+            {{ 'madcoders_rma.ui.return.return_form'|trans }}
+        </h3>
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_customerData.html.twig' %}
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_addressCustomerData.html.twig' %}
+    </div>
+    <div class="sixteen wide column">
+        <table class="ui celled compact small table fixed">
+            <thead>
+            <tr>
+                <th>{{ 'sylius.ui.item'|trans }}</th>
+                <th>{{ 'sylius.ui.product_options'|trans }}</th>
+                <th>{{ 'madcoders_rma.ui.return.return_qty'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in order_return.items if item.returnQty > 0 %}
+                {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_item.html.twig' with {'item': item} %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_customerNote.html.twig' %}
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_customerConsent.html.twig' %}
+    </div>
+</div>
+
+<div class="ui stackable segment grid">
+    <div class="sixteen wide column">
+        <h3 class="ui dividing header">
+            {{ 'madcoders_rma.ui.return_management'|trans }}
+        </h3>
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/_timeline.html.twig' %}
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/_addNotes.html.twig' %}
+    </div>
+</div>

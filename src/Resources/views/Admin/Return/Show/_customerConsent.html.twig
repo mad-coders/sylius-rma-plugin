@@ -1,0 +1,8 @@
+<h4 class="ui top attached styled header">
+    {{ 'madcoders_rma.ui.customer_consent'|trans }}
+</h4>
+<div class="ui attached segment" id="customer-consent-data">
+    {% if order_return.orderReturnConsent == true %}
+        {{ order_return.orderReturnConsentLabel }}
+    {% endif %}
+</div>
