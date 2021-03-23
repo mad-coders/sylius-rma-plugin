@@ -6,7 +6,7 @@ sylius_grid:
         options:
           class: Madcoders\SyliusRmaPlugin\Entity\OrderReturn
       sorting:
-        createdAt: desc
+        date: desc
       fields:
         date:
           type: datetime
