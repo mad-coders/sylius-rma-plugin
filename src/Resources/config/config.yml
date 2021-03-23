@@ -1,3 +1,6 @@
+imports:
+  - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids.yaml" }
+
 sylius_mailer:
   emails:
     authcode_generated:

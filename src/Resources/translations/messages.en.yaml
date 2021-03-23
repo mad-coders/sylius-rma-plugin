@@ -1,8 +1,9 @@
 madcoders_rma:
     ui:
         return_reason: 'Return reason'
-        order_number: 'Podaj numer zamówienia'
+        order_number: 'Order Number'
         return_number: 'Order return number'
+        return_list: 'List of Returns Order'
         return:
             enter_order_number: 'Please enter your order number'
             create_return_form: 'Create return form'

@@ -1,0 +1,32 @@
+sylius_grid:
+  grids:
+    madcoders_rma_admin_return_orders:
+      driver:
+        name: doctrine/orm
+        options:
+          class: Madcoders\SyliusRmaPlugin\Entity\OrderReturn
+      fields:
+        date:
+          type: datetime
+          label: sylius.ui.date
+          path: createdAt
+          sortable: createdAt
+          options:
+            format: d-m-Y H:i:s
+        returnNumber:
+          type: string
+          label: madcoders_rma.ui.return_number
+        channel:
+          path: channelCode
+          type: twig
+          label: sylius.ui.channel
+          sortable: channelCode
+          options:
+            template: "@MadcodersSyliusRmaPlugin/Admin/Order/Grid/Field/channel.html.twig"
+        number:
+          path: orderNumber
+          type: twig
+          label: madcoders_rma.ui.order_number
+          sortable: ~
+          options:
+            template: "@MadcodersSyliusRmaPlugin/Admin/Order/Grid/Field/number.html.twig"
