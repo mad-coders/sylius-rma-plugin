@@ -1,0 +1,24 @@
+{% import '@SyliusUi/Macro/flags.html.twig' as flags %}
+
+{% set order = rma_order_number_view(order_return.orderNumber)  %}
+
+<h1 class="ui header">
+    <i class="circular cart icon"></i>
+    <div class="content">
+        {{ 'madcoders_rma.ui.return_number'|trans }} #{{ order_return.returnNumber }}
+        <div class="sub header">
+            <div class="ui horizontal divided list">
+                <div class="item">
+                    {{ order_return.createdAt|format_datetime }}
+                </div>
+                <div class="item" id="sylius-order-state">
+                    {% include [('@MadcodersSyliusRmaPlugin/Admin/Return/Label/State' ~ '/' ~ order_return.orderReturnStatus ~ '.html.twig'), '@SyliusUi/Label/_default.html.twig'] with {'value': ('sylius.ui.' ~ order_return.orderReturnStatus)|trans} %}
+                </div>
+                <div class="item">
+                    {{ 'sylius.ui.purchased_from'|trans }}
+                    {% include '@SyliusAdmin/Common/_channel.html.twig' with {'channel': order.channel} %}
+                </div>
+            </div>
+        </div>
+    </div>
+</h1>

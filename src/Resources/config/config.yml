@@ -10,6 +10,39 @@ sylius_mailer:
       subject: sylius.emails.return_generated.subject
       template: "@MadcodersSyliusRmaPlugin/Email/returnFormGenerated.html.twig"
 
+sylius_ui:
+  events:
+    madcoders_rma.admin.order_return.show.content:
+      blocks:
+        before_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 35
+          context:
+            event: sylius.admin.order_return.show.before_header
+        header:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_headerWidget.html.twig"
+          priority: 30
+        after_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 25
+          context:
+            event: sylius.admin.order_return.show.after_header
+        breadcrumb:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_breadcrumb.html.twig"
+          priority: 20
+        after_breadcrumb_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 15
+          context:
+            event: sylius.admin.order_return.show.after_breadcrumb
+        content:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_content.html.twig"
+          priority: 10
+        after_content_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 5
+          context:
+            event: sylius.admin.order.show.after_content
 
 # order return state machine
 

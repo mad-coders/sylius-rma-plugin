@@ -5,6 +5,8 @@ sylius_grid:
         name: doctrine/orm
         options:
           class: Madcoders\SyliusRmaPlugin\Entity\OrderReturn
+      sorting:
+        date: desc
       fields:
         date:
           type: datetime
@@ -22,11 +24,23 @@ sylius_grid:
           label: sylius.ui.channel
           sortable: channelCode
           options:
-            template: "@MadcodersSyliusRmaPlugin/Admin/Order/Grid/Field/channel.html.twig"
+            template: "@MadcodersSyliusRmaPlugin/Admin/Return/Grid/Field/channel.html.twig"
         number:
           path: orderNumber
           type: twig
           label: madcoders_rma.ui.order_number
           sortable: ~
           options:
-            template: "@MadcodersSyliusRmaPlugin/Admin/Order/Grid/Field/number.html.twig"
+            template: "@MadcodersSyliusRmaPlugin/Admin/Return/Grid/Field/number.html.twig"
+        orderReturnStatus:
+          type: twig
+          label: sylius.ui.state
+          sortable: ~
+          options:
+            template: "@SyliusUi/Grid/Field/state.html.twig"
+            vars:
+              labels: "@MadcodersSyliusRmaPlugin/Admin/Return/Label/State"
+      actions:
+        item:
+          show:
+            type: show

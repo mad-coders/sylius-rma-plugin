@@ -1,0 +1,13 @@
+{% set variant = rma_product_view(item.productSku) %}
+
+<tr>
+    <td class="single line">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Item/_info.html.twig' with {'variant': variant} %}
+    </td>
+    <td class="left aligned">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Item/_options.html.twig' with {'variant': variant} %}
+    </td>
+    <td class="center line">
+        {{ item.returnQty }}
+    </td>
+</tr>
