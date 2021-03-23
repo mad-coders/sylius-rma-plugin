@@ -9,6 +9,7 @@ madcoders_rma:
         return_management: 'Management of return'
         timeline: 'Time Line'
         add_notes: 'Add Notes'
+        order_returns: 'Returns'
         return:
             enter_order_number: 'Please enter your order number'
             create_return_form: 'Create return form'

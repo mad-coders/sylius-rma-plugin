@@ -7,6 +7,8 @@ namespace Madcoders\SyliusRmaPlugin\DependencyInjection;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
@@ -72,6 +74,22 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
                                     ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('order_return_change_log')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(OrderReturnChangeLog::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(OrderReturnChangeLogInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                ->end()
                                 ->end()
                             ->end()
                         ->end()

@@ -17,7 +17,7 @@
             <index columns="order_number"/>
         </indexes>
 
-        <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem"  mapped-by="orderReturn" field="items">
+        <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem" mapped-by="orderReturn" field="items">
             <cascade>
                 <cascade-persist/>
                 <cascade-remove/>
