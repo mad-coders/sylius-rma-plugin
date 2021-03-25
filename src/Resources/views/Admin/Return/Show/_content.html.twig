@@ -41,7 +41,7 @@
         </h3>
     </div>
     <div class="eight wide column">
-        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/_timeline.html.twig' %}
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/_timeline.html.twig' with {'order_return': order_return} %}
     </div>
     <div class="eight wide column">
         {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/_addNotes.html.twig' with {'form': form}%}

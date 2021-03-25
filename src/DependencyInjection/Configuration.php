@@ -8,6 +8,8 @@ use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthorInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
@@ -89,6 +91,22 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
                                         ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
+                                ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('madcoders_rma_order_return_change_log_author')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                    ->scalarNode('model')->defaultValue(OrderReturnChangeLogAuthor::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('interface')->defaultValue(OrderReturnChangeLogAuthorInterface::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('repository')->cannotBeEmpty()->end()
                                 ->end()
                                 ->end()
                             ->end()

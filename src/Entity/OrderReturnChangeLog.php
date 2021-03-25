@@ -29,6 +29,9 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
     /** @var string */
     private $returnNumber;
 
+    /** @var OrderReturnChangeLogAuthor */
+    private $author;
+
     /** @return int */
     public function getId(): int
     {
@@ -69,5 +72,17 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
     public function setReturnNumber(string $returnNumber): void
     {
         $this->returnNumber = $returnNumber;
+    }
+
+    /** @return OrderReturnChangeLogAuthor */
+    public function getAuthor(): OrderReturnChangeLogAuthor
+    {
+        return $this->author;
+    }
+
+    /** @param OrderReturnChangeLogAuthor $author */
+    public function setAuthor(OrderReturnChangeLogAuthor $author): void
+    {
+        $this->author = $author;
     }
 }

@@ -31,4 +31,10 @@ interface OrderReturnChangeLogInterface
 
     /** @param string $returnNumber */
     public function setReturnNumber(string $returnNumber): void;
+
+    /** @return OrderReturnChangeLogAuthor */
+    public function getAuthor(): OrderReturnChangeLogAuthor;
+
+    /** @param OrderReturnChangeLogAuthor $author */
+    public function setAuthor(OrderReturnChangeLogAuthor $author): void;
 }
