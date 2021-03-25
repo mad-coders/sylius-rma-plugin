@@ -6,3 +6,5 @@ madcoders_rma:
         bank_account_number:
             not_blank: 'To pole nie moze być puste'
             not_a_valid: 'This is not a valid International Bank Account Number (IBAN).'
+        notes:
+            not_blank: 'To pole nie moze być puste'

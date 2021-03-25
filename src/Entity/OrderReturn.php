@@ -121,9 +121,7 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     /** @var string|null */
     private $bankAccountNumber;
 
-    /**
-     * @var OrderReturnItem[]
-     */
+    /** @var OrderReturnItem[] */
     private $items;
 
     public function __construct()

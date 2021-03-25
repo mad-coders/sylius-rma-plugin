@@ -15,10 +15,13 @@ madcoders_rma_admin_order_return:
 
 madcoders_rma_admin_order_return_show:
   path: /order-returns/{id}
-  methods: [GET]
+  methods: [ GET, POST ]
+  controller: madcoders.sylius_rma_plugin.controller.admin_management_controller:viewIndex
   defaults:
-    _controller: madcoders_rma.controller.order_return:showAction
+    template: "@MadcodersSyliusRmaPlugin/Admin/Return/show.html.twig"
     _sylius:
       section: admin
       permission: true
-      template: "@MadcodersSyliusRmaPlugin/Admin/Return/show.html.twig"
+      repository:
+        arguments:
+          - $id
