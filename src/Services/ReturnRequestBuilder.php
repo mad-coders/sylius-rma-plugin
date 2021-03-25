@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -28,19 +29,30 @@ class ReturnRequestBuilder
     /** @var MaxQtyCalculator */
     private $maxQtyCalculator;
 
+    /** @var RmaChangesLogger */
+    private $changesLogger;
+
     /**
      * ReturnRequestBuilder constructor.
      * @param OrderRepositoryInterface $orderRepository
      * @param RepositoryInterface $orderReturnRepository
      * @param ReturnNumberGenerator $orderReturnGenerator
      * @param MaxQtyCalculator $maxQtyCalculator
+     * @param RmaChangesLogger $changesLogger
      */
-    public function __construct(OrderRepositoryInterface $orderRepository, RepositoryInterface $orderReturnRepository, ReturnNumberGenerator $orderReturnGenerator, MaxQtyCalculator $maxQtyCalculator)
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        RepositoryInterface $orderReturnRepository,
+        ReturnNumberGenerator $orderReturnGenerator,
+        MaxQtyCalculator $maxQtyCalculator,
+        RmaChangesLogger $changesLogger
+    )
     {
         $this->orderRepository = $orderRepository;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->orderReturnGenerator = $orderReturnGenerator;
         $this->maxQtyCalculator = $maxQtyCalculator;
+        $this->changesLogger = $changesLogger;
     }
 
     /**
@@ -120,6 +132,14 @@ class ReturnRequestBuilder
 
             $orderReturn->addItem($orderReturnItem);
         }
+
+        //Logger functionality
+        $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
+        $newChangeLogAuthor->setFirstName($address->getFirstName());
+        $newChangeLogAuthor->setLastName($address->getLastName());
+        $newChangeLogAuthor->setType('customer');
+
+        $this->changesLogger->add($orderReturnNumber, 'created_draft', '', $newChangeLogAuthor);
 
         $this->orderReturnRepository->add($orderReturn);
 

@@ -11,8 +11,11 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnNotesType;
+use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -21,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 
@@ -47,6 +51,12 @@ final class AdminManagementController extends AbstractController
     /** @var RepositoryInterface */
     private $changeLogRepository;
 
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
+
+    /** @var RmaChangesLogger */
+    private $changesLogger;
+
     /**
      * AdminManagementController constructor.
      * @param FormFactoryInterface $formFactory
@@ -56,6 +66,8 @@ final class AdminManagementController extends AbstractController
      * @param SessionInterface $session
      * @param RepositoryInterface $orderReturnRepository
      * @param RepositoryInterface $changeLogRepository
+     * @param TokenStorageInterface $tokenStorage
+     * @param RmaChangesLogger $changesLogger
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -64,7 +76,9 @@ final class AdminManagementController extends AbstractController
         RouterInterface $router,
         SessionInterface $session,
         RepositoryInterface $orderReturnRepository,
-        RepositoryInterface $changeLogRepository
+        RepositoryInterface $changeLogRepository,
+        TokenStorageInterface $tokenStorage,
+        RmaChangesLogger $changesLogger
     )
     {
         $this->formFactory = $formFactory;
@@ -74,6 +88,8 @@ final class AdminManagementController extends AbstractController
         $this->session = $session;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->changeLogRepository = $changeLogRepository;
+        $this->tokenStorage = $tokenStorage;
+        $this->changesLogger = $changesLogger;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -82,8 +98,18 @@ final class AdminManagementController extends AbstractController
 
         if (!$orderReturn = $this->getDoctrine()->getRepository(OrderReturn::class)
             ->findOneBy(array('id' => $orderReturnId))) {
+
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_index'));
         }
+
+        if (!$returnNumber = (string) $orderReturn->getReturnNumber()){
+
+            return new RedirectResponse($this->router
+                ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
+        };
+
+        $changeLog = $this->getDoctrine()->getRepository(OrderReturnChangeLog::class)
+            ->findBy(array('returnNumber' => $returnNumber), array('createdAt' => 'DESC'));
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnNotesType::class);
         $form = $this->formFactory->create($formType);
@@ -104,17 +130,17 @@ final class AdminManagementController extends AbstractController
                     ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
             }
 
-            if (!$returnNumber = (string) $orderReturn->getReturnNumber()){
+            /** @var AdminUserInterface $user */
+            $user = $this->tokenStorage->getToken()->getUser();
+            $userFirstName = $user->getFirstName();
+            $userLastName = $user->getLastName();
 
-                return new RedirectResponse($this->router
-                    ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
-            };
+            $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
+            $newChangeLogAuthor->setFirstName($userFirstName);
+            $newChangeLogAuthor->setLastName($userLastName);
+            $newChangeLogAuthor->setType('admin');
 
-            $newChangeLog = new OrderReturnChangeLog();
-            $newChangeLog->setReturnNumber($returnNumber);
-            $newChangeLog->setType('Manager Comments');
-            $newChangeLog->setNote($note);
-            $this->changeLogRepository->add($newChangeLog);
+            $this->changesLogger->add($returnNumber, 'added_note', $note, $newChangeLogAuthor);
 
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
         }
@@ -122,7 +148,7 @@ final class AdminManagementController extends AbstractController
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
         return new Response($this->templatingEngine
-            ->render($templateWithAttribute, ['order_return' => $orderReturn,'form' => $form->createView()]));
+            ->render($templateWithAttribute, ['order_return' => $orderReturn, 'form' => $form->createView(), 'changeLog' => $changeLog ]));
     }
 
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string

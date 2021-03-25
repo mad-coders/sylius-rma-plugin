@@ -11,11 +11,13 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
+use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -64,6 +66,9 @@ final class ReturnController extends AbstractController
     /** @var ReturnFormEmailSenderInterface */
     private $orderReturnFormPdfEmailSender;
 
+    /** @var RmaChangesLogger */
+    private $changesLogger;
+
     /**
      * ReturnController constructor.
      * @param FormFactoryInterface $formFactory
@@ -71,23 +76,24 @@ final class ReturnController extends AbstractController
      * @param ChannelContextInterface $channelContext
      * @param RouterInterface $router
      * @param SessionInterface $session
-     * @param RepositoryInterface $orderReturnRepository
      * @param ReturnRequestBuilder $returnRequestBuilder
+     * @param RepositoryInterface $orderReturnRepository
      * @param StateMachineFactoryInterface $stateMachineFactory
      * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
      * @param ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
+     * @param RmaChangesLogger $changesLogger
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
         ChannelContextInterface $channelContext,
-        RouterInterface $router,
-        SessionInterface $session,
-        RepositoryInterface $orderReturnRepository,
+        RouterInterface $router, SessionInterface $session,
         ReturnRequestBuilder $returnRequestBuilder,
+        RepositoryInterface $orderReturnRepository,
         StateMachineFactoryInterface $stateMachineFactory,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
+        ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
+        RmaChangesLogger $changesLogger
     )
     {
         $this->formFactory = $formFactory;
@@ -100,6 +106,7 @@ final class ReturnController extends AbstractController
         $this->stateMachineFactory = $stateMachineFactory;
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
         $this->orderReturnFormPdfEmailSender = $orderReturnFormPdfEmailSender;
+        $this->changesLogger = $changesLogger;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -130,9 +137,11 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
+        $returnNumber = (string) $request->attributes->get('returnNumber');
+
         if (!$orderReturn = $this->getDoctrine()
             ->getRepository(OrderReturn::class)
-            ->findOneBy(array('returnNumber' => $request->attributes->get('returnNumber')))) {
+            ->findOneBy(array('returnNumber' => $returnNumber))) {
             return $this->createMissingOrderNumberResponse($request);
         };
 
@@ -154,14 +163,33 @@ final class ReturnController extends AbstractController
             }
 
             $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
+
+            if (!$userFirstName = $orderReturn->getFirstName()) {
+                $userFirstName = 'no Name';
+            }
+
+            if (!$userLastName = $orderReturn->getLastName()) {
+                $userLastName = 'no Last Name';
+            }
+
+            if (!$customerEmail = $orderReturn->getCustomerEmail()) {
+                $customerEmail = 'no email address';
+            }
+
+            $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
+            $newChangeLogAuthor->setFirstName($userFirstName);
+            $newChangeLogAuthor->setLastName($userLastName);
+            $newChangeLogAuthor->setType('customer');
+
+            $this->changesLogger->add($returnNumber, 'customer_accepted', '', $newChangeLogAuthor);
+
             $this->orderReturnRepository->add($orderReturn);
 
             /** @var ChannelInterface $channelVariable */
             $channel = $this->channelContext->getChannel();
-            $customerEmail = $orderReturn->getCustomerEmail();
             $this->orderReturnFormPdfEmailSender->sendReturnOrderFormEmail($orderReturn, $channel, $customerEmail);
 
-            return new RedirectResponse($this->router->generate('madcoders_rma_return_form_success', ['returnNumber' => $orderReturn->getReturnNumber()]));
+            return new RedirectResponse($this->router->generate('madcoders_rma_return_form_success', ['returnNumber' => $returnNumber]));
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);

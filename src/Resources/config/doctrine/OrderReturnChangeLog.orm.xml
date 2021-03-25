@@ -11,6 +11,17 @@
             <generator strategy="AUTO"/>
         </id>
 
+        <one-to-one target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor" field="author">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+
+        <indexes>
+            <index columns="return_number"/>
+        </indexes>
+
         <field name="returnNumber" column="return_number" type="string" />
         <field name="type" column="type" type="text"/>
         <field name="note" column="note" type="text" nullable="true" />

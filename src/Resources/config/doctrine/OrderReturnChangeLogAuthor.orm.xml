@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+>
+
+    <mapped-superclass name="Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor"
+                       table="madcoders_rma_order_return_change_log_author">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="type" column="type" type="text" nullable="true" />
+        <field name="firstName" column="first_name" type="text" nullable="true" />
+        <field name="lastName" column="last_name" type="text" nullable="true" />
+
+    </mapped-superclass>
+</doctrine-mapping>
