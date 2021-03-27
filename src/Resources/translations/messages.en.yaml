@@ -10,6 +10,9 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
+        return_history: 'Return History'
+        your_consent: 'Your consent'
+        your_note: 'Your notes'
         return:
             enter_order_number: 'Please enter your order number'
             create_return_form: 'Create return form'

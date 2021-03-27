@@ -1,0 +1,2 @@
+{% set order = rma_order_number_view(data)  %}
+<a href="{{ path('sylius_shop_account_order_show', {'number' : order.number })|raw }}">#{{ order.number}}</a>
