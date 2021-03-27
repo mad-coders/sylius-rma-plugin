@@ -55,19 +55,29 @@ winzou_state_machine:
     states:
       draft: ~
       new: ~
-      accepted: ~
-      rejected: ~
+      completed: ~
+      canceled: ~
+    callbacks:
+      after:
+        updated_changelog_on_cancel:
+          on: [ 'cancel' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel', 'updatedChangelogOnCancel' ]
+          args: [ 'object' ]
+        updated_changelog_on_complete:
+          on: [ 'complete' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete', 'UpdatedChangelogOnComplete' ]
+          args: [ 'object' ]
 
     transitions:
       new:
         from: ['draft']
         to: new
-      accept:
+      complete:
         from: ['new']
-        to: accepted
-      reject:
-        from: ['new']
-        to: rejected
+        to: completed
+      cancel:
+        from: ['draft', 'new']
+        to: canceled
 
 # HOW TO USE ORDER RETURN STATE MACHINE
 

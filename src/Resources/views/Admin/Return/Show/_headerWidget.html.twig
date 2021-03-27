@@ -5,7 +5,19 @@
         {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_header.html.twig' %}
     </div>
     <div class="six wide right aligned column">
+
         {% set path = path('madcoders_rma_admin_order_return_index') %}
         {{ buttons.default(path, '', 'back', 'arrow alternate circle left outline') }}
+
+        {% if order_return.orderReturnStatus == 'new' %}
+            {% set pathDone = path('madcoders_rma_admin_order_return_show_complete', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
+            {{ buttons.default(pathDone, 'sylius.ui.complete'|trans, order_return.id, 'check circle outline', 'green') }}
+        {% endif %}
+
+       {% if order_return.orderReturnStatus != 'completed' and  order_return.orderReturnStatus != 'canceled' %}
+            {% set pathCancel = path('madcoders_rma_admin_order_return_show_cancel', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
+            {{ buttons.default(pathCancel, 'sylius.ui.cancel'|trans, order_return.id, 'cancel', 'red') }}
+        {% endif %}
+
     </div>
 </div>

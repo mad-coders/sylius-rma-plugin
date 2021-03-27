@@ -33,6 +33,10 @@ class RmaTimeLineExtension extends AbstractExtension
                 return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_createdDraft.html.twig';
             case 'customer_accepted':
                 return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_customerAccepted.html.twig';
+            case 'cancelled':
+                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_cancelled.html.twig';
+            case 'completed':
+                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_completed.html.twig';
             default:
                 throw new \Exception('Type not identified');
         }
