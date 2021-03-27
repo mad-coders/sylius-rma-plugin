@@ -12,6 +12,25 @@ sylius_mailer:
 
 sylius_ui:
   events:
+    madcoders_rma.shop.account.order_return.show.subcontent:
+      blocks:
+        header:
+          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_header.html.twig"
+          priority: 20
+        after_content_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 15
+          context:
+            event: madcoders_rma.shop.account.order_return.show.after_content_header
+        summary:
+          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_summary.html.twig"
+          priority: 10
+        after_summary_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 5
+          context:
+            event: madcoders_rma.shop.account.order_return.show.after_summary
+
     madcoders_rma.admin.order_return.show.content:
       blocks:
         before_header_legacy:

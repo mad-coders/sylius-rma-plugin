@@ -14,6 +14,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
+use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -58,7 +59,7 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('interface')->defaultValue(OrderReturnInterface::class)->cannotBeEmpty()->end()
                                         ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
                                         ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
-                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->defaultValue(OrderReturnRepository::class)->cannotBeEmpty()->end()
                                     ->end()
                                 ->end()
                             ->end()

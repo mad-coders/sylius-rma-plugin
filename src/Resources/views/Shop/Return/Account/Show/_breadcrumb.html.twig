@@ -1,0 +1,11 @@
+<div class="ui breadcrumb">
+    <a href="{{ path('sylius_shop_homepage') }}" class="section">{{ 'sylius.ui.home'|trans }}</a>
+    <div class="divider"> / </div>
+    <a href="{{ path('sylius_shop_account_dashboard') }}" class="section">{{ 'sylius.ui.my_account'|trans }}</a>
+    <div class="divider"> / </div>
+    <a href="{{ path('madcoders_rma_shop_account_index') }}" class="section">{{ 'madcoders_rma.ui.return_history'|trans }}</a>
+    <div class="divider"> / </div>
+    <div class="active section">
+        {{ 'madcoders_rma.ui.return_number'|trans }} <span id="number" {{ sylius_test_html_attribute('return-number') }}>#{{ order_return.returnNumber }}</span>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="ui stackable segment grid">
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerData.html.twig' %}
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_addressCustomerData.html.twig' %}
+    </div>
+    <div class="sixteen wide column">
+        <table class="ui celled compact small table fixed">
+            <thead>
+            <tr>
+                <th class="nine wide">{{ 'sylius.ui.item'|trans }}</th>
+                <th class="four wide">{{ 'sylius.ui.product_options'|trans }}</th>
+                <th class="three wide">{{ 'madcoders_rma.ui.return.return_qty'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in order_return.items if item.returnQty > 0 %}
+                {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_item.html.twig' with {'item': item} %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerNote.html.twig' %}
+    </div>
+    <div class="eight wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerConsent.html.twig' %}
+    </div>
+</div>

@@ -11,5 +11,10 @@
             <tag name="kernel.event_listener" event="sylius.menu.admin.main" method="addAdminMenuItems"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.ui.menu.account_menu_listener"
+                 class="Madcoders\SyliusRmaPlugin\Ui\Menu\AccountMenuListener">
+            <tag name="kernel.event_listener" event="sylius.menu.shop.account" method="addAccountMenuItems"/>
+        </service>
+
     </services>
 </container>
