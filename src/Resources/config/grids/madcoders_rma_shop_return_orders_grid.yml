@@ -1,0 +1,58 @@
+sylius_grid:
+    grids:
+        madcoders_rma_shop_return_orders_grid:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: Madcoders\SyliusRmaPlugin\Entity\OrderReturn
+                    repository:
+                        method: createReturnsListQueryBuilder
+                        arguments:
+                            customerEmail: 'expr:service("security.token_storage").getToken().getUser().getCustomer().getEmail()'
+            sorting:
+                createdAt: desc
+            limits: [25, 50, 100]
+            fields:
+                createdAt:
+                    type: datetime
+                    label: sylius.ui.created
+                    sortable: ~
+                    options:
+                        format: d-m-Y
+                returnNumber:
+                    type: string
+                    label: madcoders_rma.ui.return_number
+                    sortable: ~
+                number:
+                    path: orderNumber
+                    type: twig
+                    label: madcoders_rma.ui.order_number
+                    sortable: ~
+                    options:
+                        template: "@MadcodersSyliusRmaPlugin/Shop/Return/Grid/Field/number.html.twig"
+                orderReturnStatus:
+                    type: twig
+                    label: sylius.ui.state
+                    sortable: ~
+                    options:
+                        template: "@SyliusUi/Grid/Field/state.html.twig"
+                        vars:
+                            labels: "@MadcodersSyliusRmaPlugin/Admin/Return/Label/State"
+            actions:
+                item:
+                    show:
+                        type: shop_show
+                        label: sylius.ui.show
+                        options:
+                            link:
+                                route: madcoders_rma_shop_account_return_order_show
+                                parameters:
+                                    returnNumber: resource.returnNumber
+#                    download_pdf:
+#                        type: show
+#                        label: setono_sylius_gift_card.ui.download_pdf
+#                        options:
+#                            link:
+#                                route: setono_sylius_gift_card_shop_gift_card_pdf
+#                                parameters:
+#                                    id: resource.id

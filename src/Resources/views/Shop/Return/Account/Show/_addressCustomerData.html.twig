@@ -1,0 +1,16 @@
+{% import "@SyliusUi/Macro/flags.html.twig" as flags %}
+
+<h4 class="ui top attached styled header">
+    {{ 'sylius.ui.address'|trans }}
+</h4>
+<div class="ui attached segment" id="customer-address-data">
+    <address>
+        {% if order_return.company is not null %}
+            {{ order_return.company }}<br>
+        {% endif %}
+        {{ order_return.street }}<br/>
+        {{ order_return.city }}, {{ order_return.postcode }}<br/>
+        {{ flags.fromCountryCode(order_return.countryCode) }}
+        {{ order_return.countryCode|sylius_country_name|upper }}
+    </address>
+</div>

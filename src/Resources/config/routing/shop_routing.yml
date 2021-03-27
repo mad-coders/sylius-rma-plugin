@@ -63,3 +63,27 @@ madcoders_rma_return_form_print:
             repository:
                 arguments:
                     - $returnNumber
+
+madcoders_rma_shop_account_index:
+    path: /account/return-history
+    methods: [ GET ]
+    defaults:
+        _controller: madcoders_rma.controller.order_return::indexAction
+        _sylius:
+            section: shop
+            grid: madcoders_rma_shop_return_orders_grid
+            template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/index.html.twig'
+
+madcoders_rma_shop_account_return_order_show:
+    path: account/return-history/{returnNumber}
+    methods: [GET]
+    defaults:
+        _controller: madcoders_rma.controller.order_return::showAction
+        _sylius:
+            section: shop_account
+            template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/show.html.twig"
+            repository:
+                method: findOneByReturnNumberAndCustomerEmail
+                arguments:
+                    - $returnNumber
+                    - "expr:service('sylius.context.customer').getCustomer().getEmail()"

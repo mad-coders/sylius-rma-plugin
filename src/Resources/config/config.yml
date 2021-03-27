@@ -12,6 +12,25 @@ sylius_mailer:
 
 sylius_ui:
   events:
+    madcoders_rma.shop.account.order_return.show.subcontent:
+      blocks:
+        header:
+          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_header.html.twig"
+          priority: 20
+        after_content_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 15
+          context:
+            event: madcoders_rma.shop.account.order_return.show.after_content_header
+        summary:
+          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_summary.html.twig"
+          priority: 10
+        after_summary_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 5
+          context:
+            event: madcoders_rma.shop.account.order_return.show.after_summary
+
     madcoders_rma.admin.order_return.show.content:
       blocks:
         before_header_legacy:
@@ -55,19 +74,29 @@ winzou_state_machine:
     states:
       draft: ~
       new: ~
-      accepted: ~
-      rejected: ~
+      completed: ~
+      canceled: ~
+    callbacks:
+      after:
+        updated_changelog_on_cancel:
+          on: [ 'cancel' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel', 'updatedChangelogOnCancel' ]
+          args: [ 'object' ]
+        updated_changelog_on_complete:
+          on: [ 'complete' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete', 'UpdatedChangelogOnComplete' ]
+          args: [ 'object' ]
 
     transitions:
       new:
         from: ['draft']
         to: new
-      accept:
+      complete:
         from: ['new']
-        to: accepted
-      reject:
-        from: ['new']
-        to: rejected
+        to: completed
+      cancel:
+        from: ['draft', 'new']
+        to: canceled
 
 # HOW TO USE ORDER RETURN STATE MACHINE
 

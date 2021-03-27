@@ -18,6 +18,10 @@
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.services.rma_admin_user_data" class="Madcoders\SyliusRmaPlugin\Services\RmaAdminUserData">
+            <argument type="service" id="security.token_storage" />
+        </service>
+
         <service id="madcoders.sylius_rma_plugin.services.rma_changes_logger" class="Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger">
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
         </service>
@@ -38,6 +42,18 @@
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_time_ago_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeAgoExtension">
             <tag name="twig.extension"/>
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\UpdatedChangelogOnCancel" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_admin_user_data"/>
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger"/>
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\UpdatedChangelogOnComplete" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_admin_user_data"/>
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger"/>
         </service>
 
     </services>

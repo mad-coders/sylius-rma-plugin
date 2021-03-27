@@ -1,0 +1,12 @@
+{% extends '@SyliusShop/Account/layout.html.twig' %}
+
+{% block breadcrumb %}
+    {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Index/_breadcrumb.html.twig' %}
+{% endblock %}
+
+{% block subcontent %}
+    {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Index/_header.html.twig' %}
+
+    {{ sylius_grid_render(resources, '@SyliusShop/Grid/_default.html.twig') }}
+
+{% endblock %}

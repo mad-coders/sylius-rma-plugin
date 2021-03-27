@@ -13,20 +13,20 @@ interface OrderReturnInterface
 {
     const STATUS_DRAFT = 'draft';
     const STATUS_NEW = 'new';
-    const STATUS_ACCEPTED = 'accepted';
-    const STATUS_REJECTED = 'rejected';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELED = 'canceled';
 
     const TRANSITION_NEW = 'new';
-    const TRANSITION_ACCEPT = 'accept';
-    const TRANSITION_REJECT = 'reject';
+    const TRANSITION_COMPLETE = 'complete';
+    const TRANSITION_CANCEL = 'cancel';
 
     const GRAPH = 'return_status';
 
     const STATUS_LIST = [
         self::STATUS_DRAFT,
         self::STATUS_NEW,
-        self::STATUS_ACCEPTED,
-        self::STATUS_REJECTED,
+        self::STATUS_COMPLETED,
+        self::STATUS_CANCELED,
     ];
 
     /**
