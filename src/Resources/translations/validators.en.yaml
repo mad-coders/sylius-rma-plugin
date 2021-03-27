@@ -1,6 +1,7 @@
 madcoders_rma:
     validator:
-        return_qty_less_or_equal: 'You cannot return more than {{ compared_value }}.'
+        not_blank: 'Field cannot be empty'
+        return_qty_less_or_equal: 'Max return qty is {{ compared_value }}.'
         order_number:
             not_blank: 'Please provide valid order number'
         bank_account_number:

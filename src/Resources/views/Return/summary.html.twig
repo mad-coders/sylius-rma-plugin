@@ -10,14 +10,13 @@
             <h1 class="ui header">
                 <i class="circular truck icon"></i>
                 <div class="content">
-                    {{ 'sylius.ui.return'|trans }} {{ 'sylius.ui.order'|trans }} - {{ orderNumber }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.return.verife_your_form'|trans }}</div>
+                    {{ 'madcoders_rma.ui.headline'|trans }} #{{ orderNumber }}
+                    <div class="sub header">{{ 'madcoders_rma.ui.confirmation_step.subheader'|trans }}</div>
                 </div>
             </h1>
             <div class="ui segment">
                 <h3 class="ui dividing header">
-                    {{ 'madcoders_rma.ui.return.return_form'|trans }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.return.verife_your_form'|trans }}</div>
+                    {{ 'madcoders_rma.ui.confirmation_step.section.general'|trans }}
                 </h3>
                 <div class="ui two column centered stackable grid">
                     <div class="column">
@@ -28,7 +27,7 @@
                         {% if returnOrder.phoneNumber is defined  %}
                         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}<br/>
                         {% endif %}
-                        <strong>{{ 'madcoders_rma.ui.return.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}<br/>
+                        <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}<br/>
 
                     </div>
                     <div class="column">
@@ -37,14 +36,16 @@
                 </div>
                 <div class="ui one column centered stackable grid">
                     <div class="column">
-                        <strong>{{ 'sylius.ui.items'|trans }}:</strong>
+                        <h3 class="ui dividing header">
+                            {{ 'madcoders_rma.ui.confirmation_step.section.items'|trans }}
+                        </h3>
                         <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }}
                                class="ui very basic celled table">
                             <thead>
                             <tr>
                                 <th>{{ 'sylius.ui.item'|trans }}</th>
                                 <th>{{ 'sylius.ui.product_options'|trans }}</th>
-                                <th>{{ 'madcoders_rma.ui.return.return_qty'|trans }}</th>
+                                <th>{{ 'madcoders_rma.ui.confirmation_step.qty_to_return'|trans }}</th>
                             </tr>
                             </thead>
                             <tbody>

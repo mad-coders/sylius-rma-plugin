@@ -52,12 +52,12 @@ interface OrderReturnInterface
     /**
      * @return string
      */
-    public function getCustomerEmail(): string;
+    public function getCustomerEmail(): ?string;
 
     /**
      * @param string $customerEmail
      */
-    public function setCustomerEmail(string $customerEmail): void;
+    public function setCustomerEmail(?string $customerEmail): void;
 
     /**
      * @param string $returnNumber

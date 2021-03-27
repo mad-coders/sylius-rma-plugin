@@ -25,7 +25,7 @@ final class ReturnAuthVerificationType extends AbstractType
                 'required'    => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'madcoders_rma.not_blank',
+                        'message' => 'madcoders_rma.validator.not_blank',
                     ])
                 ],
             ]);

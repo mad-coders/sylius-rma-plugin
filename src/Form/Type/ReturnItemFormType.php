@@ -44,7 +44,7 @@ final class ReturnItemFormType extends AbstractType
                 'required'    => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'madcoders_rma.return.not_blank',
+                        'message' => 'madcoders_rma.validator.not_blank',
                     ]),
                     new LessThanOrEqual([
                         'value' => $returnItem->getMaxQty(),

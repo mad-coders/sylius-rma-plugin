@@ -141,7 +141,7 @@ final class AuthController extends AbstractController
                 return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
             }
 
-            return $this->errorRedirect($request, 'madcoders_rma.ui.return.order_number_not_valid');
+            return $this->errorRedirect($request, 'madcoders_rma.ui.first_step.error.order_number_not_valid');
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
@@ -192,7 +192,7 @@ final class AuthController extends AbstractController
             $errorMessage = $this->getSyliusAttribute(
                 $request,
                 'error_flash',
-                'madcoders_rma.ui.return.code_not_valid'
+                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_not_valid')
             );
 
             /** @var FlashBagInterface $flashBag */

@@ -6,15 +6,20 @@ madcoders_rma:
         return_number: 'Return number'
         return_list: 'Returns'
         customer_note: "Customer's Note"
-        customer_consent: "Customer's Consent"
+        customer_consent: "I accept terms of service and privacy policy"
         return_management: 'Management of return'
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
         # ##########################################
 
+        headline: 'Return form'
         continue_button: 'Continue'
-        not_blank: 'Field cannot be empty'
+        session_not_valid: 'Your session has expired'
+
+        form:
+            bank_account_number: 'Bank account number (IBAN)'
+            enter_order_number: 'Please enter order number'
 
         first_step:
             success:
@@ -26,34 +31,30 @@ madcoders_rma:
         verification_step:
             secondary_headline: 'Verification step'
             enter_verification_code: "Check your e-mail and enter verification code"
+            error:
+                code_not_valid: 'Verification code is not valid. Please try again.'
 
-        select_items_step:
+        fill_the_form_step:
+            secondary_headline: 'Select items and check your details'
+            bank_account_number_headline: 'Bank account number'
+            bank_account_number_subheader: 'The money will be refunded to given account'
+            selecte_items_to_return_form: 'Please select items and quantities to return'
+            verify_address: 'Verify your address details'
 
         confirmation_step:
+            subheader: 'Verify return details and submit the form'
+            qty_to_return: 'Qty to return'
+            section:
+                general: 'General information'
+                items: 'Items to return'
 
+        success:
+            thank_you: 'Thank you'
+            return_form_created: 'Return form has been created'
+            print_order_return_form: 'Print return form'
+            order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
-        return:
-            order_not_fullfiled_yet: 'You cannot return order that was not fulfilled yet'
-            enter_order_number: 'Please enter order number'
-            create_return_form: 'Create return form'
-            order_number_not_valid: 'No order that meets the criteria'
-            code_not_valid: 'code_not_valid'
-            enter_code_you_received: 'Enter the code you received'
-            verife_your_form: 'Verife your form'
-            return_form: 'Return Form'
-            consent_text: 'Akceptuje warunki zwrotu'
-            selecte_items_to_return_form: 'Wybierz producty do zwrotu'
-            provide_reason: 'Provide the reason for the return'
-            return_qty: 'Iłość zwracana'
-            bank_account_number: 'Bank account number'
-            provide_bank_account_number: 'Provide you Bank Account Number'
-            created_an_order_return: 'You have successfully created an order return. '
-            created_an_order_return_instruction: 'Print the return form and put it in the package with the returned products. We also sent the form to the email address provided'
-            print_order_return_form: 'Print order return form'
-            return_items_list: 'ZURÜCK GESENDETE(R) ARTIKEL'
-            customer_information: 'PERSONAL INFORMATION'
-            return_sending_address: 'Please send your return to'
-            signatured_place: 'signature place'
+    pdf:
 
     email:
 
