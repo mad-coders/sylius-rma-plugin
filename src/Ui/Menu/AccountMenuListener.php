@@ -13,10 +13,10 @@ final class AccountMenuListener
     {
         $menu = $event->getMenu();
 
-        $this->addGiftCardsMenu($menu);
+        $this->addReturnHistoryMenu($menu);
     }
 
-    private function addGiftCardsMenu(ItemInterface $menu): void
+    private function addReturnHistoryMenu(ItemInterface $menu): void
     {
         $menu->addChild('return_history', ['route' => 'madcoders_rma_shop_account_index'])
             ->setLabel('madcoders_rma.ui.return_history')
