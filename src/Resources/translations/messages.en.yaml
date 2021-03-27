@@ -1,7 +1,8 @@
 madcoders_rma:
     ui:
+        # @todo move it to form etc, keep global small
         return_reason: 'Return reason'
-        order_number: 'Order Number'
+        order_number: 'Order number'
         return_number: 'Return number'
         return_list: 'Returns'
         customer_note: "Customer's Note"
@@ -10,8 +11,30 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
+        # ##########################################
+
+        continue_button: 'Continue'
+        not_blank: 'Field cannot be empty'
+
+        first_step:
+            success:
+                message: 'We have send verification code to your e-mail associated with the order #%orderNumber%. Please fill form below to proceed.'
+            error:
+                order_number_not_valid: 'Order number #%orderNumber% is not valid'
+                order_not_fullfiled_yet: 'Order #%orderNumber% is not fulfilled yet. Please contact customer support'
+
+        verification_step:
+            secondary_headline: 'Verification step'
+            enter_verification_code: "Check your e-mail and enter verification code"
+
+        select_items_step:
+
+        confirmation_step:
+
+
         return:
-            enter_order_number: 'Please enter your order number'
+            order_not_fullfiled_yet: 'You cannot return order that was not fulfilled yet'
+            enter_order_number: 'Please enter order number'
             create_return_form: 'Create return form'
             order_number_not_valid: 'No order that meets the criteria'
             code_not_valid: 'code_not_valid'
@@ -31,6 +54,9 @@ madcoders_rma:
             customer_information: 'PERSONAL INFORMATION'
             return_sending_address: 'Please send your return to'
             signatured_place: 'signature place'
+
+    email:
+
     state:
         draft: 'Draft'
         accepted: 'Accepted'

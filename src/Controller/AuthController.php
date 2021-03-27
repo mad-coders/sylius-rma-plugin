@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
 
@@ -49,21 +50,16 @@ final class AuthController extends AbstractController
     /** @var SessionInterface */
     private $session;
 
-    /**
-     * AuthController constructor.
-     * @param FormFactoryInterface $formFactory
-     * @param EngineInterface|Environment $templatingEngine
-     * @param ChannelContextInterface $channelContext
-     * @param RouterInterface $router
-     * @param AuthCodeEmailSenderInterface $authCodeEmailSender
-     * @param SessionInterface $session
-     */
+    /** @var TranslatorInterface */
+    private $translator;
+
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
         ChannelContextInterface $channelContext,
         RouterInterface $router,
         AuthCodeEmailSenderInterface $authCodeEmailSender,
+        TranslatorInterface $translator,
         SessionInterface $session
     )
     {
@@ -73,6 +69,7 @@ final class AuthController extends AbstractController
         $this->router = $router;
         $this->authCodeEmailSender = $authCodeEmailSender;
         $this->session = $session;
+        $this->translator = $translator;
     }
 
     public function start(Request $request, string $template): Response
@@ -84,17 +81,25 @@ final class AuthController extends AbstractController
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
             $data = $form->getData();
-            $orderNumber = $data['orderNumber'];
+            $orderNumber = trim(str_replace(['#'], '', $data['orderNumber']));
             $order = $this->getDoctrine()
                 ->getRepository(Order::class)
                 ->findOneBy(array('number' => $orderNumber));
 
             if (!$order) {
-                return $this->errorRedirect($request, 'madcoders_rma.ui.return.order_number_not_valid');
+                return $this->errorRedirect(
+                    $request,
+                    'madcoders_rma.ui.first_step.error.order_number_not_valid',
+                    [ '%orderNumber%' => $orderNumber ]
+                );
             }
 
             if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
-                return $this->errorRedirect($request, 'madcoders_rma.ui.return.order_not_fullfiled_yet');
+                return $this->errorRedirect(
+                    $request,
+                    'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
+                    [ '%orderNumber%' => $orderNumber ]
+                );
             }
 
             /** @var CustomerInterface $customer */
@@ -123,7 +128,7 @@ final class AuthController extends AbstractController
             $successMessage = $this->getSyliusAttribute(
                 $request,
                 'success_flash',
-                'madcoders_rma.order.sending_auth_code_success'
+                $this->translator->trans('madcoders_rma.ui.first_step.success.message', [ '%orderNumber%' => $orderNumber ])
             );
 
             /** @var FlashBagInterface $flashBag */
@@ -144,11 +149,11 @@ final class AuthController extends AbstractController
         return new Response($this->templatingEngine->render($templateWithAttribute, ['form' => $form->createView()]));
     }
 
-    private function errorRedirect(Request $request, $errorMessage): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = []): Response
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
-        $flashBag->add('error', $errorMessage);
+        $flashBag->add('error', $this->translator->trans($errorMessage, $context));
 
         $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
         if ($redirectRoute) {

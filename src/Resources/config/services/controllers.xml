@@ -9,6 +9,7 @@
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
             <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
+            <argument type="service" id="translator" />
             <argument type="service" id="session" />
         </service>
 
