@@ -25,3 +25,35 @@ madcoders_rma_admin_order_return_show:
       repository:
         arguments:
           - $id
+
+madcoders_rma_admin_order_return_show_cancel:
+  path: /order-returns/{id}/cancel/{_csrf_token}
+  methods: [ GET ]
+  controller: madcoders_rma.controller.order_return:applyStateMachineTransitionAction
+  defaults:
+    _sylius:
+      section: admin
+      permission: true
+      repository:
+        method: findOneById
+        arguments:
+          - $id
+      state_machine:
+        graph: return_status
+        transition: cancel
+
+madcoders_rma_admin_order_return_show_complete:
+  path: /order-returns/{id}/complete/{_csrf_token}
+  methods: [ GET ]
+  controller: madcoders_rma.controller.order_return:applyStateMachineTransitionAction
+  defaults:
+    _sylius:
+      section: admin
+      permission: true
+      repository:
+        method: findOneById
+        arguments:
+          - $id
+      state_machine:
+        graph: return_status
+        transition: complete
