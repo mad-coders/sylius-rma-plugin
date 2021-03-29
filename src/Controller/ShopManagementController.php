@@ -127,7 +127,11 @@ final class ShopManagementController extends AbstractController
         }
 
         if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
-
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
+                [ '%orderNumber%' => $orderNumber ]
+            );
         }
 
         $this->session->set('madcoders_rma_allowed_order', $orderNumber);
