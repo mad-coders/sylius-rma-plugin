@@ -89,7 +89,8 @@ final class ShopManagementController extends AbstractController
         RepositoryInterface $changeLogRepository,
         TokenStorageInterface $tokenStorage,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        OrderRepository $orderRepository, TranslatorInterface $translator
+        OrderRepository $orderRepository,
+        TranslatorInterface $translator
     )
     {
         $this->formFactory = $formFactory;
