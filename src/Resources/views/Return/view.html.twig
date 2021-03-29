@@ -1,26 +1,26 @@
 {% extends '@SyliusShop/layout.html.twig' %}
+
 {% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+{% form_theme form.items '@MadcodersSyliusRmaPlugin/Return/Form/_item.html.twig' %}
 
 {% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
 
 {% block content %}
-    {% form_theme form.items '@MadcodersSyliusRmaPlugin/Return/Form/_item.html.twig' %}
-
     <div class="ui hidden divider"></div>
     <div class="ui one column centered stackable grid">
         <div class="column">
             <h1 class="ui header">
                 <i class="circular truck icon"></i>
                 <div class="content">
-                    {{ 'sylius.ui.return'|trans }} {{ 'sylius.ui.order'|trans }} - {{ orderNumber }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.return.create_return_form'|trans }}</div>
+                    {{ 'madcoders_rma.ui.headline'|trans }} #{{ orderNumber }}
+                    <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.secondary_headline'|trans }}</div>
                 </div>
             </h1>
             <div class="ui segment">
                 {{ form_start(form, {'action': path('madcoders_rma_return_form'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
                 <h3 class="ui dividing header">
                     {{ 'sylius.ui.items'|trans }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.return.selecte_items_to_return_form'|trans }}</div>
+                    <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.selecte_items_to_return_form'|trans }}</div>
                 </h3>
                 <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }}
                        class="ui very basic celled table">
@@ -38,7 +38,7 @@
                 <div class=" ">
                     <h3 class="ui dividing header">
                         {{ 'sylius.ui.address'|trans }}
-                        <div class="sub header">{{ 'sylius.ui.add_address'|trans }}</div>
+                        <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.verify_address'|trans }}</div>
                     </h3>
 
                     {% include '@MadcodersSyliusRmaPlugin/Return/Form/_address.html.twig' with {'form': form} %}
@@ -55,8 +55,8 @@
                 <br/>
                 <div>
                     <h3 class="ui dividing header">
-                        {{ 'madcoders_rma.ui.return.bank_account_number'|trans }}
-                        <div class="sub header">{{ 'madcoders_rma.ui.return.provide_bank_account_number'|trans }}</div>
+                        {{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_headline'|trans }}
+                        <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_subheader'|trans }}</div>
                     </h3>
 
                     {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-returnReason')) }}
@@ -64,7 +64,7 @@
 
                 {{ form_row(form._token) }}
                 <br/>
-                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'sylius.ui.create'|trans }}</button>
+                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'madcoders_rma.ui.continue_button'|trans }}</button>
                 {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>

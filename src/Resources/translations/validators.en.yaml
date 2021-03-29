@@ -1,10 +1,11 @@
 madcoders_rma:
     validator:
-        return_qty_less_or_equal: 'You cannot return more than {{ compared_value }}.'
+        not_blank: 'Field cannot be empty'
+        return_qty_less_or_equal: 'Max return qty is {{ compared_value }}.'
         order_number:
-            not_blank: 'To pole nie moze być puste'
+            not_blank: 'Please provide valid order number'
         bank_account_number:
-            not_blank: 'To pole nie moze być puste'
+            not_blank: 'Please enter bank account number'
             not_a_valid: 'This is not a valid International Bank Account Number (IBAN).'
         notes:
-            not_blank: 'To pole nie moze być puste'
+            not_blank: 'This field cannot be empty'

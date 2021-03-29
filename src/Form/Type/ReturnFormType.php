@@ -36,7 +36,7 @@ final class ReturnFormType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'madcoders_rma.validator.order_number.not_blank',
+                        'message' => 'madcoders_rma.validator.not_blank',
                     ])
                 ],
             ])
@@ -75,7 +75,7 @@ final class ReturnFormType extends AbstractType
                 'label' => 'sylius.form.province.name',
             ])
             ->add('bankAccountNumber', TextType::class, [
-                'label' => 'madcoders_rma.ui.return.bank_account_number',
+                'label' => 'madcoders_rma.ui.form.bank_account_number',
                 'required' => true,
                 'constraints' => [
                     new NotBlank([

@@ -1,5 +1,7 @@
 {% extends '@SyliusShop/layout.html.twig' %}
 
+{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+
 {% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
 
 {% block content %}
@@ -9,16 +11,16 @@
             <h1 class="ui header">
                 <i class="circular truck icon"></i>
                 <div class="content">
-                    {{ 'sylius.ui.return'|trans }}
-                    <div class="sub header">{{ 'madcoders_rm.ui.return.enter_code_you_received'|trans }}</div>
+                    {{ 'madcoders_rma.ui.headline'|trans }}
+                    <div class="sub header">{{ 'madcoders_rma.ui.verification_step.secondary_headline'|trans }}</div>
                 </div>
             </h1>
             <div class="ui segment">
                 {{ form_start(form, {'action': path('madcoders_rma_verification', { 'code': code }), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
-                {{ form_row(form.authCode, sylius_test_form_attribute('return-authCode')) }}
+                {{ form_row(form.authCode, sylius_test_form_attribute('rma-auth-code-field')) }}
                 {{ form_row(form._token) }}
                 <br/>
-                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'sylius.ui.send'|trans }}</button>
+                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>{{ 'madcoders_rma.ui.continue_button'|trans }}</button>
                 {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>
