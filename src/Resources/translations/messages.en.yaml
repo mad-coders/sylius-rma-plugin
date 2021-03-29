@@ -11,6 +11,8 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
+        create_new_return: 'Create new return'
+        edit_form: 'Edit form'
         # ##########################################
 
         headline: 'Return form'

@@ -1,0 +1,16 @@
+sylius_grid:
+    templates:
+        action:
+            madcoders_rma_create_new: "@MadcodersSyliusRmaPlugin/BulkAction/createNewReturn.html.twig"
+    grids:
+        sylius_shop_account_order:
+            actions:
+                item:
+                    madcoders_rma_create_new:
+                        type: madcoders_rma_create_new
+                        label: madcoders_rma.ui.create_new_return
+                        options:
+                            link:
+                                route: madcoders_rma_shop_account_create_new_return
+                                parameters:
+                                    orderNumber: resource.number

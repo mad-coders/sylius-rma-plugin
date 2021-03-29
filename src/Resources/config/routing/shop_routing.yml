@@ -87,3 +87,25 @@ madcoders_rma_shop_account_return_order_show:
                 arguments:
                     - $returnNumber
                     - "expr:service('sylius.context.customer').getCustomer().getEmail()"
+
+madcoders_rma_shop_account_return_order_download:
+    path: account/return-history/{returnNumber}/print-form
+    methods: [ GET ]
+    defaults:
+        _controller: madcoders.sylius_rma_plugin.controller.shop_management_controller::printAction
+        _sylius:
+            section: shop_account
+            repository:
+                arguments:
+                    - $returnNumber
+
+madcoders_rma_shop_account_create_new_return:
+    path: account/return-history/{orderNumber}/create-return
+    methods: [ GET ]
+    defaults:
+        _controller: madcoders.sylius_rma_plugin.controller.shop_management_controller::createAction
+        _sylius:
+            section: shop_account
+            repository:
+                arguments:
+                    - $orderNumber
