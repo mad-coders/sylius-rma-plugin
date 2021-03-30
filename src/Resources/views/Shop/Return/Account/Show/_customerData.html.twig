@@ -3,13 +3,13 @@
 </h4>
 <div class="ui attached segment" id="customer-data">
 
-    <strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ order_return.returnNumber }}<br/>
+    <strong>{{ 'madcoders_rma.ui.headline'|trans }}:</strong> {{ order_return.returnNumber }}<br/>
     <strong>{{ 'sylius.ui.created_at'|trans }}:</strong>  {{ order_return.createdAt |date }}<br/>
     <strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ order_return.firstname }} {{ order_return.lastname }}<br/>
     <strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ order_return.customerEmail }} <br/>
     {% if order_return.phoneNumber is defined  %}
         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ order_return.phoneNumber }}<br/>
     {% endif %}
-    <strong>{{ 'madcoders_rma.ui.return.bank_account_number'|trans }}:</strong> {{ order_return.bankAccountNumber }}<br/>
+    <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ order_return.bankAccountNumber }}<br/>
 
 </div>

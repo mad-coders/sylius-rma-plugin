@@ -8,7 +8,7 @@ sylius_grid:
                 item:
                     madcoders_rma_create_new:
                         type: madcoders_rma_create_new
-                        label: madcoders_rma.ui.create_new_return
+                        label: madcoders_rma.ui.action.create_new_return
                         options:
                             link:
                                 route: madcoders_rma_shop_account_create_new_return

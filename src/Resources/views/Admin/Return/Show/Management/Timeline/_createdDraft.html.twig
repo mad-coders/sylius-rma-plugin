@@ -1,5 +1,5 @@
 {% set order = rma_order_number_view(data.orderNumber)  %}
 <div class="summary">
-    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> Creted new draft to order:
+    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> {{ 'madcoders_rma.admin.history.created_draft_order'|trans }}:
     <a href="{{ path('sylius_admin_order_show', {'id' : order.id })|raw }}">#{{ order.number }}</a>
 </div>

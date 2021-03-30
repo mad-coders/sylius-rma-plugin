@@ -1,6 +1,7 @@
 <div class="summary">
-    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> completed return <a>{{ logItem.returnNumber }}</a>:
+    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> {{ 'madcoders_rma.admin.history.completed_return'|trans }} <a>{{ logItem.returnNumber }}</a>:
 </div>
 <div class="extra text">
-    Status changed to <strong>Completed</strong>
+    {{ 'madcoders_rma.admin.history.status_changed_from'|trans }} <strong>{{ 'madcoders_rma.state.new'|trans }}</strong>
+    {{ 'madcoders_rma.admin.history.to'|trans }} <strong>{{ 'madcoders_rma.state.completed'|trans }}</strong>
 </div>

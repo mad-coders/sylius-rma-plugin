@@ -1,7 +1,10 @@
 madcoders_rma:
     ui:
+        action:
+            create_new_return: 'Return'
+            submit_return_form: 'Submit return form'
+
         # @todo move it to form etc, keep global small
-        return_reason: 'Return reason'
         order_number: 'Order number'
         return_number: 'Return number'
         return_list: 'Returns'
@@ -11,17 +14,23 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
-        create_new_return: 'Create new return'
         edit_form: 'Edit form'
         # ##########################################
 
+        customer_consent_header: 'Customer consents'
+        return_history: "Your order returns"
+        qty: 'QTY'
         headline: 'Return form'
         continue_button: 'Continue'
         session_not_valid: 'Your session has expired'
 
+        return_reason: 'Reason of return'
+        return_consent_text: 'I accept terms and conditions'
+
         form:
             bank_account_number: 'Bank account number (IBAN)'
             enter_order_number: 'Please enter order number'
+            return_reason: 'Reason of return'
 
         first_step:
             success:
@@ -40,6 +49,8 @@ madcoders_rma:
             secondary_headline: 'Select items and check your details'
             bank_account_number_headline: 'Bank account number'
             bank_account_number_subheader: 'The money will be refunded to given account'
+            return_reason_headline: 'Reason'
+            return_reason_subheader: 'Simply choose from the list'
             selecte_items_to_return_form: 'Please select items and quantities to return'
             verify_address: 'Verify your address details'
 
@@ -56,6 +67,18 @@ madcoders_rma:
             print_order_return_form: 'Print return form'
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
+    admin:
+        history:
+            status_changed_to: 'Status changed to'
+            status_changed_from: 'Status changed form'
+            to: 'to'
+            accepted_return_form: 'accepted return form'
+            created_draft_order: 'created draft order'
+            completed_return: 'completed return'
+            cancelled_return: 'cancelled return'
+            added_new_note: 'added new note'
+        return_details_header: 'Return details'
+
     pdf:
         return_to_address: "Return to"
         header: "Return Form"
@@ -63,10 +86,12 @@ madcoders_rma:
         items_list: "Items"
         return_qty: "QTY"
         place_for_signature: "Signature"
-        bank_account_number: 'Bank account number (IBAN)
+        bank_account_number: 'Bank account number (IBAN)'
 
     email:
 
     state:
         draft: 'Draft'
-        accepted: 'Accepted'
+        new: 'New'
+        completed: 'Completed'
+        cancelled: "Cancelled"

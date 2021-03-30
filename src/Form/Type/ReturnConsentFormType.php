@@ -33,11 +33,11 @@ final class ReturnConsentFormType extends AbstractType
     {
         $builder
             ->add('orderReturnConsent', CheckboxType::class, [
-                'label'    => 'madcoders_rma.ui.return.consent_text',
+                'label'    => 'madcoders_rma.ui.return_consent_text',
                 'required' => true
             ])
             ->add('orderReturnConsentLabel', HiddenType::class, [
-                'data' => $this->translator->trans('madcoders_rma.ui.return.consent_text'),
+                'data' => $this->translator->trans('madcoders_rma.ui.return_consent_text'),
             ])
         ;
     }

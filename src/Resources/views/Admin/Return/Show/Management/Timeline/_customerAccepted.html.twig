@@ -1,6 +1,7 @@
 <div class="summary">
-    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> accepted return form:
+    <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> {{ 'madcoders_rma.admin.history.accepted_return_form'|trans }}:
 </div>
 <div class="extra text">
-Status changed from <strong>Dtaft</strong> to <strong>New</strong>
+{{ 'madcoders_rma.admin.history.status_changed_from'|trans }} <strong>{{ 'madcoders_rma.state.draft'|trans }}</strong>
+{{ 'madcoders_rma.admin.history.to'|trans }} <strong>{{ 'madcoders_rma.state.new'|trans }}</strong>
 </div>
