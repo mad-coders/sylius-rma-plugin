@@ -164,6 +164,7 @@ final class ReturnController extends AbstractController
 
             $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
 
+            // TODO align entity instead
             if (!$userFirstName = $orderReturn->getFirstName()) {
                 $userFirstName = 'no Name';
             }

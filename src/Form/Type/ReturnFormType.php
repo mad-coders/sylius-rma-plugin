@@ -32,7 +32,7 @@ final class ReturnFormType extends AbstractType
 
             ])
             ->add('returnReason', TextType::class, [
-                'label'    => 'madcoders_rma.ui.return_reason',
+                'label'    => 'madcoders_rma.ui.form.return_reason',
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
