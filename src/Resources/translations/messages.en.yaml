@@ -57,6 +57,13 @@ madcoders_rma:
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
     pdf:
+        return_to_address: "Return to"
+        header: "Return Form"
+        customer_information: "Customer information"
+        items_list: "Items"
+        return_qty: "QTY"
+        place_for_signature: "Signature"
+        bank_account_number: 'Bank account number (IBAN)
 
     email:
 

@@ -34,10 +34,12 @@
                         </td>
 
                         <td style="border-right: 6px solid red; color: darkred" >
-                            <strong>{{ 'madcoders_rma.ui.return.return_sending_address'|trans }}:</strong><br/>
+                            <strong>{{ 'madcoders_rma.pdf.return_to_address'|trans }}:</strong><br/>
+                            {# @TODO config #}
                             Genslerstraße 84<br/>
                             13359 Berlin<br/>
                             Germany<br/>
+                            {# END #}
                         </td>
                     </tr>
                 </table>
@@ -49,7 +51,7 @@
                     <tr>
                         <td style="text-align: center;">
                             <h2>
-                                <strong>{{ 'madcoders_rma.ui.return.return_form' |trans }}</strong>
+                                <strong>{{ 'madcoders_rma.pdf.header' |trans }}</strong>
                             </h2>
                         </td>
                     </tr>
@@ -62,7 +64,7 @@
                     <tr>
                         <td style="text-align: center;">
                             <h4>
-                                <strong>{{ 'madcoders_rma.ui.return.customer_information' |trans }}</strong>
+                                <strong>{{ 'madcoders_rma.pdf.customer_information' |trans }}</strong>
                             </h4>
                         </td>
                     </tr>
@@ -81,7 +83,7 @@
                             {% if orderReturnFormData.phoneNumber is defined  %}
                                 <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ orderReturnFormData.phoneNumber }}<br/>
                             {% endif %}
-                            <strong>{{ 'madcoders_rma.ui.return.bank_account_number'|trans }}:</strong> {{ orderReturnFormData.bankAccountNumber }}<br/>
+                            <strong>{{ 'madcoders_rma.pdf.bank_account_number'|trans }}:</strong> {{ orderReturnFormData.bankAccountNumber }}<br/>
                         </td>
                         <td>
                             {% import "@SyliusUi/Macro/flags.html.twig" as flags %}
@@ -107,7 +109,7 @@
                     <tr>
                         <td style="text-align: center;">
                             <h4>
-                                <strong>{{ 'madcoders_rma.ui.return.return_items_list' |trans }}</strong>
+                                <strong>{{ 'madcoders_rma.pdf.items_list' |trans }}</strong>
                             </h4>
                         </td>
                     </tr>
@@ -117,7 +119,7 @@
         <tr class="heading">
             <td>{{ 'sylius.ui.item'|trans }}</td>
             <td>{{ 'sylius.ui.product_options'|trans }}</td>
-            <td>{{ 'madcoders_rma.ui.return.return_qty'|trans }}</td>
+            <td>{{ 'madcoders_rma.pdf.return_qty'|trans }}</td>
         </tr>
 
         {% for item in orderReturnFormData.items %}
@@ -182,7 +184,7 @@
                         <p style="vertical-align: bottom"><strong>{{ 'sylius.ui.date'|trans }}:</strong> {{ "now"|date("m/d/Y") }}</p>
                     </td>
                     <td style="text-align: center; border: 1px solid #ccc!important; border-radius: 16px; background-color: #eeeeee">
-                        <p style="margin-top: 2.5em; margin-bottom: 2.5em; color: #dddddd">{{ 'madcoders_rma.ui.return.signatured_place' |trans }}</p>
+                        <p style="margin-top: 2.5em; margin-bottom: 2.5em; color: #dddddd">{{ 'madcoders_rma.pdf.place_for_signature' |trans }}</p>
                     </td>
                 </tr>
             </table>
