@@ -1,4 +1,8 @@
 sylius_grid:
+    templates:
+        action:
+            madcoders_rma_shop_download: "@MadcodersSyliusRmaPlugin/BulkAction/printReturnFormDownload.html.twig"
+            madcoders_rma_shop_edit: "@MadcodersSyliusRmaPlugin/BulkAction/editReturn.html.twig"
     grids:
         madcoders_rma_shop_return_orders_grid:
             driver:
@@ -48,11 +52,19 @@ sylius_grid:
                                 route: madcoders_rma_shop_account_return_order_show
                                 parameters:
                                     returnNumber: resource.returnNumber
-#                    download_pdf:
-#                        type: show
-#                        label: setono_sylius_gift_card.ui.download_pdf
-#                        options:
-#                            link:
-#                                route: setono_sylius_gift_card_shop_gift_card_pdf
-#                                parameters:
-#                                    id: resource.id
+                    download:
+                        type: madcoders_rma_shop_download
+                        label: madcoders_rma.ui.success.print_order_return_form
+                        options:
+                            link:
+                                route: madcoders_rma_shop_account_return_order_download
+                                parameters:
+                                    returnNumber: resource.returnNumber
+                    edit:
+                        type: madcoders_rma_shop_edit
+                        label: madcoders_rma.ui.edit_form
+                        options:
+                            link:
+                                route: madcoders_rma_shop_account_create_new_return
+                                parameters:
+                                    orderNumber: resource.orderNumber
