@@ -4,7 +4,7 @@
 
 {% block body %}
     {% autoescape %}
-        {{ 'madcoders_rma.email.order_return_form.greeting'|trans({ '%returnNumber%': orderReturn.returnNumber }) }},<br>
+        {{ 'madcoders_rma.email.order_return_form.greeting'|trans({ '%name%': orderReturn.returnNumber }) }},<br>
         <br>
         {{ 'madcoders_rma.email.order_return_form.info'|trans }},<br>
     {% endautoescape %}
