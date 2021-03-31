@@ -1,0 +1,4 @@
+sylius_mailer:
+    sender:
+        name: '%env(MAILER_NAME)%'
+        address: '%env(MAILER_ADDRESS)%'
