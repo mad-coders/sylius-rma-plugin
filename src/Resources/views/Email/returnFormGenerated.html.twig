@@ -1,9 +1,11 @@
 {% block subject %}
-    Your returned  form
+    {{ 'madcoders_rma.email.order_return_form.subject'|trans({ '%returnNumber%': orderReturn.returnNumber }) }}
 {% endblock %}
 
 {% block body %}
     {% autoescape %}
-        Tu będzie email, lub nie będzie.
+        {{ 'madcoders_rma.email.order_return_form.greeting'|trans({ '%returnNumber%': orderReturn.returnNumber }) }},<br>
+        <br>
+        {{ 'madcoders_rma.email.order_return_form.info'|trans }},<br>
     {% endautoescape %}
 {% endblock %}

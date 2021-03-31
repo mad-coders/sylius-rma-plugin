@@ -70,7 +70,7 @@ madcoders_rma:
     admin:
         history:
             status_changed_to: 'Status changed to'
-            status_changed_from: 'Status changed form'
+            status_changed_from: 'Status changed from'
             to: 'to'
             accepted_return_form: 'accepted return form'
             created_draft_order: 'created draft order'
@@ -89,6 +89,10 @@ madcoders_rma:
         bank_account_number: 'Bank account number (IBAN)'
 
     email:
+        order_return_form:
+            subject: 'Order return #%returnNumber%'
+            greeting: 'Hi %name%'
+            info: 'Please print attached form and send to us'
 
     state:
         draft: 'Draft'
