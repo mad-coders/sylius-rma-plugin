@@ -20,5 +20,11 @@ class AdminMenuListener
             ->setLabel('Returns')
             ->setLabelAttribute('icon', 'dolly')
         ;
+
+        $newRmaSubmenu
+            ->addChild('return-reasons', ['route' => 'madcoders_rma_admin_order_return_reason_index'])
+            ->setLabel('Return Reasons')
+            ->setLabelAttribute('icon', 'edit outline')
+        ;
     }
 }

@@ -13,6 +13,22 @@ madcoders_rma_admin_order_return:
             icon: 'file dolly outline'
   type: sylius.resource
 
+madcoders_rma_admin_order_return_reason:
+  resource: |
+    alias: madcoders_rma.order_return_reason
+    section: admin
+    templates: "@SyliusAdmin\\Crud"
+    redirect: update
+    grid: madcoders_rma_admin_return_reason
+    vars:
+        all:
+            subheader: madcoders_rma.ui.return_reason_list
+            templates:
+                form: "@MadcodersSyliusRmaPlugin/Admin/Reason/_form.html.twig"
+        index:
+            icon: 'edit outline'
+  type: sylius.resource
+
 madcoders_rma_admin_order_return_show:
   path: /order-returns/{id}
   methods: [ GET, POST ]
@@ -25,6 +41,8 @@ madcoders_rma_admin_order_return_show:
       repository:
         arguments:
           - $id
+
+#madcoders_rma_admin_order_return_reason_show:
 
 madcoders_rma_admin_order_return_show_cancel:
   path: /order-returns/{id}/cancel/{_csrf_token}

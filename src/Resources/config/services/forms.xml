@@ -8,5 +8,10 @@
             <tag name="form.type"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.form.type.return_reason_translation_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonTranslationType">
+            <argument type="string">Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation</argument>
+            <tag name="form.type"/>
+        </service>
+
     </services>
 </container>
