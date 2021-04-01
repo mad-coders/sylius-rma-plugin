@@ -31,6 +31,8 @@ madcoders_rma:
             bank_account_number: 'Bank account number (IBAN)'
             enter_order_number: 'Please enter order number'
             return_reason: 'Reason of return'
+            enabled: 'Enabled'
+            deadline_to_return: 'Deadline for return applications'
 
         first_step:
             success:

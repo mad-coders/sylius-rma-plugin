@@ -14,9 +14,16 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReason;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslationInterface;
+use Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonFormType;
+use Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonTranslationType;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\Factory;
+use Sylius\Component\Resource\Factory\TranslatableFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -93,6 +100,39 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
                                 ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('order_return_reason')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(OrderReturnReason::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(OrderReturnReasonInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(TranslatableFactory::class)->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                        ->scalarNode('form')->defaultValue(ReturnReasonFormType::class)->cannotBeEmpty()->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('translation')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                    ->variableNode('options')->end()
+                                    ->arrayNode('classes')
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('model')->defaultValue(OrderReturnReasonTranslation::class)->cannotBeEmpty()->end()
+                                            ->scalarNode('interface')->defaultValue(OrderReturnReasonTranslationInterface::class)->cannotBeEmpty()->end()
+                                            ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                            ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                            ->scalarNode('repository')->cannotBeEmpty()->end()
+                                        ->end()
+                                        ->end()
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()
