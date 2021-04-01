@@ -70,6 +70,17 @@ madcoders_rma:
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
     admin:
+        reasons:
+
+            form:
+                header: Reasons of return
+                enabled: 'Enabled'
+                name: 'Name'
+                days_to_deadline_to_return: 'Reason validity period in days'
+                position: 'Position'
+                descriptin: 'Descriptin'
+                slug: 'Code'
+
         history:
             status_changed_to: 'Status changed to'
             status_changed_from: 'Status changed from'

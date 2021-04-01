@@ -23,15 +23,15 @@ final class ReturnReasonFormType extends AbstractType
         $builder
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_reason.enabled',
+                'label' => 'madcoders_rma.admin.reason.form.enabled',
             ])
             ->add('translations', ResourceTranslationsType::class, [
                 'entry_type' => ReturnReasonTranslationType::class,
-                'label' => 'madcoders_rma.ui.form.return_reason.name',
+                'label' => 'madcoders_rma.admin.reason.form.name',
             ])
             ->add('deadlineToReturn', IntegerType::class, [
                 'required' => true,
-                'label' => 'madcoders_rma.form.return_reason.days_to_deadline_to_return',
+                'label' => 'madcoders_rma.admin.reason.form.days_to_deadline_to_return',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.days_to_deadline_to_return.not_blank',
@@ -40,7 +40,7 @@ final class ReturnReasonFormType extends AbstractType
             ])
             ->add('position', IntegerType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_reason.position',
+                'label' => 'madcoders_rma.admin.reason.form.position',
             ])
             ->addEventSubscriber(new AddCodeFormSubscriber())
         ;

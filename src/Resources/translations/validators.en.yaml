@@ -9,3 +9,5 @@ madcoders_rma:
             not_a_valid: 'This is not a valid International Bank Account Number (IBAN).'
         notes:
             not_blank: 'This field cannot be empty'
+        days_to_deadline_to_return:
+            not_blank: 'Not blank'
