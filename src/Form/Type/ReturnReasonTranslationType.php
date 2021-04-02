@@ -21,14 +21,14 @@ final class ReturnReasonTranslationType extends AbstractResourceType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'madcoders_rma.form.return_reason.name',
+                'label' => 'madcoders_rma.admin.reason.form.name',
             ])
             ->add('slug', TextType::class, [
-                'label' => 'madcoders_rma.form.return_reason.slug',
+                'label' => 'madcoders_rma.admin.reason.form.slug', // TODO: consider changing to "code"
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_reason.description',
+                'label' => 'madcoders_rma.admin.reason.form.description',
             ])
         ;
     }
