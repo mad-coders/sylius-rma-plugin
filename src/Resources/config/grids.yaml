@@ -1,5 +1,6 @@
 imports:
     - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids/madcoders_rma_admin_return_orders_grid.yml" }
     - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids/madcoders_rma_admin_return_reason_grid.yml" }
+    - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids/madcoders_rma_admin_return_consent_grid.yml" }
     - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids/madcoders_rma_shop_return_orders_grid.yml" }
     - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids/madcoders_rma_shop_account_order_grid.yml" }

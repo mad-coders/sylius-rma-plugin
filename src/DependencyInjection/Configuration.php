@@ -11,6 +11,10 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthorInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentTranslation;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentTranslationInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
@@ -18,8 +22,8 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReason;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslationInterface;
+use Madcoders\SyliusRmaPlugin\Form\Type\OrderReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonFormType;
-use Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonTranslationType;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
 use Sylius\Component\Resource\Factory\Factory;
@@ -133,6 +137,39 @@ final class Configuration implements ConfigurationInterface
                                         ->end()
                                         ->end()
                                     ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('order_return_consent')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                    ->scalarNode('model')->defaultValue(OrderReturnConsent::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('interface')->defaultValue(OrderReturnConsentInterface::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                    ->scalarNode('factory')->defaultValue(TranslatableFactory::class)->end()
+                                    ->scalarNode('repository')->cannotBeEmpty()->end()
+                                    ->scalarNode('form')->defaultValue(OrderReturnConsentFormType::class)->cannotBeEmpty()->end()
+                                ->end()
+                                ->end()
+                                ->arrayNode('translation')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                    ->variableNode('options')->end()
+                                    ->arrayNode('classes')
+                                        ->addDefaultsIfNotSet()
+                                        ->children()
+                                        ->scalarNode('model')->defaultValue(OrderReturnConsentTranslation::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(OrderReturnConsentTranslationInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                    ->end()
+                                    ->end()
+                                ->end()
                                 ->end()
                             ->end()
                         ->end()
