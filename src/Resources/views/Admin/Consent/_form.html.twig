@@ -1,0 +1,27 @@
+{% from '@SyliusAdmin/Macro/translationForm.html.twig' import translationForm %}
+
+<div class="ui stackable grid">
+    <div class="sixteen wide column">
+        <h3 class="ui dividing header">
+            {{ 'madcoders_rma.ui.order_return_consent_form'|trans }}
+        </h3>
+    </div>
+    <br/>
+    {{ form_errors(form) }}
+    <div class="eight wide column">
+        {{ translationForm(form.translations) }}
+    </div>
+    <div class="eight wide column">
+        <div class="ui segment">
+            <div class="field">
+                {{ form_row(form.code) }}
+            </div>
+            <div class="field">
+                {{ form_row(form.position) }}
+            </div>
+            <div class="field">
+                {{ form_row(form.enabled) }}
+            </div>
+        </div>
+    </div>
+</div>

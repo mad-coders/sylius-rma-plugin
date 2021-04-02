@@ -13,5 +13,10 @@
             <tag name="form.type"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.form.type.order_return_consent_translation_type" class="Madcoders\SyliusRmaPlugin\Form\Type\OrderReturnConsentTranslationType">
+            <argument type="string">Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentTranslation</argument>
+            <tag name="form.type"/>
+        </service>
+
     </services>
 </container>

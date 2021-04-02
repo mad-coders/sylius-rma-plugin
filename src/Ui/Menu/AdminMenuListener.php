@@ -26,5 +26,11 @@ class AdminMenuListener
             ->setLabel('Return Reasons')
             ->setLabelAttribute('icon', 'edit outline')
         ;
+
+        $newRmaSubmenu
+            ->addChild('return-consents', ['route' => 'madcoders_rma_admin_order_return_consent_index'])
+            ->setLabel('Return Consents')
+            ->setLabelAttribute('icon', 'briefcase')
+        ;
     }
 }
