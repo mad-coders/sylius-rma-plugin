@@ -18,7 +18,10 @@
             <tag name="form.type"/>
         </service>
 
-        <service id="madcoders.sylius_rma_plugin.form.choice_provider.reason" class="Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider" />
+        <service id="madcoders.sylius_rma_plugin.form.choice_provider.reason" class="Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider">
+            <argument type="service" id="madcoders_rma.repository.order_return_reason" />
+            <argument type="service" id= "sylius.repository.order" />
+        </service>
 
         <service id="madcoders.sylius_rma_plugin.form.type.return_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType">
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />

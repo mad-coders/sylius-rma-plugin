@@ -14,4 +14,6 @@ interface ChoiceProviderInterface
      * @return array
      */
     public function getChoices(OrderReturnInterface $orderReturn): array;
+
+    public function getNameByCode(string $code): ?string;
 }

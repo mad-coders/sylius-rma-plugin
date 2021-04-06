@@ -36,6 +36,11 @@
             <tag name="twig.extension"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.twig.rma_reason_choice_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaReasonChoiceExtension">
+            <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
+            <tag name="twig.extension"/>
+        </service>
+
         <service id="madcoders.sylius_rma_plugin.twig.rma_time_line_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeLineExtension">
             <tag name="twig.extension"/>
         </service>
