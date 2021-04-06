@@ -33,6 +33,8 @@ madcoders_rma:
             return_reason: 'Reason of return'
             enabled: 'Enabled'
             deadline_to_return: 'Deadline for return applications'
+            placeholder:
+                reason: 'Choose reason'
 
         first_step:
             success:

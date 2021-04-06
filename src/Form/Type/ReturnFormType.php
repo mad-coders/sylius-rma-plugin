@@ -106,6 +106,8 @@ final class ReturnFormType extends AbstractType
             $form->add('returnReason', ChoiceType::class, [
                 'label'    => 'madcoders_rma.ui.form.return_reason',
                 'required' => true,
+                'placeholder' => 'madcoders_rma.ui.form.placeholder.reason',
+                'empty_data' => '',
                 'choices' => array_flip($choices),
                 'constraints' => [
                     new NotBlank([
