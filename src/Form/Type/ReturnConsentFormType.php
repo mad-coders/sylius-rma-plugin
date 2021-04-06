@@ -10,7 +10,9 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,11 +34,28 @@ final class ReturnConsentFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+//        $builder
+//            ->add('consents', CollectionType::class, [
+//                'label'    => '',
+//                'required' => false
+//            ])
+//        ;
+
         $builder
-            ->add('consents', CollectionType::class, [
+            ->add('consents', ChoiceType::class, [
                 'label'    => '',
-                'required' => false
-            ]);
+                'required' => false,
+                'expanded' => true,
+                'choices' => $this->consentChoiceProvider->getChoices(),
+            ])
+            ->addModelTransformer(new CallbackTransformer(
+                function(array $consents): array {
+                    return $consents;
+                },
+                function(array $consents): array {
+                    return $consents;
+                }
+            ));
         ;
     }
 
