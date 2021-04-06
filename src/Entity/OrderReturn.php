@@ -109,14 +109,9 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     private $customerIp;
 
     /**
-     * @var bool
+     * @var array
      */
-    private $orderReturnConsent = false;
-
-    /**
-     * @var string|null
-     */
-    private $orderReturnConsentLabel;
+    private $orderReturnConsents = [];
 
     /** @var string|null */
     private $bankAccountNumber;
@@ -202,35 +197,27 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function getOrderReturnConsent(): bool
+    public function getOrderReturnConsents(): array
     {
-        return $this->orderReturnConsent;
+        return $this->orderReturnConsents;
     }
 
     /**
-     * @param bool $orderReturnConsent
+     * @param array $orderReturnConsents
      */
-    public function setOrderReturnConsent(bool $orderReturnConsent): void
+    public function setOrderReturnConsents(array $orderReturnConsents): void
     {
-        $this->orderReturnConsent = $orderReturnConsent;
+        $this->orderReturnConsents = $orderReturnConsents;
     }
 
     /**
-     * @return string|null
+     * @param array $orderReturnConsent
      */
-    public function getOrderReturnConsentLabel(): ?string
+    public function addOrderReturnConsent(array $orderReturnConsent): void
     {
-        return $this->orderReturnConsentLabel;
-    }
-
-    /**
-     * @param string|null $orderReturnConsentLabel
-     */
-    public function setOrderReturnConsentLabel(?string $orderReturnConsentLabel): void
-    {
-        $this->orderReturnConsentLabel = $orderReturnConsentLabel;
+        $this->orderReturnConsents[] = $orderReturnConsent;
     }
 
     /**

@@ -28,8 +28,7 @@
         <field name="returnNumber" unique="true" column="return_number" type="string" />
         <field name="channelCode" column="channel_code" type="string" />
         <field name="returnReason" column="return_reason" type="string" nullable="true" />
-        <field name="orderReturnConsent" column="order_consent" type="boolean"  nullable="false" />
-        <field name="orderReturnConsentLabel" column="order_consent_label" type="text" nullable="true"  />
+        <field name="orderReturnConsents" column="order_consents" type="json"  nullable="false" />
 
         <field name="firstname" column="firstname" type="string" nullable="true" />
         <field name="lastname" column="lastname" type="string" nullable="true" />
