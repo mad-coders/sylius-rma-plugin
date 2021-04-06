@@ -2,7 +2,7 @@
     {{ 'madcoders_rma.ui.customer_note'|trans }}
 </h4>
 <div class="ui attached segment" id="customer-note-data">
-    <strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong> {{ order_return.returnReason }} <br/>
+    <strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong> {{ rma_reason_name_view(order_return.returnReason) }} <br/>
     {% if order_return.note  is defined %}
         <strong>{{ 'sylius.ui.notes'|trans }}:</strong> {{ order_return.note }} <br/>
     {% endif %}

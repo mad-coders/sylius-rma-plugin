@@ -10,19 +10,33 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProviderInterface;
 use Sylius\Bundle\AddressingBundle\Form\Type\CountryCodeChoiceType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ReturnFormType extends AbstractType
 {
+    /** @var ChoiceProviderInterface */
+    private $reasonChoiceProvider;
+
+    public function __construct(ChoiceProviderInterface $reasonChoiceProvider)
+    {
+        $this->reasonChoiceProvider = $reasonChoiceProvider;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
         $builder
             ->add('items', CollectionType::class, [
                 'entry_type' => ReturnItemFormType::class,
@@ -30,15 +44,6 @@ final class ReturnFormType extends AbstractType
                 'required' => false,
                 'entry_options' => ['label' => false ],
 
-            ])
-            ->add('returnReason', TextType::class, [
-                'label'    => 'madcoders_rma.ui.form.return_reason',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ])
-                ],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'sylius.form.address.first_name',
@@ -87,6 +92,30 @@ final class ReturnFormType extends AbstractType
                 ],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+            $orderReturn = $event->getData();
+            $form = $event->getForm();
+
+            if (!$orderReturn instanceof OrderReturnInterface) {
+                throw new \InvalidArgumentException(sprintf('$orderReturn must implement %s interface', OrderReturnInterface::class));
+            }
+
+            $choices = $this->reasonChoiceProvider->getChoices($orderReturn);
+
+            $form->add('returnReason', ChoiceType::class, [
+                'label'    => 'madcoders_rma.ui.form.return_reason',
+                'required' => true,
+                'placeholder' => 'madcoders_rma.ui.form.placeholder.reason',
+                'empty_data' => '',
+                'choices' => array_flip($choices),
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.not_blank',
+                    ])
+                ],
+            ]);
+        });
     }
 
     /**
