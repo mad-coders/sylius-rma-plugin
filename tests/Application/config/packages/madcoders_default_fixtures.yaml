@@ -2,25 +2,64 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
-                madcoders_rma_order_return:
+#                madcoders_rma_order_return:
+#                    options:
+#                        custom:
+#                            draft_order_return:
+#                                order_number: "000000011"
+#                                return_number: "R00000011-1"
+#                                channel_code: "FASHION_WEB"
+#                                return_reason: "damaged"
+#
+#                madcoders_rma_order_return_item:
+#                    options:
+#                        custom:
+#                            draf_order_return_item_1:
+#                                return_number: "R00000011-1"
+#                                product_sku: "XYZ00123"
+#                                product_name: "Not so good product"
+#                                return_qty: 1
+#                                unit_price: 1190
+
+                madcoders_rma_order_return_reason:
                     options:
                         custom:
-                            draft_order_return:
-                                order_number: "00000011"
-                                return_number: "R00000011-1"
-                                channel_code: "FASHION_WEB"
-                                return_reason: "damaged"
-                                return_consent: false
-                                return_consent_label: null
+                            madcoders_rma_order_return_reason_1:
+                                code: reason_1
+                                slug: reason_1
+                                name: "Reason 1"
+                                enabled: true
+                                deadline_to_return: 90
+                            madcoders_rma_order_return_reason_2:
+                                code: reason_2
+                                slug: reason_2
+                                name: "Reason 2"
+                                enabled: true
+                                deadline_to_return: 120
+                            madcoders_rma_order_return_reason_3:
+                                code: reason_3
+                                slug: reason_3
+                                name: "Free return (in 14 days)"
+                                enabled: true
+                                deadline_to_return: 14
+                            madcoders_rma_order_return_reason_disabled:
+                                code: reason_disabled
+                                slug: reason_disabled
+                                name: "This reason is disabled"
+                                enabled: false
+                                deadline_to_return: 14
 
-                madcoders_rma_order_return_item:
+                madcoders_rma_order_return_consent:
                     options:
                         custom:
-                            draf_order_return_item_1:
-                                return_number: "R00000011-1"
-                                product_sku: "XYZ00123"
-                                product_name: "Not so good product"
-                                return_qty: 1
-                                unit_price: 1190
-
+                            madcoders_rma_order_return_consent_1:
+                                code: consent_1
+                                slug: consent_1
+                                name: "Consent label xyz xyz xyz 1"
+                                enabled: true
+                            madcoders_rma_order_return_consent_2:
+                                code: consent_2
+                                slug: consent_2
+                                name: "Consent label xyz xyz xyz 2"
+                                enabled: true
 

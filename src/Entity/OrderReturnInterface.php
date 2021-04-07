@@ -85,24 +85,19 @@ interface OrderReturnInterface
     public function setReturnReason(?string $returnReason): void;
 
     /**
-     * @return bool
+     * @return array
      */
-    public function getOrderReturnConsent(): bool;
+    public function getOrderReturnConsents(): array;
 
     /**
-     * @param bool $orderReturnConsent
+     * @param array $orderReturnConsents
      */
-    public function setOrderReturnConsent(bool $orderReturnConsent): void;
+    public function setOrderReturnConsents(array $orderReturnConsents): void;
 
     /**
-     * @return string|null
+     * @param array $orderReturnConsent
      */
-    public function getOrderReturnConsentLabel(): ?string;
-
-    /**
-     * @param string|null $orderReturnConsentLabel
-     */
-    public function setOrderReturnConsentLabel(?string $orderReturnConsentLabel): void;
+    public function addOrderReturnConsent(array $orderReturnConsent): void;
 
     /**
      * @return string|null
