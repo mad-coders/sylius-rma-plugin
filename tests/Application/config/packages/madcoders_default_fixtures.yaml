@@ -10,8 +10,6 @@ sylius_fixtures:
                                 return_number: "R00000011-1"
                                 channel_code: "FASHION_WEB"
                                 return_reason: "damaged"
-                                return_consent: false
-                                return_consent_label: null
 
                 madcoders_rma_order_return_item:
                     options:

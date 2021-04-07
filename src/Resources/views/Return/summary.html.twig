@@ -65,8 +65,7 @@
                 <div class="ui one column centered stackable grid">
                     <div class="column">
                         {{ form_start(form, {'action': path('madcoders_rma_return_form_accept', { 'returnNumber': returnOrder.returnNumber }), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
-                        {{ form_row(form.orderReturnConsent, sylius_test_form_attribute('return-order_consent')) }}
-                        {{ form_row(form.orderReturnConsentLabel, sylius_test_form_attribute('return-order_consent_label')) }}
+                        {{ form_row(form.consents, sylius_test_form_attribute('return-order_consents')) }}
                         {{ form_row(form._token) }}
                         <br/>
                         <a href="{{ path('madcoders_rma_return_form') }}" class="ui large floated button">{{ 'sylius.ui.edit'|trans }}</a>

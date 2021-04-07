@@ -8,27 +8,32 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+//use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConsentFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('checked', CheckboxType::class, [
-                    'label' => $options['consent_label'],
-                    'required' => true]
-            )
             ->add('label', HiddenType::class)
             ->add('code', HiddenType::class);
-    }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
 
-        $resolver->setDefault('consent_label', null);
-        $resolver->setRequired('consent_label');
+            if (!is_array($data)) {
+                throw new \RuntimeException('Consent data must be an array');
+            }
+
+            $form->add('checked', CheckboxType::class, [
+                    'label' => (string) $data['label'] ?: '-- missing --',
+                    'required' => true
+                ]
+            );
+        });
     }
 
     public function getBlockPrefix(): string
