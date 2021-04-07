@@ -2,24 +2,24 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
-                madcoders_rma_order_return:
-                    options:
-                        custom:
-                            draft_order_return:
-                                order_number: "00000011"
-                                return_number: "R00000011-1"
-                                channel_code: "FASHION_WEB"
-                                return_reason: "damaged"
-
-                madcoders_rma_order_return_item:
-                    options:
-                        custom:
-                            draf_order_return_item_1:
-                                return_number: "R00000011-1"
-                                product_sku: "XYZ00123"
-                                product_name: "Not so good product"
-                                return_qty: 1
-                                unit_price: 1190
+#                madcoders_rma_order_return:
+#                    options:
+#                        custom:
+#                            draft_order_return:
+#                                order_number: "000000011"
+#                                return_number: "R00000011-1"
+#                                channel_code: "FASHION_WEB"
+#                                return_reason: "damaged"
+#
+#                madcoders_rma_order_return_item:
+#                    options:
+#                        custom:
+#                            draf_order_return_item_1:
+#                                return_number: "R00000011-1"
+#                                product_sku: "XYZ00123"
+#                                product_name: "Not so good product"
+#                                return_qty: 1
+#                                unit_price: 1190
 
                 madcoders_rma_order_return_reason:
                     options:

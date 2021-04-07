@@ -161,13 +161,11 @@ final class ReturnController extends AbstractController
 
         // Customer accepted returnOrder, orderOrder has new status
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-
             /** @var array $data */
             $data = $form->getData();
             $orderReturn->setOrderReturnConsents((array) $data['consents']);
 
             $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-
             if (!$orderReturnStateMachine->can(OrderReturnInterface::STATUS_NEW)) {
                 return $this->createInvalidStateResponse($request);
             }
