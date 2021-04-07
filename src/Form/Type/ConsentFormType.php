@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\IsTrue;
+
 //use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ConsentFormType extends AbstractType
@@ -20,7 +22,7 @@ class ConsentFormType extends AbstractType
             ->add('label', HiddenType::class)
             ->add('code', HiddenType::class);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+        $callback = function(FormEvent $event): void {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -30,10 +32,16 @@ class ConsentFormType extends AbstractType
 
             $form->add('checked', CheckboxType::class, [
                     'label' => (string) $data['label'] ?: '-- missing --',
-                    'required' => true
+                    'required' => true,
+                    'constraints' => [
+                        new IsTrue()
+                    ]
                 ]
             );
-        });
+        };
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, $callback);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, $callback);
     }
 
     public function getBlockPrefix(): string

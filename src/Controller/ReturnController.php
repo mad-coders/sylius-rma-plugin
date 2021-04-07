@@ -153,11 +153,8 @@ final class ReturnController extends AbstractController
             $consentData['consents'][] = [
                 'code' => $consent->getCode(),
                 'label' => $consent->getTranslation()->getName(),
-                'checked' => false,
             ];
         }
-
-        var_dump($consentData);
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class);
         $form = $this->formFactory->create($formType, $consentData);

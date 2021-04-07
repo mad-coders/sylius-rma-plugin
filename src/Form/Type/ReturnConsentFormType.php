@@ -33,7 +33,7 @@ final class ReturnConsentFormType extends AbstractType
         $builder
             ->add('consents', CollectionType::class, [
                 'label'    => false,
-                'required' => false,
+                'required' => true,
                 'entry_type' => ConsentFormType::class,
             ])
         ;
