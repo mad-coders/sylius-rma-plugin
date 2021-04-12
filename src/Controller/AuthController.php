@@ -12,6 +12,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthStartType;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
+use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -48,11 +49,14 @@ final class AuthController extends AbstractController
     /** @var AuthCodeEmailSenderInterface */
     private $authCodeEmailSender;
 
-    /** @var SessionInterface */
-    private $session;
-
     /** @var TranslatorInterface */
     private $translator;
+
+    /** @var OrderReturnAuthorizerInterface */
+    private $orderReturnAuthorizer;
+
+    /** @var SessionInterface */
+    private $session;
 
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -61,6 +65,7 @@ final class AuthController extends AbstractController
         RouterInterface $router,
         AuthCodeEmailSenderInterface $authCodeEmailSender,
         TranslatorInterface $translator,
+        OrderReturnAuthorizerInterface $orderReturnAuthorizer,
         SessionInterface $session
     )
     {
@@ -69,14 +74,16 @@ final class AuthController extends AbstractController
         $this->channelContext = $channelContext;
         $this->router = $router;
         $this->authCodeEmailSender = $authCodeEmailSender;
-        $this->session = $session;
         $this->translator = $translator;
+        $this->orderReturnAuthorizer = $orderReturnAuthorizer;
+        $this->session = $session;
     }
 
     public function start(Request $request, string $template): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthStartType::class);
+        $redirectToOrderReturnRoute = $this->getSyliusAttribute($request, 'redirect_to_order_return', 'madcoders_rma_return_form');
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
@@ -95,15 +102,17 @@ final class AuthController extends AbstractController
                 );
             }
 
-            // replace with grant
-            //$this->denyAccessUnlessGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order);
-
             if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
                     [ '%orderNumber%' => $orderNumber ]
                 );
+            }
+
+            // redirect forward if access is already granted
+            if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+                return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, [ 'orderNumber' => $order->getNumber() ]));
             }
 
             /** @var CustomerInterface $customer */
@@ -168,6 +177,37 @@ final class AuthController extends AbstractController
 
     public function verification(Request $request, string $template, string $code): Response
     {
+        $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
+        $redirectErrorRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
+
+        if (!$redirectRoute) {
+            throw new \InvalidArgumentException('$redirectRoute has not been configured properly');
+        }
+
+        if (!$redirectErrorRoute) {
+            throw new \InvalidArgumentException('$redirectErrorRoute has not been configured properly');
+        }
+
+        // TODO: inject repository instead
+        $authData = $this->getDoctrine()
+            ->getRepository(AuthCode::class)
+            ->findOneBy(array('hash' => $code));
+
+        if (!$authData) {
+            $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
+        }
+
+        // TODO: inject repository instead
+        // load order
+        $order = $this->getDoctrine()
+            ->getRepository(Order::class)
+            ->findOneBy(array('orderNumber' => $authData->getOrderNumber()));
+
+        // redirect forward if access is already granted
+        if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $order->getNumber() ]));
+        }
+
         $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthVerificationType::class);
         $form = $this->formFactory->create($formType);
 
@@ -175,22 +215,14 @@ final class AuthController extends AbstractController
 
             $data = $form->getData();
             $authCode = $data['authCode'];
-            $authData = $this->getDoctrine()
-                ->getRepository(AuthCode::class)
-                ->findOneBy(array('hash' => $code));
 
             $orderNumber = $authData->getOrderNumber();
             $authDataCode = $authData->getAuthCode();
 
             if ($authDataCode === $authCode) {
-                $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
+                $this->orderReturnAuthorizer->authorize($order);
 
-                if ($redirectRoute) {
-                    $this->session->set('madcoders_rma_allowed_order', $orderNumber);
-                    return new RedirectResponse($this->router->generate($redirectRoute));
-                }
-
-                return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
+                return new RedirectResponse($this->router->generate($redirectRoute, [ 'order' => $orderNumber ]));
             }
 
             $errorMessage = $this->getSyliusAttribute(
@@ -203,14 +235,7 @@ final class AuthController extends AbstractController
             $flashBag = $request->getSession()->getBag('flashes');
             $flashBag->add('error', $errorMessage);
 
-            $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
-            $redirectCode = $this->getSyliusAttribute($request, 'code', '');
-
-            if ($redirectRoute) {
-                return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
-            }
-
-            return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
+            return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
@@ -222,6 +247,18 @@ final class AuthController extends AbstractController
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes)) {
+            return null;
+        }
+
+        if (!isset($attributes[$attributeName]) || !is_string($attributes[$attributeName])) {
+            return $default;
+        }
+
+        if (empty($attributes[$attributeName])) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 }

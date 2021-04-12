@@ -9,6 +9,7 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\User\Model\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Security;
 
 /**
@@ -21,7 +22,7 @@ use Symfony\Component\Security\Core\Security;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
-class OrderReturnVoter extends Voter
+class OrderReturnVoter extends Voter implements VoterInterface
 {
     public const ATTRIBUTE_RETURN = 'return';
     public const SUPPORTED_ATTRIBUTES = [self::ATTRIBUTE_RETURN];
