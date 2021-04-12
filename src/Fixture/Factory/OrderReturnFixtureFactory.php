@@ -53,8 +53,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         $orderReturn->setReturnNumber($options['return_number']);
         $orderReturn->setChannelCode($options['channel_code']);
         $orderReturn->setReturnReason($options['return_reason']);
-        $orderReturn->setOrderReturnConsent($options['return_consent']);
-        $orderReturn->setOrderReturnConsentLabel($options['return_consent_label']);
+        $orderReturn->setOrderReturnConsents($options['return_consents']);
         $orderReturn->setCity($options['city']);
         $orderReturn->setPostcode($options['postcode']);
         $orderReturn->setStreet($options['street']);
@@ -79,11 +78,8 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
             ->setRequired('return_number')
             ->setAllowedTypes('return_number', 'string')
 
-            ->setRequired('return_consent')
-            ->setAllowedTypes('return_consent', 'bool')
-
-            ->setRequired('return_consent_label')
-            ->setAllowedTypes('return_consent_label', ['string', 'null'])
+            ->setDefault('return_consents', [])
+            ->setAllowedTypes('return_consents', 'array')
 
             ->setRequired('return_reason')
             ->setAllowedTypes('return_reason', 'string')

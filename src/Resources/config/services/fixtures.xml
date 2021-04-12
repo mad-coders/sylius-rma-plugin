@@ -25,5 +25,24 @@
             <argument id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_item" type="service"/>
             <tag name="sylius_fixtures.fixture"/>
         </service>
+
+        <!-- Order Return Reason -->
+        <service id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_reason" class="Madcoders\SyliusRmaPlugin\Fixture\Factory\OrderReturnReasonFixtureFactory" />
+
+        <service id="madcoders.sylius_rma_plugin.fixture.order_return_reason" class="Madcoders\SyliusRmaPlugin\Fixture\OrderReturnReasonFixture">
+            <argument id="sylius.manager.channel" type="service"/>
+            <argument id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_reason" type="service"/>
+            <tag name="sylius_fixtures.fixture"/>
+        </service>
+
+        <!-- Order Return Consent -->
+        <service id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_consent" class="Madcoders\SyliusRmaPlugin\Fixture\Factory\OrderReturnConsentFixtureFactory" />
+
+        <service id="madcoders.sylius_rma_plugin.fixture.order_return_consent" class="Madcoders\SyliusRmaPlugin\Fixture\OrderReturnConsentFixture">
+            <argument id="sylius.manager.channel" type="service"/>
+            <argument id="madcoders.sylius_rma_plugin.fixture.example_factory.order_return_consent" type="service"/>
+            <tag name="sylius_fixtures.fixture"/>
+        </service>
+
     </services>
 </container>

@@ -2,7 +2,12 @@
     {{ 'madcoders_rma.ui.customer_consent_header'|trans }}
 </h4>
 <div class="ui attached segment" id="customer-consent-data">
-    {% if order_return.orderReturnConsent == true %}
-        {{ order_return.orderReturnConsentLabel }}
+    {% if order_return.orderReturnConsents %}
+        {% for consent in order_return.orderReturnConsents %}
+            <div>
+                {% if consent.checked %}<span class="ui label green">[x]</span>{% else %}<span class="ui label red">[&nbsp;]</span>{% endif %}
+                {{ consent.label }}
+            </div>
+        {% endfor %}
     {% endif %}
 </div>

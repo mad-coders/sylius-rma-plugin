@@ -12,6 +12,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 use Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
@@ -143,22 +144,29 @@ final class ReturnController extends AbstractController
             ->getRepository(OrderReturn::class)
             ->findOneBy(array('returnNumber' => $returnNumber))) {
             return $this->createMissingOrderNumberResponse($request);
-        };
+        }
+
+        $consentData = [ 'consents' => [] ];
+        /** @var OrderReturnConsent $consent */
+        foreach($this->getDoctrine()->getRepository(OrderReturnConsent::class)->findBy([ 'enabled' => true], ['position' => 'asc']) as $consent) {
+
+            $consentData['consents'][] = [
+                'code' => $consent->getCode(),
+                'label' => $consent->getTranslation()->getName(),
+            ];
+        }
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class);
-        $form = $this->formFactory->create($formType);
+        $form = $this->formFactory->create($formType, $consentData);
 
         // Customer accepted returnOrder, orderOrder has new status
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-
+            /** @var array $data */
             $data = $form->getData();
-            $orderReturn->setOrderReturnConsent($data['orderReturnConsent']);
-            $orderReturn->setOrderReturnConsentLabel($data['orderReturnConsentLabel']);
+            $orderReturn->setOrderReturnConsents((array) $data['consents']);
 
             $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-
             if (!$orderReturnStateMachine->can(OrderReturnInterface::STATUS_NEW)) {
-
                 return $this->createInvalidStateResponse($request);
             }
 
