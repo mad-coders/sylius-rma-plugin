@@ -12,6 +12,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthStartType;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
+use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
@@ -93,6 +94,9 @@ final class AuthController extends AbstractController
                     [ '%orderNumber%' => $orderNumber ]
                 );
             }
+
+            // replace with grant
+            //$this->denyAccessUnlessGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order);
 
             if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
                 return $this->errorRedirect(
