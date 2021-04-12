@@ -47,9 +47,21 @@ final class ReturnFormType extends AbstractType
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'sylius.form.address.first_name',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.not_blank',
+                    ])
+                ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'sylius.form.address.last_name',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.not_blank',
+                    ])
+                ],
             ])
             ->add('phoneNumber', TextType::class, [
                 'required' => false,

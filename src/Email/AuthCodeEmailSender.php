@@ -34,5 +34,5 @@ final class AuthCodeEmailSender  implements AuthCodeEmailSenderInterface
             'channel' => $channel,
             'code' => $hash
         ]);
-     }
+    }
 }

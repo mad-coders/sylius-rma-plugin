@@ -13,6 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ReturnConsentFormType extends AbstractType
@@ -34,7 +35,12 @@ final class ReturnConsentFormType extends AbstractType
         $builder
             ->add('orderReturnConsent', CheckboxType::class, [
                 'label'    => 'madcoders_rma.ui.return_consent_text',
-                'required' => true
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.not_blank',
+                    ])
+                ],
             ])
             ->add('orderReturnConsentLabel', HiddenType::class, [
                 'data' => $this->translator->trans('madcoders_rma.ui.return_consent_text'),

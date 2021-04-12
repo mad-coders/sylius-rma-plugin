@@ -206,7 +206,8 @@ final class AuthController extends AbstractController
                 return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
             }
 
-            return new RedirectResponse($this->router->generate('sylius_shop_homepage'));        }
+            return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
+        }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
