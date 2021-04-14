@@ -42,9 +42,6 @@ final class ConfigAddressToChannelFormType extends AbstractType
             ->add('provinceName', TextType::class, [
                 'label' => 'sylius.form.province.name',
             ])
-            ->add('channelId', HiddenType::class, [
-                'label' => false,
-            ])
         ;
     }
 

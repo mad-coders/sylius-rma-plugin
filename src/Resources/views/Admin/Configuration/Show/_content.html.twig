@@ -15,11 +15,11 @@
 
         {{ form_end(channelForm, {'render_rest': false}) }}
 
+        {# @todo remember to pass channelId to action #}
         {{ form_start(addressFormToSelectedChannel, {'action': path('madcoders_rma_start'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
 
             {% include '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/Form/_address.html.twig' with {'form': addressFormToSelectedChannel} %}
 
-            {{ form_row(addressFormToSelectedChannel.channelId, sylius_test_form_attribute('rma-admin-config-address-company-field')) }}
             {{ form_row(addressFormToSelectedChannel._token) }}
             <br/>
             <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>

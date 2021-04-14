@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use http\Exception\RuntimeException;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigAddressToChannelFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigChannelSelectFormType;
@@ -85,30 +86,18 @@ final class RmaConfigurationController extends AbstractController
             throw new Exception('Address form not defined');
         }
 
-        if (!$channel = $this->channelsRepository->findOneBy(array('id' => $channelId)) or $channelId == null) {
-            $channelForm = $this->formFactory->create($channelFormType);
-            $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
+       $channel = $this->getSelectedChannel($channelId);
+        $addressByChannel = [];
 
-        } else {
-            if (!$channel instanceof ChannelInterface) {
-                throw new Exception('Channel is not channelInterface');
-            }
+        /** @var RmaConfigurationInterface|null $addressConfigByChannel */
+        $addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
-
-            if (!$addressConfigByChannel = $this->configurationRepository->findOneBy(array('channel' => $channel, 'parameter' => 'address'))) {
-                 $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
-            }  else  {
-                if (!$addressConfigByChannel instanceof RmaConfigurationInterface) {
-                    throw new Exception('AddressConfigByChannel  is not RmaConfigurationInterface');
-                }
-                $addressByChannel = $addressConfigByChannel->getValue();
-                $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
-            }
-
-
-
-            $channelForm = $this->createForm($channelFormType, ['channelChoice' => $channelId ]);
+        if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
+            $addressByChannel = $addressConfigByChannel->getValue();
         }
+
+        $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
+        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId ] : null);
 
         if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
             throw new Exception('Template not defined');
@@ -116,10 +105,35 @@ final class RmaConfigurationController extends AbstractController
 
         return new Response($this->templatingEngine
             ->render($templateWithAttribute, [
-                'channelForm' => $channelForm->createView(),
-                'addressFormToSelectedChannel' => $addressFormToSelectedChannel->createView()
+                    'channelForm' => $channelForm->createView(),
+                    'addressFormToSelectedChannel' => $addressFormToSelectedChannel->createView(),
+                    'channel' => $channel,
             ]
         ));
+    }
+
+    private function getSelectedChannel(?string $channelId = null): ChannelInterface
+    {
+        if ($channelId) {
+            $channel = $this->channelsRepository->findOneBy(['id' => $channelId]);
+            if (!$channel instanceof ChannelInterface) {
+                throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));
+            }
+
+            return $channel;
+        } else {
+            return $this->getDefaultChannel();
+        }
+    }
+
+    private function getDefaultChannel(): ChannelInterface
+    {
+        $channel = $this->channelsRepository->findOneBy([]);
+        if (!$channel instanceof ChannelInterface) {
+            throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));
+        }
+
+        return $channel;
     }
 
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
