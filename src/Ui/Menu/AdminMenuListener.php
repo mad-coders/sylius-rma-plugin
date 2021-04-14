@@ -32,5 +32,11 @@ class AdminMenuListener
             ->setLabel('Return Consents')
             ->setLabelAttribute('icon', 'briefcase')
         ;
+
+        $newRmaSubmenu
+            ->addChild('return-config', ['route' => 'madcoders_rma_admin_order_return_config_edit'])
+            ->setLabel('Return Configuration')
+            ->setLabelAttribute('icon', 'sliders horizontal')
+        ;
     }
 }

@@ -45,6 +45,20 @@ madcoders_rma_admin_order_return_consent:
             icon: 'briefcase'
   type: sylius.resource
 
+madcoders_rma_admin_order_return_config_edit:
+  path: /rma-configuration/{channelId}
+  methods: [ GET, POST ]
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:viewIndex
+  defaults:
+    channelId: null
+    template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/show.html.twig"
+    _sylius:
+      section: admin
+      permission: true
+      repository:
+        arguments:
+          - $channelId
+
 madcoders_rma_admin_order_return_show:
   path: /order-returns/{id}
   methods: [ GET, POST ]

@@ -14,6 +14,8 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
+        configuration: 'RMA Configuration'
+        configuration_edit: 'Edit configuration'
         edit_form: 'Edit form'
         # ##########################################
 
@@ -72,6 +74,8 @@ madcoders_rma:
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
     admin:
+        configuration:
+            select_channel: 'Select Channel'
         reasons:
 
             form:

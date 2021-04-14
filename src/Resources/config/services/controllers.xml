@@ -54,5 +54,18 @@
             <argument type="service" id="translator" />
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.controller.rma_configuration_controller"
+                 class="Madcoders\SyliusRmaPlugin\Controller\RmaConfigurationController">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="twig" />
+            <argument type="service" id="router" />
+            <argument type="service" id="session" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id= "sylius.repository.channel" />
+            <argument type="service" id= "madcoders_rma.repository.madcoders_rma_configuration" />
+        </service>
+
+
     </services>
 </container>

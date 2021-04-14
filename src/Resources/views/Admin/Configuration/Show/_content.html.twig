@@ -1,0 +1,32 @@
+<div class="ui stackable segment grid">
+    <div class="sixteen wide column">
+        <h3 class="ui dividing header">
+            {{ 'madcoders_rma.admin.configuration.select_channel'|trans }}
+        </h3>
+
+        {{ form_start(channelForm, {'action': path('madcoders_rma_start'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+
+            {{ form_row(channelForm.channelChoice, sylius_test_form_attribute('rma-admin-channel-choice-field')) }}
+            {{ form_row(channelForm._token) }}
+            <br/>
+            <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>
+                {{ 'madcoders_rma.ui.continue_button'|trans }}
+            </button>
+
+        {{ form_end(channelForm, {'render_rest': false}) }}
+
+        {{ form_start(addressFormToSelectedChannel, {'action': path('madcoders_rma_start'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+
+            {% include '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/Form/_address.html.twig' with {'form': addressFormToSelectedChannel} %}
+
+            {{ form_row(addressFormToSelectedChannel.channelId, sylius_test_form_attribute('rma-admin-config-address-company-field')) }}
+            {{ form_row(addressFormToSelectedChannel._token) }}
+            <br/>
+            <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>
+                {{ 'madcoders_rma.ui.continue_button'|trans }}
+            </button>
+
+        {{ form_end(addressFormToSelectedChannel, {'render_rest': false}) }}
+
+    </div>
+</div>

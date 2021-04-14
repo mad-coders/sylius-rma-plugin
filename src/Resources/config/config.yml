@@ -63,6 +63,38 @@ sylius_ui:
           context:
             event: sylius.admin.order.show.after_content
 
+    madcoders_rma.admin.configuration.content:
+      blocks:
+        before_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 35
+          context:
+            event: sylius.admin.configuration.before_header
+        header:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_headerWidget.html.twig"
+          priority: 30
+        after_header_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 25
+          context:
+            event: sylius.admin.configuration.after_header
+        breadcrumb:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_breadcrumb.html.twig"
+          priority: 20
+        after_breadcrumb_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 15
+          context:
+            event: sylius.admin.configuration.after_breadcrumb
+        content:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_content.html.twig"
+          priority: 10
+        after_content_legacy:
+          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
+          priority: 5
+          context:
+            event: sylius.admin.configuration.after_content
+
 # order return state machine
 
 winzou_state_machine:
