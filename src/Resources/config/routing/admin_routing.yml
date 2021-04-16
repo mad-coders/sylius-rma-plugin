@@ -59,6 +59,26 @@ madcoders_rma_admin_order_return_config_edit:
         arguments:
           - $channelId
 
+madcoders_rma_admin_order_return_config_change_channel:
+  path: /rma-configuration-change-channel
+  methods: [ POST ]
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:changeChannel
+  defaults:
+    _sylius:
+      redirect: madcoders_rma_admin_order_return_config_edit
+      section: admin
+      permission: true
+
+madcoders_rma_admin_order_return_config_add_address_to_selected_channel:
+  path: /rma-configuration-change-channel/{channelId}
+  methods: [ POST ]
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:saveAddressToSelectedChannel
+  defaults:
+    _sylius:
+      redirect: madcoders_rma_admin_order_return_config_edit
+      section: admin
+      permission: true
+
 madcoders_rma_admin_order_return_show:
   path: /order-returns/{id}
   methods: [ GET, POST ]

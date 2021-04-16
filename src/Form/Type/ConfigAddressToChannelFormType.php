@@ -19,11 +19,9 @@ final class ConfigAddressToChannelFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $builder
             ->add('company', TextType::class, [
                 'required' => false,
-                'data' => '',
                 'label' => 'sylius.form.address.company',
             ])
             ->add('countryCode', CountryCodeChoiceType::class, [
@@ -38,9 +36,6 @@ final class ConfigAddressToChannelFormType extends AbstractType
             ])
             ->add('postcode', TextType::class, [
                 'label' => 'sylius.form.address.postcode',
-            ])
-            ->add('provinceName', TextType::class, [
-                'label' => 'sylius.form.province.name',
             ])
         ;
     }
