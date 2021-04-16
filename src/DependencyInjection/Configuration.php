@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\DependencyInjection;
 
+use Madcoders\SyliusRmaPlugin\Controller\RmaConfigurationController;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
@@ -22,6 +23,8 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReason;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslationInterface;
+use Madcoders\SyliusRmaPlugin\Entity\RmaConfiguration;
+use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\OrderReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonFormType;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
@@ -173,6 +176,7 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+
                         ->arrayNode('madcoders_rma_order_return_change_log_author')
                             ->addDefaultsIfNotSet()
                                 ->children()
@@ -189,6 +193,24 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
+
+                        ->arrayNode('madcoders_rma_configuration')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(RmaConfiguration::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(RmaConfigurationInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(RmaConfigurationController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+
                     ->end()
                 ->end()
             ->end()

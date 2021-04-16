@@ -35,11 +35,10 @@
 
                         <td style="border-right: 6px solid red; color: darkred" >
                             <strong>{{ 'madcoders_rma.pdf.return_to_address'|trans }}:</strong><br/>
-                            {# @TODO config #}
-                            Genslerstraße 84<br/>
-                            13359 Berlin<br/>
-                            Germany<br/>
-                            {# END #}
+                            {{ returnAddress.company }}<br/>
+                            {{ returnAddress.street }}<br/>
+                            {{ returnAddress.postcode }} {{ returnAddress.city }}<br/>
+                            {{ returnAddress.countryCode|sylius_country_name|upper }}<br/>
                         </td>
                     </tr>
                 </table>

@@ -10,6 +10,8 @@
             <argument type="service" id="file_locator" />
             <argument>@MadcodersSyliusRmaPlugin/Return/Download/pdf.html.twig</argument>
             <argument>@MadcodersSyliusRmaPlugin/Resources/pdf/sylius-logo.png</argument>
+            <argument type="service"  id="madcoders.sylius_rma_plugin.services.configuration.return_address_configurator" />
+            <argument type="service" id= "sylius.repository.channel" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.generator.return_number_generator" class="Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator">

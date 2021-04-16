@@ -14,6 +14,8 @@ madcoders_rma:
         timeline: 'Time Line'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
+        configuration: 'RMA Configuration'
+        configuration_edit: 'Edit configuration'
         edit_form: 'Edit form'
         # ##########################################
 
@@ -22,6 +24,8 @@ madcoders_rma:
         qty: 'QTY'
         headline: 'Return form'
         continue_button: 'Continue'
+        change_button: 'Change'
+        change_channel_button: 'Change Channel'
         session_not_valid: 'Your session has expired'
 
         return_reason: 'Reason of return'
@@ -72,6 +76,16 @@ madcoders_rma:
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
     admin:
+        configuration:
+            select_channel: 'Select Channel'
+            change_return_addresss_to_channel: 'Change address to channel'
+
+            form:
+
+                error:
+                    channel_not_exist: 'Channel not exist'
+                    form_not_save: 'Form not save'
+
         reasons:
 
             form:

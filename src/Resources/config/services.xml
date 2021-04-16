@@ -61,5 +61,10 @@
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.services.configuration.return_address_configurator"
+                 class="Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator" public="true">
+            <argument type="service" id= "madcoders_rma.repository.madcoders_rma_configuration" />
+        </service>
+
     </services>
 </container>

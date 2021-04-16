@@ -28,5 +28,16 @@
             <tag name="form.type" />
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.form.type.config_channel_select_form_type"
+                 class="Madcoders\SyliusRmaPlugin\Form\Type\ConfigChannelSelectFormType">
+            <argument type="service" id= "sylius.repository.channel" />
+            <tag name="form.type" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.form.type.config_address_to_channel_form_type"
+                 class="Madcoders\SyliusRmaPlugin\Form\Type\ConfigAddressToChannelFormType">
+            <tag name="form.type" />
+        </service>
+
     </services>
 </container>
