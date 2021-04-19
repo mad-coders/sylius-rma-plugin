@@ -17,6 +17,7 @@ madcoders_rma:
         configuration: 'RMA Configuration'
         configuration_edit: 'Edit configuration'
         edit_form: 'Edit form'
+        comments: 'Comments'
         # ##########################################
 
         customer_consent_header: 'Customer consents'
@@ -37,7 +38,6 @@ madcoders_rma:
             return_reason: 'Reason of return'
             enabled: 'Enabled'
             deadline_to_return: 'Deadline for return applications'
-            none: 'Add notes'
             placeholder:
                 reason: 'Choose reason'
 
