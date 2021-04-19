@@ -109,6 +109,11 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     private $customerIp;
 
     /**
+     * @var string|null
+     */
+    private $customerNote;
+
+    /**
      * @var array
      */
     private $orderReturnConsents = [];
@@ -426,6 +431,22 @@ class OrderReturn implements OrderReturnInterface, ResourceInterface, Timestampa
     public function setCustomerIp(string $customerIp): void
     {
         $this->customerIp = $customerIp;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerNote(): ?string
+    {
+        return $this->customerNote;
+    }
+
+    /**
+     * @param string|null $customerNote
+     */
+    public function setCustomerNote(?string $customerNote): void
+    {
+        $this->customerNote = $customerNote;
     }
 
     /**

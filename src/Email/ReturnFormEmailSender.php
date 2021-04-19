@@ -26,24 +26,16 @@ final class ReturnFormEmailSender implements ReturnFormEmailSenderInterface
     /** @var TemporaryFilesystem */
     private $temporaryFilesystem;
 
-    /**
-     * ReturnFormEmailSender constructor.
-     * @param SenderInterface $emailSender
-     * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
-     * @param ReturnAddressConfigurator $returnAddressConfigurator
-     * @param TemporaryFilesystem $temporaryFilesystem
-     */
     public function __construct(
         SenderInterface $emailSender,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        ReturnAddressConfigurator $returnAddressConfigurator,
-        TemporaryFilesystem $temporaryFilesystem
+        ReturnAddressConfigurator $returnAddressConfigurator
     )
     {
         $this->emailSender = $emailSender;
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
         $this->returnAddressConfigurator = $returnAddressConfigurator;
-        $this->temporaryFilesystem = $temporaryFilesystem;
+        $this->temporaryFilesystem = new TemporaryFilesystem();
     }
 
     /**
