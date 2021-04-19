@@ -17,6 +17,7 @@ madcoders_rma:
         configuration: 'RMA Configuration'
         configuration_edit: 'Edit configuration'
         edit_form: 'Edit form'
+        comments: 'Comments'
         # ##########################################
 
         customer_consent_header: 'Customer consents'
@@ -57,6 +58,8 @@ madcoders_rma:
             secondary_headline: 'Select items and check your details'
             bank_account_number_headline: 'Bank account number'
             bank_account_number_subheader: 'The money will be refunded to given account'
+            comment: 'Comment on the return'
+            add_your_comments_here: 'Add your comments here'
             return_reason_headline: 'Reason'
             return_reason_subheader: 'Simply choose from the list'
             selecte_items_to_return_form: 'Please select items and quantities to return'

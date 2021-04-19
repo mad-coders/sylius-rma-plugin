@@ -16,6 +16,7 @@ use Sylius\Bundle\AddressingBundle\Form\Type\CountryCodeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -90,6 +91,10 @@ final class ReturnFormType extends AbstractType
             ])
             ->add('provinceName', TextType::class, [
                 'label' => 'sylius.form.province.name',
+            ])
+            ->add('customerNote', TextareaType::class, [
+                'required' => false,
+                'label' => 'madcoders_rma.ui.add_notes',
             ])
             ->add('bankAccountNumber', TextType::class, [
                 'label' => 'madcoders_rma.ui.form.bank_account_number',

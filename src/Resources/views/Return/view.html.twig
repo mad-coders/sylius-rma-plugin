@@ -35,7 +35,7 @@
                         {{ form_row(form.items) }}
                      </tbody>
                 </table>
-                <div class=" ">
+                <div>
                     <h3 class="ui dividing header">
                         {{ 'sylius.ui.address'|trans }}
                         <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.verify_address'|trans }}</div>
@@ -49,8 +49,9 @@
                         {{ 'madcoders_rma.ui.fill_the_form_step.return_reason_headline'|trans }}
                         <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.return_reason_subheader'|trans }}</div>
                     </h3>
-
-                    {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
+                    <div class="field">
+                        {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
+                    </div>
                 </div>
                 <br/>
                 <div>
@@ -58,10 +59,20 @@
                         {{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_headline'|trans }}
                         <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_subheader'|trans }}</div>
                     </h3>
-
-                    {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-returnReason')) }}
+                    <div class="field">
+                        {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-returnReason')) }}
+                    </div>
                 </div>
-
+                <br/>
+                <div class="ui">
+                    <h3 class="ui dividing header">
+                        {{ 'madcoders_rma.ui.fill_the_form_step.comment'|trans }}
+                        <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.add_your_comments_here'|trans }}</div>
+                    </h3>
+                    <div class="field">
+                        {{ form_row(form.customerNote, sylius_test_form_attribute('return-returnReason')) }}
+                    </div>
+                </div>
                 {{ form_row(form._token) }}
                 <br/>
                 <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'madcoders_rma.ui.continue_button'|trans }}</button>
