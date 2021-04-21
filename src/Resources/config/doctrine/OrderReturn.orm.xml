@@ -44,6 +44,7 @@
 
         <field name="orderReturnStatus" column="order_return_status" type="string"/>
         <field name="customerIp" column="customer_ip" type="string" nullable="true"/>
+        <field name="customerNote" column="customer_note" type="text" nullable="true"/>
         <field name="bankAccountNumber" column="bank_account_number" type="string" nullable="true"/>
 
         <field name="createdAt" column="created_at" type="datetime">

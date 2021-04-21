@@ -12,6 +12,7 @@
         <service id="madcoders.sylius_rma_plugin.email.return_form_email_sender" class="Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSender">
             <argument type="service" id="sylius.email_sender" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.order_return_form_pdf_file_generator" />
+            <argument type="service"  id="madcoders.sylius_rma_plugin.services.configuration.return_address_configurator" />
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface" alias="madcoders.sylius_rma_plugin.email.return_form_email_sender" />
 

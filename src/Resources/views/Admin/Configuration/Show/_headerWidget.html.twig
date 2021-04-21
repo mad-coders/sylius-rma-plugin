@@ -1,0 +1,13 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+<div class="ui stackable two column grid">
+    <div class="ten wide column">
+        {% include '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_header.html.twig' %}
+    </div>
+    <div class="six wide right aligned column">
+
+        {% set path = path('sylius_admin_dashboard') %}
+        {{ buttons.default(path, '', 'back', 'arrow alternate circle left outline') }}
+
+    </div>
+</div>

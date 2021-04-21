@@ -88,6 +88,7 @@ final class AuthController extends AbstractController
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
+            /** @var array $data */
             $data = $form->getData();
             $orderNumber = trim(str_replace(['#'], '', $data['orderNumber']));
             $order = $this->getDoctrine()
