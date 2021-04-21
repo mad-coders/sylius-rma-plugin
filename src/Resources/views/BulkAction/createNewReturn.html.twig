@@ -2,7 +2,9 @@
 
 {% set path = options.link.url|default(path(options.link.route, options.link.parameters|default({}))) %}
 
-{% if data.state == 'fulfilled' %}
+{% set orderHasItemsToReturned =  rma_order_has_items_to_returned_view(data) %}
+
+{% if data.state == 'fulfilled' and orderHasItemsToReturned == true %}
 
     {{ buttons.default(path, action.label, true, 'undo alternate', 'primary') }}
 
