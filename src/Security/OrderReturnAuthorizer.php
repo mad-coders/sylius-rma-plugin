@@ -27,11 +27,6 @@ class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
         $this->storage = $storage;
     }
 
-    public function authorizeWithVerificationCode(OrderInterface $order, string $authCode): void
-    {
-
-    }
-
     public function isAllowed(OrderInterface $order): bool
     {
          return $this->storage->exists($order->getNumber());
