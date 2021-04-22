@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterface
 {
     private const SESSION_KEY = 'madcoders_rma_auth_order';
-    private const DEFAULT_EXPIRY_TIME = 3600;
 
     /** @var SessionInterface */
     private $session;
@@ -31,20 +30,6 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
     {
         $this->session = $session;
     }
-
-    private function read(): array
-    {
-        /** @var array|null $data */
-        $data = $this->session->get(self::SESSION_KEY);
-
-        return is_array($data) ? $data : [];
-    }
-
-    private function write(array $data): void
-    {
-        $this->session->set(self::SESSION_KEY, $data);
-    }
-
     public function add(string $orderNumber, int $expiryTime = self::DEFAULT_EXPIRY_TIME): void
     {
         $data = $this->read();
@@ -91,4 +76,16 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
         return true;
     }
 
+    private function read(): array
+    {
+        /** @var array|null $data */
+        $data = $this->session->get(self::SESSION_KEY);
+
+        return is_array($data) ? $data : [];
+    }
+
+    private function write(array $data): void
+    {
+        $this->session->set(self::SESSION_KEY, $data);
+    }
 }

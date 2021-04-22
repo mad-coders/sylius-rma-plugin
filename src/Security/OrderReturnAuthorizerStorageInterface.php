@@ -19,18 +19,27 @@ use Madcoders\SyliusRmaPlugin\Security\Exception\NotExistsException;
  */
 interface OrderReturnAuthorizerStorageInterface
 {
-    /**
-     * @param array $data
-     */
-    public function put(array $data): void;
+    public const DEFAULT_EXPIRY_TIME = 3600;
 
     /**
      * @param string $orderNumber
      *
      * @return array
+     *
      * @throws NotExistsException
      */
     public function get(string $orderNumber): array;
 
+    /**
+     * @param string $orderNumber
+     * @param int $expiryTime
+     */
+    public function add(string $orderNumber, int $expiryTime = self::DEFAULT_EXPIRY_TIME): void;
+
+    /**
+     * @param string $orderNumber
+     *
+     * @return bool
+     */
     public function exists(string $orderNumber): bool;
 }
