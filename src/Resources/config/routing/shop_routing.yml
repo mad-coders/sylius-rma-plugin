@@ -6,6 +6,7 @@ madcoders_rma_start:
         template: '@MadcodersSyliusRmaPlugin/Auth/start.html.twig'
         _sylius:
             error_redirect: madcoders_rma_start
+            redirect_to_order_return: madcoders_rma_return_form
             redirect: madcoders_rma_verification
 
 madcoders_rma_verification:
@@ -23,7 +24,7 @@ madcoders_rma_verification:
                     - $code
 
 madcoders_rma_return_form:
-    path: /rma-form
+    path: /rma-form/{orderNumber}
     methods: [ GET, POST ]
     controller: madcoders.sylius_rma_plugin.controller.return_controller:viewIndex
     defaults:

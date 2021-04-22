@@ -17,7 +17,7 @@
                 </div>
             </h1>
             <div class="ui segment">
-                {{ form_start(form, {'action': path('madcoders_rma_return_form'), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+                {{ form_start(form, {'action': path('madcoders_rma_return_form', { 'orderNumber': orderNumber }), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
                 <h3 class="ui dividing header">
                     {{ 'sylius.ui.items'|trans }}
                     <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.selecte_items_to_return_form'|trans }}</div>
