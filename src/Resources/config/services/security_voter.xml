@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" class="Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizer">
+            <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer_storage" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.voter.order_return_authorizer_storage" class="Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerStorage">
+            <argument type="service" id="session"/>
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.voter.order_return" class="Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter">
+            <argument type="service" id="security.helper" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
+            <tag name="security.voter" />
+        </service>
+    </services>
+</container>

@@ -17,10 +17,12 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
+use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -110,13 +112,21 @@ final class ReturnController extends AbstractController
         $this->changesLogger = $changesLogger;
     }
 
-    public function viewIndex(Request $request, string $template): Response
+    public function viewIndex(Request $request, string $orderNumber, string $template): Response
     {
-        $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class, );
-        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
+        $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class);
+
+        // TODO: inject repository instead
+        // load order
+        $order = $this->getDoctrine()
+            ->getRepository(Order::class)
+            ->findOneBy(array('number' => $orderNumber));
+
+        // redirect forward if access is already granted
+        if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return $this->createMissingOrderNumberResponse($request);
         }
-        /////
+
         $orderReturn = $this->returnRequestBuilder->build($orderNumber);
         $returnNumber = $orderReturn->getReturnNumber();
         $form = $this->formFactory->create($formType, $orderReturn);
@@ -134,15 +144,22 @@ final class ReturnController extends AbstractController
 
     public function acceptIndex(Request $request, string $template): Response
     {
-        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
-            return $this->createMissingOrderNumberResponse($request);
-        }
-
         $returnNumber = (string) $request->attributes->get('returnNumber');
 
         if (!$orderReturn = $this->getDoctrine()
             ->getRepository(OrderReturn::class)
             ->findOneBy(array('returnNumber' => $returnNumber))) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
+
+        // TODO: inject repository instead
+        // load order
+        $order = $this->getDoctrine()
+            ->getRepository(Order::class)
+            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
+
+        // redirect forward if access is already granted
+        if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
@@ -203,16 +220,30 @@ final class ReturnController extends AbstractController
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
-        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'returnOrder'=> $orderReturn, 'form' => $form->createView()]));
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderReturn->getOrderNumber(), 'returnOrder'=> $orderReturn, 'form' => $form->createView()]));
     }
 
     public function successIndex(Request $request, string $template): Response
     {
-        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
+        $returnNumber = (string) $request->attributes->get('returnNumber');
+
+        // TODO: inject repository instead
+        if (!$orderReturn = $this->getDoctrine()
+            ->getRepository(OrderReturn::class)
+            ->findOneBy(array('returnNumber' => $returnNumber))) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $returnNumber = $request->attributes->get('returnNumber');
+        // TODO: inject repository instead
+        // load order
+        $order = $this->getDoctrine()
+            ->getRepository(Order::class)
+            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
+
+        if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
+
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
         $this->session->remove('madcoders_rma_allowed_order');
         $this->session->set('madcoders_rma_allowed_order_return', $returnNumber);

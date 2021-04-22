@@ -158,7 +158,7 @@ final class ShopManagementController extends AbstractController
 
         $this->session->set('madcoders_rma_allowed_order', $orderNumber);
 
-        return new RedirectResponse($this->router->generate('madcoders_rma_return_form'));
+        return new RedirectResponse($this->router->generate('madcoders_rma_return_form', ['orderNumber' => $orderNumber]));
     }
 
     public function printAction(Request $request, string $returnNumber): Response

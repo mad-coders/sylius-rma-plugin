@@ -3,7 +3,7 @@
 </h4>
 <div class="ui attached segment" id="customer-note-data">
     <strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong> {{ rma_reason_name_view(order_return.returnReason) }} <br/>
-    {% if order_return.customerNote  is defined %}
+    {% if order_return.customerNote is defined and order_return.customerNote is not empty %}
         <br/>
         <strong>{{ 'sylius.ui.notes'|trans }}:</strong> {{ order_return.customerNote }} <br/>
     {% endif %}
