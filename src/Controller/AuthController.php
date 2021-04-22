@@ -202,7 +202,7 @@ final class AuthController extends AbstractController
         // load order
         $order = $this->getDoctrine()
             ->getRepository(Order::class)
-            ->findOneBy(array('orderNumber' => $authData->getOrderNumber()));
+            ->findOneBy(array('number' => $authData->getOrderNumber()));
 
         // redirect forward if access is already granted
         if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -223,7 +223,7 @@ final class AuthController extends AbstractController
             if ($authDataCode === $authCode) {
                 $this->orderReturnAuthorizer->authorize($order);
 
-                return new RedirectResponse($this->router->generate($redirectRoute, [ 'order' => $orderNumber ]));
+                return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $orderNumber ]));
             }
 
             $errorMessage = $this->getSyliusAttribute(

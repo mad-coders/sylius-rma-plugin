@@ -39,6 +39,8 @@ class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
 
     public function authorize(OrderInterface $order): void
     {
-        $this->storage->put();
+        if (is_string($order->getNumber())) {
+            $this->storage->add($order->getNumber());
+        }
     }
 }

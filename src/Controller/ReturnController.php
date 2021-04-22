@@ -120,7 +120,7 @@ final class ReturnController extends AbstractController
         // load order
         $order = $this->getDoctrine()
             ->getRepository(Order::class)
-            ->findOneBy(array('orderNumber' => $orderNumber));
+            ->findOneBy(array('number' => $orderNumber));
 
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -156,7 +156,7 @@ final class ReturnController extends AbstractController
         // load order
         $order = $this->getDoctrine()
             ->getRepository(Order::class)
-            ->findOneBy(array('orderNumber' => $orderReturn->getOrderNumber()));
+            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
 
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -220,7 +220,7 @@ final class ReturnController extends AbstractController
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
-        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber, 'returnOrder'=> $orderReturn, 'form' => $form->createView()]));
+        return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderReturn->getOrderNumber(), 'returnOrder'=> $orderReturn, 'form' => $form->createView()]));
     }
 
     public function successIndex(Request $request, string $template): Response

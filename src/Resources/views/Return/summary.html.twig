@@ -68,7 +68,7 @@
                         {{ form_row(form.consents, sylius_test_form_attribute('return-order_consents')) }}
                         {{ form_row(form._token) }}
                         <br/>
-                        <a href="{{ path('madcoders_rma_return_form') }}" class="ui large floated button">{{ 'sylius.ui.edit'|trans }}</a>
+                        <a href="{{ path('madcoders_rma_return_form', { 'orderNumber': returnOrder.orderNumber }) }}" class="ui large floated button">{{ 'sylius.ui.edit'|trans }}</a>
                         <button type="submit" class="ui large right primary submit button" {{ sylius_test_html_attribute('send-button') }}>
                             {{ 'madcoders_rma.ui.action.submit_return_form'|trans }}
                         </button>

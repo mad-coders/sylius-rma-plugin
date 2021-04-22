@@ -30,6 +30,7 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
     {
         $this->session = $session;
     }
+
     public function add(string $orderNumber, int $expiryTime = self::DEFAULT_EXPIRY_TIME): void
     {
         $data = $this->read();
@@ -53,11 +54,11 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
     {
         $orderData = $this->read();
 
-        if (!isset($orderData[$orderNumber])) {
+        if (!isset($orderData[$orderNumber]) || !is_array($orderData[$orderNumber])) {
             throw new NotExistsException(sprintf('Order number %s has not been found in Authorizer storage', $orderNumber));
         }
 
-        if ($orderData['expiryTime'] < (new \DateTime())->getTimestamp()) {
+        if ($orderData[$orderNumber]['expiryTime'] < (new \DateTime())->getTimestamp()) {
             $this->remove($orderNumber);
             throw new NotExistsException(sprintf('Order number %s has not been found in Authorizer storage', $orderNumber));
         }
