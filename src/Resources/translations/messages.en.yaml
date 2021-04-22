@@ -126,6 +126,11 @@ madcoders_rma:
             greeting: 'Hi %name%'
             info: 'Please print attached form and send to us'
 
+        order_return_auth_email:
+            subject: 'Order return verification code'
+            auth_code_info: 'to continue return process please enter %auth_code% code on'
+            verification_page: 'verification page'
+
     state:
         draft: 'Draft'
         new: 'New'

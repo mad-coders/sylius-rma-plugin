@@ -1,12 +1,19 @@
 {% block subject %}
-    Verification Code
+    {{ 'madcoders_rma.email.order_return_auth_email.subject'|trans }}
 {% endblock %}
 
 {% block body %}
     {% set url = channel.hostname is not null ? 'https://' ~ channel.hostname ~ path('madcoders_rma_verification', { 'code': code }) : url('madcoders_rma_verification', { 'code': code }) %}
 
     {% autoescape %}
-        Hello,
-        to continue return process please enter {{ authCodeInterface.authCode }} code on <a target="_blank" href="{{ url }}">verification page</a>.
+        Hello,<br>
+        <br>
+
+        {# @todo add extension point: mail before content #}
+
+        {{ 'madcoders_rma.email.order_return_auth_email.auth_code_info'|trans({ '%auth_code%': authCodeInterface.authCode }) }}
+        <a target="_blank" href="{{ url }}">{{ 'madcoders_rma.email.order_return_auth_email.verification_page'|trans }}</a>.
+
+        {# @todo add extension point: mail after content #}
     {% endautoescape %}
 {% endblock %}
