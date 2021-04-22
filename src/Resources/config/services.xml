@@ -6,8 +6,14 @@
     </imports>
 
     <services>
-        <service id="madcoders.sylius_rma_plugin.services.max_qty_calculator" class="Madcoders\SyliusRmaPlugin\Services\MaxQtyCalculator">
+        <service id="madcoders.sylius_rma_plugin.services.max_qty_calculator"
+                 class="Madcoders\SyliusRmaPlugin\Services\MaxQtyCalculator">
             <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return"
+                 class="Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.max_qty_calculator" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.return_request_builder" class="Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder">
@@ -24,29 +30,6 @@
 
         <service id="madcoders.sylius_rma_plugin.services.rma_changes_logger" class="Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger">
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
-        </service>
-
-        <service id="madcoders.sylius_rma_plugin.rma_product_view_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaProductViewExtension">
-            <argument type="service" id="sylius.repository.product_variant" />
-            <tag name="twig.extension"/>
-        </service>
-
-        <service id="madcoders.sylius_rma_plugin.twig.rma_order_view_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaOrderViewExtension">
-            <argument type="service" id="sylius.repository.order" />
-            <tag name="twig.extension"/>
-        </service>
-
-        <service id="madcoders.sylius_rma_plugin.twig.rma_reason_choice_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaReasonChoiceExtension">
-            <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
-            <tag name="twig.extension"/>
-        </service>
-
-        <service id="madcoders.sylius_rma_plugin.twig.rma_time_line_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeLineExtension">
-            <tag name="twig.extension"/>
-        </service>
-
-        <service id="madcoders.sylius_rma_plugin.twig.rma_time_ago_extension" class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeAgoExtension">
-            <tag name="twig.extension"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel"

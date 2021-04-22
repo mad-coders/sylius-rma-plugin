@@ -1,5 +1,10 @@
 <?php
-
+/*
+ * This file is part of the Madcoders RMA Plugin.
+ *
+ * (c) Leonid Moshko
+ *
+ */
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
