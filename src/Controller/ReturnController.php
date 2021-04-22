@@ -225,11 +225,25 @@ final class ReturnController extends AbstractController
 
     public function successIndex(Request $request, string $template): Response
     {
-        if (!$orderNumber = (string) $this->session->get('madcoders_rma_allowed_order')) {
+        $returnNumber = (string) $request->attributes->get('returnNumber');
+
+        // TODO: inject repository instead
+        if (!$orderReturn = $this->getDoctrine()
+            ->getRepository(OrderReturn::class)
+            ->findOneBy(array('returnNumber' => $returnNumber))) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $returnNumber = $request->attributes->get('returnNumber');
+        // TODO: inject repository instead
+        // load order
+        $order = $this->getDoctrine()
+            ->getRepository(Order::class)
+            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
+
+        if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            return $this->createMissingOrderNumberResponse($request);
+        }
+
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
         $this->session->remove('madcoders_rma_allowed_order');
         $this->session->set('madcoders_rma_allowed_order_return', $returnNumber);
