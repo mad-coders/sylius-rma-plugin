@@ -20,14 +20,14 @@ final class OrderReturnConsentTranslationType extends AbstractResourceType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'madcoders_rma.form.return_consent.name',
+                'label' => 'madcoders_rma.admin.return_consent.form.name',
             ])
             ->add('slug', TextType::class, [
-                'label' => 'madcoders_rma.form.return_consent.slug',
+                'label' => 'madcoders_rma.admin.return_consent.form.slug',
             ])
             ->add('description', TextareaType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_consent.description',
+                'label' => 'madcoders_rma.admin.return_consent.form.description',
             ])
         ;
     }
