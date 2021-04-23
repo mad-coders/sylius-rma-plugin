@@ -63,6 +63,7 @@ madcoders_rma:
             enter_verification_code: "Check your e-mail and enter verification code"
             error:
                 code_not_valid: 'Verification code is not valid. Please try again.'
+                code_expired: 'Verification code has expired. Please try again.'
 
         fill_the_form_step:
             secondary_headline: 'Select items and check your details'

@@ -47,12 +47,12 @@ interface AuthCodeInterface
     public function setAuthCode(int $authCode): void;
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTimeInterface
      */
-    public function getExpiresAt(): ?\DateTimeInterface;
+    public function getExpiresAt(): \DateTimeInterface;
 
     /**
-     * @param \DateTimeInterface|null $expiresAt
+     * @param \DateTimeInterface $expiresAt
      */
-    public function setExpiresAt(?\DateTimeInterface $expiresAt): void;
+    public function setExpiresAt(\DateTimeInterface $expiresAt): void;
 }

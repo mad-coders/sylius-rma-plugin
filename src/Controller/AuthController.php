@@ -198,6 +198,21 @@ final class AuthController extends AbstractController
             $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
         }
 
+        // TODO: needs to be shorten
+        if ($authData->getExpiresAt() < (new \DateTime())) {
+            $errorMessage = $this->getSyliusAttribute(
+                $request,
+                'error_flash',
+                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_expired')
+            );
+
+            /** @var FlashBagInterface $flashBag */
+            $flashBag = $request->getSession()->getBag('flashes');
+            $flashBag->add('error', $errorMessage);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+        }
+
         // TODO: inject repository instead
         // load order
         $order = $this->getDoctrine()
