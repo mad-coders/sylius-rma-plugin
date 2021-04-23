@@ -46,6 +46,11 @@ class ChoiceProvider implements ChoiceProviderInterface
             return [];
         }
 
+        return $this->createAvailableReasons($order);
+    }
+
+    public function createAvailableReasons(OrderInterface $order): array
+    {
         $orderShipment = $order->getShipments()->first();
         if (!$orderShipment instanceof ShipmentInterface) {
             return [];

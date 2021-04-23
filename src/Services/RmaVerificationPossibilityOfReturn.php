@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
 
+use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Exception;
@@ -18,13 +19,21 @@ class RmaVerificationPossibilityOfReturn
     /** @var MaxQtyCalculator */
     private $maxQtyCalculator;
 
+    /** @var ChoiceProvider */
+    private $availableReasonsCreator;
+
     /**
      * RmaVerificationPossibilityOfReturn constructor.
      * @param MaxQtyCalculator $maxQtyCalculator
+     * @param ChoiceProvider $availableReasonsCreator
      */
-    public function __construct(MaxQtyCalculator $maxQtyCalculator)
+    public function __construct(
+        MaxQtyCalculator $maxQtyCalculator,
+        ChoiceProvider $availableReasonsCreator
+    )
     {
         $this->maxQtyCalculator = $maxQtyCalculator;
+        $this->availableReasonsCreator = $availableReasonsCreator;
     }
 
     /**
@@ -51,6 +60,10 @@ class RmaVerificationPossibilityOfReturn
 
             $itemVariantCode = $itemVariant->getCode();
             $orderQty = $orderQty + $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);
+        }
+
+        if (count($this->availableReasonsCreator->createAvailableReasons($order)) < 1) {
+            return false;
         }
 
         if ($orderQty > 0) {

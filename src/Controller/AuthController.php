@@ -31,6 +31,7 @@ use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
+use Exception;
 
 final class AuthController extends AbstractController
 {
@@ -176,6 +177,13 @@ final class AuthController extends AbstractController
         return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }
 
+    /**
+     * @param Request $request
+     * @param string $template
+     * @param string $code
+     * @return Response
+     * @throws Exception
+     */
     public function verification(Request $request, string $template, string $code): Response
     {
         $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
@@ -236,12 +244,20 @@ final class AuthController extends AbstractController
             $flashBag = $request->getSession()->getBag('flashes');
             $flashBag->add('error', $errorMessage);
 
-            return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
+            if (!$errorRedirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'madcoders_rma_verification')) {
+                return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+            }
+
+            return new RedirectResponse($this->router->generate($errorRedirectRoute, [ 'code' => $code]));
         }
 
-        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+        if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
+            throw new Exception('Template not find');
+        }
 
-        return new Response($this->templatingEngine->render($templateWithAttribute, ['code' => $code, 'form' => $form->createView()]));
+        return new Response($this->templatingEngine->render($templateWithAttribute, [
+            'code' => $code, 'form' => $form->createView()
+        ]));
     }
 
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string

@@ -161,7 +161,7 @@ final class ReturnController extends AbstractController
         if (!$possibleToReturn = $this->verificationPossibilityOfReturn->verificationForButtonRender($order)) {
             return $this->errorRedirect(
                 $request,
-                'madcoders_rma.ui.first_step.error.order_already_returned',
+                'madcoders_rma.ui.first_step.error.order_already_returned_or_cannot_be_returned',
                 [ '%orderNumber%' => $orderNumber ]
             );
         }

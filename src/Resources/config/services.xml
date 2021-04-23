@@ -14,6 +14,7 @@
         <service id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return"
                  class="Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn">
             <argument type="service" id="madcoders.sylius_rma_plugin.services.max_qty_calculator" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.return_request_builder" class="Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder">
