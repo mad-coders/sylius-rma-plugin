@@ -38,6 +38,11 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
      */
     private $expiresAt;
 
+    public function __construct()
+    {
+        $this->expiresAt = new \DateTime();
+    }
+
     /**
      * @return int|null
      */
@@ -95,17 +100,17 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return \DateTimeInterface
      */
-    public function getExpiresAt(): ?\DateTimeInterface
+    public function getExpiresAt(): \DateTimeInterface
     {
         return $this->expiresAt;
     }
 
     /**
-     * @param \DateTimeInterface|null $expiresAt
+     * @param \DateTimeInterface $expiresAt
      */
-    public function setExpiresAt(?\DateTimeInterface $expiresAt): void
+    public function setExpiresAt(\DateTimeInterface $expiresAt): void
     {
         $this->expiresAt = $expiresAt;
     }
