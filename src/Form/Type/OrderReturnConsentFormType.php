@@ -23,15 +23,15 @@ final class OrderReturnConsentFormType extends AbstractType
         $builder
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_consent.enabled',
+                'label' => 'madcoders_rma.admin.return_consent.form.enabled',
             ])
             ->add('translations', ResourceTranslationsType::class, [
                 'entry_type' => OrderReturnConsentTranslationType::class,
-                'label' => 'madcoders_rma.ui.form.return_consent.name',
+                'label' => 'madcoders_rma.admin.return_consent.form.name',
             ])
             ->add('position', IntegerType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.form.return_consent.position',
+                'label' => 'madcoders_rma.admin.return_consent.form.position',
             ])
             ->addEventSubscriber(new AddCodeFormSubscriber())
         ;

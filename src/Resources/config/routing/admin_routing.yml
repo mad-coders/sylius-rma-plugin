@@ -38,7 +38,7 @@ madcoders_rma_admin_order_return_consent:
     grid: madcoders_rma_admin_return_consent
     vars:
         all:
-            subheader: madcoders_rma.ui.return_consent_list
+            subheader: madcoders_rma.ui.order_return_consent_subheader
             templates:
                 form: "@MadcodersSyliusRmaPlugin/Admin/Consent/_form.html.twig"
         index:

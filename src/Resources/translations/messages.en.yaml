@@ -32,6 +32,16 @@ madcoders_rma:
         return_reason: 'Reason of return'
         return_consent_text: 'I accept terms and conditions'
 
+        # consent admin
+
+        edit_order_return_consent: 'Edit order return consent'
+        new_order_return_consent: 'New order return consent'
+        order_return_consents: 'Order return consents'
+        order_return_consent_subheader: 'Order return consents (optional or required)'
+        order_return_consent_form: 'General'
+
+        ##############
+
         form:
             bank_account_number: 'Bank account number (IBAN)'
             enter_order_number: 'Please enter order number'
@@ -83,17 +93,14 @@ madcoders_rma:
         configuration:
             select_channel: 'Select Channel'
             change_return_addresss_to_channel: 'Change address to channel'
-
             form:
-
                 error:
                     channel_not_exist: 'Channel not exist'
                     form_not_save: 'Form not save'
 
         reasons:
-
             form:
-                header: Reasons of return
+                header: 'Reasons of return'
                 enabled: 'Enabled'
                 name: 'Name'
                 days_to_deadline_to_return: 'Reason validity period in days'
@@ -112,6 +119,14 @@ madcoders_rma:
             added_new_note: 'added new note'
         return_details_header: 'Return details'
 
+        return_consent:
+            form:
+                enabled: 'Enabled'
+                name: 'Name'
+                position: 'Position'
+                slug: 'Slug'
+                description: 'Description'
+
     pdf:
         return_to_address: "Return to"
         header: "Return Form"
@@ -126,6 +141,11 @@ madcoders_rma:
             subject: 'Order return #%returnNumber%'
             greeting: 'Hi %name%'
             info: 'Please print attached form and send to us'
+
+        order_return_auth_email:
+            subject: 'Order return verification code'
+            auth_code_info: 'to continue return process please enter %auth_code% code on'
+            verification_page: 'verification page'
 
     state:
         draft: 'Draft'
