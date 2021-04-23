@@ -11,6 +11,7 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
+use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
@@ -65,6 +66,9 @@ final class ShopManagementController extends AbstractController
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var RmaVerificationPossibilityOfReturn */
+    private $verificationPossibilityOfReturn;
+
     /**
      * ShopManagementController constructor.
      * @param FormFactoryInterface $formFactory
@@ -78,6 +82,7 @@ final class ShopManagementController extends AbstractController
      * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
      * @param OrderRepository $orderRepository
      * @param TranslatorInterface $translator
+     * @param RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -90,7 +95,8 @@ final class ShopManagementController extends AbstractController
         TokenStorageInterface $tokenStorage,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
         OrderRepository $orderRepository,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
     )
     {
         $this->formFactory = $formFactory;
@@ -104,8 +110,15 @@ final class ShopManagementController extends AbstractController
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
         $this->orderRepository = $orderRepository;
         $this->translator = $translator;
+        $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
     }
 
+    /**
+     * @param Request $request
+     * @param string $orderNumber
+     * @return Response
+     * @throws \Exception
+     */
     public function createAction(Request $request, string $orderNumber): Response
     {
         if (!$token = $this->tokenStorage->getToken()) {
@@ -131,6 +144,14 @@ final class ShopManagementController extends AbstractController
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
+                [ '%orderNumber%' => $orderNumber ]
+            );
+        }
+
+        if (!$possibleToReturn = $this->verificationPossibilityOfReturn->verificationForButtonRender($order)) {
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_already_returned',
                 [ '%orderNumber%' => $orderNumber ]
             );
         }
