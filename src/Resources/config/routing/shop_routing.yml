@@ -30,7 +30,7 @@ madcoders_rma_return_form:
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Return/view.html.twig'
         _sylius:
-            error_redirect: madcoders_rma_verification
+            error_redirect: madcoders_rma_start
             redirect: sylius_shop_homepage
 
 madcoders_rma_return_form_accept:

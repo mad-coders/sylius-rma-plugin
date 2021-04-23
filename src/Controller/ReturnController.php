@@ -20,6 +20,8 @@ use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
+use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
+use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\Order;
@@ -33,6 +35,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Webmozart\Assert\Assert;
@@ -72,6 +75,15 @@ final class ReturnController extends AbstractController
     /** @var RmaChangesLogger */
     private $changesLogger;
 
+    /** @var RmaVerificationPossibilityOfReturn */
+    private $verificationPossibilityOfReturn;
+
+    /** @var OrderRepository */
+    private $orderRepository;
+
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * ReturnController constructor.
      * @param FormFactoryInterface $formFactory
@@ -85,6 +97,9 @@ final class ReturnController extends AbstractController
      * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
      * @param ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
      * @param RmaChangesLogger $changesLogger
+     * @param RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
+     * @param OrderRepository $orderRepository
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -96,7 +111,10 @@ final class ReturnController extends AbstractController
         StateMachineFactoryInterface $stateMachineFactory,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
         ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
-        RmaChangesLogger $changesLogger
+        RmaChangesLogger $changesLogger,
+        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        OrderRepository $orderRepository,
+        TranslatorInterface $translator
     )
     {
         $this->formFactory = $formFactory;
@@ -110,21 +128,42 @@ final class ReturnController extends AbstractController
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
         $this->orderReturnFormPdfEmailSender = $orderReturnFormPdfEmailSender;
         $this->changesLogger = $changesLogger;
+        $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
+        $this->orderRepository = $orderRepository;
+        $this->translator = $translator;
     }
 
+    /**
+     * @param Request $request
+     * @param string $orderNumber
+     * @param string $template
+     * @return Response
+     * @throws \Exception
+     */
     public function viewIndex(Request $request, string $orderNumber, string $template): Response
     {
         $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class);
 
         // TODO: inject repository instead
         // load order
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->findOneBy(array('number' => $orderNumber));
+
+        $order = $this->orderRepository->findOneByNumber($orderNumber);
+
+//        $order = $this->getDoctrine()
+//            ->getRepository(Order::class)
+//            ->findOneBy(array('number' => $orderNumber));
 
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return $this->createMissingOrderNumberResponse($request);
+        }
+
+        if (!$possibleToReturn = $this->verificationPossibilityOfReturn->verificationForButtonRender($order)) {
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_already_returned',
+                [ '%orderNumber%' => $orderNumber ]
+            );
         }
 
         $orderReturn = $this->returnRequestBuilder->build($orderNumber);
@@ -133,7 +172,6 @@ final class ReturnController extends AbstractController
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $this->orderReturnRepository->add($orderReturn);
-            ///save return qty
 
             return new RedirectResponse($this->router->generate('madcoders_rma_return_form_accept', ['returnNumber' => $returnNumber ]));
         }
@@ -245,6 +283,8 @@ final class ReturnController extends AbstractController
         }
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        //@TODO: Its used?
         $this->session->remove('madcoders_rma_allowed_order');
         $this->session->set('madcoders_rma_allowed_order_return', $returnNumber);
 
@@ -306,5 +346,19 @@ final class ReturnController extends AbstractController
         $attributes = $request->attributes->get('_sylius');
 
         return $attributes[$attributeName] ?? $default;
+    }
+
+    private function errorRedirect(Request $request, string $errorMessage, array $context = [], string $code = null): Response
+    {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $this->translator->trans($errorMessage, $context));
+
+        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
+        if ($redirectRoute) {
+            return new RedirectResponse($this->router->generate($redirectRoute, [ 'code' => $code]));
+        }
+
+        return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }
 }
