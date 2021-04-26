@@ -13,6 +13,8 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class AuthCode implements ResourceInterface, AuthCodeInterface
 {
+    public const DEFAULT_MAX_ATTEMPTS = 3;
+
     /**
      * @var int
      */
@@ -32,6 +34,9 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
      * @var int
      */
     private $authCode;
+
+    /** @var int */
+    private $attempts = 0;
 
     /**
      * @var \DateTimeInterface|null
@@ -113,5 +118,26 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
     public function setExpiresAt(\DateTimeInterface $expiresAt): void
     {
         $this->expiresAt = $expiresAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttempts(): int
+    {
+        return $this->attempts;
+    }
+
+    /**
+     * @param int $attempts
+     */
+    public function setAttempts(int $attempts): void
+    {
+        $this->attempts = $attempts;
+    }
+
+    public function increaseNumberOfAttempts(): void
+    {
+        $this->attempts++;
     }
 }
