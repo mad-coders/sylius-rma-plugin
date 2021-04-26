@@ -55,4 +55,17 @@ interface AuthCodeInterface
      * @param \DateTimeInterface $expiresAt
      */
     public function setExpiresAt(\DateTimeInterface $expiresAt): void;
+
+
+    /**
+     * @return int
+     */
+    public function getAttempts(): int;
+
+    /**
+     * @param int $attempts
+     */
+    public function setAttempts(int $attempts): void;
+
+    public function increaseNumberOfAttempts(): void;
 }

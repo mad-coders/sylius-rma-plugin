@@ -12,6 +12,7 @@
         <field name="orderNumber" column="order_number" type="text"/>
         <field name="hash" column="hash" type="text"/>
         <field name="authCode" column="auth_code" type="integer"/>
+        <field name="attempts" column="attempts" type="integer" nullable="0"/>
         <field name="expiresAt" column="expires_at" type="datetime"/>
     </mapped-superclass>
 </doctrine-mapping>

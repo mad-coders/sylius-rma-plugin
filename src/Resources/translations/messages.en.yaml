@@ -63,8 +63,9 @@ madcoders_rma:
             secondary_headline: 'Verification step'
             enter_verification_code: "Check your e-mail and enter verification code"
             error:
-                code_not_valid: 'Verification code is not valid. Please try again.'
+                code_not_valid: 'Verification code is not valid. Attempt %attempts% of %max% has failed. Please try again.'
                 code_expired: 'Verification code has expired. Please try again.'
+                max_attempts_exceeded: 'Max attempts number has been exceeded. Authentication code is not longer valid. Please start again.'
 
         fill_the_form_step:
             secondary_headline: 'Select items and check your details'
