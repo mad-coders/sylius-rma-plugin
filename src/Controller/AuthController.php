@@ -206,6 +206,21 @@ final class AuthController extends AbstractController
             $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
         }
 
+        // TODO: needs to be shorten
+        if ($authData->getExpiresAt() < (new \DateTime())) {
+            $errorMessage = $this->getSyliusAttribute(
+                $request,
+                'error_flash',
+                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_expired')
+            );
+
+            /** @var FlashBagInterface $flashBag */
+            $flashBag = $request->getSession()->getBag('flashes');
+            $flashBag->add('error', $errorMessage);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+        }
+
         // TODO: inject repository instead
         // load order
         $order = $this->getDoctrine()
@@ -229,15 +244,37 @@ final class AuthController extends AbstractController
             $authDataCode = $authData->getAuthCode();
 
             if ($authDataCode === $authCode) {
+                // this is success path
                 $this->orderReturnAuthorizer->authorize($order);
 
                 return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $orderNumber ]));
             }
 
+            // this is error handling
+            $authData->increaseNumberOfAttempts();
+            $this->getDoctrine()->getManager()->persist($authData);
+            $this->getDoctrine()->getManager()->flush();
+
+            if ($authData->getAttempts() >= AuthCode::DEFAULT_MAX_ATTEMPTS) {
+                $errorMessage = $this->getSyliusAttribute(
+                    $request,
+                    'error_flash',
+                    $this->translator->trans('madcoders_rma.ui.verification_step.error.max_attempts_exceeded')
+                );
+
+                /** @var FlashBagInterface $flashBag */
+                $flashBag = $request->getSession()->getBag('flashes');
+                $flashBag->add('error', $errorMessage);
+
+                return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+            }
+
             $errorMessage = $this->getSyliusAttribute(
                 $request,
                 'error_flash',
-                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_not_valid')
+                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_not_valid',
+                    [ '%max%' => AuthCode::DEFAULT_MAX_ATTEMPTS, '%attempts%' => $authData->getAttempts() ]
+                )
             );
 
             /** @var FlashBagInterface $flashBag */
