@@ -56,6 +56,10 @@ class ChoiceProvider implements ChoiceProviderInterface
             return [];
         }
 
+        if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
+            return [];
+        }
+
         $shipmentDate = $orderShipment->getShippedAt();
         $dateNow = new \DateTime('@'.strtotime('now'));
         $daysAreGone = $shipmentDate->diff($dateNow)->d;
