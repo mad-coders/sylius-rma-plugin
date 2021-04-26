@@ -35,6 +35,10 @@ interface OrderReturnConsentInterface extends CodeAwareInterface, TranslatableIn
 
     public function setPosition(?int $position): void;
 
+    public function isConsentRequire(): bool;
+
+    public function setConsentRequire(bool $consentRequire): void;
+
     /**
      * @param string|null $locale
      * @return OrderReturnConsentTranslationInterface

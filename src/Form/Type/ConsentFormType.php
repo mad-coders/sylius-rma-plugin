@@ -20,7 +20,8 @@ class ConsentFormType extends AbstractType
     {
         $builder
             ->add('label', HiddenType::class)
-            ->add('code', HiddenType::class);
+            ->add('code', HiddenType::class)
+            ->add('consentRequire', HiddenType::class);
 
         $callback = function(FormEvent $event): void {
             $form = $event->getForm();
@@ -30,12 +31,16 @@ class ConsentFormType extends AbstractType
                 throw new \RuntimeException('Consent data must be an array');
             }
 
+            $constraints = [];
+            if ($data['consentRequire']) {
+                $constraints[] = new IsTrue();
+            }
+
             $form->add('checked', CheckboxType::class, [
+                    'label_attr' => ['style' => 'margin-bottom: 15px'],
                     'label' => (string) $data['label'] ?: '-- missing --',
-                    'required' => true,
-                    'constraints' => [
-                        new IsTrue()
-                    ]
+                    'required' => (boolean) $data['consentRequire'] ?: false,
+                    'constraints' => $constraints,
                 ]
             );
         };

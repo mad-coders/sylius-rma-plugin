@@ -208,6 +208,7 @@ final class ReturnController extends AbstractController
             $consentData['consents'][] = [
                 'code' => $consent->getCode(),
                 'label' => $consent->getTranslation()->getName(),
+                'consentRequire' => $consent->isConsentRequire(),
             ];
         }
 

@@ -20,6 +20,7 @@
         </field>
 
         <field name="enabled" column="enabled" type="boolean" />
+        <field name="consentRequire" column="consent_require" type="boolean"/>
 
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>
