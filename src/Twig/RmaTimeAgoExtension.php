@@ -25,7 +25,7 @@ class RmaTimeAgoExtension extends AbstractExtension
     public function createTimeAgo(\DateTime $date): string
     {
         $nowDate = new \DateTime();
-        $diff = $nowDate->getTimestamp() - $date->getTimestamp();
+        $diff = $nowDate->getTimestamp() - $date->getTimestamp() + 1;
 
         $units = array (
             31536000 => 'year',
