@@ -35,6 +35,9 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
     /** @var int|null */
     private $position;
 
+    /** @var bool */
+    private $consentRequire = false;
+
     public function __construct()
     {
         $this->initializeTranslationsCollection();
@@ -108,6 +111,18 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
     public function setSlug(?string $slug): void
     {
         $this->getTranslation()->setSlug($slug);
+    }
+
+    /** @return bool */
+    public function isConsentRequire(): bool
+    {
+        return $this->consentRequire;
+    }
+
+    /** @param bool $consentRequire */
+    public function setConsentRequire(bool $consentRequire): void
+    {
+        $this->consentRequire = $consentRequire;
     }
 
     /**
