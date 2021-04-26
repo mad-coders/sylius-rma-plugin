@@ -57,7 +57,7 @@ madcoders_rma:
             error:
                 order_number_not_valid: 'Order number #%orderNumber% is not valid'
                 order_not_fullfiled_yet: 'Order #%orderNumber% is not fulfilled yet. Please contact customer support'
-                order_already_returned: 'Order #%orderNumber% has already been returned'
+                order_already_returned_or_cannot_be_returned: 'Order #%orderNumber% has already been returned or cannot be returned'
 
         verification_step:
             secondary_headline: 'Verification step'

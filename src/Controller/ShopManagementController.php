@@ -165,12 +165,10 @@ final class ShopManagementController extends AbstractController
     {
         /** @var ShopUserInterface $customer */
         if (!$customer = $this->tokenStorage->getToken()->getUser()) {
-
             return $this->createMissingUserResponse($request);
         }
 
         if (!$customerEmail = $customer->getEmail()) {
-
             return $this->createMissingUserResponse($request);
         }
 
