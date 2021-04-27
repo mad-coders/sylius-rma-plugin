@@ -40,6 +40,7 @@ final class ReturnItemFormType extends AbstractType
             }
 
             $form->add('returnQty', NumberType::class, [
+                'attr'        => ['style' => 'max-width: 200px; display: block;'],
                 'label'       => false,
                 'required'    => true,
                 'constraints' => [
@@ -54,7 +55,6 @@ final class ReturnItemFormType extends AbstractType
             ]);
         });
     }
-
 
     /**
      * {@inheritdoc}
