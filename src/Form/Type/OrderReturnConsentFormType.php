@@ -34,6 +34,7 @@ final class OrderReturnConsentFormType extends AbstractType
                 'label' => 'madcoders_rma.admin.return_consent.form.position',
             ])
             ->add('consentRequire', CheckboxType::class, [
+                'required' => false,
                 'label' => 'madcoders_rma.admin.return_consent.form.require',
             ])
             ->addEventSubscriber(new AddCodeFormSubscriber())

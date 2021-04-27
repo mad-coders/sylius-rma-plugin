@@ -37,7 +37,7 @@ class ConsentFormType extends AbstractType
             }
 
             $form->add('checked', CheckboxType::class, [
-                    'label_attr' => ['style' => 'margin-bottom: 15px'],
+                    'label_attr' => ['style' => 'margin-top: 7px'],
                     'label' => (string) $data['label'] ?: '-- missing --',
                     'required' => (boolean) $data['consentRequire'] ?: false,
                     'constraints' => $constraints,

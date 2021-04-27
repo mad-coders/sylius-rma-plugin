@@ -93,6 +93,7 @@ final class ReturnFormType extends AbstractType
                 'label' => 'sylius.form.province.name',
             ])
             ->add('customerNote', TextareaType::class, [
+                'attr'        => ['rows' => '2'],
                 'required' => false,
                 'label' => 'madcoders_rma.ui.add_notes',
             ])
