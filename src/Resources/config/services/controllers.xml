@@ -72,6 +72,7 @@
             <argument type="service" id="translator" />
         </service>
 
+        <service id="Madcoders\SyliusRmaPlugin\Controller\CreditsController" autowire="true" autoconfigure="true" public="true" />
 
     </services>
 </container>
