@@ -2,6 +2,16 @@ image: php:7.3
 pipelines:
     default:
         - step:
+              name: "Unit and component tests"
+              caches:
+                  - composer
+              script:
+                  - apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev git zip
+                  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+                  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --ignore-platform-reqs
+                  - php vendor/bin/phpunit -c phpunit.xml.dist
+        - step:
+              name: "Static analysis"
               caches:
                   - composer
               script:
