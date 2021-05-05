@@ -2,8 +2,10 @@ image: php:7.3
 pipelines:
     default:
         - step:
+              caches:
+                  - composer
               script:
                   - apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
                   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-                  - composer install
+                  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --ignore-platform-reqs
                   - php vendor/bin/psalm
