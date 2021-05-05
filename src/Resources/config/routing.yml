@@ -8,3 +8,7 @@ madcoders_rma_admin:
     resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing/admin_routing.yml"
     prefix: /admin
 
+madcoders_rma_credits:
+    path: /madcoders/rma/credits
+    defaults:
+        _controller: Madcoders\SyliusRmaPlugin\Controller\CreditsController
