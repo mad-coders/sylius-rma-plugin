@@ -9,5 +9,12 @@
         </service>
 
         <service id="madcoders.rma.page.shop.credits" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPage" parent="sylius.behat.symfony_page" public="false" />
+
+
+        <service id="madcoders.rma.context.ui.shop.rma.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\AuthContext">
+            <argument type="service" id="madcoders.rma.page.shop.rma.start" />
+        </service>
+
+        <service id="madcoders.rma.page.shop.rma.start" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPage" parent="sylius.behat.symfony_page" public="false" />
     </services>
 </container>

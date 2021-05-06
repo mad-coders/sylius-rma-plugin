@@ -1,0 +1,18 @@
+default:
+    suites:
+        madcoders_rma_auth:
+            contexts:
+                # hook
+                - sylius.behat.context.hook.doctrine_orm
+
+                # setup
+                - sylius.behat.context.setup.channel
+
+                # transformers
+                - sylius.behat.context.transform.order
+
+                # ui
+                - madcoders.rma.context.ui.shop.rma.auth
+
+            filters:
+                tags: "@madcoders_rma_auth && @ui"
