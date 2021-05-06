@@ -27,11 +27,35 @@ class AuthContext implements Context
     }
 
     /**
+     * @Given I am on RMA start page
+     */
+    public function iAmOnRmaStartPage(): void
+    {
+        $this->startPage->open();
+    }
+
+    /**
      * @When I visit RMA start page
      */
     public function visitStartPage(): void
     {
         $this->startPage->open();
+    }
+
+    /**
+     * @When I enter :orderNumber in order number input filed
+     */
+    public function enterOrderNumber(string $orderNumber): void
+    {
+        $this->startPage->getOrderNumberField()->setValue($orderNumber);
+    }
+
+    /**
+     * @When I submit the form
+     */
+    public function submitForm(): void
+    {
+        $this->startPage->getSubmitButton()->click();
     }
 
 }

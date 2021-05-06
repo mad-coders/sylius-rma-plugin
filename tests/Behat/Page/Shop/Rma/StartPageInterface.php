@@ -12,4 +12,6 @@ interface StartPageInterface extends SymfonyPageInterface
     public function getOrderNumberField(): NodeElement;
 
     public function hasOrderNumberField(): bool;
+
+    public function getSubmitButton(): NodeElement;
 }

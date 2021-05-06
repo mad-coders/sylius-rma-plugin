@@ -9,17 +9,18 @@ Feature: Ensure that guest user can access given order
         When I visit RMA start page
         Then I can see order number input field
 
-#    @ui
-#    Scenario: I see auth code page when I give correct order number
-#        Given I am on RMA start page
-#        And I placed an order "000001"
-#        And the order "000001" is fulfilled
-#        When I enter "00001" in order number input filed
-#        And I submit order number form
+    @ui
+    Scenario: I see auth code page when I give correct order number
+        Given the store has customer "John Doe" with email "john.doe@madcoders.pl"
+        And the customer "john.doe@madcoders.pl" has already placed an order "000001"
+        And the order's state is "fulfilled"
+        And I am on RMA start page
+        When I enter "00001" in order number input filed
+        And I submit the form
 #        Then I should be redirected to auth code page
 #        And I see success message
 #        And I received e-mail with auth code
-#
+
 #    @ui
 #    Scenario: I see return form when I give correct auth code
 #        Given I am on RMA auth code page

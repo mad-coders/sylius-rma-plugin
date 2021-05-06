@@ -4,6 +4,11 @@
     <services>
         <defaults public="true" />
 
+
+        <service id="madcoders.rma.context.setup.order" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
+            <argument type="service" id="sylius.repository.order" />
+        </service>
+
         <service id="madcoders.rma.context.ui.shop.welcome" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\CreditsContext">
             <argument type="service" id="madcoders.rma.page.shop.credits" />
         </service>

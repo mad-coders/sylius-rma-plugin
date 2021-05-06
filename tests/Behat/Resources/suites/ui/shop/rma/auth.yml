@@ -4,12 +4,22 @@ default:
             contexts:
                 # hook
                 - sylius.behat.context.hook.doctrine_orm
+                - sylius.behat.context.hook.email_spool
 
                 # setup
                 - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.order
+                - sylius.behat.context.setup.user
+                - sylius.behat.context.setup.customer
+                - sylius.behat.context.setup.shop_security
+                - sylius.behat.context.setup.address
+                - madcoders.rma.context.setup.order
 
                 # transformers
                 - sylius.behat.context.transform.order
+                - sylius.behat.context.transform.customer
+                - sylius.behat.context.transform.user
+                - sylius.behat.context.transform.shared_storage
 
                 # ui
                 - madcoders.rma.context.ui.shop.rma.auth

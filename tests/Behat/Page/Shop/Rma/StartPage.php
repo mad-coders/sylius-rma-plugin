@@ -34,6 +34,11 @@ class StartPage extends SymfonyPage implements StartPageInterface
         return $this->hasElement('order_number_field');
     }
 
+    public function getSubmitButton(): NodeElement
+    {
+        return $this->getElement('submit_button');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +46,8 @@ class StartPage extends SymfonyPage implements StartPageInterface
     {
         return array_merge(parent::getDefinedElements(), [
             'order_number_field' => '[data-test-rma-order-number-field]',
+            'submit_button' => '[data-test-rma-submit-button]',
         ]);
     }
+
 }
