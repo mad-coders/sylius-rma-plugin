@@ -13,13 +13,17 @@ default:
                 - sylius.behat.context.setup.customer
                 - sylius.behat.context.setup.shop_security
                 - sylius.behat.context.setup.address
+                - sylius.behat.context.setup.product
                 - madcoders.rma.context.setup.order
 
                 # transformers
+                - sylius.behat.context.transform.channel
                 - sylius.behat.context.transform.order
                 - sylius.behat.context.transform.customer
                 - sylius.behat.context.transform.user
+                - sylius.behat.context.transform.product
                 - sylius.behat.context.transform.shared_storage
+                - sylius.behat.context.transform.lexical
 
                 # ui
                 - madcoders.rma.context.ui.shop.rma.auth

@@ -11,13 +11,17 @@ Feature: Ensure that guest user can access given order
 
     @ui
     Scenario: I see auth code page when I give correct order number
-        Given the store has customer "John Doe" with email "john.doe@madcoders.pl"
-        And the customer "john.doe@madcoders.pl" has already placed an order "000001"
+        Given the store has a product "Product A"
+        And the store has customer "John Doe" with email "john.doe@madcoders.pl"
+        And this customer has placed an order "00001" buying a single "Product A" product for "$1.00" on the "United States" channel
+        And this order is already paid
+        And this order has already been shipped
+        #And the customer "john.doe@madcoders.pl" has already placed an order "000001"
         And the order's state is "fulfilled"
         And I am on RMA start page
         When I enter "00001" in order number input filed
         And I submit the form
-#        Then I should be redirected to auth code page
+        Then I should be redirected to auth code page
 #        And I see success message
 #        And I received e-mail with auth code
 

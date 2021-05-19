@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
+use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPageInterface;
 use Webmozart\Assert\Assert;
 
@@ -13,9 +16,19 @@ class AuthContext implements Context
     /** @var StartPageInterface */
     private $startPage;
 
-    public function __construct(StartPageInterface $startPage)
+    /** @var AuthPageInterface  */
+    private $authPage;
+
+    /** @var RepositoryInterface */
+    private $authCodeRepository;
+
+    public function __construct(StartPageInterface $startPage,
+                                AuthPageInterface $authPage,
+                                RepositoryInterface $authCodeRepository)
     {
         $this->startPage = $startPage;
+        $this->authCodeRepository = $authCodeRepository;
+        $this->authPage = $authPage;
     }
 
     /**
@@ -56,6 +69,28 @@ class AuthContext implements Context
     public function submitForm(): void
     {
         $this->startPage->getSubmitButton()->click();
+    }
+
+    /**
+     * @Then I should be redirected to auth code page
+     */
+    public function iAmOnAuthCodePage()
+    {
+        $authCode = $this->getLastAuthCode();
+
+        Assert::notNull($authCode);
+
+        $this->authPage->verify([ 'code' => $authCode->getHash() ]);
+    }
+
+    private function getLastAuthCode(): ?AuthCodeInterface
+    {
+        $authCode = $this->authCodeRepository->findBy([], ['id' => 'DESC']);
+        if (count($authCode) === 0) {
+            return null;
+        }
+
+        return $authCode[0];
     }
 
 }

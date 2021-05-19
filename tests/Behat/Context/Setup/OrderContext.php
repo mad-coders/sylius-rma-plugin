@@ -29,7 +29,7 @@ class OrderContext implements Context
     }
 
     /**
-     * @Given /^(the order)'s state is ("[^"]+")/
+     * @Given /^(the order)'s state is "([^"]+)"/
      */
     public function setOrderState(OrderInterface $order, string $state): void
     {
