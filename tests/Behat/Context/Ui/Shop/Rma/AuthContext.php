@@ -16,7 +16,7 @@ class AuthContext implements Context
     /** @var StartPageInterface */
     private $startPage;
 
-    /** @var AuthPageInterface  */
+    /** @var AuthPageInterface */
     private $authPage;
 
     /** @var RepositoryInterface */
@@ -79,7 +79,7 @@ class AuthContext implements Context
         $authCode = $this->getLastAuthCode();
         Assert::notNull($authCode);
 
-        $this->authPage->verify([ 'code' => $authCode->getHash() ]);
+        $this->authPage->verify(['code' => $authCode->getHash()]);
     }
 
     /**
@@ -87,7 +87,7 @@ class AuthContext implements Context
      */
     public function iShouldBeOnAuthCodePageWithHash(string $hash)
     {
-        $this->authPage->verify([ 'code' => $hash ]);
+        $this->authPage->verify(['code' => $hash]);
     }
 
     private function getLastAuthCode(): ?AuthCodeInterface

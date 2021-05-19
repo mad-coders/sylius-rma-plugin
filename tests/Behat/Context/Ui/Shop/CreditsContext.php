@@ -43,6 +43,8 @@ final class CreditsContext implements Context
 
     /**
      * @Then they should see credits header :header
+     * @Then he should see credits header :header
+     * @Then she should see credits header :header
      */
     public function theyShouldBeDynamicallyGreetedWithGreeting(string $header): void
     {
