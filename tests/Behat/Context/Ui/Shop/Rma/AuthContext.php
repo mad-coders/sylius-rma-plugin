@@ -74,13 +74,20 @@ class AuthContext implements Context
     /**
      * @Then I should be redirected to auth code page
      */
-    public function iAmOnAuthCodePage()
+    public function iShouldBeOnAuthCodePage()
     {
         $authCode = $this->getLastAuthCode();
-
         Assert::notNull($authCode);
 
         $this->authPage->verify([ 'code' => $authCode->getHash() ]);
+    }
+
+    /**
+     * @Then I should be redirected to auth code page with :hash
+     */
+    public function iShouldBeOnAuthCodePageWithHash(string $hash)
+    {
+        $this->authPage->verify([ 'code' => $hash ]);
     }
 
     private function getLastAuthCode(): ?AuthCodeInterface
