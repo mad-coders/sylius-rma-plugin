@@ -26,7 +26,7 @@ Feature: Guest user can be granted with access to order he owns
 
     @ui
     Scenario: I see return form when I give correct auth code
-        Given auth code "123456" for order "000001"
+        Given auth code "123456" for order "00001"
 #        And I am on RMA auth code page for the auth code
 #        When I enter "123456" in auth code input filed
 #        And I submit auth code form
