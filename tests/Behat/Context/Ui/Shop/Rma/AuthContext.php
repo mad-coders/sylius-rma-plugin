@@ -7,9 +7,10 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 use Behat\Behat\Context\Context;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
+use Sylius\Component\Core\Test\Services\EmailCheckerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\FlashNotificationContextTrait;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPageInterface;
 use Webmozart\Assert\Assert;
@@ -27,13 +28,25 @@ class AuthContext implements Context
     /** @var RepositoryInterface */
     private $authCodeRepository;
 
-    public function __construct(StartPageInterface $startPage,
-                                AuthPageInterface $authPage,
-                                RepositoryInterface $authCodeRepository)
+    /** @var EmailCheckerInterface */
+    private $emailChecker;
+
+    /** @var TranslatorInterface  */
+    private $translator;
+
+    public function __construct(
+        StartPageInterface $startPage,
+        AuthPageInterface $authPage,
+        RepositoryInterface $authCodeRepository,
+        EmailCheckerInterface $emailChecker,
+        TranslatorInterface $translator
+    )
     {
         $this->startPage = $startPage;
         $this->authCodeRepository = $authCodeRepository;
         $this->authPage = $authPage;
+        $this->emailChecker = $emailChecker;
+        $this->translator = $translator;
     }
 
     /**
@@ -93,6 +106,25 @@ class AuthContext implements Context
     public function iShouldBeOnAuthCodePageWithHash(string $hash)
     {
         $this->authPage->verify(['code' => $hash]);
+    }
+
+    /**
+     * @Then email with auth code has been sent to :recipient
+     */
+    public function iRecievedAuthCodeEmail(string $recipient, string $localeCode = 'en_US'): void
+    {
+        $authCode = $this->getLastAuthCode();
+        Assert::notNull($authCode);
+        Assert::notNull($authCode->getAuthCode());
+
+        $message = $this->translator->trans(
+            'madcoders_rma.email.order_return_auth_email.auth_code_info',
+            [ '%auth_code%' => $authCode->getAuthCode() ],
+            null,
+            $localeCode
+        );
+
+        $this->emailChecker->hasMessageTo($message, $recipient);
     }
 
     private function getLastAuthCode(): ?AuthCodeInterface

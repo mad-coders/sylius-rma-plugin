@@ -26,7 +26,6 @@ default:
                 - sylius.behat.context.transform.lexical
 
                 # ui
-                - sylius.behat.context.ui.email
                 - madcoders.rma.context.ui.shop.rma.auth
 
             filters:

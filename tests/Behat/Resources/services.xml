@@ -20,6 +20,8 @@
             <argument type="service" id="madcoders.rma.page.shop.rma.start" />
             <argument type="service" id="madcoders.rma.page.shop.rma.auth" />
             <argument type="service" id="madcoders_rma.repository.authcode" />
+            <argument type="service" id="sylius.behat.email_checker" />
+            <argument type="service" id="translator" />
         </service>
 
         <service id="madcoders.rma.page.shop.rma.start" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPage" parent="sylius.behat.symfony_page" public="false" />
