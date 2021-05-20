@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\FlashNotificationContextTrait;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPageInterface;
 use Webmozart\Assert\Assert;
 
 class AuthContext implements Context
 {
+    use FlashNotificationContextTrait;
+
     /** @var StartPageInterface */
     private $startPage;
 
@@ -100,4 +105,11 @@ class AuthContext implements Context
         return $authCode[0];
     }
 
+    /**
+     * @return SymfonyPageInterface
+     */
+    private function getPage(): SymfonyPageInterface
+    {
+        return $this->authPage;
+    }
 }

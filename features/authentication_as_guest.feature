@@ -1,5 +1,5 @@
 @madcoders_rma @madcoders_rma_auth
-Feature: Ensure that guest user can access given order
+Feature: Guest user can be granted with access to order he owns
 
     Background:
         Given the store operates on a single channel in "United States"
@@ -10,7 +10,7 @@ Feature: Ensure that guest user can access given order
         Then I can see order number input field
 
     @ui @email
-    Scenario: I see auth code page when I give correct order number
+    Scenario: As guest customer I am able to see auth code page when I give correct order number
         Given the store has a product "Product A"
         And the store has customer "John Doe" with email "john.doe@madcoders.pl"
         And this customer has placed an order "00001" buying a single "Product A" product for "$1.00" on the "United States" channel
@@ -21,7 +21,7 @@ Feature: Ensure that guest user can access given order
         When I enter "00001" in order number input filed
         And I submit the form
         Then I should be redirected to auth code page
-#        And I see success message containing text ""
+        And I see single success message containing text "We have send verification code to your e-mail associated with the order"
         And 1 email should be sent to "john.doe@madcoders.pl"
 #        And I received e-mail with auth code
 

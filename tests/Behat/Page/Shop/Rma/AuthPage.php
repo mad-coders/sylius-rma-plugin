@@ -6,6 +6,9 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma;
 
 use Behat\Mink\Element\NodeElement;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\FlashNotificationContextTrait;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
 
 /**
  * Sylius RMA Plugin
@@ -17,8 +20,9 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
-class AuthPage extends SymfonyPage implements AuthPageInterface
+class AuthPage extends SymfonyPage implements AuthPageInterface, FlashNotificationInterface
 {
+    use FlashNotificationTrait;
 
     public function getSubmitButton(): NodeElement
     {
