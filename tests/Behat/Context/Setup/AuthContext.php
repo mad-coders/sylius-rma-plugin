@@ -24,10 +24,14 @@ class AuthContext implements Context
      */
     public function createAuthCodeForOrder(int $code, OrderInterface $order): void
     {
+        $expiryDate = new \DateTime();
+        $expiryDate->modify('+1 Hour');
+
         $authCode = new AuthCode();
         $authCode->setAuthCode($code);
         $authCode->setHash(hash('sha256', $order->getNumber().time()));
         $authCode->setOrderNumber($order->getNumber());
+        $authCode->setExpiresAt($expiryDate);
 
         $this->authCodeRepository->add($authCode);
     }

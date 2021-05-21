@@ -127,6 +127,18 @@ class AuthContext implements Context
         $this->emailChecker->hasMessageTo($message, $recipient);
     }
 
+    /**
+     * @When I visit RMA auth code page
+     */
+    public function visitAuthCodePage(): void
+    {
+        $authCode = $this->getLastAuthCode();
+        Assert::notNull($authCode);
+        Assert::notNull($authCode->getHash());
+
+        $this->authPage->open([ 'code' => $authCode->getHash() ]);
+    }
+
     private function getLastAuthCode(): ?AuthCodeInterface
     {
         $authCode = $this->authCodeRepository->findBy([], ['id' => 'DESC']);
