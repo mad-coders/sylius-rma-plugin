@@ -6,7 +6,10 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\ShipmentInterface;
+use Sylius\Component\Core\Model\ShippingMethodInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
+use Sylius\Component\Resource\Factory\FactoryInterface;
 
 /**
  * Sylius RMA Plugin
@@ -23,9 +26,16 @@ class OrderContext implements Context
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    public function __construct(OrderRepositoryInterface $orderRepository)
+    /** @var FactoryInterface */
+    private $shipmentFactory;
+
+    public function __construct(
+        OrderRepositoryInterface $orderRepository,
+        FactoryInterface $shipmentFactory
+    )
     {
         $this->orderRepository = $orderRepository;
+        $this->shipmentFactory = $shipmentFactory;
     }
 
     /**
@@ -34,6 +44,21 @@ class OrderContext implements Context
     public function setOrderState(OrderInterface $order, string $state): void
     {
         $order->setState($state);
+        $this->orderRepository->add($order);
+    }
+
+    /**
+     * @Given /^(the order) has single shipment with ("[^"]+" shipping method)/
+     */
+    public function addSingleShipment(OrderInterface $order, ShippingMethodInterface $shippingMethod): void
+    {
+        /** @var ShipmentInterface $shipment */
+        $shipment = $this->shipmentFactory->createNew();
+        $shipment->setState(ShipmentInterface::STATE_READY);
+        $shipment->setMethod($shippingMethod);
+
+        $order->addShipment($shipment);
+        $order->setShippingState('ready');
         $this->orderRepository->add($order);
     }
 }

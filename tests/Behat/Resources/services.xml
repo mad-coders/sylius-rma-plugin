@@ -7,6 +7,7 @@
         <!-- contexts -->
         <service id="madcoders.rma.context.setup.order" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
             <argument type="service" id="sylius.repository.order" />
+            <argument type="service" id="sylius.factory.shipment" />
         </service>
 
         <service id="madcoders.rma.context.setup.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\AuthContext">
