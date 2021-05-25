@@ -16,6 +16,7 @@ default:
                 - sylius.behat.context.setup.product
                 - madcoders.rma.context.setup.order
                 - madcoders.rma.context.setup.auth
+                - madcoders.rma.context.setup.return_reason
 
                 # transformers
                 - sylius.behat.context.transform.channel
@@ -28,6 +29,7 @@ default:
 
                 # ui
                 - madcoders.rma.context.ui.shop.rma.auth
+                - madcoders.rma.context.ui.shop.rma.return_form
 
             filters:
                 tags: "@madcoders_rma_auth && @ui"

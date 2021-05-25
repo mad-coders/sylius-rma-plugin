@@ -10,4 +10,10 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 interface AuthPageInterface extends SymfonyPageInterface
 {
     public function getSubmitButton(): NodeElement;
+
+    public function clickSubmitButton(): void;
+
+    public function getAuthCodeFieled(): NodeElement;
+
+    public function insertAuthCode(string $authCode): void;
 }

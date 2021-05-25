@@ -139,6 +139,22 @@ class AuthContext implements Context
         $this->authPage->open([ 'code' => $authCode->getHash() ]);
     }
 
+    /**
+     * @When I enter :authCode in auth code input filed
+     */
+    public function enterAuthCode(string $authCode): void
+    {
+        $this->authPage->insertAuthCode($authCode);
+    }
+
+    /**
+     * @When I submit auth code form
+     */
+    public function clickSubmitButton(): void
+    {
+        $this->authPage->clickSubmitButton();
+    }
+
     private function getLastAuthCode(): ?AuthCodeInterface
     {
         $authCode = $this->authCodeRepository->findBy([], ['id' => 'DESC']);

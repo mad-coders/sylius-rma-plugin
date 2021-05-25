@@ -9,6 +9,9 @@ Feature: Guest user can be granted with access to order he owns
         And this order is already paid
         And this order has already been shipped
         And the order's state is "fulfilled"
+        And there are return reasons:
+        | code         | name                     | deadline_to_return |
+        | reason_360   | Reason 360               | 360                |
 
     @ui
     Scenario: I can see RMA start page
@@ -28,7 +31,6 @@ Feature: Guest user can be granted with access to order he owns
     Scenario: I see return form when I give correct auth code
         Given auth code "123456" for order "00001"
         When I visit RMA auth code page
-#        And I enter "123456" in auth code input filed
-#        And I submit auth code form
-#        Then I should be redirected to order return page
-#        And I see return form
+        And I enter "123456" in auth code input filed
+        And I submit auth code form
+        Then I should be redirected to order return page for order "00001"
