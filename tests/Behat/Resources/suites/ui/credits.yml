@@ -1,0 +1,8 @@
+default:
+    suites:
+        madcoders_credits:
+            contexts:
+                - madcoders.rma.context.ui.shop.welcome
+
+            filters:
+                tags: "@madcoders_credits && @ui"
