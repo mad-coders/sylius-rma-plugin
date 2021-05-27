@@ -75,9 +75,12 @@ class ReturnReasonContext implements Context
      */
     public function iFillCreateForm(TableNode $table)
     {
+        $formName = 'madcoders_rma_return_reason';
         foreach($table as $row) {
-            $fieldLocator = $row['field'];
-            $this->returnReasonCreatePage->choosesFormElement($row['value'], $fieldLocator);
+            $translationPrefix = $row['type'] === 'translations' ? 'translations_en_US_' : '';
+            $locator = sprintf('%s_%s%s', $formName, $translationPrefix, $row['field']);
+
+            $this->returnReasonCreatePage->choosesFormElement($row['value'], $locator);
         }
     }
 

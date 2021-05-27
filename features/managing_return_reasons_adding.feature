@@ -14,15 +14,15 @@ Feature: Adding new return reason
       When I click create button
       Then I should be redirected to return reason create page
 
-    @ui @javascript
+    @ui
     Scenario: Adding a new return reason
       Given I want to create a new return reason
       When I fill create form with following data:
-        | field               | type              | value                              |
-        | code                | field             |code-abc                            |
-        | slug                | translations      |slug-abc                            |
-        | name                | translations      |Reason ABC                          |
-        | deadline_to_return  | translations      | 14                                 |
+        | field               | type              | value                               |
+        | code                | field             | code-abc                            |
+        | slug                | translations      | slug-abc                            |
+        | name                | translations      | Reason ABC                          |
+        | deadlineToReturn    | field             | 16                                  |
       And I click submit button
       Then I should be notified that it has been successfully created
 
