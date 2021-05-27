@@ -5,6 +5,12 @@ imports:
 default:
     extensions:
         DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
+        Bex\Behat\ScreenshotExtension:
+            screenshot_taking_mode: failed_scenarios
+            image_drivers:
+                local:
+                    screenshot_directory: /Users/piotr/projects/sylius_plugins/simple-rma-plugin/etc/build/s
+                    clear_screenshot_directory: true
 
         FriendsOfBehat\MinkDebugExtension:
             directory: etc/build
