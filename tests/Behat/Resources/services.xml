@@ -34,10 +34,27 @@
             <argument type="service" id="madcoders.rma.page.shop.rma.return_form" />
         </service>
 
+        <service id="madcoders.rma.context.ui.admin.rma.managing_return_reasons"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnReasonContext">
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_index" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_create" />
+            <argument type="service" id="sylius.behat.shared_storage" />
+        </service>
+
         <!-- pages -->
         <service id="madcoders.rma.page.shop.rma.start" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPage" parent="sylius.behat.symfony_page" public="false" />
         <service id="madcoders.rma.page.shop.rma.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPage" parent="sylius.behat.symfony_page" public="false" />
         <service id="madcoders.rma.page.shop.rma.return_form" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPage" parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_index"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\IndexPage"
+                 parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_create"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\CreatePage"
+                 parent="sylius.behat.page.admin.crud.create" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_reason_create</argument>
+        </service>
 
         <service id="madcoders.rma.page.shop.credits" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPage" parent="sylius.behat.symfony_page" public="false" />
     </services>

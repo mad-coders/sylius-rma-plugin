@@ -5,7 +5,8 @@ Feature: Adding new return reason
     I want to add new return reason
 
     Background:
-        Given I am logged in as an administrator
+        Given the store operates on a single channel in "United States"
+        And I am logged in as an administrator
 
     @ui
     Scenario: I can access return reason create page
@@ -13,15 +14,15 @@ Feature: Adding new return reason
       When I click create button
       Then I should be redirected to return reason create page
 
-    @ui
+    @ui @javascript
     Scenario: Adding a new return reason
-      Given I am on return reason create page
+      Given I want to create a new return reason
       When I fill create form with following data:
-        | field               | value                               |
-        | slug                | slug-abc                            |
-        | code                | code-abc                            |
-        | name                | Reason ABC                          |
-        | deadline_to_return  | 14                                  |
+        | field               | type              | value                              |
+        | code                | field             |code-abc                            |
+        | slug                | translations      |slug-abc                            |
+        | name                | translations      |Reason ABC                          |
+        | deadline_to_return  | translations      | 14                                 |
       And I click submit button
       Then I should be notified that it has been successfully created
 
