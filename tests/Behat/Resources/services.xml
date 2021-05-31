@@ -38,6 +38,8 @@
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnReasonContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_index" />
             <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_create" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_update" />
+            <argument type="service" id="madcoders_rma.repository.order_return_reason" />
             <argument type="service" id="sylius.behat.shared_storage" />
         </service>
 
@@ -48,12 +50,20 @@
 
         <service id="madcoders.rma.page.admin.rma.return_reasons_index"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\IndexPage"
-                 parent="sylius.behat.symfony_page" public="false" />
+                 parent="sylius.behat.page.admin.crud.index" public="false" >
+            <argument type="string">madcoders_rma_admin_order_return_reason_index</argument>
+        </service>
 
         <service id="madcoders.rma.page.admin.rma.return_reasons_create"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\CreatePage"
                  parent="sylius.behat.page.admin.crud.create" public="false">
             <argument type="string">madcoders_rma_admin_order_return_reason_create</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_update"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\UpdatePage"
+                 parent="sylius.behat.page.admin.crud.update" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_reason_update</argument>
         </service>
 
         <service id="madcoders.rma.page.shop.credits" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPage" parent="sylius.behat.symfony_page" public="false" />

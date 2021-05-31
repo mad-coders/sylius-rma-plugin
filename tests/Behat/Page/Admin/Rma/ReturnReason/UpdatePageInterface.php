@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason;
 
 use Behat\Mink\Element\NodeElement;
-use Sylius\Behat\Page\Admin\Crud\IndexPageInterface as BaseIndexPage;
+use Behat\Mink\Exception\ElementNotFoundException;
+use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface as BaseUpdatePageInterface;
 /**
  * Sylius RMA Plugin
  *
@@ -16,6 +17,10 @@ use Sylius\Behat\Page\Admin\Crud\IndexPageInterface as BaseIndexPage;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
-interface IndexPageInterface extends BaseIndexPage
+interface UpdatePageInterface extends BaseUpdatePageInterface
 {
+    /**
+     * @throws ElementNotFoundException
+     */
+    public function choosesFormElement(string $name, string $element): void;
 }

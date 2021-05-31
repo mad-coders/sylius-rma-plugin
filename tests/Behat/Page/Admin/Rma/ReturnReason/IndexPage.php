@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason;
 
 use Behat\Mink\Element\NodeElement;
-use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Sylius\Behat\Page\Admin\Crud\IndexPage as BaseIndexPage;
 
 /**
  * Sylius RMA Plugin
@@ -17,11 +17,6 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
-class IndexPage extends SymfonyPage implements IndexPageInterface
+class IndexPage extends BaseIndexPage implements IndexPageInterface
 {
-
-    public function getRouteName(): string
-    {
-        return 'madcoders_rma_admin_order_return_reason_index';
-    }
 }
