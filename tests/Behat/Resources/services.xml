@@ -4,8 +4,66 @@
     <services>
         <defaults public="true" />
 
+        <!-- contexts -->
+        <service id="madcoders.rma.context.setup.order" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
+            <argument type="service" id="sylius.repository.order" />
+            <argument type="service" id="sylius.factory.shipment" />
+        </service>
+
+        <service id="madcoders.rma.context.setup.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\AuthContext">
+            <argument type="service" id="madcoders_rma.repository.authcode" />
+        </service>
+
+        <service id="madcoders.rma.context.setup.return_reason" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\ReturnReasonContext">
+            <argument type="service" id="madcoders_rma.repository.order_return_reason" />
+        </service>
+
         <service id="madcoders.rma.context.ui.shop.welcome" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\CreditsContext">
             <argument type="service" id="madcoders.rma.page.shop.credits" />
+        </service>
+
+        <service id="madcoders.rma.context.ui.shop.rma.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\AuthContext">
+            <argument type="service" id="madcoders.rma.page.shop.rma.start" />
+            <argument type="service" id="madcoders.rma.page.shop.rma.auth" />
+            <argument type="service" id="madcoders_rma.repository.authcode" />
+            <argument type="service" id="sylius.behat.email_checker" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="madcoders.rma.context.ui.shop.rma.return_form" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\ReturnFormContext">
+            <argument type="service" id="madcoders.rma.page.shop.rma.return_form" />
+        </service>
+
+        <service id="madcoders.rma.context.ui.admin.rma.managing_return_reasons"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnReasonContext">
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_index" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_create" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_update" />
+            <argument type="service" id="madcoders_rma.repository.order_return_reason" />
+            <argument type="service" id="sylius.behat.shared_storage" />
+        </service>
+
+        <!-- pages -->
+        <service id="madcoders.rma.page.shop.rma.start" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPage" parent="sylius.behat.symfony_page" public="false" />
+        <service id="madcoders.rma.page.shop.rma.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPage" parent="sylius.behat.symfony_page" public="false" />
+        <service id="madcoders.rma.page.shop.rma.return_form" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPage" parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_index"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\IndexPage"
+                 parent="sylius.behat.page.admin.crud.index" public="false" >
+            <argument type="string">madcoders_rma_admin_order_return_reason_index</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_create"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\CreatePage"
+                 parent="sylius.behat.page.admin.crud.create" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_reason_create</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.return_reasons_update"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\UpdatePage"
+                 parent="sylius.behat.page.admin.crud.update" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_reason_update</argument>
         </service>
 
         <service id="madcoders.rma.page.shop.credits" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPage" parent="sylius.behat.symfony_page" public="false" />

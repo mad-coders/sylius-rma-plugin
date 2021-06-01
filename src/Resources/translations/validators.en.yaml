@@ -11,3 +11,7 @@ madcoders_rma:
             not_blank: 'This field cannot be empty'
         days_to_deadline_to_return:
             not_blank: 'Not blank'
+        name:
+            not_blank: 'Not blank'
+        slug:
+            not_blank: 'Not blank'
