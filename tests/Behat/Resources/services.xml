@@ -18,6 +18,12 @@
             <argument type="service" id="madcoders_rma.repository.order_return_reason" />
         </service>
 
+        <service id="madcoders.rma.context.setup.return_consent"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\ReturnConsentContext">
+            <argument type="service" id="madcoders_rma.repository.order_return_consent" />
+            <argument type="service" id="sylius.behat.shared_storage" />
+        </service>
+
         <service id="madcoders.rma.context.ui.shop.welcome" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\CreditsContext">
             <argument type="service" id="madcoders.rma.page.shop.credits" />
         </service>
@@ -43,10 +49,37 @@
             <argument type="service" id="sylius.behat.shared_storage" />
         </service>
 
+        <service id="madcoders.rma.context.ui.admin.rma.managing_return_consent"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnConsentContext">
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_consents_index" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_consents_create" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.return_consents_update" />
+            <argument type="service" id="madcoders_rma.repository.order_return_consent" />
+            <argument type="service" id="sylius.behat.shared_storage" />
+        </service>
+
         <!-- pages -->
         <service id="madcoders.rma.page.shop.rma.start" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPage" parent="sylius.behat.symfony_page" public="false" />
         <service id="madcoders.rma.page.shop.rma.auth" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\AuthPage" parent="sylius.behat.symfony_page" public="false" />
         <service id="madcoders.rma.page.shop.rma.return_form" class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPage" parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.admin.rma.return_consents_index"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent\IndexPage"
+                 parent="sylius.behat.page.admin.crud.index" public="false" >
+            <argument type="string">madcoders_rma_admin_order_return_consent_index</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.return_consents_create"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent\CreatePage"
+                 parent="sylius.behat.page.admin.crud.create" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_consent_create</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.return_consents_update"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent\UpdatePage"
+                 parent="sylius.behat.page.admin.crud.update" public="false">
+            <argument type="string">madcoders_rma_admin_order_return_consent_update</argument>
+        </service>
 
         <service id="madcoders.rma.page.admin.rma.return_reasons_index"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\IndexPage"
