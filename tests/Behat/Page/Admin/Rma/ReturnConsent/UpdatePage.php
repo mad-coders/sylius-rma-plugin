@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason;
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
 
 use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;

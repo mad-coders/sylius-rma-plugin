@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason;
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
 
-use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
+use Sylius\Behat\Page\Admin\Crud\IndexPage as BaseIndexPage;
 
 /**
  * Sylius RMA Plugin
@@ -17,7 +16,6 @@ use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
-class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
+class IndexPage extends BaseIndexPage implements IndexPageInterface
 {
-    use ChoosesFormElement;
 }

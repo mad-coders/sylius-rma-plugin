@@ -7,12 +7,9 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
-use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
-use Sylius\Component\Core\Test\Services\EmailCheckerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\CreatePageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\IndexPageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnReason\UpdatePageInterface;
@@ -41,6 +38,7 @@ class ReturnReasonContext implements Context
      * @param IndexPageInterface $returnReasonIndexPage
      * @param CreatePageInterface $returnReasonCreatePage
      * @param UpdatePageInterface $returnReasonUpdatePage
+     * @param RepositoryInterface $orderReturnReasonRepository
      * @param SharedStorageInterface $sharedStorage
      */
     public function __construct(

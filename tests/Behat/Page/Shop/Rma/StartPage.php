@@ -49,5 +49,4 @@ class StartPage extends SymfonyPage implements StartPageInterface
             'submit_button' => '[data-test-rma-submit-button]',
         ]);
     }
-
 }
