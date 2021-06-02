@@ -21,6 +21,7 @@ class AuthContext implements Context
 
     /**
      * @Given auth code :code for order :order
+     * @Given auth code :code for latest order
      */
     public function createAuthCodeForOrder(int $code, OrderInterface $order): void
     {

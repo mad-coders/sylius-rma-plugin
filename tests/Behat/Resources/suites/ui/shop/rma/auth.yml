@@ -15,6 +15,7 @@ default:
                 - sylius.behat.context.setup.address
                 - sylius.behat.context.setup.product
                 - sylius.behat.context.setup.shipping
+                - sylius.behat.context.setup.payment
                 - madcoders.rma.context.setup.order
                 - madcoders.rma.context.setup.auth
                 - madcoders.rma.context.setup.return_reason
@@ -28,6 +29,8 @@ default:
                 - sylius.behat.context.transform.shared_storage
                 - sylius.behat.context.transform.lexical
                 - sylius.behat.context.transform.shipping_method
+                - sylius.behat.context.transform.address
+                - sylius.behat.context.transform.payment
 
                 # ui
                 - madcoders.rma.context.ui.shop.rma.auth
