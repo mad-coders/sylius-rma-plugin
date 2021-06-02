@@ -9,7 +9,7 @@ default:
             screenshot_taking_mode: failed_scenarios
             image_drivers:
                 local:
-                    screenshot_directory: /Users/piotr/projects/sylius_plugins/simple-rma-plugin/etc/build/s
+                    screenshot_directory: /Users/leonidmoshko/projects/sylius/sylius-plugin-rma/tests/etc/build/s
                     clear_screenshot_directory: true
 
         FriendsOfBehat\MinkDebugExtension:
