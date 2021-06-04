@@ -97,6 +97,12 @@ final class AuthController extends AbstractController
                 ->findOneBy(array('number' => $orderNumber));
 
             if (!$order) {
+                $order = $this->getDoctrine()
+                    ->getRepository(Order::class)
+                    ->findOneBy(array('number' => '#' . $orderNumber));
+            }
+
+            if (!$order) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_number_not_valid',
@@ -229,6 +235,12 @@ final class AuthController extends AbstractController
         $order = $this->getDoctrine()
             ->getRepository(Order::class)
             ->findOneBy(array('number' => $authData->getOrderNumber()));
+
+        if (!$order) {
+            $order = $this->getDoctrine()
+                ->getRepository(Order::class)
+                ->findOneBy(array('number' => '#' . $authData->getOrderNumber()));
+        }
 
         // redirect forward if access is already granted
         if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {

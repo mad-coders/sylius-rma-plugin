@@ -21,6 +21,7 @@ class AuthContext implements Context
 
     /**
      * @Given auth code :code for order :order
+     * @Given /^auth code "([^"]+)" for (latest order)$/
      */
     public function createAuthCodeForOrder(int $code, OrderInterface $order): void
     {
@@ -30,7 +31,7 @@ class AuthContext implements Context
         $authCode = new AuthCode();
         $authCode->setAuthCode($code);
         $authCode->setHash(hash('sha256', $order->getNumber().time()));
-        $authCode->setOrderNumber($order->getNumber());
+        $authCode->setOrderNumber(str_replace('#', '', $order->getNumber()));
         $authCode->setExpiresAt($expiryDate);
 
         $this->authCodeRepository->add($authCode);

@@ -62,7 +62,13 @@ class ReturnRequestBuilder
      */
     public function build(string $orderNumber): OrderReturnInterface
     {
+        // TODO: this can be replaced by orderLoader / provider or smth
         $order = $this->orderRepository->findOneByNumber($orderNumber);
+
+        if (!$order) {
+            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        }
+        // END
 
         if (!$order instanceof OrderInterface) {
             throw new Exception(sprintf('$order must implement %s interface', OrderInterface::class));
