@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
+use Sylius\Component\Core\Model\OrderInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPageInterface;
 
 class ReturnFormContext implements Context
@@ -19,9 +20,10 @@ class ReturnFormContext implements Context
 
     /**
      * @When I should be redirected to order return page for order :orderNumber
+     * @When /^I should be redirected to order return page for (latest order)$/
      */
-    public function shouldBeOnOrderReturnPage(string $orderNumber): void
+    public function shouldBeOnOrderReturnPage(OrderInterface $order): void
     {
-        $this->returnFormPage->verify(['orderNumber' => $orderNumber]);
+        $this->returnFormPage->verify(['orderNumber' => str_replace('#', '', $order->getNumber())]);
     }
 }

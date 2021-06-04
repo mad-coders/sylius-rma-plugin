@@ -8,8 +8,6 @@ Feature: Guest user can be granted with access to order he owns
         And the store has a product "Product A"
         And the store has customer "John Doe" with email "john.doe@madcoders.pl"
         And there is a customer "john.doe@madcoders.pl" that placed order with "Product A" product to "United States" based billing address with "Standard shipping" shipping method and "Offline" payment method
-#        And this customer has placed an order "00001" buying a single "Product A" product for "$1.00" on the "United States" channel
-#        And the order has single shipment with "Standard shipping" shipping method
         And this order has already been shipped
         And the order's state is "fulfilled"
 
@@ -27,7 +25,7 @@ Feature: Guest user can be granted with access to order he owns
         And I see single success message containing text "We have send verification code to your e-mail associated with the order"
         And email with auth code has been sent to "john.doe@madcoders.pl"
 
-    @ui @dupa
+    @ui
     Scenario: I see return form when I give correct auth code
         Given auth code "123456" for latest order
         And there are return reasons:
@@ -36,4 +34,4 @@ Feature: Guest user can be granted with access to order he owns
         When I visit RMA auth code page
         And I enter "123456" in auth code input filed
         And I submit auth code form
-        Then I should be redirected to order return page for order "000001"
+        Then I should be redirected to order return page for latest order

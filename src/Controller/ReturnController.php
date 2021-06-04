@@ -147,7 +147,13 @@ final class ReturnController extends AbstractController
         // TODO: inject repository instead
         // load order
 
+        // TODO: this can be replaced by orderLoader / provider or smth
         $order = $this->orderRepository->findOneByNumber($orderNumber);
+
+        if (!$order) {
+            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        }
+        // END
 
 //        $order = $this->getDoctrine()
 //            ->getRepository(Order::class)
