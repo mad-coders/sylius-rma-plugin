@@ -26,12 +26,21 @@ class RmaAdminUserData
     {
         /** @var AdminUserInterface $user */
         $user = $this->tokenStorage->getToken()->getUser();
-        $userFirstName = $user->getFirstName();
-        $userLastName = $user->getLastName();
 
         $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
-        $newChangeLogAuthor->setFirstName($userFirstName);
-        $newChangeLogAuthor->setLastName($userLastName);
+
+        if ($userFirstName = $user->getFirstName()) {
+            $newChangeLogAuthor->setFirstName($userFirstName);
+        } else {
+            $newChangeLogAuthor->setFirstName($user->getEmail());
+        }
+
+        if ( $userLastName = $user->getLastName()) {
+            $newChangeLogAuthor->setLastName($userLastName);
+        } else {
+            $newChangeLogAuthor->setLastName('');
+        }
+
         $newChangeLogAuthor->setType('admin');
 
         return $newChangeLogAuthor;

@@ -44,5 +44,4 @@ class ReturnReasonContext implements Context
 
         return $reason;
     }
-
 }
