@@ -8,6 +8,8 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Sylius\Behat\NotificationType;
+use Sylius\Behat\Service\NotificationCheckerInterface;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -26,22 +28,28 @@ class ReturnStatusContext implements Context
     /** @var RepositoryInterface */
     private $orderReturnRepository;
 
+    /** @var NotificationCheckerInterface */
+    private $notificationChecker;
+
     /**
      * ReturnContext constructor
      *
      * @param IndexPageInterface $orderReturnIndexPage
      * @param ShowPageInterface $orderReturnShowPage
      * @param RepositoryInterface $orderReturnRepository
+     * @param NotificationCheckerInterface $notificationChecker
      */
     public function __construct(
         IndexPageInterface $orderReturnIndexPage,
         ShowPageInterface $orderReturnShowPage,
-        RepositoryInterface $orderReturnRepository
+        RepositoryInterface $orderReturnRepository,
+        NotificationCheckerInterface $notificationChecker
     )
     {
         $this->orderReturnIndexPage = $orderReturnIndexPage;
         $this->orderReturnShowPage = $orderReturnShowPage;
         $this->orderReturnRepository = $orderReturnRepository;
+        $this->notificationChecker = $notificationChecker;
     }
 
     /**
@@ -85,13 +93,45 @@ class ReturnStatusContext implements Context
     }
 
     /**
+     * @Then I should be notified that status has been successfully updated
+     */
+    public function iShouldBeNotifiedAboutItHasBeenSuccessfullyCanceled()
+    {
+        $this->notificationChecker->checkNotification(
+            'Order return has been successfully updated.',
+            NotificationType::success()
+        );
+    }
+
+    /**
+     * @Then order return status is :status
+     */
+    public function orderReturnHasStatus(string $status): void
+    {
+       if (!$originalStatus = $this->orderReturnShowPage->getStatus()) {
+           throw new \InvalidArgumentException('Order return status cannot be found');
+       }
+       if (strcasecmp($originalStatus, $status) !== 0) {
+           throw new \Exception(sprintf('Order return has "%s" status', $originalStatus));
+       }
+    }
+
+    /**
      * @When I click complete button
      */
-    public function iCompleteThisButton(): void
+    public function iCompleteThisOrderReturn(): void
     {
         if ($this->orderReturnShowPage->isNewOrderReturnPage()) {
             $this->orderReturnShowPage->completeThisOrderReturn();
         }
+    }
+
+    /**
+     * @When I click cancel button
+     */
+    public function iCanceledThisOrderReturn(): void
+    {
+        $this->orderReturnShowPage->cancelThisOrderReturn();
     }
 
     private function findOrderReturnByNumber(string $number): OrderReturnInterface

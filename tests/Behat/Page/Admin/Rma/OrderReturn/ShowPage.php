@@ -29,10 +29,22 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         $this->getElement('rma-complete-button')->click();
     }
 
+    public function cancelThisOrderReturn(): void
+    {
+        $this->getElement('rma-cancel-button')->click();
+    }
+
+    public function getStatus(): string
+    {
+       return $this->getElement('sylius-order-state')->getText();
+    }
+
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
             'rma-complete-button' =>  '.complete-button',
+            'rma-cancel-button' =>  '.cancel-button',
+            'sylius-order-state' => '#sylius-order-state'
         ]);
     }
 

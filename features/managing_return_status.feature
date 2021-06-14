@@ -32,19 +32,23 @@ Feature: Managing order return status
         And order return with number "R000000010-1" has reason with code "reason_360"
         And I am on order return show page of return number "R000000010-1"
         When I click complete button
-#        Then I should be notified that status has been successfully updated
-#        And order return status is "Completed"
-#
-#    Scenario: I change order return status to "cancelled"
-#        Given And I have order return number "R000000010-1" with status "new"
-#        And I am on order return show page of return number "R000000010-1"
-#        When I click cancel button
-#        Then I should be notified that status has been successfully updated
-#        And order return status is "Cancelled"
-#
-#    Scenario: I change draft order return status to "cancelled"
-#        Given And I have order return number "R000000010-1" with status "draft"
-#        And I am on order return show page of return number "R000000010-1"
-#        When I click cancel button
-#        Then I should be notified that status has been successfully updated
-#        And order return status is "Cancelled"
+        Then I should be notified that status has been successfully updated
+        And order return status is "Completed"
+
+    @ui
+    Scenario: I change order return status to "cancelled"
+        Given I have order return with number "R000000010-1" and status "new" for latest order
+        And order return with number "R000000010-1" has reason with code "reason_360"
+        And I am on order return show page of return number "R000000010-1"
+        When I click cancel button
+        Then I should be notified that status has been successfully updated
+        And order return status is "Cancelled"
+
+    @ui
+    Scenario: I change draft order return status to "cancelled"
+        Given I have order return with number "R000000010-1" and status "draft" for latest order
+        And order return with number "R000000010-1" has reason with code "reason_360"
+        And I am on order return show page of return number "R000000010-1"
+        When I click cancel button
+        Then I should be notified that status has been successfully updated
+        And order return status is "Cancelled"
