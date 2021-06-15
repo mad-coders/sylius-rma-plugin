@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma;
 
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\TableNode;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Sylius\Behat\NotificationType;
 use Sylius\Behat\Service\NotificationCheckerInterface;
-use Sylius\Behat\Service\SharedStorageInterface;
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\OrderReturn\IndexPageInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\OrderReturn\ShowPageInterface;
-use Webmozart\Assert\Assert;
 
 class ReturnStatusContext implements Context
 {
@@ -75,6 +70,7 @@ class ReturnStatusContext implements Context
 
     /**
      * @When I open order return :orderReturnNumber page
+     * @When order return show page of return number :orderReturnNumber will be refreshed
      * @Given I am on order return show page of return number :orderReturnNumber
      */
     public function iOpenOrderReturnPage(string $orderReturnNumber): void

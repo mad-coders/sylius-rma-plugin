@@ -1,6 +1,6 @@
 <div class="summary">
     <a>{{ logItem.author.firstName }} {{ logItem.author.lastName }}</a> {{ 'madcoders_rma.admin.history.added_new_note'|trans }}:
 </div>
-<div class="extra text">
+<div class="extra text" {{ sylius_test_html_attribute('madcoders-rma-timeline-note-text') }}>
     {{ logItem.note }}
 </div>

@@ -11,7 +11,7 @@ madcoders_rma:
         customer_note: "Customer's Note"
         customer_consent: "I accept terms of service and privacy policy"
         return_management: 'Management of return'
-        timeline: 'Time Line'
+        timeline: 'Timeline'
         add_notes: 'Add Notes'
         order_returns: 'Returns'
         configuration: 'RMA Configuration'
@@ -92,6 +92,8 @@ madcoders_rma:
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
 
     admin:
+        flashes:
+            success_added_note: 'The note has been added'
         configuration:
             select_channel: 'Select Channel'
             change_return_addresss_to_channel: 'Change address to channel'

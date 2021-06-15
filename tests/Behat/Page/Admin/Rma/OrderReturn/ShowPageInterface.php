@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\OrderReturn;
 
+use Behat\Mink\Element\NodeElement;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 /**
  * Sylius RMA Plugin
@@ -26,4 +27,10 @@ interface ShowPageInterface  extends SymfonyPageInterface
     public function getRouteName(): string;
 
     public function getStatus(): string;
+
+    public function fillNoteField(string $text): void;
+
+    public function clickSendNoteButton(): void;
+
+    public function getFirstTimelineNotes(): NodeElement;
 }

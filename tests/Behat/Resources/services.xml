@@ -70,8 +70,12 @@
             <argument type="service" id="madcoders.rma.page.admin.rma.order_return_show" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="sylius.behat.notification_checker" />
-<!--            <argument type="service" id="madcoders_rma.repository.order_return_reason" />-->
-<!--            <argument type="service" id="sylius.behat.shared_storage" />-->
+        </service>
+
+        <service id="madcoders.rma.context.ui.admin.rma.managing_return_notes"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnNotesContext">
+            <argument type="service" id="madcoders.rma.page.admin.rma.order_return_show" />
+            <argument type="service" id="sylius.behat.notification_checker" />
         </service>
 
         <!-- pages -->
