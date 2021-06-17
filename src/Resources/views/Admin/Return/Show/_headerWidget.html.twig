@@ -11,12 +11,12 @@
 
         {% if order_return.orderReturnStatus == 'new' %}
             {% set pathDone = path('madcoders_rma_admin_order_return_show_complete', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
-            {{ buttons.default(pathDone, 'sylius.ui.complete'|trans, order_return.id, 'check circle outline', 'green') }}
+            {{ buttons.default(pathDone, 'sylius.ui.complete'|trans, order_return.id, 'check circle outline', 'complete-button green') }}
         {% endif %}
 
        {% if order_return.orderReturnStatus != 'completed' and  order_return.orderReturnStatus != 'canceled' %}
             {% set pathCancel = path('madcoders_rma_admin_order_return_show_cancel', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
-            {{ buttons.default(pathCancel, 'sylius.ui.cancel'|trans, order_return.id, 'cancel', 'red') }}
+            {{ buttons.default(pathCancel, 'sylius.ui.cancel'|trans, order_return.id, 'cancel', 'cancel-button red') }}
         {% endif %}
 
     </div>

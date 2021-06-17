@@ -100,6 +100,7 @@ madcoders_rma_admin_order_return_show_cancel:
     _sylius:
       section: admin
       permission: true
+      flash: madcoders.admin.history.cancelled_return
       repository:
         method: findOneById
         arguments:
@@ -116,6 +117,7 @@ madcoders_rma_admin_order_return_show_complete:
     _sylius:
       section: admin
       permission: true
+      flash: madcoders.admin.history.completed_return
       repository:
         method: findOneById
         arguments:

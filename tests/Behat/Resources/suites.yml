@@ -3,3 +3,5 @@ imports:
     - suites/ui/shop/rma/auth.yml
     - suites/ui/admin/rma/managing_return_reasons.yml
     - suites/ui/admin/rma/managing_return_consents.yml
+    - suites/ui/admin/rma/managing_return_status.yml
+    - suites/ui/admin/rma/managing_return_notes.yml

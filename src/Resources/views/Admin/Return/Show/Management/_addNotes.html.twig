@@ -1,15 +1,16 @@
 <h4 class="ui top attached styled header">
     {{ 'madcoders_rma.ui.add_notes'|trans }}
 </h4>
-<div class="ui attached segment" id="customer-consent-data">
+<div class="ui attached segment" {{ sylius_test_html_attribute('madcoders-rma-add-note-to-timeline') }}>
 
-    {{ form_start(form, {'action': path('madcoders_rma_admin_order_return_show', { 'id': order_return.id } ), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+    {{ form_start(form, {'action': path('madcoders_rma_admin_order_return_show', { 'id': order_return.id } ),
+            'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
 
         {{ form_row(form.note) }}
         {{ form_row(form._token) }}
         <br/>
 
-        <button type="submit" class="ui left large primary submit button" {{ sylius_test_html_attribute('send-button') }}>
+        <button type="submit" class="ui left large primary submit button" {{ sylius_test_html_attribute('send-note-button') }}>
             {{ 'sylius.ui.add'|trans }}
         </button>
     {{ form_end(form, {'render_rest': false}) }}

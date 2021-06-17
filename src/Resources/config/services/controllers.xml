@@ -41,6 +41,7 @@
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="translator" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.shop_management_controller"

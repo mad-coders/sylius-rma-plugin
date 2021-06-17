@@ -1,7 +1,7 @@
-<h4 class="ui top attached styled header">
+<h4 class="ui top attached styled header" >
     {{ 'madcoders_rma.ui.timeline'|trans }}
 </h4>
-<div class="ui attached segment" id="customer-consent-data">
+<div class="ui attached segment" {{ sylius_test_html_attribute('madcoders-rma-timeline') }}>
     <div class="ui feed">
     {% for logItem in changeLog %}
 

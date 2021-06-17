@@ -22,10 +22,12 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class AdminManagementController extends AbstractController
@@ -57,8 +59,12 @@ final class AdminManagementController extends AbstractController
     /** @var RmaChangesLogger */
     private $changesLogger;
 
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
-     * AdminManagementController constructor.
+     * AdminManagementController constructor
+     *
      * @param FormFactoryInterface $formFactory
      * @param EngineInterface|Environment $templatingEngine
      * @param ChannelContextInterface $channelContext
@@ -68,6 +74,7 @@ final class AdminManagementController extends AbstractController
      * @param RepositoryInterface $changeLogRepository
      * @param TokenStorageInterface $tokenStorage
      * @param RmaChangesLogger $changesLogger
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -78,7 +85,8 @@ final class AdminManagementController extends AbstractController
         RepositoryInterface $orderReturnRepository,
         RepositoryInterface $changeLogRepository,
         TokenStorageInterface $tokenStorage,
-        RmaChangesLogger $changesLogger
+        RmaChangesLogger $changesLogger,
+        TranslatorInterface $translator
     )
     {
         $this->formFactory = $formFactory;
@@ -90,6 +98,7 @@ final class AdminManagementController extends AbstractController
         $this->changeLogRepository = $changeLogRepository;
         $this->tokenStorage = $tokenStorage;
         $this->changesLogger = $changesLogger;
+        $this->translator = $translator;
     }
 
     public function viewIndex(Request $request, string $template): Response
@@ -132,15 +141,24 @@ final class AdminManagementController extends AbstractController
 
             /** @var AdminUserInterface $user */
             $user = $this->tokenStorage->getToken()->getUser();
-            $userFirstName = $user->getFirstName();
-            $userLastName = $user->getLastName();
 
             $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
-            $newChangeLogAuthor->setFirstName($userFirstName);
-            $newChangeLogAuthor->setLastName($userLastName);
             $newChangeLogAuthor->setType('admin');
 
+            if ($userFirstName = $user->getFirstName()) {
+                $newChangeLogAuthor->setFirstName($userFirstName);
+            } else {
+                $newChangeLogAuthor->setFirstName($user->getEmail());
+            }
+
+            if ( $userLastName = $user->getLastName()) {
+                $newChangeLogAuthor->setLastName($userLastName);
+            } else {
+                $newChangeLogAuthor->setLastName('');
+            }
+
             $this->changesLogger->add($returnNumber, 'added_note', $note, $newChangeLogAuthor);
+            $this->successFlashBag($request);
 
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
         }
@@ -149,6 +167,19 @@ final class AdminManagementController extends AbstractController
 
         return new Response($this->templatingEngine
             ->render($templateWithAttribute, ['order_return' => $orderReturn, 'form' => $form->createView(), 'changeLog' => $changeLog ]));
+    }
+
+    private function successFlashBag(Request $request): void
+    {
+        $successMessage = $this->getSyliusAttribute(
+            $request,
+            'success_flash',
+            $this->translator->trans('madcoders_rma.admin.flashes.success_added_note')
+        );
+
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('success', $successMessage);
     }
 
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
