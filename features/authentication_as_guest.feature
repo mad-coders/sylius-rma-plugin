@@ -18,7 +18,7 @@ Feature: Guest user can be granted with access to order he owns
 
     @ui @email
     Scenario: As guest customer I am able to see auth code page when I give correct order number
-        And I am on RMA start page
+        Given I am on RMA start page
         When I enter "000001" in order number input filed
         And I submit the form
         Then I should be redirected to auth code page
