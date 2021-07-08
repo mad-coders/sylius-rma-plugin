@@ -1,4 +1,4 @@
-@madcoders_rma @madcoders_rma_auth
+@madcoders_rma @madcoders_rma_auth @madcoders_rma_auth_guest
 Feature: Guest user can be granted with access to order he owns
 
     Background:
