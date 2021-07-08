@@ -1,4 +1,4 @@
-@managing_return_reasons
+@madcoders_rma @managing_return_reasons
 Feature: Deleting a return reason
     In order to enable customer to select return reason in order return form
     As an Administrator

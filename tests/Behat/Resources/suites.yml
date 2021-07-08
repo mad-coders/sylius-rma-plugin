@@ -1,6 +1,7 @@
 imports:
     - suites/ui/credits.yml
     - suites/ui/shop/rma/auth.yml
+    - suites/ui/shop/rma/submit_form.yml
     - suites/ui/admin/rma/managing_return_reasons.yml
     - suites/ui/admin/rma/managing_return_consents.yml
     - suites/ui/admin/rma/managing_return_status.yml

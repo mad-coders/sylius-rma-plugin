@@ -1,4 +1,4 @@
-@managing_return_notes
+@madcoders_rma @managing_return_notes
 Feature: Managing order return notes
     In order to enable administrator to other staff members
     As an Administrator

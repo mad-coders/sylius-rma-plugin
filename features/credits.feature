@@ -1,4 +1,4 @@
-@madcoders_credits @madcoders_rma
+@madcoders_rma @madcoders_credits @madcoders_rma
 Feature: Display credits page
 
     @ui

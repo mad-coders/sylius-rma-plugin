@@ -155,10 +155,6 @@ final class ReturnController extends AbstractController
         }
         // END
 
-//        $order = $this->getDoctrine()
-//            ->getRepository(Order::class)
-//            ->findOneBy(array('number' => $orderNumber));
-
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return $this->createMissingOrderNumberResponse($request);
@@ -178,6 +174,7 @@ final class ReturnController extends AbstractController
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $this->orderReturnRepository->add($orderReturn);
+            $this->addSuccessMessageWithInformationForCheck($request);
 
             return new RedirectResponse($this->router->generate('madcoders_rma_return_form_accept', ['returnNumber' => $returnNumber ]));
         }
@@ -196,11 +193,12 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        // TODO: inject repository instead
-        // load order
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
+        $orderNumber = $orderReturn->getOrderNumber();
+        $order = $this->orderRepository->findOneByNumber($orderNumber);
+
+        if (!$order) {
+            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        }
 
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -353,6 +351,15 @@ final class ReturnController extends AbstractController
         $attributes = $request->attributes->get('_sylius');
 
         return $attributes[$attributeName] ?? $default;
+    }
+
+    private function addSuccessMessageWithInformationForCheck(Request $request, array $context = []): void
+    {
+        $infoMessage = 'madcoders_rma.ui.first_step.success.please_check_your_form';
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('success', $this->translator->trans($infoMessage, $context));
+
     }
 
     private function errorRedirect(Request $request, string $errorMessage, array $context = [], string $code = null): Response
