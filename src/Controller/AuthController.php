@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthStartType;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
+use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
@@ -56,6 +58,9 @@ final class AuthController extends AbstractController
     /** @var OrderReturnAuthorizerInterface */
     private $orderReturnAuthorizer;
 
+    /** @var OrderByNumberProviderInterface */
+    private $orderByNumberProvider;
+
     /** @var SessionInterface */
     private $session;
 
@@ -67,6 +72,7 @@ final class AuthController extends AbstractController
         AuthCodeEmailSenderInterface $authCodeEmailSender,
         TranslatorInterface $translator,
         OrderReturnAuthorizerInterface $orderReturnAuthorizer,
+        OrderByNumberProviderInterface $orderByNumberProvider,
         SessionInterface $session
     )
     {
@@ -77,6 +83,7 @@ final class AuthController extends AbstractController
         $this->authCodeEmailSender = $authCodeEmailSender;
         $this->translator = $translator;
         $this->orderReturnAuthorizer = $orderReturnAuthorizer;
+        $this->orderByNumberProvider = $orderByNumberProvider;
         $this->session = $session;
     }
 
@@ -91,22 +98,13 @@ final class AuthController extends AbstractController
 
             /** @var array $data */
             $data = $form->getData();
-            $orderNumber = trim(str_replace(['#'], '', $data['orderNumber']));
-            $order = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findOneBy(array('number' => $orderNumber));
+            $orderNumber = (string)$data['orderNumber'];
 
-            if (!$order) {
-                $order = $this->getDoctrine()
-                    ->getRepository(Order::class)
-                    ->findOneBy(array('number' => '#' . $orderNumber));
-            }
-
-            if (!$order) {
+            if (!$order = $this->orderByNumberProvider->findOneByNumber($orderNumber)) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_number_not_valid',
-                    [ '%orderNumber%' => $orderNumber ]
+                    ['%orderNumber%' => $orderNumber]
                 );
             }
 
@@ -211,7 +209,7 @@ final class AuthController extends AbstractController
             ->getRepository(AuthCode::class)
             ->findOneBy(array('hash' => $code));
 
-        if (!$authData) {
+        if (!$authData instanceof AuthCodeInterface) {
             $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
         }
 
@@ -230,17 +228,7 @@ final class AuthController extends AbstractController
             return new RedirectResponse($this->router->generate('madcoders_rma_start'));
         }
 
-        // TODO: inject repository instead
-        // load order
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->findOneBy(array('number' => $authData->getOrderNumber()));
-
-        if (!$order) {
-            $order = $this->getDoctrine()
-                ->getRepository(Order::class)
-                ->findOneBy(array('number' => '#' . $authData->getOrderNumber()));
-        }
+        $order = $this->orderByNumberProvider->findOneByNumber($authData->getOrderNumber());
 
         // redirect forward if access is already granted
         if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {

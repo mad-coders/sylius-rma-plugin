@@ -12,6 +12,7 @@
             <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
             <argument type="service" id="translator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="session" />
         </service>
 
