@@ -10,6 +10,12 @@
         </testsuite>
     </testsuites>
 
+    <coverage>
+        <include>
+            <directory suffix=".php">src/</directory>
+        </include>
+    </coverage>
+
     <php>
         <ini name="error_reporting" value="-1" />
 

@@ -45,6 +45,7 @@
         "friendsofsymfony/oauth-server-bundle": "^1.6 || >2.0.0-alpha.0 ^2.0@dev",
         "lakion/mink-debug-extension": "^2.0.0",
         "phpspec/phpspec": "^7.0",
+        "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "0.12.74",
         "phpstan/phpstan-doctrine": "0.12.31",
