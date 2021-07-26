@@ -1,10 +1,5 @@
 <?php
-/*
- * This file is part of the Madcoders RMA Plugin.
- *
- * (c) Leonid Moshko
- *
- */
+
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
@@ -30,6 +25,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Exception;
 
+/**
+ * Sylius RMA Plugin
+ *
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
+ *
+ * Architects of this package:
+ * @author Leonid Moshko <l.moshko@madcoders.pl>
+ * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+ */
 final class RmaConfigurationController extends AbstractController
 {
     /** @var FormFactoryInterface */
@@ -155,10 +160,14 @@ final class RmaConfigurationController extends AbstractController
         );
     }
 
-    public function saveAddressToSelectedChannel(Request $request, string $channelId): Response
+    public function saveAddressToSelectedChannel(Request $request, string $channelId, string $template): Response
     {
         if (!$addressFormTypeToSelectedChannel = $this->getSyliusAttribute($request, 'addressForm', ConfigAddressToChannelFormType::class)) {
             throw new Exception('Address form not defined');
+        }
+
+        if (!$channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class)) {
+            throw new Exception('Channel form not defined');
         }
 
         if (!$redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'madcoders_rma_admin_order_return_index')) {
@@ -166,17 +175,36 @@ final class RmaConfigurationController extends AbstractController
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
+        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId ] : null);
 
-        if ($request->isMethod('POST') && $addressFormToSelectedChannel->handleRequest($request)->isValid()) {
+        if ($request->isMethod('POST')) {
+
+            if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
+                throw new Exception('Template not defined');
+            }
+
+            $channel = $this->getSelectedChannel($channelId);
+
+            if (!$addressFormToSelectedChannel->handleRequest($request)->isValid()){
+                return new Response($this->templatingEngine
+                    ->render($templateWithAttribute, [
+                            'channelForm' => $channelForm->createView(),
+                            'addressFormToSelectedChannel' => $addressFormToSelectedChannel->createView(),
+                            'channel' => $channel,
+                        ]
+                    ));
+            }
 
             /** @var array $data */
             if (!$data = $addressFormToSelectedChannel->getData()) {
                 throw new Exception('Address form not have data');
             }
-            $channel = $this->getSelectedChannel($channelId);
 
             /** @var RmaConfigurationInterface|null $addressConfigByChannel */
-            if ($addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address'])) {
+            if ($addressConfigByChannel = $this->configurationRepository->findOneBy([
+                'channel' => $channel,
+                'parameter' => 'address'
+            ])) {
                 $addressConfigByChannel->setValue(json_encode($data));
             } else {
                 $addressConfigByChannel = new RmaConfiguration();
@@ -201,8 +229,11 @@ final class RmaConfigurationController extends AbstractController
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('error', $this->translator->trans($errorMessage, $context));
+        $redirectRoute = $this->getSyliusAttribute(
+            $request,
+            'error_redirect',
+            'madcoders_rma_admin_order_return_config_edit');
 
-        $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'madcoders_rma_admin_order_return_index');
         if ($redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }

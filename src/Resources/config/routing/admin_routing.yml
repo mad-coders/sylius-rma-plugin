@@ -1,17 +1,17 @@
 madcoders_rma_admin_order_return:
-  resource: |
-    alias: madcoders_rma.order_return
-    section: admin
-    only: [index, update, delete, bulkDelete]
-    templates: "@SyliusAdmin\\Crud"
-    redirect: index
-    grid: madcoders_rma_admin_return_orders
-    vars:
-        all:
-            subheader: madcoders_rma.ui.return_list
-        index:
-            icon: 'file dolly outline'
-  type: sylius.resource
+    resource: |
+        alias: madcoders_rma.order_return
+        section: admin
+        only: [index, update, delete, bulkDelete]
+        templates: "@SyliusAdmin\\Crud"
+        redirect: index
+        grid: madcoders_rma_admin_return_orders
+        vars:
+            all:
+                subheader: madcoders_rma.ui.return_list
+            index:
+                icon: 'file dolly outline'
+    type: sylius.resource
 
 madcoders_rma_admin_order_return_reason:
   resource: |
@@ -74,6 +74,7 @@ madcoders_rma_admin_order_return_config_add_address_to_selected_channel:
   methods: [ POST ]
   controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:saveAddressToSelectedChannel
   defaults:
+    template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/show.html.twig"
     _sylius:
       redirect: madcoders_rma_admin_order_return_config_edit
       section: admin
