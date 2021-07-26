@@ -26,20 +26,8 @@ Feature: Submitting return form as guest
             And the order's state is "fulfilled"
 
         @ui
-        Scenario: I can create return form as signed in customer by rma-start form
+        Scenario: I can create return form as signed in customer by "Order History" from customer board
             Given I am on order return page for latest order
-            When I choose reason with code "reason_360"
-            And I fill in my bank account in IBAN format
-            And I fill in notes field with text "My notes ABC"
-            And I click submit button for return form
-            Then I should be redirected to return review page for latest order
-            And I see single success message containing text "Return form has been saved"
 
         @ui
-        Scenario: I can submit return form as signed in customer by order return review page
-            Given I have order return with number "R000001-1" and status "draft" for latest order
-            And I am on order return review page for latest order
-            When I approve return form
-            Then email with order return confirmation should be sent to "john.doe@madcoders.pl" for latest order
-            And I should be redirected to success page for latest order
-            And I see single success message containing text "Return form has been created"
+        Scenario: I can submit return form as signed in customer by "Your order returns" from customer board
