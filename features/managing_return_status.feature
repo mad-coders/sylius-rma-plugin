@@ -1,4 +1,4 @@
-@managing_return_status
+@madcoders_rma @managing_return_status
 Feature: Managing order return status
     In order to enable administrator to manage return status
     As an Administrator

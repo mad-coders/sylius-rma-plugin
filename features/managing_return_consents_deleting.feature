@@ -1,4 +1,4 @@
-@managing_return_consents
+@madcoders_rma @managing_return_consents
 Feature: Deleting a return consent
     In order to enable customer to select return consent in order return form
     As an Administrator

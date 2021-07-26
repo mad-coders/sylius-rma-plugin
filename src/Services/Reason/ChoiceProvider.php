@@ -42,6 +42,11 @@ class ChoiceProvider implements ChoiceProviderInterface
     {
         $orderNumber = $orderReturn->getOrderNumber();
         $order = $this->orderRepository->findOneByNumber($orderNumber);
+
+        if (!$order) {
+            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        }
+
         if (!$order instanceof OrderInterface) {
             return [];
         }

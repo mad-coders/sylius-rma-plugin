@@ -42,7 +42,16 @@ final class ReturnReasonFormType extends AbstractType
                 'required' => false,
                 'label' => 'madcoders_rma.admin.reason.form.position',
             ])
-            ->addEventSubscriber(new AddCodeFormSubscriber())
+            ->addEventSubscriber(new AddCodeFormSubscriber(
+                NULL,
+                [
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'vsf_navi.admin.vsf_navi_item.form.code.not_blank',
+                        ])
+                    ],
+                ]
+            ))
         ;
     }
 

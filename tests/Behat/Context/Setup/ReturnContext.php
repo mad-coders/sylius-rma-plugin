@@ -22,19 +22,25 @@ class ReturnContext implements Context
     /** @var SharedStorageInterface */
     private $sharedStorage;
 
+    /** @var RepositoryInterface */
+    private $returnReasonRepository;
+
     /**
      * ReturnContext constructor
      *
      * @param RepositoryInterface $returnRepository
      * @param SharedStorageInterface $sharedStorage
+     * @param RepositoryInterface $returnReasonRepository
      */
     public function __construct(
         RepositoryInterface $returnRepository,
-        SharedStorageInterface $sharedStorage
+        SharedStorageInterface $sharedStorage,
+        RepositoryInterface $returnReasonRepository
     )
     {
         $this->returnRepository = $returnRepository;
         $this->sharedStorage = $sharedStorage;
+        $this->returnReasonRepository = $returnReasonRepository;
     }
 
     /**
@@ -47,7 +53,17 @@ class ReturnContext implements Context
         $orderReturn->setOrderReturnStatus($orderReturnStatus);
         $orderReturn->setOrderNumber($order->getNumber());
         $orderReturn->setChannelCode($order->getLocaleCode());
+        $orderReturn->setReturnReason($this->getReturnReasonCode());
 
         $this->returnRepository->add($orderReturn);
+    }
+
+    private function getReturnReasonCode(): string
+    {
+        $reason = $this->returnReasonRepository->findAll();
+        if (count($reason) > 0) {
+            return $reason[0]->getCode();
+        }
+        return '';
     }
 }

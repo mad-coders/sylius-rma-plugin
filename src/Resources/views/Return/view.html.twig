@@ -50,7 +50,7 @@
                         <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.return_reason_subheader'|trans }}</div>
                     </h3>
                     <div class="field">
-                        {{ form_row(form.returnReason, sylius_test_form_attribute('return-returnReason')) }}
+                        {{ form_row(form.returnReason, sylius_test_form_attribute('rma-return-returnReason')) }}
                     </div>
                 </div>
                 <br/>
@@ -75,7 +75,8 @@
                 </div>
                 {{ form_row(form._token) }}
                 <br/>
-                <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('send-button') }}>{{ 'madcoders_rma.ui.continue_button'|trans }}</button>
+                <button type="submit" class="ui fluid large primary submit button"
+                        {{ sylius_test_html_attribute('madcoders-rma-submit-return-form-button') }}>{{ 'madcoders_rma.ui.continue_button'|trans }}</button>
                 {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>
