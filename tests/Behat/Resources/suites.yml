@@ -6,3 +6,4 @@ imports:
     - suites/ui/admin/rma/managing_return_consents.yml
     - suites/ui/admin/rma/managing_return_status.yml
     - suites/ui/admin/rma/managing_return_notes.yml
+    - suites/ui/admin/rma/managing_address_in_configuration.yml

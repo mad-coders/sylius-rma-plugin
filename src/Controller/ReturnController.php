@@ -258,6 +258,8 @@ final class ReturnController extends AbstractController
             $channel = $this->channelContext->getChannel();
             $this->orderReturnFormPdfEmailSender->sendReturnOrderFormEmail($orderReturn, $channel, $customerEmail);
 
+            $this->addSuccessMessageAboutReturnFormCreated($request);
+
             return new RedirectResponse($this->router->generate('madcoders_rma_return_form_success', ['returnNumber' => $returnNumber]));
         }
 
@@ -359,7 +361,14 @@ final class ReturnController extends AbstractController
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('success', $this->translator->trans($infoMessage, $context));
+    }
 
+    private function addSuccessMessageAboutReturnFormCreated(Request $request, array $context = []): void
+    {
+        $infoMessage = 'madcoders_rma.ui.success.return_form_created';
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('success', $this->translator->trans($infoMessage, $context));
     }
 
     private function errorRedirect(Request $request, string $errorMessage, array $context = [], string $code = null): Response

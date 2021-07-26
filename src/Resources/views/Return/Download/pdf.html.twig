@@ -129,11 +129,11 @@
                     <table>
                         <tr>
                             <td style="border: none;">
-                                {% if variant.hasImages %}
-                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': variant, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}
-                                {% else %}
-                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}
-                                {% endif %}
+{#                                {% if variant.hasImages %}#}
+{#                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': variant, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}#}
+{#                                {% else %}#}
+{#                                    {% include '@SyliusShop/Product/_mainImage.html.twig' with {'product': product, 'filter': 'sylius_shop_product_tiny_thumbnail'} %}#}
+{#                                {% endif %}#}
                             </td>
                             <td style="text-align: left; border: none;">
                             <div class="sylius-product-name">{{ product.name }}</div>

@@ -7,8 +7,11 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 use Behat\Behat\Context\Context;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Test\Services\EmailCheckerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnSuccessPageInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Sylius RMA Plugin
@@ -28,19 +31,31 @@ class ReturnSuccessContext implements Context
     /** @var RepositoryInterface */
     private $orderReturnRepository;
 
+    /** @var EmailCheckerInterface */
+    private $emailChecker;
+
+    /** @var TranslatorInterface */
+    private $translator;
+
     /**
      * ReturnSuccessContext constructor
      *
      * @param ReturnSuccessPageInterface $returnSuccessPage
      * @param RepositoryInterface $orderReturnRepository
+     * @param EmailCheckerInterface $emailChecker
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         ReturnSuccessPageInterface $returnSuccessPage,
-        RepositoryInterface $orderReturnRepository
+        RepositoryInterface $orderReturnRepository,
+        EmailCheckerInterface $emailChecker,
+        TranslatorInterface $translator
     )
     {
         $this->returnSuccessPage = $returnSuccessPage;
         $this->orderReturnRepository = $orderReturnRepository;
+        $this->emailChecker = $emailChecker;
+        $this->translator = $translator;
     }
 
     /**
@@ -52,6 +67,24 @@ class ReturnSuccessContext implements Context
     {
         $returnNumber = $this->findNewReturnFormByOrderNumber($order->getNumber());
         $this->returnSuccessPage->verify(['returnNumber' => $returnNumber]);
+    }
+
+    /**
+     * @Then /^email with order return confirmation should be sent to "([^"]+)" for (latest order)$/
+     */
+    public function iRecievedConfirmationEmail(string $recipient, OrderInterface $order, string $localeCode = 'en_US'): void
+    {
+        $returnNumber = $this->findNewReturnFormByOrderNumber($order->getNumber());
+        Assert::notNull($returnNumber);
+
+        $message = $this->translator->trans(
+            'madcoders_rma.email.order_return_form.greeting',
+            [ '%name%' => $returnNumber ],
+            null,
+            $localeCode
+        );
+
+        Assert::true($this->emailChecker->hasMessageTo($message, $recipient));
     }
 
     /**

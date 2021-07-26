@@ -1,10 +1,17 @@
-@madcoders_rma @madcoders_rma_submit_form
+@madcoders_rma @madcoders_rma_submit_form @madcoders_rma_submit_form_as_signed_in_customer
 Feature: Submitting return form as guest
     In order to finalize my return request
-    As guest I need to be able to fill gaps and submit return form
+    As signed in customer and I need to be able to fill gaps and submit return form
 
         Background:
-            Given the store operates on a single channel in "United States"
+            Given the store operates on a single channel in the "United States" named "Channel 1"
+            And Store return address with data for channel "Channel 1":
+                | field               | type              | value                               |
+                | company             | field             | Company 1                           |
+                | street              | field             | 326 Avenue                          |
+                | city                | field             | New York                            |
+                | postcode            | field             | 73110                               |
+                | country             | field             | United States                       |
             And the store ships everywhere for "Standard shipping"
             And the store allows paying Offline for all channels
             And the store has a product "Product A"
@@ -19,7 +26,7 @@ Feature: Submitting return form as guest
             And the order's state is "fulfilled"
 
         @ui
-        Scenario: I can create return form as signed in customer
+        Scenario: I can create return form as signed in customer by rma-start form
             Given I am on order return page for latest order
             When I choose reason with code "reason_360"
             And I fill in my bank account in IBAN format
@@ -29,10 +36,17 @@ Feature: Submitting return form as guest
             And I see single success message containing text "Return form has been saved"
 
         @ui
-        Scenario: I can submit return form as signed in customer
+        Scenario: I can create return form as signed in customer by "Order History" from customer board
+            Given I am on order return page for latest order
+
+        @ui
+        Scenario: I can submit return form as signed in customer by order return review page
             Given I have order return with number "R000001-1" and status "draft" for latest order
             And I am on order return review page for latest order
             When I approve return form
-#            Then I should be redirected to success page for latest order
-#            And I see single success message containing text "Success"
-#            And email with order return confirmation should be sent to "john.doe@madcoders.pl"
+            Then email with order return confirmation should be sent to "john.doe@madcoders.pl" for latest order
+            And I should be redirected to success page for latest order
+            And I see single success message containing text "Return form has been created"
+
+        @ui
+        Scenario: I can submit return form as signed in customer by "Your order returns" from customer board

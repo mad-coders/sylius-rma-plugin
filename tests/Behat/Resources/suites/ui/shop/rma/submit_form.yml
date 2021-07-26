@@ -20,6 +20,7 @@ default:
                 - madcoders.rma.context.setup.auth
                 - madcoders.rma.context.setup.return_reason
                 - madcoders.rma.context.setup.return
+                - madcoders.rma.context.setup.return_address
 
                 # transformers
                 - sylius.behat.context.transform.channel
