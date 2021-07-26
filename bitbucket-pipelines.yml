@@ -1,3 +1,11 @@
+definitions:
+    services:
+        mysql:
+            image: mysql:5.7
+            variables:
+                MYSQL_DATABASE: sylius_test
+                MYSQL_ROOT_PASSWORD: root
+
 image: php:7.3
 pipelines:
     default:
@@ -10,6 +18,46 @@ pipelines:
                   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
                   - COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --ignore-platform-reqs
                   - php vendor/bin/phpunit -c phpunit.xml.dist
+        - step:
+              name: "Behat scenarios"
+              services:
+                  - mysql
+              caches:
+                  - composer
+              script:
+                  - >
+                      set -ex
+
+                      mkdir -p public/media/image
+
+                      export APP_ENV=test
+                      export DATABASE_URL=mysql://root:root@localhost:3306/sylius_test
+
+                      (cd tests/Application && APP_ENV=test php bin/console doctrine:schema:update --force --no-interaction -v)
+                      (cd tests/Application && symfony serve --port=8080 --no-tls -d)
+
+                  - >
+                        google-chrome-stable --headless \
+                                            --no-sandbox \
+                                            --disable-gpu \
+                                            --no-default-browser-check \
+                                            --remote-debugging-port=9222 \
+                                            --remote-debugging-address=127.0.0.1 \
+                                            --user-data-dir=/tmp/chrome-data \
+                                            --enable-automation \
+                                            --disable-background-networking \
+                                            --no-first-run \
+                                            --disable-popup-blocking \
+                                            --disable-default-apps \
+                                            --allow-insecure-localhost \
+                                            --disable-translate \
+                                            --disable-extensions \
+                                            --enable-features=Metal \
+                                            --window-size=1920,1080 \
+                                            --proxy-server='direct://' \
+                                            --proxy-bypass-list='*' \
+                                            --ignore-certificate-errors \
+                                            http://127.0.0.1:8080/ &
 #        - step:
 #              name: "Static analysis"
 #              caches:
