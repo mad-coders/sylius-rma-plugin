@@ -45,7 +45,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
      *
      * @return bool
      */
-    protected function supports(string $attribute, $subject): bool
+    protected function supports($attribute, $subject)
     {
         if (!$subject instanceof OrderInterface) {
             return false;
@@ -65,7 +65,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
      *
      * @return bool
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         if (!$subject instanceof OrderInterface) {
             return false;
