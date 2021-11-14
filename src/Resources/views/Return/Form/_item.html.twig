@@ -1,13 +1,7 @@
 {% block madcoders_rma_return_item_widget %}
     {% apply spaceless %}
-
         {% set variant = rma_product_view(form.vars.value.productSku) %}
-        {% if form.vars.value.maxQty > 0 %}
-        <tr>
-            {# @TODO: Add select functionality #}
-{#            <td>#}
-{#                {{ form_row(form.itemToReturn) }}#}
-{#            </td>#}
+        <tr{% if form.vars.value.maxQty == 0 %} style="display: none;"{% endif %}>
             <td class="single line">
                 {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_info.html.twig' with {'variant': variant} %}
             </td>
@@ -19,7 +13,5 @@
                 <span style="vertical-align: top"> / {{ form.vars.value.maxQty }}</span>
             </td>
         </tr>
-        {% endif %}
-
     {% endapply %}
 {% endblock %}

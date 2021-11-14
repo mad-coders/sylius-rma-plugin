@@ -49,7 +49,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for item in returnOrder.items if item.returnQty > 0 %}
+                            {% for item in returnOrder.items %}
                                 {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_item.html.twig' with {'item': item} %}
                             {% endfor %}
                             </tbody>
