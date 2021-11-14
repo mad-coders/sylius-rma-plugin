@@ -53,12 +53,12 @@ madcoders_rma:
 
         first_step:
             success:
-                message: 'We have send verification code to your e-mail associated with the order #%orderNumber%. Please fill form below to proceed.'
+                message: 'We have send verification code to your e-mail associated with the order %orderNumber%. Please fill form below to proceed.'
                 please_check_your_form: 'Return form has been saved as "Draft", please verify form and approve'
             error:
-                order_number_not_valid: 'Order number #%orderNumber% is not valid'
-                order_not_fullfiled_yet: 'Order #%orderNumber% is not fulfilled yet. Please contact customer support'
-                order_already_returned_or_cannot_be_returned: 'Order #%orderNumber% has already been returned or cannot be returned'
+                order_number_not_valid: 'Order number %orderNumber% is not valid'
+                order_not_fullfiled_yet: 'Order %orderNumber% is not fulfilled yet. Please contact customer support'
+                order_already_returned_or_cannot_be_returned: 'Order %orderNumber% has already been returned or cannot be returned'
 
         verification_step:
             secondary_headline: 'Verification step'
