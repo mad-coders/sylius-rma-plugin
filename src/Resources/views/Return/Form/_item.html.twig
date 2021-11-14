@@ -9,6 +9,7 @@
                 {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_options.html.twig' with {'variant': variant} %}
             </td>
             <td class="center line">
+                {# @TODO: Add select functionality #}
                 <span class="sylius-quantity" style="display: inline-block" >{{ form_row(form.returnQty) }}</span>
                 <span style="vertical-align: top"> / {{ form.vars.value.maxQty }}</span>
             </td>

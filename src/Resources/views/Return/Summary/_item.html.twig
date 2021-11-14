@@ -1,6 +1,6 @@
 {% set variant = rma_product_view(item.productSku) %}
 
-<tr{% if item.returnQty == 0 %} style="display: none;"{% endif %}>
+<tr>
     <td class="single line">
         {% include '@MadcodersSyliusRmaPlugin/Return/Summary/Item/_info.html.twig' with {'variant': variant} %}
     </td>
