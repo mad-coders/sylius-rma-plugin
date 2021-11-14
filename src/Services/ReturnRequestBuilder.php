@@ -99,6 +99,9 @@ class ReturnRequestBuilder
         // populate customer email
         $orderReturn->setCustomerEmail($customer->getEmail());
 
+        // set customer number
+        $orderReturn->setCustomerNumber((string)$order->getCustomer()->getId());
+
         // check if address exists
         if (!$address = $order->getBillingAddress()) {
             throw new Exception('Customer address is missing');

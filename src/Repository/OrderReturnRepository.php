@@ -16,11 +16,11 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 class OrderReturnRepository extends EntityRepository
 {
 
-    public function createReturnsListQueryBuilder(string $customerEmail): QueryBuilder
+    public function createCustomersReturnListQueryBuilder($customerNumber): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('o');
-        $qb->where('o.customerEmail = :customerEmail');
-        $qb->setParameter('customerEmail', $customerEmail);
+        $qb = $this->createQueryBuilder('r');
+        $qb->where('r.customerNumber = :customerNumber');
+        $qb->setParameter('customerNumber', (string) $customerNumber);
 
         return $qb;
     }
