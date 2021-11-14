@@ -15,6 +15,7 @@
 
         <indexes>
             <index columns="order_number"/>
+            <index columns="customer_number"/>
         </indexes>
 
         <one-to-many target-entity="Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem" mapped-by="orderReturn" field="items">
@@ -26,6 +27,7 @@
 
         <field name="orderNumber" column="order_number" type="string" />
         <field name="returnNumber" unique="true" column="return_number" type="string" />
+        <field name="customerNumber" column="customer_number" type="string" />
         <field name="channelCode" column="channel_code" type="string" />
         <field name="returnReason" column="return_reason" type="string" nullable="true" />
         <field name="orderReturnConsents" column="order_consents" type="json"  nullable="false" />

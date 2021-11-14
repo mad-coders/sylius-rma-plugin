@@ -10,9 +10,9 @@ sylius_grid:
                 options:
                     class: Madcoders\SyliusRmaPlugin\Entity\OrderReturn
                     repository:
-                        method: createReturnsListQueryBuilder
+                        method: createCustomersReturnListQueryBuilder
                         arguments:
-                            customerEmail: 'expr:service("security.token_storage").getToken().getUser().getCustomer().getEmail()'
+                            customerEmail: 'expr:service("security.token_storage").getToken().getUser().getCustomer().getId()'
             sorting:
                 createdAt: desc
             limits: [25, 50, 100]

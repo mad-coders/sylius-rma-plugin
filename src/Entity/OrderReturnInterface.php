@@ -47,6 +47,16 @@ interface OrderReturnInterface
     /**
      * @return string
      */
+    public function getCustomerNumber(): string;
+
+    /**
+     * @param string $customerNumber
+     */
+    public function setCustomerNumber(string $customerNumber): void;
+
+    /**
+     * @return string
+     */
     public function getReturnNumber(): string;
 
     /**
