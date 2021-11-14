@@ -31,8 +31,12 @@ class RmaReasonChoiceExtension  extends AbstractExtension
         ];
     }
 
-    public function findReasonNameByCode(string $code): ?string
+    public function findReasonNameByCode(?string $code): ?string
     {
+        if (!is_string($code)) {
+            return null;
+        }
+
         return $this->reasonChoiceProvider->getNameByCode($code);
     }
 }
