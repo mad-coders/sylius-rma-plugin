@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Email;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Channel\Model\ChannelInterface;
 
 interface ReturnFormEmailSenderInterface
 {
