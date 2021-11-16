@@ -215,6 +215,8 @@ final class RmaConfigurationController extends AbstractController
 
             $this->configurationRepository->add($addressConfigByChannel);
 
+            $this->addSuccessMessageAboutConfigurationChanged($request);
+
             return new RedirectResponse($this->router->generate($redirectRoute, ['channelId' => $channelId]));
         }
 
@@ -269,5 +271,13 @@ final class RmaConfigurationController extends AbstractController
         $attributes = $request->attributes->get('_sylius');
 
         return $attributes[$attributeName] ?? $default;
+    }
+
+    private function addSuccessMessageAboutConfigurationChanged(Request $request, array $context = []): void
+    {
+        $infoMessage = 'madcoders_rma.ui.success.configuration_updated';
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('success', $this->translator->trans($infoMessage, $context));
     }
 }

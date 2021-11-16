@@ -22,4 +22,18 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
      * @throws ElementNotFoundException
      */
     public function choosesFormElement(string $name, string $element): void;
+
+    public function fillFormField(array $row): void;
+
+    public function selectCountry(string $countryName): void;
+
+    public function selectChannel(string $channelName): void;
+
+    public function hasReturnAddress(
+        string $company,
+        string $street,
+        string $postcode,
+        string $city,
+        string $countryName
+    ): bool;
 }
