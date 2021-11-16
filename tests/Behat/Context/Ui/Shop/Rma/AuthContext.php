@@ -7,6 +7,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 use Behat\Behat\Context\Context;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Test\Services\EmailCheckerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -74,11 +75,11 @@ class AuthContext implements Context
     }
 
     /**
-     * @When I enter :orderNumber in order number input filed
+     * @When /^I enter number of (latest order) in order number input filed$/
      */
-    public function enterOrderNumber(string $orderNumber): void
+    public function enterOrderNumber(OrderInterface $order): void
     {
-        $this->startPage->getOrderNumberField()->setValue($orderNumber);
+        $this->startPage->getOrderNumberField()->setValue($order->getNumber());
     }
 
     /**
