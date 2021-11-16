@@ -25,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -57,6 +58,9 @@ final class AuthController extends AbstractController
     /** @var AuthCodeFactoryInterface  */
     private $authCodeFactory;
 
+    /** @var AuthorizationCheckerInterface  */
+    private $authorizationChecker;
+
     public function __construct(
         FormFactoryInterface $formFactory,
         EngineInterface $templatingEngine,
@@ -65,7 +69,8 @@ final class AuthController extends AbstractController
         TranslatorInterface $translator,
         OrderReturnAuthorizerInterface $orderReturnAuthorizer,
         OrderByNumberProviderInterface $orderByNumberProvider,
-        AuthCodeFactoryInterface $authCodeFactory
+        AuthCodeFactoryInterface $authCodeFactory,
+        AuthorizationCheckerInterface $authorizationChecker
     )
     {
         $this->formFactory = $formFactory;
@@ -76,6 +81,7 @@ final class AuthController extends AbstractController
         $this->orderReturnAuthorizer = $orderReturnAuthorizer;
         $this->orderByNumberProvider = $orderByNumberProvider;
         $this->authCodeFactory = $authCodeFactory;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function start(Request $request, string $template): Response
@@ -107,7 +113,7 @@ final class AuthController extends AbstractController
             }
 
             // redirect forward if access is already granted
-            if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
                 return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, [ 'orderNumber' => $order->getNumber() ]));
             }
 
@@ -198,7 +204,7 @@ final class AuthController extends AbstractController
         $order = $this->orderByNumberProvider->findOneByNumber($authData->getOrderNumber());
 
         // redirect forward if access is already granted
-        if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+        if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $order->getNumber() ]));
         }
 
