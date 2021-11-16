@@ -17,22 +17,21 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Email;
 
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
+use Sylius\Component\Channel\Context\RequestBased\ChannelContext;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Mailer\Sender\SenderInterface;
 
-final class AuthCodeEmailSender  implements AuthCodeEmailSenderInterface
+final class AuthCodeChannelAwareEmailSender  implements AuthCodeEmailSenderInterface
 {
-    /** @var SenderInterface */
+    /** @var AuthCodeEmailSenderInterface  */
     private $emailSender;
 
-    /**
-     * AuthCodeEmailSender constructor.
-     * @param SenderInterface $emailSender
-     */
-    public function __construct(
-        SenderInterface $emailSender
-    ) {
+    /** @var ChannelContext  */
+    private $channelContext;
+
+    public function __construct(AuthCodeEmailSenderInterface $emailSender, ChannelContext $channelContext)
+    {
         $this->emailSender = $emailSender;
+        $this->channelContext = $channelContext;
     }
 
     public function sendAuthCodeEmail(
@@ -40,9 +39,7 @@ final class AuthCodeEmailSender  implements AuthCodeEmailSenderInterface
         OrderInterface $order,
         array $context = []
     ): void {
-        $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$order->getCustomer()->getEmail()], [
-            'authCode' => $authCode,
-            'channel' => $context['channel'],
-        ]);
+        $context['channel'] = $this->channelContext->getChannel();
+        $this->emailSender->sendAuthCodeEmail($authCode, $order, $context);
     }
 }

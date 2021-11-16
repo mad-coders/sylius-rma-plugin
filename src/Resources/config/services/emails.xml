@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+-->
+
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="true" />
 
         <service id="madcoders.sylius_rma_plugin.email.authcode_email_sender" class="Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSender">
             <argument type="service" id="sylius.email_sender" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.email.authcode_channel_aware_email_sender"
+                 class="Madcoders\SyliusRmaPlugin\Email\AuthCodeChannelAwareEmailSender">
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
+            <argument type="service" id="sylius.context.channel.request_based" />
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface" alias="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
 

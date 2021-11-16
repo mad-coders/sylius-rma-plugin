@@ -14,12 +14,9 @@
 
 declare(strict_types=1);
 
-namespace Madcoders\SyliusRmaPlugin\Email;
+namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
-use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
-use Sylius\Component\Core\Model\OrderInterface;
-
-interface AuthCodeEmailSenderInterface
+interface AuthCodeSecretGeneratorInterface
 {
-    public function sendAuthCodeEmail(AuthCodeInterface $authCode, OrderInterface $order, array $context = []): void;
+    public function generate(): int;
 }
