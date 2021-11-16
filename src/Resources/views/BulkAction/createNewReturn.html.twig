@@ -6,7 +6,7 @@
 
 {% if data.state == 'fulfilled' and orderHasItemsToReturned == true %}
 
-    {{ buttons.default(path, action.label, true, 'undo alternate', 'primary') }}
+    {{ buttons.default(path, action.label, null, 'undo alternate', 'primary') }}
 
 {% endif %}
 

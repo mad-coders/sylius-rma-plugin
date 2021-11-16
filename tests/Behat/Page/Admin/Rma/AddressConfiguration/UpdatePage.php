@@ -27,7 +27,7 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
      */
     public function getSelectedChannelId(): string
     {
-        return $channelName = $this->getElement('rma-configuration-channel-field')->getValue();;
+        return $channelName = $this->getElement('rma-configuration-channel-field')->getValue();
     }
 
     public function fillFormField(array $row): void

@@ -17,6 +17,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
+use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
@@ -78,29 +79,12 @@ final class ReturnController extends AbstractController
     /** @var RmaVerificationPossibilityOfReturn */
     private $verificationPossibilityOfReturn;
 
-    /** @var OrderRepository */
-    private $orderRepository;
+    /** @var OrderByNumberProviderInterface */
+    private $orderByNumberProvider;
 
     /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * ReturnController constructor.
-     * @param FormFactoryInterface $formFactory
-     * @param EngineInterface|Environment $templatingEngine
-     * @param ChannelContextInterface $channelContext
-     * @param RouterInterface $router
-     * @param SessionInterface $session
-     * @param ReturnRequestBuilder $returnRequestBuilder
-     * @param RepositoryInterface $orderReturnRepository
-     * @param StateMachineFactoryInterface $stateMachineFactory
-     * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
-     * @param ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender
-     * @param RmaChangesLogger $changesLogger
-     * @param RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
-     * @param OrderRepository $orderRepository
-     * @param TranslatorInterface $translator
-     */
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
@@ -113,7 +97,7 @@ final class ReturnController extends AbstractController
         ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
         RmaChangesLogger $changesLogger,
         RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
-        OrderRepository $orderRepository,
+        OrderByNumberProviderInterface $orderByNumberProvider,
         TranslatorInterface $translator
     )
     {
@@ -129,7 +113,7 @@ final class ReturnController extends AbstractController
         $this->orderReturnFormPdfEmailSender = $orderReturnFormPdfEmailSender;
         $this->changesLogger = $changesLogger;
         $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
-        $this->orderRepository = $orderRepository;
+        $this->orderByNumberProvider = $orderByNumberProvider;
         $this->translator = $translator;
     }
 
@@ -144,16 +128,13 @@ final class ReturnController extends AbstractController
     {
         $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class);
 
-        // TODO: inject repository instead
-        // load order
-
-        // TODO: this can be replaced by orderLoader / provider or smth
-        $order = $this->orderRepository->findOneByNumber($orderNumber);
-
-        if (!$order) {
-            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderNumber)) {
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_number_not_valid',
+                ['%orderNumber%' => $orderNumber]
+            );
         }
-        // END
 
         // redirect forward if access is already granted
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -164,7 +145,7 @@ final class ReturnController extends AbstractController
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_already_returned_or_cannot_be_returned',
-                [ '%orderNumber%' => $orderNumber ]
+                [ '%orderNumber%' => $order->getNumber() ]
             );
         }
 
@@ -183,21 +164,20 @@ final class ReturnController extends AbstractController
         return new Response($this->templatingEngine->render($templateWithAttribute, ['orderNumber' => $orderNumber,'form' => $form->createView()]));
     }
 
-    public function acceptIndex(Request $request, string $template): Response
+    public function acceptIndex(Request $request, string $returnNumber, string $template): Response
     {
-        $returnNumber = (string) $request->attributes->get('returnNumber');
-
         if (!$orderReturn = $this->getDoctrine()
             ->getRepository(OrderReturn::class)
             ->findOneBy(array('returnNumber' => $returnNumber))) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        $orderNumber = $orderReturn->getOrderNumber();
-        $order = $this->orderRepository->findOneByNumber($orderNumber);
-
-        if (!$order) {
-            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
+        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber())) {
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_number_not_valid',
+                ['%orderNumber%' => $orderReturn->getOrderNumber()]
+            );
         }
 
         // redirect forward if access is already granted
@@ -205,6 +185,7 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
+        // TODO: create consents form type
         $consentData = [ 'consents' => [] ];
         /** @var OrderReturnConsent $consent */
         foreach($this->getDoctrine()->getRepository(OrderReturnConsent::class)->findBy([ 'enabled' => true], ['position' => 'asc']) as $consent) {
@@ -215,6 +196,8 @@ final class ReturnController extends AbstractController
                 'consentRequire' => $consent->isConsentRequire(),
             ];
         }
+
+        /////// END /////////////
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnConsentFormType::class);
         $form = $this->formFactory->create($formType, $consentData);
@@ -232,7 +215,8 @@ final class ReturnController extends AbstractController
 
             $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
 
-            // TODO align entity instead
+            // TODO align entity instead - either allow nullable fields or not and avoid workarounds
+            // TODO: create change log service
             if (!$userFirstName = $orderReturn->getFirstName()) {
                 $userFirstName = 'no Name';
             }
@@ -279,11 +263,13 @@ final class ReturnController extends AbstractController
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        // TODO: inject repository instead
-        // load order
-        $order = $this->getDoctrine()
-            ->getRepository(Order::class)
-            ->findOneBy(array('number' => $orderReturn->getOrderNumber()));
+        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber())) {
+            return $this->errorRedirect(
+                $request,
+                'madcoders_rma.ui.first_step.error.order_number_not_valid',
+                ['%orderNumber%' => $orderReturn->getOrderNumber()]
+            );
+        }
 
         if (!$this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return $this->createMissingOrderNumberResponse($request);
@@ -292,6 +278,7 @@ final class ReturnController extends AbstractController
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
         //@TODO: Its used?
+        //@TODO perhaps it can be optimized with sticking just to allowed order number
         $this->session->remove('madcoders_rma_allowed_order');
         $this->session->set('madcoders_rma_allowed_order_return', $returnNumber);
 

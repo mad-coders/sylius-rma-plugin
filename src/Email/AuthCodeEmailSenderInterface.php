@@ -9,5 +9,5 @@ use Sylius\Component\Core\Model\ChannelInterface;
 
 interface AuthCodeEmailSenderInterface
 {
-    public function sendAuthCodeEmail(AuthCodeInterface $authCodeInterface, ChannelInterface $channel, string $hash, string $customerEmail): void;
+    public function sendAuthCodeEmail(AuthCodeInterface $authCode, ChannelInterface $channel, string $hash, string $customerEmail): void;
 }

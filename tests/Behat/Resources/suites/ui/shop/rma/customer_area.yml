@@ -1,0 +1,42 @@
+default:
+    suites:
+        madcoders_customer_area:
+            contexts:
+                # hook
+                - sylius.behat.context.hook.doctrine_orm
+                - sylius.behat.context.hook.email_spool
+
+                # setup
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.order
+                - sylius.behat.context.setup.user
+                - sylius.behat.context.setup.customer
+                - sylius.behat.context.setup.shop_security
+                - sylius.behat.context.setup.address
+                - sylius.behat.context.setup.product
+                - sylius.behat.context.setup.shipping
+                - sylius.behat.context.setup.payment
+                - madcoders.rma.context.setup.order
+                - madcoders.rma.context.setup.auth
+                - madcoders.rma.context.setup.return_reason
+
+                # transformers
+                - sylius.behat.context.transform.channel
+                - sylius.behat.context.transform.order
+                - sylius.behat.context.transform.customer
+                - sylius.behat.context.transform.user
+                - sylius.behat.context.transform.product
+                - sylius.behat.context.transform.shared_storage
+                - sylius.behat.context.transform.lexical
+                - sylius.behat.context.transform.shipping_method
+                - sylius.behat.context.transform.address
+                - sylius.behat.context.transform.payment
+
+                # ui
+                - sylius.behat.context.ui.shop.account
+                - madcoders.rma.context.ui.shop.rma.auth
+                - madcoders.rma.context.ui.shop.rma.customer_area
+                - madcoders.rma.context.ui.shop.rma.return_form
+
+            filters:
+                tags: "@madcoders_rma_auth_signed_in && @ui"

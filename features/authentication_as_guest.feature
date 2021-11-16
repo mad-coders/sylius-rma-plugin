@@ -16,7 +16,7 @@ Feature: Guest user can be granted with access to order he owns
         When I visit RMA start page
         Then I can see order number input field
 
-    @ui @email
+    @ui @email @todo
     Scenario: As guest customer I am able to see auth code page when I give correct order number
         Given I am on RMA start page
         When I enter "000001" in order number input filed

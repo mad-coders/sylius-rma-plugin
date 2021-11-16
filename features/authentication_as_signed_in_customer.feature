@@ -1,4 +1,4 @@
-@madcoders_rma @madcoders_rma_auth @madcoders_rma_auth_signed_in
+@madcoders_rma @madcoders_rma_auth_signed_in
 Feature: Guest user can be granted with access to order he owns
 
     Background:
@@ -16,29 +16,21 @@ Feature: Guest user can be granted with access to order he owns
             | code         | name                     | deadline_to_return |
             | reason_360   | Reason 360               | 360                |
 
-    @ui @todo
+    @ui
     Scenario: I can see RMA start page
         When I visit RMA start page
         Then I can see order number input field
 
-    @ui @todo
+    @ui
     Scenario: As signed in customer I bypass auth code page when I give correct order number
         Given I am on RMA start page
-        When I enter "000001" in order number input filed
+        When I enter number of latest order in order number input filed
         And I submit the form
-        #Then I should be redirected to order return page for order "000001"
         Then I should be redirected to order return page for latest order
 
-    @ui @todo
-    Scenario: As signed in customer I bypass auth code page when I click return link in customer area
-        Given I am on order list page in customer area
-        When I click return button at order "000001"
-        #Then I should be redirected to order return page for order "000001"
-        Then I should be redirected to order return page for latest order
-
-    @ui @todo
-    Scenario: As signed in customer I bypass auth code page when I click return link in customer area
-        Given I am on orders show page for order "000001" in customer area
-        When I click return button
-        #Then I should be redirected to order return page for order "000001"
+    @ui
+    Scenario: As signed in customer I bypass auth code page when I click return link in customer area (Orders Index Page)
+        Given I am on dashboard in customer area
+        When I browse my orders
+        And I click return button at latest order
         Then I should be redirected to order return page for latest order

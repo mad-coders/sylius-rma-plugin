@@ -24,13 +24,13 @@ final class AuthCodeEmailSender  implements AuthCodeEmailSenderInterface
     }
 
     public function sendAuthCodeEmail(
-        AuthCodeInterface $authCodeInterface,
+        AuthCodeInterface $authCode,
         ChannelInterface $channel,
         string $hash,
         string $customerEmail
     ): void {
         $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$customerEmail], [
-            'authCodeInterface' => $authCodeInterface,
+            'authCodeInterface' => $authCode,
             'channel' => $channel,
             'code' => $hash
         ]);
