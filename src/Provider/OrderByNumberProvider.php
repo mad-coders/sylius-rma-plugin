@@ -14,18 +14,20 @@ final class OrderByNumberProvider implements OrderByNumberProviderInterface
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    public function __construct(
-        OrderRepositoryInterface $orderRepository
-    )
+    /** @var string */
+    private $prefixSign;
+
+    public function __construct(OrderRepositoryInterface $orderRepository, string $prefixSign = self::ORDER_PREFIX_SIGN)
     {
         $this->orderRepository = $orderRepository;
+        $this->prefixSign = $prefixSign;
     }
 
     public function findOneByNumber(string $orderNumber): ?OrderInterface
     {
-        $orderNumber = trim(str_replace([self::ORDER_PREFIX_SIGN], '', $orderNumber));
+        $orderNumber = trim(str_replace([$this->prefixSign], '', $orderNumber));
         if (!$order = $this->orderRepository->findOneByNumber($orderNumber)) {
-            $order = $this->orderRepository->findOneByNumber(self::ORDER_PREFIX_SIGN . $orderNumber);
+            $order = $this->orderRepository->findOneByNumber($this->prefixSign . $orderNumber);
         }
 
         if (!$order instanceof OrderInterface) {
