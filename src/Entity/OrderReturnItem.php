@@ -1,10 +1,17 @@
 <?php
+
 /*
- * This file is part of the Madcoders RMA Plugin.
+ * This file is part of package:
+ * Sylius RMA Plugin
  *
- * (c) Leonid Moshko
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
  *
+ * Architects of this package:
+ * @author Leonid Moshko <l.moshko@madcoders.pl>
+ * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
@@ -13,44 +20,28 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $itemToReturn = false;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $maxQty = 0;
 
-    /**
-     * @var OrderReturn
-     */
+    /** @var OrderReturn */
     private $orderReturn;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $productSku;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $productName;
 
-    /**
-     * @var int
-     */
+    /**  @var int */
     private $returnQty = 0;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $unitPrice;
 
     /**

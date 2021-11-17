@@ -1,22 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Madcoders\SyliusRmaPlugin\Security;
-
-
-use Madcoders\SyliusRmaPlugin\Security\Exception\NotExistsException;
-
-/**
- * Sylius RMA Plugin by MADCODERS
+/*
+ * This file is part of package:
+ * Sylius RMA Plugin
  *
- * @copyright MADCODERS (www.madcoders.co)
- * @licence For the full copyright and license information, please view the LICENSE file
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
  *
  * Architects of this package:
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Madcoders\SyliusRmaPlugin\Security;
+
+use Madcoders\SyliusRmaPlugin\Security\Exception\NotExistsException;
+
 interface OrderReturnAuthorizerStorageInterface
 {
     public const DEFAULT_EXPIRY_TIME = 3600;

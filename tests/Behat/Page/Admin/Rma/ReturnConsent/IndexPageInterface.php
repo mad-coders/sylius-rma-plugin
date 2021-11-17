@@ -1,11 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
-
-use Sylius\Behat\Page\Admin\Crud\IndexPageInterface as BaseIndexPage;
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -15,6 +11,13 @@ use Sylius\Behat\Page\Admin\Crud\IndexPageInterface as BaseIndexPage;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
+
+use Sylius\Behat\Page\Admin\Crud\IndexPageInterface as BaseIndexPage;
+
 interface IndexPageInterface extends BaseIndexPage
 {
 }
