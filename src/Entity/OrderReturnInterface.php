@@ -1,10 +1,17 @@
 <?php
+
 /*
- * This file is part of the Madcoders RMA Plugin.
+ * This file is part of package:
+ * Sylius RMA Plugin
  *
- * (c) Leonid Moshko
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
  *
+ * Architects of this package:
+ * @author Leonid Moshko <l.moshko@madcoders.pl>
+ * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
@@ -31,39 +38,25 @@ interface OrderReturnInterface extends ResourceInterface
         self::STATUS_CANCELED,
     ];
 
-    /**
-     * @return int
-     */
+    /** @return int */
     public function getId(): ?int;
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getOrderNumber(): string;
 
-    /**
-     * @param string $orderNumber
-     */
+    /** @param string $orderNumber */
     public function setOrderNumber(string $orderNumber): void;
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getCustomerNumber(): string;
 
-    /**
-     * @param string $customerNumber
-     */
+    /** @param string $customerNumber */
     public function setCustomerNumber(string $customerNumber): void;
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getReturnNumber(): string;
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getCustomerEmail(): ?string;
 
     /**

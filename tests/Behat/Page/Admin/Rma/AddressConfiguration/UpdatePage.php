@@ -1,14 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\AddressConfiguration;
-
-use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
-use Behat\Mink\Exception\ElementNotFoundException;
-
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -18,6 +11,15 @@ use Behat\Mink\Exception\ElementNotFoundException;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\AddressConfiguration;
+
+use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
+use Behat\Mink\Exception\ElementNotFoundException;
+
 class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 {
     use ChoosesFormElement;

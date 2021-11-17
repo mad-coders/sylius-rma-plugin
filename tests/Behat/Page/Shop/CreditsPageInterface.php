@@ -1,12 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop;
-
-use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
-
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -16,6 +11,13 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop;
+
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
+
 interface CreditsPageInterface extends SymfonyPageInterface
 {
     /** @return string */

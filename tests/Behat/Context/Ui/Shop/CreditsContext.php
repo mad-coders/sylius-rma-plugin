@@ -1,14 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop;
-
-use Behat\Behat\Context\Context;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPageInterface;
-use Webmozart\Assert\Assert;
-
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -18,6 +11,15 @@ use Webmozart\Assert\Assert;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop;
+
+use Behat\Behat\Context\Context;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\CreditsPageInterface;
+use Webmozart\Assert\Assert;
+
 final class CreditsContext implements Context
 {
     /**

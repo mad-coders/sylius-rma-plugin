@@ -1,15 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma;
-
-use Behat\Mink\Exception\ElementNotFoundException;
-use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
-
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -19,6 +11,16 @@ use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma;
+
+use Behat\Mink\Exception\ElementNotFoundException;
+use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
+
 class ReturnReviewPage extends SymfonyPage implements ReturnReviewPageInterface, FlashNotificationInterface
 {
     use FlashNotificationTrait;

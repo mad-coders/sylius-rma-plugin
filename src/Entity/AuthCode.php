@@ -1,10 +1,17 @@
 <?php
+
 /*
- * This file is part of the Madcoders RMA Plugin.
+ * This file is part of package:
+ * Sylius RMA Plugin
  *
- * (c) Leonid Moshko
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
  *
+ * Architects of this package:
+ * @author Leonid Moshko <l.moshko@madcoders.pl>
+ * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
 declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
@@ -15,32 +22,22 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
 {
     public const DEFAULT_MAX_ATTEMPTS = 3;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $orderNumber;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $hash;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $authCode;
 
     /** @var int */
     private $attempts = 0;
 
-    /**
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null */
     private $expiresAt;
 
     public function __construct()

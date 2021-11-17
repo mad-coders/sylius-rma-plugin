@@ -1,12 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
-
-use Behat\Mink\Exception\ElementNotFoundException;
-use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface as BaseUpdatePageInterface;
-/**
+/*
+ * This file is part of package:
  * Sylius RMA Plugin
  *
  * @copyright MADCODERS Team (www.madcoders.co)
@@ -16,6 +11,14 @@ use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface as BaseUpdatePageInterface;
  * @author Leonid Moshko <l.moshko@madcoders.pl>
  * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
+
+declare(strict_types=1);
+
+namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\ReturnConsent;
+
+use Behat\Mink\Exception\ElementNotFoundException;
+use Sylius\Behat\Page\Admin\Crud\UpdatePageInterface as BaseUpdatePageInterface;
+
 interface UpdatePageInterface extends BaseUpdatePageInterface
 {
     /**
