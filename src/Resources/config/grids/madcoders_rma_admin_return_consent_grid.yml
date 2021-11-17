@@ -1,43 +1,54 @@
+#
+# This file is part of package:
+# Sylius RMA Plugin
+#
+# @copyright MADCODERS Team (www.madcoders.co)
+# @licence For the full copyright and license information, please view the LICENSE
+#
+# Architects of this package:
+# @author Leonid Moshko <l.moshko@madcoders.pl>
+# @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+#
 sylius_grid:
-  grids:
-    madcoders_rma_admin_return_consent:
-      driver:
-        name: doctrine/orm
-        options:
-          class: Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent
-      sorting:
-        date: desc
-      fields:
-        name:
-          type: string
-          label: sylius.ui.name
-          sortable: translation.name
-        code:
-          type: string
-          label: sylius.ui.code
-          sortable: ~
-        position:
-          type: string
-          label: sylius.ui.position
-          sortable: ~
-        enabled:
-          type: twig
-          label: sylius.ui.enabled
-          options:
-            template: "@SyliusUi/Grid/Field/enabled.html.twig"
-        date:
-          type: datetime
-          label: sylius.ui.date
-          path: createdAt
-          sortable: createdAt
-          options:
-            format: d-m-Y H:i:s
-      actions:
-        main:
-          create:
-            type: create
-        item:
-          update:
-            type: update
-          delete:
-            type: delete
+    grids:
+        madcoders_rma_admin_return_consent:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent
+            sorting:
+                date: desc
+            fields:
+                name:
+                    type: string
+                    label: sylius.ui.name
+                    sortable: translation.name
+                code:
+                    type: string
+                    label: sylius.ui.code
+                    sortable: ~
+                position:
+                    type: string
+                    label: sylius.ui.position
+                    sortable: ~
+                enabled:
+                    type: twig
+                    label: sylius.ui.enabled
+                    options:
+                        template: "@SyliusUi/Grid/Field/enabled.html.twig"
+                date:
+                    type: datetime
+                    label: sylius.ui.date
+                    path: createdAt
+                    sortable: createdAt
+                    options:
+                        format: d-m-Y H:i:s
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete
