@@ -34,6 +34,7 @@ final class OrderReturnFixture extends AbstractResourceFixture
                 ->scalarNode('street')->end()
                 ->scalarNode('phone_number')->end()
                 ->scalarNode('customer_ip')->end()
+                ->scalarNode('customer_number')->end()
         ;
     }
 }

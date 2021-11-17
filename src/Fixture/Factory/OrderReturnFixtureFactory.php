@@ -59,6 +59,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         $orderReturn->setStreet($options['street']);
         $orderReturn->setPhoneNumber($options['phone_number']);
         $orderReturn->setCustomerIp($options['customer_ip']);
+        $orderReturn->setCustomerNumber($options['customer_number']);
 
         return $orderReturn;
     }
@@ -108,6 +109,9 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
                 return (string) $this->faker->phoneNumber;
             })
             ->setAllowedTypes('phone_number', 'string')
+
+            ->setRequired('customer_number')
+            ->setAllowedTypes('customer_number', 'integer')
         ;
     }
 }
