@@ -2,25 +2,25 @@
     "name": "madcoders/sylius-rma-plugin",
     "type": "sylius-plugin",
     "description": "RMA Plugin",
+    "license": "EUPL-1.2",
     "authors": [
         {
             "name": "Piotr Lewandowski",
             "email": "p.lewandowski@madcoders.pl",
-            "homepage": "https://www.madcoders.pl",
-            "role": "Developer"
+            "homepage": "https://www.madcoders.co",
+            "role": "Architect & Developer"
         },
         {
             "name": "Leonid Moshko",
             "email": "l.moshko@madcoders.pl",
-            "homepage": "https://www.madcoders.pl",
-            "role": "Developer"
+            "homepage": "https://www.madcoders.co",
+            "role": "Architect & Developer"
         }
-     ],
+    ],
     "keywords": [
         "sylius",
         "sylius-plugin"
     ],
-    "license": "proprietary",
     "require": {
         "php": "^7.3",
         "knplabs/knp-snappy-bundle": "^1.8",
