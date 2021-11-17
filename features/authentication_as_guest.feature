@@ -19,7 +19,7 @@ Feature: Guest user can be granted with access to order he owns
     @ui @email @todo
     Scenario: As guest customer I am able to see auth code page when I give correct order number
         Given I am on RMA start page
-        When I enter "000001" in order number input filed
+        When I enter number of latest order in order number input filed
         And I submit the form
         Then I should be redirected to auth code page
         And I see single success message containing text "We have send verification code to your e-mail associated with the order"
