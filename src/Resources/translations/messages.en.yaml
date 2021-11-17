@@ -1,5 +1,7 @@
 madcoders_rma:
     ui:
+        order_return_reasons: 'Order return reasons'
+        return_reason_list: 'Order return reasons'
         return:
             session_not_valid: 'Your session has expired'
         action:
@@ -93,6 +95,7 @@ madcoders_rma:
             return_form_created: 'Return form has been created'
             print_order_return_form: 'Print return form'
             order_return_instruction: 'Please print and sign generated form. The form must be attached to the return parcel'
+            configuration_updated: 'Configuration updated'
 
     admin:
         flashes:
