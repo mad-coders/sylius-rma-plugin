@@ -42,8 +42,6 @@
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\ReturnAddressContext">
             <argument type="service" id="sylius.repository.channel" />
             <argument type="service" id="madcoders_rma.repository.madcoders_rma_configuration" />
-<!--            <argument type="service" id="sylius.behat.shared_stchanorage" />-->
-<!--            <argument type="service" id="madcoders_rma.repository.order_return_reason" />-->
         </service>
 
         <service id="madcoders.rma.context.ui.shop.welcome"
@@ -58,6 +56,13 @@
             <argument type="service" id="madcoders_rma.repository.authcode" />
             <argument type="service" id="sylius.behat.email_checker" />
             <argument type="service" id="translator" />
+        </service>
+
+        <service id="madcoders.rma.context.ui.shop.rma.customer_area"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\CustomerAreaContext">
+            <argument type="service" id="madcoders.rma.page.admin.rma.dashboard" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.account_area.order.index" />
+            <argument type="service" id="madcoders.rma.page.admin.rma.account_area.order.show" />
         </service>
 
         <service id="madcoders.rma.context.ui.shop.rma.return_form"
@@ -117,7 +122,7 @@
         <service id="madcoders.rma.context.ui.admin.rma.managing_address_configuration"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\AddressConfigurationContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.address_configuration" />
-            <argument type="service" id="sylius.behat.notification_checker" />
+            <argument type="service" id="sylius.repository.channel" />
         </service>
 
         <!-- pages -->
@@ -192,6 +197,22 @@
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\AddressConfiguration\UpdatePage"
                  parent="sylius.behat.page.admin.crud.update" public="false">
             <argument type="string">madcoders_rma_admin_order_return_config_edit</argument>
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.dashboard"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\DashboardPage"
+                 parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.admin.rma.account_area.order.index"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\OrderIndexPage"
+                 parent="sylius.behat.symfony_page" public="false" >
+            <argument type="service" id="sylius.behat.table_accessor" />
+        </service>
+
+        <service id="madcoders.rma.page.admin.rma.account_area.order.show"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\OrderShowPage"
+                 parent="sylius.behat.symfony_page" public="false">
+            <argument type="service" id="sylius.behat.table_accessor" />
         </service>
 
         <service id="madcoders.rma.page.shop.credits"

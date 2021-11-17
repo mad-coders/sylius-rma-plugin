@@ -13,7 +13,7 @@
                 {{ form_row(channelForm._token) }}
             </div>
             <br/>
-            <button type="submit" class="ui large primary submit button"
+            <button type="submit" class="ui large primary submit button" id="sylius_change_channel_button"
                     {{ sylius_test_html_attribute('rma-admin-config-change-channel-button') }}>
                 {{ 'madcoders_rma.ui.change_channel_button'|trans }}
             </button>
@@ -36,7 +36,7 @@
 
             {{ form_row(addressFormToSelectedChannel._token) }}
             <br/>
-            <button type="submit" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>
+            <button type="submit" id="sylius_save_changes_button" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>
                 {{ 'madcoders_rma.ui.continue_button'|trans }}
             </button>
 

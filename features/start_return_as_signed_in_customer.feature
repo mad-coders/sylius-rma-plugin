@@ -25,9 +25,5 @@ Feature: Submitting return form as guest
             And this order has already been shipped
             And the order's state is "fulfilled"
 
-        @ui
-        Scenario: I can create return form as signed in customer by "Order History" from customer board
-            Given I am on order return page for latest order
-
-        @ui
+        @ui @todo
         Scenario: I can submit return form as signed in customer by "Your order returns" from customer board

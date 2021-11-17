@@ -52,11 +52,10 @@ class ReturnContext implements Context
         $orderReturn->setReturnNumber($orderReturnNumber);
         $orderReturn->setOrderReturnStatus($orderReturnStatus);
         $orderReturn->setOrderNumber($order->getNumber());
+        $orderReturn->setCustomerNumber((string)$order->getCustomer()->getId());
         $orderReturn->setCustomerEmail($order->getCustomer()->getEmail());
         $orderReturn->setChannelCode($order->getChannel()->getCode());
         $orderReturn->setReturnReason($this->getReturnReasonCode());
-
-
 
         $this->returnRepository->add($orderReturn);
     }
