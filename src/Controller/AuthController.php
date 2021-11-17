@@ -67,7 +67,7 @@ final class AuthController
 
     public function __construct(
         FormFactoryInterface $formFactory,
-        EngineInterface $templatingEngine,
+        Environment $templatingEngine,
         RouterInterface $router,
         AuthCodeEmailSenderInterface $authCodeEmailSender,
         TranslatorInterface $translator,
