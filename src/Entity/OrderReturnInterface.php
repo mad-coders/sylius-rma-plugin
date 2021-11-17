@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
-interface OrderReturnInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+interface OrderReturnInterface extends ResourceInterface
 {
     const STATUS_DRAFT = 'draft';
     const STATUS_NEW = 'new';

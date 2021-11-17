@@ -22,6 +22,7 @@
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.return_number_generator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.max_qty_calculator" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
         </service>
 
