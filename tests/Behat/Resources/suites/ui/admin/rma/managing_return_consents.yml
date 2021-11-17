@@ -1,26 +1,37 @@
+#
+# This file is part of package:
+# Sylius RMA Plugin
+#
+# @copyright MADCODERS Team (www.madcoders.co)
+# @licence For the full copyright and license information, please view the LICENSE
+#
+# Architects of this package:
+# @author Leonid Moshko <l.moshko@madcoders.pl>
+# @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+#
 default:
-  suites:
-    madcoders_rma_managing_return_consents:
-      contexts:
-        # hook
-        - sylius.behat.context.hook.doctrine_orm
-        - sylius.behat.context.hook.email_spool
+    suites:
+        madcoders_rma_managing_return_consents:
+            contexts:
+                # hook
+                - sylius.behat.context.hook.doctrine_orm
+                - sylius.behat.context.hook.email_spool
 
-        # setup
-        - sylius.behat.context.setup.channel
-        - sylius.behat.context.setup.admin_security
-        - sylius.behat.context.setup.shop_security
-        - madcoders.rma.context.setup.return_consent
+                # setup
+                - sylius.behat.context.setup.channel
+                - sylius.behat.context.setup.admin_security
+                - sylius.behat.context.setup.shop_security
+                - madcoders.rma.context.setup.return_consent
 
-        # transformers
-        - sylius.behat.context.transform.channel
-        - sylius.behat.context.transform.shared_storage
-        - sylius.behat.context.transform.lexical
-        - sylius.behat.context.transform.shipping_method
+                # transformers
+                - sylius.behat.context.transform.channel
+                - sylius.behat.context.transform.shared_storage
+                - sylius.behat.context.transform.lexical
+                - sylius.behat.context.transform.shipping_method
 
-        # ui
-        - sylius.behat.context.ui.admin.notification
-        - madcoders.rma.context.ui.admin.rma.managing_return_consent
+                # ui
+                - sylius.behat.context.ui.admin.notification
+                - madcoders.rma.context.ui.admin.rma.managing_return_consent
 
-      filters:
-        tags: "@managing_return_consents && @ui"
+            filters:
+                tags: "@managing_return_consents && @ui"
