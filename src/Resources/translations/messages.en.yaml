@@ -1,5 +1,7 @@
 madcoders_rma:
     ui:
+        return:
+            session_not_valid: 'Your session has expired'
         action:
             create_new_return: 'Return'
             submit_return_form: 'Submit return form'
