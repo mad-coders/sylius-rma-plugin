@@ -18,12 +18,13 @@ use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
@@ -32,7 +33,7 @@ use Twig\Environment;
 use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
 use Exception;
 
-final class AuthController extends AbstractController
+final class AuthController
 {
     /** @var FormFactoryInterface */
     private $formFactory;
@@ -61,6 +62,9 @@ final class AuthController extends AbstractController
     /** @var AuthorizationCheckerInterface  */
     private $authorizationChecker;
 
+    /** @var RepositoryInterface  */
+    private $authCodeRepository;
+
     public function __construct(
         FormFactoryInterface $formFactory,
         EngineInterface $templatingEngine,
@@ -70,7 +74,8 @@ final class AuthController extends AbstractController
         OrderReturnAuthorizerInterface $orderReturnAuthorizer,
         OrderByNumberProviderInterface $orderByNumberProvider,
         AuthCodeFactoryInterface $authCodeFactory,
-        AuthorizationCheckerInterface $authorizationChecker
+        AuthorizationCheckerInterface $authorizationChecker,
+        RepositoryInterface $authCodeRepository
     )
     {
         $this->formFactory = $formFactory;
@@ -82,6 +87,7 @@ final class AuthController extends AbstractController
         $this->orderByNumberProvider = $orderByNumberProvider;
         $this->authCodeFactory = $authCodeFactory;
         $this->authorizationChecker = $authorizationChecker;
+        $this->authCodeRepository = $authCodeRepository;
     }
 
     public function start(Request $request, string $template): Response
@@ -177,13 +183,9 @@ final class AuthController extends AbstractController
             throw new \InvalidArgumentException('$redirectErrorRoute has not been configured properly');
         }
 
-        // TODO: inject repository instead
-        $authData = $this->getDoctrine()
-            ->getRepository(AuthCode::class)
-            ->findOneBy(array('hash' => $code));
-
+        $authData = $this->authCodeRepository->findOneBy(array('hash' => $code));
         if (!$authData instanceof AuthCodeInterface) {
-            $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
+            throw new NotFoundHttpException(sprintf('Auth code %s has not been found', $code));
         }
 
         // TODO: needs to be shorten
@@ -228,8 +230,7 @@ final class AuthController extends AbstractController
 
             // this is error handling
             $authData->increaseNumberOfAttempts();
-            $this->getDoctrine()->getManager()->persist($authData);
-            $this->getDoctrine()->getManager()->flush();
+            $this->authCodeRepository->add($authData);
 
             if ($authData->getAttempts() >= AuthCode::DEFAULT_MAX_ATTEMPTS) {
                 $errorMessage = $this->getSyliusAttribute(

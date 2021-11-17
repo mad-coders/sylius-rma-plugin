@@ -14,6 +14,7 @@
             <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="madcoders.sylius_rma_plugin.auth_code.factory" />
             <argument type="service" id="security.authorization_checker" />
+            <argument type="service" id="madcoders_rma.repository.authcode" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.return_controller"
