@@ -7,13 +7,14 @@
                  class="Madcoders\SyliusRmaPlugin\Controller\AuthController">
             <argument type="service" id="form.factory" />
             <argument type="service" id="twig" />
-            <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
-            <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_email_sender" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.authcode_channel_aware_email_sender" />
             <argument type="service" id="translator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
             <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
-            <argument type="service" id="session" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.auth_code.factory" />
+            <argument type="service" id="security.authorization_checker" />
+            <argument type="service" id="madcoders_rma.repository.authcode" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.return_controller"

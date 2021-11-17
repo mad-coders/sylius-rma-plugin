@@ -1,9 +1,21 @@
+{#
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+#}
+
 {% block subject %}
     {{ 'madcoders_rma.email.order_return_auth_email.subject'|trans }}
 {% endblock %}
 
 {% block body %}
-    {% set url = channel.hostname is not null ? 'https://' ~ channel.hostname ~ path('madcoders_rma_verification', { 'code': code }) : url('madcoders_rma_verification', { 'code': code }) %}
+    {% set url = channel.hostname is not null ? 'https://' ~ channel.hostname ~ path('madcoders_rma_verification', { 'code': authCode.hash }) : url('madcoders_rma_verification', { 'code': authCode.hash }) %}
 
     {% autoescape %}
         Hello,<br>
@@ -11,7 +23,7 @@
 
         {# @todo add extension point: mail before content #}
 
-        {{ 'madcoders_rma.email.order_return_auth_email.auth_code_info'|trans({ '%auth_code%': authCodeInterface.authCode }) }}
+        {{ 'madcoders_rma.email.order_return_auth_email.auth_code_info'|trans({ '%auth_code%': authCode.authCode }) }}
         <a target="_blank" href="{{ url }}">{{ 'madcoders_rma.email.order_return_auth_email.verification_page'|trans }}</a>.
 
         {# @todo add extension point: mail after content #}

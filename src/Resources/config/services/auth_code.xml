@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="false"
+                  autoconfigure="false"
+                  autowire="false" />
+
+        <!-- auth code factory -->
+        <service id="madcoders.sylius_rma_plugin.auth_code.factory"
+                 class="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactory">
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeHashGeneratorInterface" />
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeSecretGeneratorInterface" />
+            <argument type="service" id="madcoders_rma.repository.authcode" />
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeExpiryDateCalculatorInterface" />
+        </service>
+
+        <!-- factory dependencies -->
+        <service id="madcoders.sylius_rma_plugin.auth_code.expiry_date_calculator"
+                 class="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeExpiryDateCalculator" />
+
+        <service id="madcoders.sylius_rma_plugin.auth_code.hash_generator"
+                 class="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeHashGenerator" />
+
+        <service id="madcoders.sylius_rma_plugin.auth_code.secret_generator"
+                 class="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeSecretGenerator" />
+
+
+        <!-- aliases -->
+        <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface"
+                 alias="madcoders.sylius_rma_plugin.auth_code.factory" />
+
+        <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeHashGeneratorInterface"
+                 alias="madcoders.sylius_rma_plugin.auth_code.hash_generator" />
+
+        <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeSecretGeneratorInterface"
+                 alias="madcoders.sylius_rma_plugin.auth_code.secret_generator" />
+
+        <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeExpiryDateCalculatorInterface"
+                 alias="madcoders.sylius_rma_plugin.auth_code.expiry_date_calculator" />
+    </services>
+</container>

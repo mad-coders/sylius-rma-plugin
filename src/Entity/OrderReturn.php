@@ -10,11 +10,10 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
 
-class OrderReturn implements OrderReturnInterface, ResourceInterface, TimestampableInterface
+class OrderReturn implements OrderReturnInterface, TimestampableInterface
 {
     use TimestampableTrait;
 

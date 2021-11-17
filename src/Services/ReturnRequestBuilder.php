@@ -7,6 +7,7 @@ namespace Madcoders\SyliusRmaPlugin\Services;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
+use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
@@ -29,22 +30,18 @@ class ReturnRequestBuilder
     /** @var MaxQtyCalculator */
     private $maxQtyCalculator;
 
+    /** @var OrderByNumberProviderInterface  */
+    private $orderByNumberProvider;
+
     /** @var RmaChangesLogger */
     private $changesLogger;
 
-    /**
-     * ReturnRequestBuilder constructor.
-     * @param OrderRepositoryInterface $orderRepository
-     * @param RepositoryInterface $orderReturnRepository
-     * @param ReturnNumberGenerator $orderReturnGenerator
-     * @param MaxQtyCalculator $maxQtyCalculator
-     * @param RmaChangesLogger $changesLogger
-     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         RepositoryInterface $orderReturnRepository,
         ReturnNumberGenerator $orderReturnGenerator,
         MaxQtyCalculator $maxQtyCalculator,
+        OrderByNumberProviderInterface $orderByNumberProvider,
         RmaChangesLogger $changesLogger
     )
     {
@@ -52,6 +49,7 @@ class ReturnRequestBuilder
         $this->orderReturnRepository = $orderReturnRepository;
         $this->orderReturnGenerator = $orderReturnGenerator;
         $this->maxQtyCalculator = $maxQtyCalculator;
+        $this->orderByNumberProvider = $orderByNumberProvider;
         $this->changesLogger = $changesLogger;
     }
 
@@ -62,13 +60,7 @@ class ReturnRequestBuilder
      */
     public function build(string $orderNumber): OrderReturnInterface
     {
-        // TODO: this can be replaced by orderLoader / provider or smth
-        $order = $this->orderRepository->findOneByNumber($orderNumber);
-
-        if (!$order) {
-            $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
-        }
-        // END
+        $order  = $this->orderByNumberProvider->findOneByNumber($orderNumber);
 
         if (!$order instanceof OrderInterface) {
             throw new Exception(sprintf('$order must implement %s interface', OrderInterface::class));

@@ -16,34 +16,30 @@ use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
-use Sylius\Component\Channel\Context\ChannelContextInterface;
-use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Core\Model\CustomerInterface;
+use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
 use Exception;
 
-final class AuthController extends AbstractController
+final class AuthController
 {
     /** @var FormFactoryInterface */
     private $formFactory;
 
     /** @var EngineInterface|Environment */
     private $templatingEngine;
-
-    /** @var ChannelContextInterface */
-    private $channelContext;
 
     /** @var RouterInterface */
     private $router;
@@ -60,40 +56,47 @@ final class AuthController extends AbstractController
     /** @var OrderByNumberProviderInterface */
     private $orderByNumberProvider;
 
-    /** @var SessionInterface */
-    private $session;
+    /** @var AuthCodeFactoryInterface  */
+    private $authCodeFactory;
+
+    /** @var AuthorizationCheckerInterface  */
+    private $authorizationChecker;
+
+    /** @var RepositoryInterface  */
+    private $authCodeRepository;
 
     public function __construct(
         FormFactoryInterface $formFactory,
-        $templatingEngine,
-        ChannelContextInterface $channelContext,
+        Environment $templatingEngine,
         RouterInterface $router,
         AuthCodeEmailSenderInterface $authCodeEmailSender,
         TranslatorInterface $translator,
         OrderReturnAuthorizerInterface $orderReturnAuthorizer,
         OrderByNumberProviderInterface $orderByNumberProvider,
-        SessionInterface $session
+        AuthCodeFactoryInterface $authCodeFactory,
+        AuthorizationCheckerInterface $authorizationChecker,
+        RepositoryInterface $authCodeRepository
     )
     {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
-        $this->channelContext = $channelContext;
         $this->router = $router;
         $this->authCodeEmailSender = $authCodeEmailSender;
         $this->translator = $translator;
         $this->orderReturnAuthorizer = $orderReturnAuthorizer;
         $this->orderByNumberProvider = $orderByNumberProvider;
-        $this->session = $session;
+        $this->authCodeFactory = $authCodeFactory;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->authCodeRepository = $authCodeRepository;
     }
 
     public function start(Request $request, string $template): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
         $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthStartType::class);
         $redirectToOrderReturnRoute = $this->getSyliusAttribute($request, 'redirect_to_order_return', 'madcoders_rma_return_form');
         $form = $this->formFactory->create($formType);
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        if ($request->isMethod(Request::METHOD_POST) && $form->handleRequest($request)->isValid()) {
 
             /** @var array $data */
             $data = $form->getData();
@@ -116,37 +119,12 @@ final class AuthController extends AbstractController
             }
 
             // redirect forward if access is already granted
-            if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
                 return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, [ 'orderNumber' => $order->getNumber() ]));
             }
 
-            /** @var CustomerInterface $customer */
-            $customer = $order->getCustomer();
-            $customerEmail = $customer->getEmail();
-
-            // TODO: auth code generator
-            $authCode = mt_rand(100000, 999999);
-
-            // TODO: $hash should be generated by AuthCodeHashGenerator class
-            $hash = hash('sha256', $orderNumber.time());
-
-            $startDate =  new \DateTime();
-            $dateInterval = new \DateInterval('PT5M');
-
-            $authCodeData = new AuthCode();
-            $authCodeData->setOrderNumber($orderNumber);
-            $authCodeData->setAuthCode($authCode);
-            $authCodeData->setHash($hash);
-            $authCodeData->setExpiresAt($startDate->add($dateInterval));
-
-            $entityManager->persist($authCodeData);
-
-            /** @var ChannelInterface $channelVariable */
-            $channel = $this->channelContext->getChannel();
-
-            $this->authCodeEmailSender->sendAuthCodeEmail($authCodeData, $channel, $hash, $customerEmail);
-
-            $entityManager->flush();
+            $authCode = $this->authCodeFactory->createForOrder($order);
+            $this->authCodeEmailSender->sendAuthCodeEmail($authCode, $order);
 
             $successMessage = $this->getSyliusAttribute(
                 $request,
@@ -161,7 +139,7 @@ final class AuthController extends AbstractController
             $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
 
             if ($redirectRoute) {
-                return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $hash]));
+                return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $authCode->getHash()]));
             }
 
             return $this->errorRedirect($request, 'madcoders_rma.ui.first_step.error.order_number_not_valid');
@@ -205,13 +183,9 @@ final class AuthController extends AbstractController
             throw new \InvalidArgumentException('$redirectErrorRoute has not been configured properly');
         }
 
-        // TODO: inject repository instead
-        $authData = $this->getDoctrine()
-            ->getRepository(AuthCode::class)
-            ->findOneBy(array('hash' => $code));
-
+        $authData = $this->authCodeRepository->findOneBy(array('hash' => $code));
         if (!$authData instanceof AuthCodeInterface) {
-            $this->createNotFoundException(sprintf('Auth code %s has not been found', $code));
+            throw new NotFoundHttpException(sprintf('Auth code %s has not been found', $code));
         }
 
         // TODO: needs to be shorten
@@ -232,7 +206,7 @@ final class AuthController extends AbstractController
         $order = $this->orderByNumberProvider->findOneByNumber($authData->getOrderNumber());
 
         // redirect forward if access is already granted
-        if ($this->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+        if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
             return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $order->getNumber() ]));
         }
 
@@ -256,8 +230,7 @@ final class AuthController extends AbstractController
 
             // this is error handling
             $authData->increaseNumberOfAttempts();
-            $this->getDoctrine()->getManager()->persist($authData);
-            $this->getDoctrine()->getManager()->flush();
+            $this->authCodeRepository->add($authData);
 
             if ($authData->getAttempts() >= AuthCode::DEFAULT_MAX_ATTEMPTS) {
                 $errorMessage = $this->getSyliusAttribute(
