@@ -79,7 +79,8 @@ Architects of this package:
 
         <service id="madcoders.rma.context.ui.shop.rma.return_form"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\ReturnFormContext">
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="session.factory" on-invalid="null" />
             <argument type="service" id="sylius.behat.cookie_setter" />
             <argument type="service" id="madcoders.rma.page.shop.rma.return_form" />
             <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
