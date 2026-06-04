@@ -42,7 +42,7 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies
@@ -76,7 +76,7 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies
@@ -127,7 +127,7 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies

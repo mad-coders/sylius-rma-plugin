@@ -28,7 +28,11 @@ the Sylius plugin CI but driven through this project's **Make targets**.
     3307, root password `rma`) so `tests/Application/.env` and the Make targets work unchanged.
 - Triggers: pushes to release branches (`1.0`, `1.1`, ...), all pull requests, and manual
   dispatch; in-progress runs for the same ref are cancelled.
-- Composer downloads are cached; Behat logs (`etc/build/`) are uploaded on failure.
+- `composer.lock` is committed so CI installs the exact, known-good dependency set
+  (`composer install` from the lock). Without it, CI does a full `composer update`, which a
+  modern Composer rejects because Sylius 1.12's transitive `api-platform/core ^2.6` carries
+  security advisories. Composer downloads are cached on the lock hash; Behat logs
+  (`etc/build/`) are uploaded on failure.
 - A new `make backend-test` target creates the **test-environment** database/schema (the
   existing `make backend` targets the dev database), filling a gap the Behat/CI flow needed.
 

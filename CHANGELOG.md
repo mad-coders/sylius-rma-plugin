@@ -27,6 +27,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 - GitHub Actions CI (`.github/workflows/ci.yml`): static analysis, unit tests, and the
   non-JavaScript Behat suite, driven through the Make targets.
 - `make backend-test` target to create the test-environment database/schema.
+- Commit `composer.lock` for deterministic, reproducible CI installs.
 
 ### Removed
 
