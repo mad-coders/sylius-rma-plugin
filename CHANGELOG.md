@@ -13,8 +13,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 - Upgrade the plugin to Sylius `~1.12`, PHP `^8.2`, and Symfony `^6.4` (from Sylius
   `~1.8 || ~1.9`). Migrated the bundled test application to the Sylius 1.12 configuration.
+- Return-form PDF generation is now **opt-in and off by default**
+  (`madcoders_rma.return_form_pdf_enabled`): the confirmation email is sent without the PDF
+  attachment and the print/download endpoints and links are disabled unless enabled. Removes the
+  hard dependency on `wkhtmltopdf` from the default and CI paths.
 
 ### Added
+
+- `madcoders_rma.return_form_pdf_enabled` feature flag (default `false`) gating all return-form
+  PDF generation; exposed to templates via the Twig function
+  `madcoders_rma_return_form_pdf_enabled()`.
 
 - Make-based development workflow (`Makefile`) wrapping setup, tests, and static analysis.
 - `make serve-test` target serving the test app in the `test` environment on

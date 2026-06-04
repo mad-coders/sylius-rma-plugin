@@ -55,6 +55,10 @@ final class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->booleanNode('return_form_pdf_enabled')
+                    ->info('When false (default), the return-form PDF is not generated: the confirmation email is sent without it and the print/download endpoints and links are disabled. Enable to generate PDFs (requires wkhtmltopdf).')
+                    ->defaultFalse()
+                ->end()
                 ->arrayNode('resources')
                     ->addDefaultsIfNotSet()
                     ->children()

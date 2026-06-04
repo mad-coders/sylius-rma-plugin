@@ -35,6 +35,8 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
 
         $this->registerResources('madcoders_rma', 'doctrine/orm', $config['resources'], $container);
 
+        $container->setParameter('madcoders_rma.return_form_pdf_enabled', (bool) $config['return_form_pdf_enabled']);
+
         $loader->load('services.xml');
     }
 

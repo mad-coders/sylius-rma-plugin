@@ -76,6 +76,9 @@ final class ShopManagementController extends AbstractController
     /** @var RmaVerificationPossibilityOfReturn */
     private $verificationPossibilityOfReturn;
 
+    /** @var bool */
+    private $returnFormPdfEnabled;
+
     /**
      * ShopManagementController constructor.
      *
@@ -94,6 +97,7 @@ final class ShopManagementController extends AbstractController
         OrderRepository $orderRepository,
         TranslatorInterface $translator,
         RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        bool $returnFormPdfEnabled = false,
     ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
@@ -107,6 +111,7 @@ final class ShopManagementController extends AbstractController
         $this->orderRepository = $orderRepository;
         $this->translator = $translator;
         $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
+        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**
@@ -158,6 +163,10 @@ final class ShopManagementController extends AbstractController
 
     public function printAction(Request $request, string $returnNumber): Response
     {
+        if (!$this->returnFormPdfEnabled) {
+            return $this->errorRedirect($request, 'madcoders_rma.ui.return.pdf_disabled');
+        }
+
         /** @var ShopUserInterface|null $customer */
         $customer = $this->tokenStorage->getToken()->getUser();
         if (!$customer) {

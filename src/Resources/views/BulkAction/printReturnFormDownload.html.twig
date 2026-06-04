@@ -2,7 +2,7 @@
 
 {% set path = options.link.url|default(path(options.link.route, options.link.parameters|default({}))) %}
 
-{% if data.orderReturnStatus == 'new' %}
+{% if madcoders_rma_return_form_pdf_enabled() and data.orderReturnStatus == 'new' %}
 
     {{ buttons.default(path, action.label, true, 'print', 'primary') }}
 

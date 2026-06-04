@@ -95,6 +95,9 @@ final class ReturnController extends AbstractController
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var bool */
+    private $returnFormPdfEnabled;
+
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
@@ -111,6 +114,7 @@ final class ReturnController extends AbstractController
         OrderByNumberProviderInterface $orderByNumberProvider,
         TranslatorInterface $translator,
         ManagerRegistry $managerRegistry,
+        bool $returnFormPdfEnabled = false,
     ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
@@ -127,6 +131,7 @@ final class ReturnController extends AbstractController
         $this->orderByNumberProvider = $orderByNumberProvider;
         $this->translator = $translator;
         $this->managerRegistry = $managerRegistry;
+        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**
@@ -294,6 +299,10 @@ final class ReturnController extends AbstractController
 
     public function printIndex(Request $request): Response
     {
+        if (!$this->returnFormPdfEnabled) {
+            return $this->createPdfDisabledResponse($request);
+        }
+
         if (!$returnNumber = (string) $this->requestStack->getSession()->get('madcoders_rma_allowed_order_return')) {
             return $this->createMissingOrderNumberResponse($request);
         }
@@ -338,6 +347,15 @@ final class ReturnController extends AbstractController
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('error', $errorMessage);
+
+        return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+    }
+
+    private function createPdfDisabledResponse(Request $request): RedirectResponse
+    {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $this->translator->trans('madcoders_rma.ui.return.pdf_disabled'));
 
         return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }

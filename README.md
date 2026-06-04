@@ -49,6 +49,19 @@ madcoders_sylius_rma_plugin:
 php bin/console doctrine:migrations:migrate
 ```
 
+### Optional: enable the return-form PDF
+
+PDF generation (the confirmation-email attachment and the print/download links) is **off by
+default** and requires a working [wkhtmltopdf](https://wkhtmltopdf.org/) binary. To enable it:
+
+```yaml
+# config/packages/madcoders_rma.yaml
+madcoders_rma:
+    return_form_pdf_enabled: true
+```
+
+See [ADR 0011](docs/adr-log/0011-return-form-pdf-feature-flag.md).
+
 ## Development
 
 Requires PHP 8.2, Composer, Docker (for the database) and Node/Yarn (for the test
