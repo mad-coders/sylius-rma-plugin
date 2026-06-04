@@ -1,3 +1,47 @@
+# UPGRADE TO Sylius 1.12 (PHP 8.2 / Symfony 6.4)
+
+This release moves the plugin to Sylius 1.12 on PHP 8.2 and Symfony 6.4.
+
+### Platform requirements
+
+- PHP `^8.2`
+- Sylius `~1.12.0`
+- Symfony `^6.4`
+
+### Composer
+
+- `composer require sylius/sylius:~1.12.0`
+- The previous `conflict` on `api-platform/core` was removed (Sylius 1.12 requires it).
+- The legacy admin API stack (`friendsofsymfony/oauth-server-bundle`,
+  `SyliusAdminApiBundle`) is gone in 1.12; it has been removed from the plugin and its
+  test application.
+- Tooling was bumped: PHPStan `^2.0` (with `phpstan-baseline.neon`),
+  `sylius-labs/coding-standard` `^4.0` (ECS config is now `ecs.php`).
+
+### Code changes required by Symfony 6
+
+- `Voter::supports()` / `voteOnAttribute()` now use typed signatures
+  (`string $attribute, mixed $subject): bool`).
+- `UserInterface::getUsername()` was replaced by `getUserIdentifier()`.
+- The removed `session` service is replaced by `RequestStack`; services that need the
+  session now inject `request_stack` and call `getSession()`.
+- `AbstractController::getDoctrine()` was removed; controllers inject `ManagerRegistry`
+  (the `doctrine` service) instead.
+
+### Test application
+
+The `tests/Application` skeleton was regenerated from Sylius-Standard 1.12 (new Kernel,
+security config, `symfony/mailer` + `symfony/messenger`, Webpack Encore). A
+`docker-compose.yml` provides MySQL 8 (host port 3307) and headless Chrome for the Behat
+JavaScript suite. See `AGENTS.md` and `Makefile` for run commands.
+
+#### Schema update
+
+Run `(cd tests/Application && APP_ENV=test bin/console doctrine:schema:create)` (or
+`doctrine:schema:update --force`) to (re)create the test application's database schema.
+
+---
+
 # UPGRADE FROM `v1.3.X` TO `v1.4.0`
 
 First step is upgrading Sylius with composer

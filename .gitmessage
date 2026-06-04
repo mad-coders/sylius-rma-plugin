@@ -1,0 +1,21 @@
+# <type>(<scope>): <subject>   (<= ~72 chars, imperative, no trailing period)
+#
+# <blank line>
+# <body: what & why, not how; wrap at ~72 chars>
+#
+# <blank line>
+# <footer: BREAKING CHANGE: ..., Refs: #123, etc.>
+#
+# --- Conventional Commits 1.0.0 -------------------------------------------------
+# type:   feat | fix | docs | refactor | test | build | ci | chore | perf | style | revert
+# scope:  optional, free-form area, e.g. (return), (auth), (admin), (deps)
+# break:  add "!" after type/scope (feat!: ...) and/or a "BREAKING CHANGE:" footer
+#
+# Examples:
+#   feat(return): add bulk cancel action to the admin grid
+#   fix(auth): reject expired auth codes
+#   build: upgrade dependencies for Sylius 1.12
+#   docs: document the commit convention
+#
+# Record notable changes in CHANGELOG.md under [Unreleased].
+# See docs/adr-log/0009-conventional-commits.md
