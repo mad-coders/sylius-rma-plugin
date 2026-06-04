@@ -1,70 +1,61 @@
 definitions:
     services:
         mysql:
-            image: mysql:5.7
+            image: mysql:8.0
             variables:
                 MYSQL_DATABASE: sylius_test
                 MYSQL_ROOT_PASSWORD: root
-
-image: php:7.3
-pipelines:
-    default:
-        - step:
-              name: "Unit and component tests"
+    steps:
+        - step: &setup
+              name: "Install dependencies"
+              image: php:8.2
               caches:
                   - composer
               script:
-                  - apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev git zip
+                  - apt-get update && apt-get install -y git unzip libicu-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+                  - docker-php-ext-configure gd --with-freetype --with-jpeg
+                  - docker-php-ext-install -j$(nproc) intl pdo_mysql zip gd
                   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-                  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --ignore-platform-reqs
-                  - php vendor/bin/phpunit -c phpunit.xml.dist
-#        - step:
-#              name: "Behat scenarios"
-#              services:
-#                  - mysql
-#              caches:
-#                  - composer
-#              script:
-#                  - >
-#                      set -ex
-#
-#                      mkdir -p public/media/image
-#
-#                      export APP_ENV=test
-#                      export DATABASE_URL=mysql://root:root@localhost:3306/sylius_test
-#
-#                      (cd tests/Application && APP_ENV=test php bin/console doctrine:schema:update --force --no-interaction -v)
-#                      (cd tests/Application && symfony serve --port=8080 --no-tls -d)
-#
-#                  - >
-#                        google-chrome-stable --headless \
-#                                            --no-sandbox \
-#                                            --disable-gpu \
-#                                            --no-default-browser-check \
-#                                            --remote-debugging-port=9222 \
-#                                            --remote-debugging-address=127.0.0.1 \
-#                                            --user-data-dir=/tmp/chrome-data \
-#                                            --enable-automation \
-#                                            --disable-background-networking \
-#                                            --no-first-run \
-#                                            --disable-popup-blocking \
-#                                            --disable-default-apps \
-#                                            --allow-insecure-localhost \
-#                                            --disable-translate \
-#                                            --disable-extensions \
-#                                            --enable-features=Metal \
-#                                            --window-size=1920,1080 \
-#                                            --proxy-server='direct://' \
-#                                            --proxy-bypass-list='*' \
-#                                            --ignore-certificate-errors \
-#                                            http://127.0.0.1:8080/ &
-#        - step:
-#              name: "Static analysis"
-#              caches:
-#                  - composer
-#              script:
-#                  - apt-get update && apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev git zip
-#                  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-#                  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-scripts --ignore-platform-reqs
-#                  - php vendor/bin/phpstan analyse -c phpstan.neon -l max src/
-#                  - php vendor/bin/psalm
+                  - COMPOSER_MEMORY_LIMIT=-1 composer install --no-interaction --no-scripts
+              artifacts:
+                  - vendor/**
+                  - tests/Application/**
+
+image: php:8.2
+
+pipelines:
+    default:
+        - step:
+              <<: *setup
+        - parallel:
+              - step:
+                    name: "Unit and component tests"
+                    image: php:8.2
+                    caches:
+                        - composer
+                    script:
+                        - php vendor/bin/phpunit -c phpunit.xml.dist
+              - step:
+                    name: "Static analysis"
+                    image: php:8.2
+                    caches:
+                        - composer
+                    script:
+                        - php vendor/bin/phpstan analyse -c phpstan.neon
+                        - php vendor/bin/ecs check src
+        - step:
+              name: "Behat scenarios (non-JS)"
+              image: php:8.2
+              services:
+                  - mysql
+              caches:
+                  - composer
+              script:
+                  - apt-get update && apt-get install -y libicu-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+                  - docker-php-ext-configure gd --with-freetype --with-jpeg
+                  - docker-php-ext-install -j$(nproc) intl pdo_mysql zip gd
+                  - export APP_ENV=test
+                  - export DATABASE_URL=mysql://root:root@127.0.0.1:3306/sylius_test?serverVersion=8.0
+                  - (cd tests/Application && APP_ENV=test bin/console doctrine:database:create --if-not-exists --no-interaction)
+                  - (cd tests/Application && APP_ENV=test bin/console doctrine:schema:create --no-interaction)
+                  - vendor/bin/behat --strict --no-interaction --tags="~@javascript"
