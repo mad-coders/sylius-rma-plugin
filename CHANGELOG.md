@@ -27,8 +27,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 - GitHub Actions CI (`.github/workflows/ci.yml`): static analysis, unit tests, and the
   non-JavaScript Behat suite, driven through the Make targets.
 - `make backend-test` target to create the test-environment database/schema.
-- Ignore the unavoidable `api-platform/core` security advisory for CI installs
-  (`config.policy.advisories.ignore`), required by the Sylius 1.12 dependency tree.
+- Ignore the unavoidable `api-platform/core` and `enshrined/svg-sanitize` security advisories
+  for CI installs (`config.policy.advisories.ignore`); both are pinned with no advisory-free
+  version by the Sylius 1.12 dependency tree.
 
 ### Removed
 

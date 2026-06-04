@@ -30,9 +30,10 @@ the Sylius plugin CI but driven through this project's **Make targets**.
   dispatch; in-progress runs for the same ref are cancelled.
 - CI resolves dependencies with `composer update` (the plugin keeps `composer.lock` gitignored,
   per library/plugin convention). A modern Composer blocks Sylius 1.12's unavoidable transitive
-  `api-platform/core ^2.6` because it carries security advisories, so `composer.json` sets
-  `config.policy.advisories.ignore: ["api-platform/core"]` - a scoped opt-out that keeps advisory
-  blocking on for every other package. (`config` is root-only, so it affects only this repo's
+  dependencies (`api-platform/core ^2.6`, `enshrined/svg-sanitize ^0.15.4||^0.16`) because they
+  carry security advisories with no advisory-free version in range, so `composer.json` sets
+  `config.policy.advisories.ignore: ["api-platform/core", "enshrined/svg-sanitize"]` - a scoped
+  opt-out that keeps advisory blocking on for every other package. (`config` is root-only, so it affects only this repo's
   CI/dev installs, never downstream consumers.) Composer downloads are cached on the
   `composer.json` hash; Behat logs (`etc/build/`) are uploaded on failure.
 - A new `make backend-test` target creates the **test-environment** database/schema (the
