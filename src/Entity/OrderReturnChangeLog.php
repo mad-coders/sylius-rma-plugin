@@ -39,55 +39,46 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
     /** @var OrderReturnChangeLogAuthor */
     private $author;
 
-    /** @return int */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /** @return string */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /** @param string $type */
     public function setType(string $type): void
     {
         $this->type = $type;
     }
 
-    /** @return string */
     public function getNote(): string
     {
         return $this->note;
     }
 
-    /** @param string $note */
     public function setNote(string $note): void
     {
         $this->note = $note;
     }
 
-    /** @return string */
     public function getReturnNumber(): string
     {
         return $this->returnNumber;
     }
 
-    /** @param string $returnNumber */
     public function setReturnNumber(string $returnNumber): void
     {
         $this->returnNumber = $returnNumber;
     }
 
-    /** @return OrderReturnChangeLogAuthor */
     public function getAuthor(): OrderReturnChangeLogAuthor
     {
         return $this->author;
     }
 
-    /** @param OrderReturnChangeLogAuthor $author */
     public function setAuthor(OrderReturnChangeLogAuthor $author): void
     {
         $this->author = $author;

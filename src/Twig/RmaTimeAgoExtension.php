@@ -21,7 +21,7 @@ use Twig\TwigFunction;
 
 class RmaTimeAgoExtension extends AbstractExtension
 {
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [
@@ -34,22 +34,25 @@ class RmaTimeAgoExtension extends AbstractExtension
         $nowDate = new \DateTime();
         $diff = $nowDate->getTimestamp() - $date->getTimestamp() + 1;
 
-        $units = array (
+        $units = [
             31536000 => 'year',
             2592000 => 'month',
             604800 => 'week',
             86400 => 'day',
             3600 => 'hour',
             60 => 'minute',
-            1 => 'second'
-        );
+            1 => 'second',
+        ];
 
         foreach ($units as $unit => $val) {
-            if ($diff < $unit) continue;
+            if ($diff < $unit) {
+                continue;
+            }
             $numberOfUnits = floor($diff / $unit);
-            return ($val == 'second')? 'a few seconds ago' :
-                (($numberOfUnits>1) ? $numberOfUnits : 'a')
-                .' '.$val.(($numberOfUnits>1) ? 's' : '').' ago';
+
+            return ($val == 'second') ? 'a few seconds ago' :
+                (($numberOfUnits > 1) ? $numberOfUnits : 'a')
+                . ' ' . $val . (($numberOfUnits > 1) ? 's' : '') . ' ago';
         }
 
         return 'N/A';

@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Security;
 
 use Sylius\Component\Core\Model\OrderInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
 {
@@ -31,7 +30,7 @@ class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
 
     public function isAllowed(OrderInterface $order): bool
     {
-         return $this->storage->exists($order->getNumber());
+        return $this->storage->exists($order->getNumber());
     }
 
     public function authorize(OrderInterface $order): void

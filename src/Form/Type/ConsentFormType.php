@@ -33,7 +33,7 @@ class ConsentFormType extends AbstractType
             ->add('code', HiddenType::class)
             ->add('consentRequire', HiddenType::class);
 
-        $callback = function(FormEvent $event): void {
+        $callback = function (FormEvent $event): void {
             $form = $event->getForm();
             $data = $event->getData();
 
@@ -46,12 +46,15 @@ class ConsentFormType extends AbstractType
                 $constraints[] = new IsTrue();
             }
 
-            $form->add('checked', CheckboxType::class, [
+            $form->add(
+                'checked',
+                CheckboxType::class,
+                [
                     'label_attr' => ['style' => 'margin-top: 7px'],
                     'label' => (string) $data['label'] ?: '-- missing --',
-                    'required' => (boolean) $data['consentRequire'] ?: false,
+                    'required' => (bool) $data['consentRequire'] ?: false,
                     'constraints' => $constraints,
-                ]
+                ],
             );
         };
 

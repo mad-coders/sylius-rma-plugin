@@ -28,7 +28,6 @@ final class ReturnConsentFormType extends AbstractType
 
     /**
      * ReturnConsentFormType constructor.
-     * @param $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -39,7 +38,7 @@ final class ReturnConsentFormType extends AbstractType
     {
         $builder
             ->add('consents', CollectionType::class, [
-                'label'    => false,
+                'label' => false,
                 'required' => true,
                 'entry_type' => ConsentFormType::class,
             ])

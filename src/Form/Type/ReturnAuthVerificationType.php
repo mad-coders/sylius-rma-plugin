@@ -27,12 +27,12 @@ final class ReturnAuthVerificationType extends AbstractType
     {
         $builder
             ->add('authCode', IntegerType::class, [
-                'label'       => 'madcoders_rma.ui.verification_step.enter_verification_code',
-                'required'    => true,
+                'label' => 'madcoders_rma.ui.verification_step.enter_verification_code',
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ]);
     }

@@ -16,8 +16,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
-use DateTime;
 use DateInterval;
+use DateTime;
 use Exception;
 
 final class AuthCodeExpiryDateCalculator implements AuthCodeExpiryDateCalculatorInterface

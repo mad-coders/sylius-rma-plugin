@@ -22,7 +22,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 final class OrderReturnItemFixture extends AbstractResourceFixture
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -30,7 +30,7 @@ final class OrderReturnItemFixture extends AbstractResourceFixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {

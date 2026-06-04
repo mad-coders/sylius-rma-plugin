@@ -28,14 +28,13 @@ class RmaOrderViewExtension extends AbstractExtension
 
     /**
      * RmaOrderViewExtension constructor.
-     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(OrderRepositoryInterface $orderRepository)
     {
         $this->orderRepository = $orderRepository;
     }
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [

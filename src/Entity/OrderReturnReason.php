@@ -28,9 +28,7 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface
         __construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
     }
-
     use ToggleableTrait;
-
     use TimestampableTrait;
 
     /** @var int */
@@ -120,20 +118,17 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface
         $this->getTranslation()->setSlug($slug);
     }
 
-    /** @return int|null */
     public function getDeadlineToReturn(): ?int
     {
         return $this->deadlineToReturn;
     }
 
-    /** @param int|null $deadlineToReturn */
     public function setDeadlineToReturn(?int $deadlineToReturn): void
     {
         $this->deadlineToReturn = $deadlineToReturn;
     }
 
     /**
-     * @param string|null $locale
      * @return OrderReturnReasonTranslationInterface
      */
     public function getTranslation(?string $locale = null): TranslationInterface

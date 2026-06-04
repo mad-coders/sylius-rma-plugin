@@ -28,9 +28,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
         __construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
     }
-
     use ToggleableTrait;
-
     use TimestampableTrait;
 
     /** @var int */
@@ -120,20 +118,17 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
         $this->getTranslation()->setSlug($slug);
     }
 
-    /** @return bool */
     public function isConsentRequire(): bool
     {
         return $this->consentRequire;
     }
 
-    /** @param bool $consentRequire */
     public function setConsentRequire(bool $consentRequire): void
     {
         $this->consentRequire = $consentRequire;
     }
 
     /**
-     * @param string|null $locale
      * @return OrderReturnConsentTranslationInterface
      */
     public function getTranslation(?string $locale = null): TranslationInterface

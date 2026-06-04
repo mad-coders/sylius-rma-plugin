@@ -15,16 +15,14 @@ use Symfony\Component\Security\Core\Security;
 /**
  * Sylius RMA Plugin by MADCODERS
  *
- * @copyright MADCODERS (www.madcoders.co)
  * @licence For the full copyright and license information, please view the LICENSE file
  *
  * Architects of this package:
- * @author Leonid Moshko <l.moshko@madcoders.pl>
- * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
  */
 class OrderReturnVoter extends Voter implements VoterInterface
 {
     public const ATTRIBUTE_RETURN = 'return';
+
     public const SUPPORTED_ATTRIBUTES = [self::ATTRIBUTE_RETURN];
 
     /** @var Security */
@@ -39,13 +37,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
         $this->orderReturnAuthenticator = $orderReturnAuthenticator;
     }
 
-    /**
-     * @param string $attribute
-     * @param mixed $subject
-     *
-     * @return bool
-     */
-    protected function supports($attribute, $subject)
+    protected function supports(string $attribute, mixed $subject): bool
     {
         if (!$subject instanceof OrderInterface) {
             return false;
@@ -58,14 +50,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
         return true;
     }
 
-    /**
-     * @param string $attribute
-     * @param mixed $subject
-     * @param TokenInterface $token
-     *
-     * @return bool
-     */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         if (!$subject instanceof OrderInterface) {
             return false;
@@ -78,7 +63,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
                 return false;
             }
 
-            return ($orderUser->getUsername() === $user->getUsername());
+            return $orderUser->getUserIdentifier() === $user->getUserIdentifier();
         }
 
         return $this->orderReturnAuthenticator->isAllowed($subject);

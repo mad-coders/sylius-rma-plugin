@@ -39,7 +39,7 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $options = []): OrderReturnConsentInterface
     {
@@ -56,9 +56,6 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
         return $orderReturnConsent;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver

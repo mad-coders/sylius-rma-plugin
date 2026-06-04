@@ -32,7 +32,7 @@ final class ReturnReasonTranslationType extends AbstractResourceType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.name.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('slug', TextType::class, [
@@ -40,7 +40,7 @@ final class ReturnReasonTranslationType extends AbstractResourceType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.slug.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('description', TextareaType::class, [

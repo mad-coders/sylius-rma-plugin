@@ -47,16 +47,16 @@ final class ReturnItemFormType extends AbstractType
             }
 
             $form->add('returnQty', NumberType::class, [
-                'attr'        => ['style' => 'max-width: 200px; display: block;'],
-                'label'       => false,
-                'required'    => true,
+                'attr' => ['style' => 'max-width: 200px; display: block;'],
+                'label' => false,
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
                     ]),
                     new LessThanOrEqual([
                         'value' => $returnItem->getMaxQty(),
-                        'message' => 'madcoders_rma.validator.return_qty_less_or_equal'
+                        'message' => 'madcoders_rma.validator.return_qty_less_or_equal',
                     ]),
                 ],
             ]);
@@ -64,11 +64,11 @@ final class ReturnItemFormType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class',  OrderReturnItem::class);
+        $resolver->setDefault('data_class', OrderReturnItem::class);
     }
 
     public function getBlockPrefix(): string

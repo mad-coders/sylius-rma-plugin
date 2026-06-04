@@ -45,89 +45,56 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
         $this->expiresAt = new \DateTime();
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getOrderNumber(): string
     {
         return $this->orderNumber;
     }
 
-    /**
-     * @param string $orderNumber
-     */
     public function setOrderNumber(string $orderNumber): void
     {
         $this->orderNumber = $orderNumber;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @param string $hash
-     */
     public function setHash(string $hash): void
     {
         $this->hash = $hash;
     }
 
-    /**
-     * @return int
-     */
     public function getAuthCode(): int
     {
         return $this->authCode;
     }
 
-    /**
-     * @param int $authCode
-     */
     public function setAuthCode(int $authCode): void
     {
         $this->authCode = $authCode;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
     public function getExpiresAt(): \DateTimeInterface
     {
         return $this->expiresAt;
     }
 
-    /**
-     * @param \DateTimeInterface $expiresAt
-     */
     public function setExpiresAt(\DateTimeInterface $expiresAt): void
     {
         $this->expiresAt = $expiresAt;
     }
 
-    /**
-     * @return int
-     */
     public function getAttempts(): int
     {
         return $this->attempts;
     }
 
-    /**
-     * @param int $attempts
-     */
     public function setAttempts(int $attempts): void
     {
         $this->attempts = $attempts;
@@ -135,6 +102,6 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
 
     public function increaseNumberOfAttempts(): void
     {
-        $this->attempts++;
+        ++$this->attempts;
     }
 }

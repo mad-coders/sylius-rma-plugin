@@ -38,7 +38,7 @@ final class ConfigAddressToChannelFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('street', TextType::class, [
@@ -47,7 +47,7 @@ final class ConfigAddressToChannelFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('city', TextType::class, [
@@ -56,7 +56,7 @@ final class ConfigAddressToChannelFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('postcode', TextType::class, [
@@ -65,7 +65,7 @@ final class ConfigAddressToChannelFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
         ;

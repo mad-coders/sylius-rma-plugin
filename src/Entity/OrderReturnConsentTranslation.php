@@ -18,7 +18,7 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Resource\Model\AbstractTranslation;
 
-class  OrderReturnConsentTranslation  extends AbstractTranslation implements OrderReturnConsentTranslationInterface
+class OrderReturnConsentTranslation extends AbstractTranslation implements OrderReturnConsentTranslationInterface
 {
     /** @var mixed */
     private $id;

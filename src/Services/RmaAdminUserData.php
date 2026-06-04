@@ -27,7 +27,6 @@ class RmaAdminUserData
 
     /**
      * RmaAdminUserData constructor.
-     * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(TokenStorageInterface $tokenStorage)
     {
@@ -47,7 +46,7 @@ class RmaAdminUserData
             $newChangeLogAuthor->setFirstName($user->getEmail());
         }
 
-        if ( $userLastName = $user->getLastName()) {
+        if ($userLastName = $user->getLastName()) {
             $newChangeLogAuthor->setLastName($userLastName);
         } else {
             $newChangeLogAuthor->setLastName('');

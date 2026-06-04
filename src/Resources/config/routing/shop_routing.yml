@@ -12,7 +12,7 @@
 madcoders_rma_start:
     path: /rma-start
     methods: [ GET, POST ]
-    controller: madcoders.sylius_rma_plugin.controller.auth_controller:start
+    controller: madcoders.sylius_rma_plugin.controller.auth_controller::start
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Auth/start.html.twig'
         _sylius:
@@ -23,7 +23,7 @@ madcoders_rma_start:
 madcoders_rma_verification:
     path: /rma-start/{code}
     methods: [ GET, POST ]
-    controller: madcoders.sylius_rma_plugin.controller.auth_controller:verification
+    controller: madcoders.sylius_rma_plugin.controller.auth_controller::verification
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Auth/verification.html.twig'
         _sylius:
@@ -37,7 +37,7 @@ madcoders_rma_verification:
 madcoders_rma_return_form:
     path: /rma-form/{orderNumber}
     methods: [ GET, POST ]
-    controller: madcoders.sylius_rma_plugin.controller.return_controller:viewIndex
+    controller: madcoders.sylius_rma_plugin.controller.return_controller::viewIndex
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Return/view.html.twig'
         _sylius:
@@ -47,7 +47,7 @@ madcoders_rma_return_form:
 madcoders_rma_return_form_accept:
     path: /rma-summary/{returnNumber}
     methods: [ GET, POST ]
-    controller: madcoders.sylius_rma_plugin.controller.return_controller:acceptIndex
+    controller: madcoders.sylius_rma_plugin.controller.return_controller::acceptIndex
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Return/summary.html.twig'
         _sylius:
@@ -58,7 +58,7 @@ madcoders_rma_return_form_accept:
 madcoders_rma_return_form_success:
     path: /rma-success/{returnNumber}
     methods: [ GET ]
-    controller: madcoders.sylius_rma_plugin.controller.return_controller:successIndex
+    controller: madcoders.sylius_rma_plugin.controller.return_controller::successIndex
     defaults:
         template: '@MadcodersSyliusRmaPlugin/Return/success.html.twig'
         _sylius:
@@ -69,7 +69,7 @@ madcoders_rma_return_form_success:
 madcoders_rma_return_form_print:
     path: /rma-form-print/{returnNumber}
     methods: [ GET ]
-    controller: madcoders.sylius_rma_plugin.controller.return_controller:printIndex
+    controller: madcoders.sylius_rma_plugin.controller.return_controller::printIndex
     defaults:
         _sylius:
             repository:

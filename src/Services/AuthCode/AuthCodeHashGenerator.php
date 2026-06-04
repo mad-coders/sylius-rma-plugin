@@ -16,8 +16,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
-use Sylius\Component\Order\Model\OrderInterface;
 use InvalidArgumentException;
+use Sylius\Component\Order\Model\OrderInterface;
 
 final class AuthCodeHashGenerator implements AuthCodeHashGeneratorInterface
 {
@@ -26,10 +26,10 @@ final class AuthCodeHashGenerator implements AuthCodeHashGeneratorInterface
         if (!is_string($order->getNumber())) {
             throw new InvalidArgumentException(sprintf(
                 'Order id: "%s", has not order number defined',
-                (string)$order->getId()
+                (string) $order->getId(),
             ));
         }
 
-        return hash('sha256', ((string)$order->getNumber()) . time());
+        return hash('sha256', ((string) $order->getNumber()) . time());
     }
 }

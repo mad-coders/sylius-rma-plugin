@@ -33,23 +33,15 @@ class ChoiceProvider implements ChoiceProviderInterface
 
     /**
      * ChoiceProvider constructor.
-     * @param RepositoryInterface $orderReturnReasonRepository
-     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         RepositoryInterface $orderReturnReasonRepository,
-        OrderRepositoryInterface $orderRepository
-    )
-    {
+        OrderRepositoryInterface $orderRepository,
+    ) {
         $this->orderReturnReasonRepository = $orderReturnReasonRepository;
         $this->orderRepository = $orderRepository;
     }
 
-    /**
-     * @param OrderReturnInterface $orderReturn
-     *
-     * @return array
-     */
     public function getChoices(OrderReturnInterface $orderReturn): array
     {
         $orderNumber = $orderReturn->getOrderNumber();
@@ -78,7 +70,7 @@ class ChoiceProvider implements ChoiceProviderInterface
         }
 
         $shipmentDate = $orderShipment->getShippedAt();
-        $dateNow = new \DateTime('@'.strtotime('now'));
+        $dateNow = new \DateTime('@' . strtotime('now'));
         $daysAreGone = $shipmentDate->diff($dateNow)->d;
 
         $reasons = $this->orderReturnReasonRepository->findBy(['enabled' => true]);
@@ -94,7 +86,7 @@ class ChoiceProvider implements ChoiceProviderInterface
             if (!$reasonName = $reason->getName()) {
                 continue;
             }
-            if ($reason->getDeadlineToReturn() >=  $daysAreGone) {
+            if ($reason->getDeadlineToReturn() >= $daysAreGone) {
                 $availableReasons[$reasonCode] = $reasonName;
             }
         }
@@ -104,7 +96,7 @@ class ChoiceProvider implements ChoiceProviderInterface
 
     public function getNameByCode(string $code): ?string
     {
-        $reason = $this->orderReturnReasonRepository->findOneBy(array('code' => $code));
+        $reason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);
         if (!$reason instanceof OrderReturnReasonInterface) {
             throw new \Exception('Reason is missing');
         }

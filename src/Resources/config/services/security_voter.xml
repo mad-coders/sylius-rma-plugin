@@ -19,7 +19,7 @@ Architects of this package:
         </service>
 
         <service id="madcoders.sylius_rma_plugin.voter.order_return_authorizer_storage" class="Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerStorage">
-            <argument type="service" id="session"/>
+            <argument type="service" id="request_stack"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.voter.order_return" class="Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter">

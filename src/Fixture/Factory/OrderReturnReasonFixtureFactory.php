@@ -39,7 +39,7 @@ final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory imple
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $options = []): OrderReturnReasonInterface
     {
@@ -57,9 +57,6 @@ final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory imple
         return $orderReturnReason;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver

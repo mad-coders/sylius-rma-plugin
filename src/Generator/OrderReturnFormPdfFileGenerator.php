@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Generator;
 
+use Exception;
 use Knp\Snappy\GeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Model\OrderReturnFormPdf;
@@ -25,7 +26,6 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
-use Exception;
 
 final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGeneratorInterface
 {
@@ -54,13 +54,8 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
 
     /**
      * OrderReturnFormPdfFileGenerator constructor.
+     *
      * @param EngineInterface|Environment $templatingEngine
-     * @param GeneratorInterface $pdfGenerator
-     * @param FileLocatorInterface $fileLocator
-     * @param string $template
-     * @param string $orderReturnFormLogoPath
-     * @param ReturnAddressConfigurator $returnAddressConfigurator
-     * @param RepositoryInterface $channelsRepository
      */
     public function __construct(
         $templatingEngine,
@@ -69,9 +64,8 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
         string $template,
         string $orderReturnFormLogoPath,
         ReturnAddressConfigurator $returnAddressConfigurator,
-        RepositoryInterface $channelsRepository
-    )
-    {
+        RepositoryInterface $channelsRepository,
+    ) {
         $this->templatingEngine = $templatingEngine;
         $this->pdfGenerator = $pdfGenerator;
         $this->fileLocator = $fileLocator;
@@ -82,8 +76,6 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
     }
 
     /**
-     * @param OrderReturnInterface $orderReturnForm
-     * @return OrderReturnFormPdf
      * @throws Exception
      */
     public function generate(OrderReturnInterface $orderReturnForm): OrderReturnFormPdf
@@ -93,8 +85,7 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
         if (!$channel instanceof ChannelInterface) {
             throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));
         }
-        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel))
-        {
+        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel)) {
             throw new Exception('Address not defined for Selected channel');
         }
 
@@ -106,8 +97,8 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
                 'orderReturnForm' => $orderReturnForm,
                 'channel' => $orderReturnForm->getChannelCode(),
                 'orderReturnFormLogoPath' => $this->fileLocator->locate($this->orderReturnFormLogoPath),
-                'returnAddress' => $returnAddress
-            ])
+                'returnAddress' => $returnAddress,
+            ]),
         );
 
         return new OrderReturnFormPdf($filename, $pdf);

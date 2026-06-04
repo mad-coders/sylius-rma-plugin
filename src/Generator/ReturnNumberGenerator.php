@@ -20,14 +20,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnNumberGenerator
 {
-    /**
-     * @var RepositoryInterface
-     */
+    /** @var RepositoryInterface */
     private $orderReturnRepository;
 
     /**
      * ReturnNumberGenerator constructor.
-     * @param RepositoryInterface $orderReturnRepository
      */
     public function __construct(RepositoryInterface $orderReturnRepository)
     {
@@ -39,8 +36,8 @@ class ReturnNumberGenerator
         $returnOrderNumberId = 1;
         $returnOrderNumber = 'R' . $orderNumber . '-' . $returnOrderNumberId;
 
-        while ($this->orderReturnRepository->findOneBy(array('returnNumber' => $returnOrderNumber))) {
-            $returnOrderNumberId++;
+        while ($this->orderReturnRepository->findOneBy(['returnNumber' => $returnOrderNumber])) {
+            ++$returnOrderNumberId;
             $returnOrderNumber = 'R' . $orderNumber . '-' . $returnOrderNumberId;
         }
 

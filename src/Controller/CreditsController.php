@@ -25,5 +25,4 @@ final class CreditsController extends AbstractController
     {
         return $this->render('@MadcodersSyliusRmaPlugin/credits.html.twig');
     }
-
 }

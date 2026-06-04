@@ -20,7 +20,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\SlugAwareInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
-interface OrderReturnConsentTranslationInterface  extends SlugAwareInterface, ResourceInterface, TranslationInterface
+interface OrderReturnConsentTranslationInterface extends SlugAwareInterface, ResourceInterface, TranslationInterface
 {
     public function getName(): ?string;
 

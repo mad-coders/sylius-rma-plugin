@@ -45,7 +45,7 @@ final class OrderReturnItemFixtureFactory extends AbstractExampleFactory impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function create(array $options = []): OrderReturnItemInterface
     {
@@ -67,7 +67,7 @@ final class OrderReturnItemFixtureFactory extends AbstractExampleFactory impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configureOptions(OptionsResolver $resolver): void
     {

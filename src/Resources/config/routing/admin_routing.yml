@@ -59,7 +59,7 @@ madcoders_rma_admin_order_return_consent:
 madcoders_rma_admin_order_return_config_edit:
   path: /rma-configuration/{channelId}
   methods: [ GET, POST ]
-  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:viewIndex
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller::viewIndex
   defaults:
     channelId: null
     template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/show.html.twig"
@@ -73,7 +73,7 @@ madcoders_rma_admin_order_return_config_edit:
 madcoders_rma_admin_order_return_config_change_channel:
   path: /rma-configuration-change-channel
   methods: [ POST ]
-  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:changeChannel
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller::changeChannel
   defaults:
     _sylius:
       redirect: madcoders_rma_admin_order_return_config_edit
@@ -83,7 +83,7 @@ madcoders_rma_admin_order_return_config_change_channel:
 madcoders_rma_admin_order_return_config_add_address_to_selected_channel:
   path: /rma-configuration-change-channel/{channelId}
   methods: [ POST ]
-  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller:saveAddressToSelectedChannel
+  controller: madcoders.sylius_rma_plugin.controller.rma_configuration_controller::saveAddressToSelectedChannel
   defaults:
     template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/show.html.twig"
     _sylius:
@@ -94,7 +94,7 @@ madcoders_rma_admin_order_return_config_add_address_to_selected_channel:
 madcoders_rma_admin_order_return_show:
   path: /order-returns/{id}
   methods: [ GET, POST ]
-  controller: madcoders.sylius_rma_plugin.controller.admin_management_controller:viewIndex
+  controller: madcoders.sylius_rma_plugin.controller.admin_management_controller::viewIndex
   defaults:
     template: "@MadcodersSyliusRmaPlugin/Admin/Return/show.html.twig"
     _sylius:
@@ -107,7 +107,7 @@ madcoders_rma_admin_order_return_show:
 madcoders_rma_admin_order_return_show_cancel:
   path: /order-returns/{id}/cancel/{_csrf_token}
   methods: [ GET ]
-  controller: madcoders_rma.controller.order_return:applyStateMachineTransitionAction
+  controller: madcoders_rma.controller.order_return::applyStateMachineTransitionAction
   defaults:
     _sylius:
       section: admin
@@ -124,7 +124,7 @@ madcoders_rma_admin_order_return_show_cancel:
 madcoders_rma_admin_order_return_show_complete:
   path: /order-returns/{id}/complete/{_csrf_token}
   methods: [ GET ]
-  controller: madcoders_rma.controller.order_return:applyStateMachineTransitionAction
+  controller: madcoders_rma.controller.order_return::applyStateMachineTransitionAction
   defaults:
     _sylius:
       section: admin

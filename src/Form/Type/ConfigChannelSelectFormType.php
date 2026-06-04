@@ -29,7 +29,6 @@ final class ConfigChannelSelectFormType extends AbstractType
 
     /**
      * ConfigChannelSelectFormType constructor.
-     * @param RepositoryInterface $channelsRepository
      */
     public function __construct(RepositoryInterface $channelsRepository)
     {
@@ -44,13 +43,13 @@ final class ConfigChannelSelectFormType extends AbstractType
             $choicesChannel[$choice->getId()] = $choice->getName();
         }
         $builder->add('channelChoice', ChoiceType::class, [
-            'label'    =>  false,
+            'label' => false,
             'required' => true,
             'choices' => array_flip($choicesChannel),
             'constraints' => [
                 new NotBlank([
                     'message' => 'madcoders_rma.validator.not_blank',
-                ])
+                ]),
             ],
         ]);
     }

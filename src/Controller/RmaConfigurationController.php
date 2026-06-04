@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Exception;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfiguration;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigAddressToChannelFormType;
@@ -27,15 +28,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use Exception;
 
 final class RmaConfigurationController extends AbstractController
 {
@@ -48,8 +48,8 @@ final class RmaConfigurationController extends AbstractController
     /** @var RouterInterface */
     private $router;
 
-    /** @var SessionInterface */
-    private $session;
+    /** @var RequestStack */
+    private $requestStack;
 
     /** @var TokenStorageInterface */
     private $tokenStorage;
@@ -68,32 +68,24 @@ final class RmaConfigurationController extends AbstractController
 
     /**
      * RmaConfigurationController constructor.
-     * @param FormFactoryInterface $formFactory
+     *
      * @param EngineInterface|Environment $templatingEngine
-     * @param RouterInterface $router
-     * @param SessionInterface $session
-     * @param TokenStorageInterface $tokenStorage
-     * @param RmaChangesLogger $changesLogger
-     * @param RepositoryInterface $channelsRepository
-     * @param RepositoryInterface $configurationRepository
-     * @param TranslatorInterface $translator
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
         RouterInterface $router,
-        SessionInterface $session,
+        RequestStack $requestStack,
         TokenStorageInterface $tokenStorage,
         RmaChangesLogger $changesLogger,
         RepositoryInterface $channelsRepository,
         RepositoryInterface $configurationRepository,
-        TranslatorInterface $translator
-    )
-    {
+        TranslatorInterface $translator,
+    ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->router = $router;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->tokenStorage = $tokenStorage;
         $this->changesLogger = $changesLogger;
         $this->channelsRepository = $channelsRepository;
@@ -118,23 +110,25 @@ final class RmaConfigurationController extends AbstractController
         $addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
         if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
-            $addressByChannel =  json_decode($addressConfigByChannel->getValue());
+            $addressByChannel = json_decode($addressConfigByChannel->getValue());
         }
 
-        $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel,$addressByChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId ] : null);
+        $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
+        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
 
         if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
             throw new Exception('Template not defined');
         }
 
         return new Response($this->templatingEngine
-            ->render($templateWithAttribute, [
+            ->render(
+                $templateWithAttribute,
+                [
                     'channelForm' => $channelForm->createView(),
                     'addressFormToSelectedChannel' => $addressFormToSelectedChannel->createView(),
                     'channel' => $channel,
-            ]
-        ));
+            ],
+            ));
     }
 
     public function changeChannel(Request $request): Response
@@ -149,7 +143,6 @@ final class RmaConfigurationController extends AbstractController
 
         $channelForm = $this->createForm($channelFormType);
         if ($request->isMethod('POST') && $channelForm->handleRequest($request)->isValid()) {
-
             /** @var array $data */
             $data = $channelForm->getData();
 
@@ -158,7 +151,7 @@ final class RmaConfigurationController extends AbstractController
 
         return $this->errorRedirect(
             $request,
-            'madcoders_rma.admin.form.error.channel_not_exist'
+            'madcoders_rma.admin.form.error.channel_not_exist',
         );
     }
 
@@ -177,36 +170,39 @@ final class RmaConfigurationController extends AbstractController
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId ] : null);
+        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
 
         if ($request->isMethod('POST')) {
-
             if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
                 throw new Exception('Template not defined');
             }
 
             $channel = $this->getSelectedChannel($channelId);
 
-            if (!$addressFormToSelectedChannel->handleRequest($request)->isValid()){
+            if (!$addressFormToSelectedChannel->handleRequest($request)->isValid()) {
                 return new Response($this->templatingEngine
-                    ->render($templateWithAttribute, [
+                    ->render(
+                        $templateWithAttribute,
+                        [
                             'channelForm' => $channelForm->createView(),
                             'addressFormToSelectedChannel' => $addressFormToSelectedChannel->createView(),
                             'channel' => $channel,
-                        ]
+                        ],
                     ));
             }
 
             /** @var array $data */
-            if (!$data = $addressFormToSelectedChannel->getData()) {
+            $data = $addressFormToSelectedChannel->getData();
+            if (!$data) {
                 throw new Exception('Address form not have data');
             }
 
             /** @var RmaConfigurationInterface|null $addressConfigByChannel */
-            if ($addressConfigByChannel = $this->configurationRepository->findOneBy([
+            $addressConfigByChannel = $this->configurationRepository->findOneBy([
                 'channel' => $channel,
-                'parameter' => 'address'
-            ])) {
+                'parameter' => 'address',
+            ]);
+            if ($addressConfigByChannel) {
                 $addressConfigByChannel->setValue(json_encode($data));
             } else {
                 $addressConfigByChannel = new RmaConfiguration();
@@ -224,7 +220,7 @@ final class RmaConfigurationController extends AbstractController
 
         return $this->errorRedirect(
             $request,
-            'madcoders_rma.admin.form.error.form_not_save'
+            'madcoders_rma.admin.form.error.form_not_save',
         );
     }
 
@@ -236,11 +232,13 @@ final class RmaConfigurationController extends AbstractController
         $redirectRoute = $this->getSyliusAttribute(
             $request,
             'error_redirect',
-            'madcoders_rma_admin_order_return_config_edit');
+            'madcoders_rma_admin_order_return_config_edit',
+        );
 
         if ($redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }
+
         return new RedirectResponse($this->router->generate('sylius_admin_dashboard'));
     }
 
@@ -253,9 +251,9 @@ final class RmaConfigurationController extends AbstractController
             }
 
             return $channel;
-        } else {
-            return $this->getDefaultChannel();
         }
+
+        return $this->getDefaultChannel();
     }
 
     private function getDefaultChannel(): ChannelInterface

@@ -15,7 +15,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in order_return.items if item.returnQty > 0 %}
+            {% for item in order_return.items|filter(item => item.returnQty > 0) %}
                 {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_item.html.twig' with {'item': item} %}
             {% endfor %}
             </tbody>

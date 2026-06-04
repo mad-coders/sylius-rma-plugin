@@ -23,6 +23,12 @@ sylius_mailer:
 
 sylius_ui:
   events:
+    sylius.shop.layout.footer:
+      blocks:
+        madcoders_rma_return_link:
+          template: "@MadcodersSyliusRmaPlugin/Shop/Footer/_returnLink.html.twig"
+          priority: 15
+
     madcoders_rma.shop.account.order_return.show.subcontent:
       blocks:
         header:
