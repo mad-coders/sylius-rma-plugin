@@ -42,11 +42,11 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies
-              run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+              run: composer update --no-interaction --no-progress --prefer-dist --no-scripts
 
             - name: PHPStan
               run: make phpstan
@@ -76,11 +76,11 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies
-              run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+              run: composer update --no-interaction --no-progress --prefer-dist --no-scripts
 
             - name: PHPUnit
               run: make phpunit
@@ -127,11 +127,11 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.lock') }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
                   restore-keys: composer-${{ env.PHP_VERSION }}-
 
             - name: Install dependencies
-              run: composer install --no-interaction --no-progress --prefer-dist
+              run: composer update --no-interaction --no-progress --prefer-dist
 
             - name: Build test application assets
               run: make frontend
