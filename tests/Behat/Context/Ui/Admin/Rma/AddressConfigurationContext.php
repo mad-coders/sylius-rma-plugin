@@ -18,6 +18,8 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
+use Sylius\Behat\NotificationType;
+use Sylius\Behat\Service\NotificationCheckerInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\AddressConfiguration\UpdatePageInterface;
 use Webmozart\Assert\Assert;
@@ -31,6 +33,9 @@ class AddressConfigurationContext implements Context
      */
     private $channelRepository;
 
+    /** @var NotificationCheckerInterface */
+    private $notificationChecker;
+
 
     /**
      * AddressConfigurationContext constructor
@@ -39,11 +44,21 @@ class AddressConfigurationContext implements Context
      */
     public function __construct(
         UpdatePageInterface $returnConsentUpdatePage,
-        ChannelRepositoryInterface $channelRepository
+        ChannelRepositoryInterface $channelRepository,
+        NotificationCheckerInterface $notificationChecker
     )
     {
         $this->returnConsentUpdatePage = $returnConsentUpdatePage;
         $this->channelRepository = $channelRepository;
+        $this->notificationChecker = $notificationChecker;
+    }
+
+    /**
+     * @Then I should be notified that the configuration has been successfully updated
+     */
+    public function iShouldBeNotifiedThatConfigurationHasBeenSuccessfullyUpdated(): void
+    {
+        $this->notificationChecker->checkNotification('Configuration updated', NotificationType::success());
     }
 
     /**

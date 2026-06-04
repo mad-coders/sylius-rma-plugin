@@ -136,6 +136,7 @@ Architects of this package:
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\AddressConfigurationContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.address_configuration" />
             <argument type="service" id="sylius.repository.channel" />
+            <argument type="service" id="sylius.behat.notification_checker" />
         </service>
 
         <!-- pages -->
