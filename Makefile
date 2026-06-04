@@ -1,7 +1,7 @@
 .PHONY: help \
         install update setup init app \
         docker-up docker-up-all docker-down docker-logs \
-        backend frontend cache-clean db-reset fixtures serve serve-test \
+        backend backend-test frontend cache-clean db-reset fixtures serve serve-test \
         test phpunit behat behat-js \
         static phpstan ecs fix \
         verify pre-commit install-hooks \
@@ -40,9 +40,13 @@ docker-logs: ## Tail the container logs
 
 ## --- Test application -------------------------------------------------------
 
-backend: ## Create the test database and schema
-	$(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
-	$(TEST_APP)/bin/console doctrine:schema:create --no-interaction
+backend: ## Create the dev database and schema (APP_ENV=dev)
+	APP_ENV=dev $(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
+	APP_ENV=dev $(TEST_APP)/bin/console doctrine:schema:create --no-interaction
+
+backend-test: ## Create the test database and schema (APP_ENV=test; used by Behat and CI)
+	APP_ENV=test $(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
+	APP_ENV=test $(TEST_APP)/bin/console doctrine:schema:create --no-interaction
 
 frontend: ## Install and build the test application assets
 	(cd $(TEST_APP) && yarn install --ignore-engines)

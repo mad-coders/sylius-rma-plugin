@@ -45,3 +45,4 @@ flip the old one's status.
 | [0007](0007-pdf-and-schema-migrations.md) | PDFs via knp_snappy; schema via Doctrine migrations | Accepted |
 | [0008](0008-quality-tooling.md) | Quality tooling: PHPStan + ECS + PHPUnit + Behat via Make | Accepted |
 | [0009](0009-conventional-commits.md) | Adopt Conventional Commits | Accepted |
+| [0010](0010-github-actions-ci.md) | CI on GitHub Actions (replacing Bitbucket Pipelines) | Accepted |

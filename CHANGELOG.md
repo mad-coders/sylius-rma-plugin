@@ -24,12 +24,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   the test suite.
 - Architecture Decision Log under `docs/adr-log/`, project guides `AGENTS.md` and `ai/`.
 - This `CHANGELOG.md`, adoption of Conventional Commits, and a `.gitmessage` template.
+- GitHub Actions CI (`.github/workflows/ci.yml`): static analysis, unit tests, and the
+  non-JavaScript Behat suite, driven through the Make targets.
+- `make backend-test` target to create the test-environment database/schema.
 
 ### Removed
 
 - Psalm and PhpSpec from the toolchain; static analysis is PHPStan `^2.0` (with
   `phpstan-baseline.neon`) and unit tests are PHPUnit.
 - `easy-coding-standard.yml`, replaced by `ecs.php` (`sylius-labs/coding-standard ^4.0`).
+- Bitbucket Pipelines (`bitbucket-pipelines.yml`), replaced by GitHub Actions.
 
 ## [1.0.0] - 2021-11-17
 
