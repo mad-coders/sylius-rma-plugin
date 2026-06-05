@@ -26,7 +26,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 class ChoiceProvider implements ChoiceProviderInterface
 {
     /**
-     * ChoiceProvider constructor.
+     * @param RepositoryInterface<OrderReturnReasonInterface> $orderReturnReasonRepository
      */
     public function __construct(private readonly RepositoryInterface $orderReturnReasonRepository, private readonly OrderRepositoryInterface $orderRepository)
     {
@@ -37,7 +37,7 @@ class ChoiceProvider implements ChoiceProviderInterface
         $orderNumber = $orderReturn->getOrderNumber();
         $order = $this->orderRepository->findOneByNumber($orderNumber);
 
-        if (!$order) {
+        if (!$order instanceof OrderInterface) {
             $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
         }
 
@@ -60,6 +60,10 @@ class ChoiceProvider implements ChoiceProviderInterface
         }
 
         $shipmentDate = $orderShipment->getShippedAt();
+        if (null === $shipmentDate) {
+            return [];
+        }
+
         $dateNow = new \DateTime('@' . strtotime('now'));
         $daysAreGone = $shipmentDate->diff($dateNow)->d;
 
@@ -67,13 +71,12 @@ class ChoiceProvider implements ChoiceProviderInterface
         $availableReasons = [];
 
         foreach ($reasons as $reason) {
-            if (!$reason instanceof OrderReturnReasonInterface) {
+            $reasonCode = $reason->getCode();
+            if (null === $reasonCode || '' === $reasonCode) {
                 continue;
             }
-            if (!$reasonCode = $reason->getCode()) {
-                continue;
-            }
-            if (!$reasonName = $reason->getName()) {
+            $reasonName = $reason->getName();
+            if (null === $reasonName || '' === $reasonName) {
                 continue;
             }
             if ($reason->getDeadlineToReturn() >= $daysAreGone) {

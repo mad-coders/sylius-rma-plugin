@@ -24,6 +24,9 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final readonly class AuthCodeFactory implements AuthCodeFactoryInterface
 {
+    /**
+     * @param RepositoryInterface<AuthCodeInterface> $authCodeRepository
+     */
     public function __construct(private AuthCodeHashGeneratorInterface $authCodeHashGenerator, private AuthCodeSecretGeneratorInterface $authCodeSecretGenerator, private RepositoryInterface $authCodeRepository, private AuthCodeExpiryDateCalculatorInterface $authCodeExpiryDate)
     {
     }
@@ -31,9 +34,11 @@ final readonly class AuthCodeFactory implements AuthCodeFactoryInterface
     public function createForOrder(OrderInterface $order): AuthCodeInterface
     {
         if (!is_string($order->getNumber())) {
+            $orderId = $order->getId();
+
             throw new InvalidArgumentException(sprintf(
                 'Order id: "%s", has not order number defined',
-                (string) $order->getId(),
+                is_scalar($orderId) ? (string) $orderId : '',
             ));
         }
 

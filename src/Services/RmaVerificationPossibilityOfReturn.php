@@ -35,7 +35,8 @@ class RmaVerificationPossibilityOfReturn
      */
     public function verificationForButtonRender(OrderInterface $order): bool
     {
-        if (!$orderNumber = $order->getNumber()) {
+        $orderNumber = $order->getNumber();
+        if (null === $orderNumber) {
             throw new Exception('Order number not find');
         }
 
@@ -45,11 +46,16 @@ class RmaVerificationPossibilityOfReturn
         /** @var OrderItemInterface $item */
         foreach ($orderItems as $item) {
             $originalQty = $item->getQuantity();
-            if (!$itemVariant = $item->getVariant()) {
+            $itemVariant = $item->getVariant();
+            if (null === $itemVariant) {
                 throw new Exception('itemVariant not find');
             }
 
             $itemVariantCode = $itemVariant->getCode();
+            if (null === $itemVariantCode) {
+                throw new Exception('itemVariant code not find');
+            }
+
             $orderQty = $orderQty + $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);
         }
 

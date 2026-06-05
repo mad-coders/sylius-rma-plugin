@@ -607,24 +607,6 @@ parameters:
 			path: src/Generator/OrderReturnFormPdfFileGenerator.php
 
 		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Services/AuthCode/AuthCodeFactory.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\AuthCode\\AuthCodeFactory\:\:__construct\(\) has parameter \$authCodeRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Services/AuthCode/AuthCodeFactory.php
-
-		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Services/AuthCode/AuthCodeHashGenerator.php
-
-		-
 			message: '#^Cannot access offset ''city'' on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -701,30 +683,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Services/Configuration/ReturnAddressConfigurator.php
-
-		-
-			message: '#^Cannot call method diff\(\) on DateTimeInterface\|null\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Services/Reason/ChoiceProvider.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Reason\\ChoiceProvider\:\:__construct\(\) has parameter \$orderReturnReasonRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Services/Reason/ChoiceProvider.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Order\\Model\\OrderInterface\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Services/Reason/ChoiceProvider.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 2
-			path: src/Services/Reason/ChoiceProvider.php
 
 		-
 			message: '#^Cannot call method getCode\(\) on Sylius\\Component\\Core\\Model\\ChannelInterface\|null\.$#'
@@ -815,21 +773,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Services/RmaAdminUserData.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Core\\Model\\ProductVariantInterface\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Services/RmaVerificationPossibilityOfReturn.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Services/RmaVerificationPossibilityOfReturn.php
-
-		-
-			message: '#^Parameter \#2 \$itemVariantCode of method Madcoders\\SyliusRmaPlugin\\Services\\MaxQtyCalculator\:\:calculation\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Services/RmaVerificationPossibilityOfReturn.php

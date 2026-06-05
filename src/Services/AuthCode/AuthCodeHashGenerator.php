@@ -24,9 +24,11 @@ final class AuthCodeHashGenerator implements AuthCodeHashGeneratorInterface
     public function generateForOrder(OrderInterface $order): string
     {
         if (!is_string($order->getNumber())) {
+            $orderId = $order->getId();
+
             throw new InvalidArgumentException(sprintf(
                 'Order id: "%s", has not order number defined',
-                (string) $order->getId(),
+                is_scalar($orderId) ? (string) $orderId : '',
             ));
         }
 
