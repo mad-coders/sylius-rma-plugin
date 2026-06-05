@@ -30,8 +30,6 @@ class UpdatedChangelogOnCancel
 
     /**
      * UpdatedChangelogOnCancel constructor.
-     * @param RmaAdminUserData $adminUser
-     * @param RmaChangesLogger $changesLogger
      */
     public function __construct(RmaAdminUserData $adminUser, RmaChangesLogger $changesLogger)
     {

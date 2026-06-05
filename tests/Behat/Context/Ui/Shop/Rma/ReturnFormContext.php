@@ -21,13 +21,18 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Sylius\Behat\Service\Setter\CookieSetterInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPageInterface;
 
 class ReturnFormContext implements Context
 {
-    /** @var SessionInterface */
-    private $session;
+    /** @var RequestStack */
+    private $requestStack;
+
+    /** @var SessionFactoryInterface */
+    private $sessionFactory;
 
     /** @var CookieSetterInterface */
     private $cookieSetter;
@@ -39,13 +44,15 @@ class ReturnFormContext implements Context
     private $authorizer;
 
     public function __construct(
-        SessionInterface $session,
+        RequestStack $requestStack,
+        SessionFactoryInterface $sessionFactory,
         CookieSetterInterface $cookieSetter,
         ReturnFormPageInterface $returnFormPage,
         OrderReturnAuthorizerInterface $authorizer
     )
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
+        $this->sessionFactory = $sessionFactory;
         $this->cookieSetter = $cookieSetter;
         $this->returnFormPage = $returnFormPage;
         $this->authorizer = $authorizer;
@@ -56,9 +63,15 @@ class ReturnFormContext implements Context
      */
     public function iAmAuthorizeForLatestOrder(OrderInterface $order): void
     {
+        $session = $this->sessionFactory->createSession();
+        $request = new Request();
+        $request->setSession($session);
+        $this->requestStack->push($request);
+
         $this->authorizeThisOrder($order);
-        $this->session->save();
-        $this->cookieSetter->setCookie($this->session->getName(), $this->session->getId());
+
+        $session->save();
+        $this->cookieSetter->setCookie($session->getName(), $session->getId());
     }
 
     /**

@@ -29,14 +29,13 @@ class RmaProductViewExtension extends AbstractExtension
 
     /**
      * RmaProductViewExtension constructor.
-     * @param ProductVariantRepositoryInterface $productVariantRepository
      */
     public function __construct(ProductVariantRepositoryInterface $productVariantRepository)
     {
         $this->productVariantRepository = $productVariantRepository;
     }
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [
@@ -44,9 +43,9 @@ class RmaProductViewExtension extends AbstractExtension
         ];
     }
 
-    public function findProductByVariantCode( string $productSku = null): ?ProductVariantInterface
+    public function findProductByVariantCode(string $productSku = null): ?ProductVariantInterface
     {
-        $productVariant = $this->productVariantRepository->findOneBy(array('code' => $productSku));
+        $productVariant = $this->productVariantRepository->findOneBy(['code' => $productSku]);
         if (!$productVariant instanceof ProductVariantInterface) {
             return null;
         }

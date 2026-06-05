@@ -29,9 +29,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
@@ -52,8 +52,8 @@ final class ShopManagementController extends AbstractController
     /** @var RouterInterface */
     private $router;
 
-    /** @var SessionInterface */
-    private $session;
+    /** @var RequestStack */
+    private $requestStack;
 
     /** @var OrderReturnRepository */
     private $orderReturnRepository;
@@ -76,41 +76,34 @@ final class ShopManagementController extends AbstractController
     /** @var RmaVerificationPossibilityOfReturn */
     private $verificationPossibilityOfReturn;
 
+    /** @var bool */
+    private $returnFormPdfEnabled;
+
     /**
      * ShopManagementController constructor.
-     * @param FormFactoryInterface $formFactory
+     *
      * @param EngineInterface|Environment $templatingEngine
-     * @param ChannelContextInterface $channelContext
-     * @param RouterInterface $router
-     * @param SessionInterface $session
-     * @param OrderReturnRepository $orderReturnRepository
-     * @param RepositoryInterface $changeLogRepository
-     * @param TokenStorageInterface $tokenStorage
-     * @param OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator
-     * @param OrderRepository $orderRepository
-     * @param TranslatorInterface $translator
-     * @param RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         $templatingEngine,
         ChannelContextInterface $channelContext,
         RouterInterface $router,
-        SessionInterface $session,
+        RequestStack $requestStack,
         OrderReturnRepository $orderReturnRepository,
         RepositoryInterface $changeLogRepository,
         TokenStorageInterface $tokenStorage,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
         OrderRepository $orderRepository,
         TranslatorInterface $translator,
-        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
-    )
-    {
+        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        bool $returnFormPdfEnabled = false,
+    ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->channelContext = $channelContext;
         $this->router = $router;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->changeLogRepository = $changeLogRepository;
         $this->tokenStorage = $tokenStorage;
@@ -118,12 +111,10 @@ final class ShopManagementController extends AbstractController
         $this->orderRepository = $orderRepository;
         $this->translator = $translator;
         $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
+        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**
-     * @param Request $request
-     * @param string $orderNumber
-     * @return Response
      * @throws \Exception
      */
     public function createAction(Request $request, string $orderNumber): Response
@@ -132,13 +123,15 @@ final class ShopManagementController extends AbstractController
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var ShopUserInterface $customer */
-        if (!$user = $token->getUser()) {
+        /** @var ShopUserInterface|null $user */
+        $user = $token->getUser();
+        if (!$user) {
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var CustomerInterface */
-        if (!$customer = $user->getCustomer()) {
+        /** @var CustomerInterface|null $customer */
+        $customer = $user->getCustomer();
+        if (!$customer) {
             return $this->createMissingUserResponse($request);
         }
 
@@ -151,7 +144,7 @@ final class ShopManagementController extends AbstractController
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
-                [ '%orderNumber%' => $orderNumber ]
+                ['%orderNumber%' => $orderNumber],
             );
         }
 
@@ -159,19 +152,24 @@ final class ShopManagementController extends AbstractController
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_already_returned',
-                [ '%orderNumber%' => $orderNumber ]
+                ['%orderNumber%' => $orderNumber],
             );
         }
 
-        $this->session->set('madcoders_rma_allowed_order', $orderNumber);
+        $this->requestStack->getSession()->set('madcoders_rma_allowed_order', $orderNumber);
 
-        return new RedirectResponse($this->router->generate('madcoders_rma_return_form', ['orderNumber' => $orderNumber]));
+        return new RedirectResponse($this->router->generate('madcoders_rma_return_form', ['orderNumber' => str_replace('#', '', $orderNumber)]));
     }
 
     public function printAction(Request $request, string $returnNumber): Response
     {
-        /** @var ShopUserInterface $customer */
-        if (!$customer = $this->tokenStorage->getToken()->getUser()) {
+        if (!$this->returnFormPdfEnabled) {
+            return $this->errorRedirect($request, 'madcoders_rma.ui.return.pdf_disabled');
+        }
+
+        /** @var ShopUserInterface|null $customer */
+        $customer = $this->tokenStorage->getToken()->getUser();
+        if (!$customer) {
             return $this->createMissingUserResponse($request);
         }
 
@@ -181,9 +179,8 @@ final class ShopManagementController extends AbstractController
 
         if (!$orderReturn = $this->orderReturnRepository
             ->findOneByReturnNumberAndCustomerEmail($returnNumber, $customerEmail)) {
-
             return $this->createMissingPrivilegesResponse($request);
-        };
+        }
 
         $orderReturnPdf = $this->orderReturnFormPdfFileGenerator->generate($orderReturn);
 
@@ -200,7 +197,7 @@ final class ShopManagementController extends AbstractController
         $errorMessage = $this->getSyliusAttribute(
             $request,
             'error_flash',
-            'madcoders_rma.ui.return.user_not_privileges_to_this_order'
+            'madcoders_rma.ui.return.user_not_privileges_to_this_order',
         );
 
         /** @var FlashBagInterface $flashBag */
@@ -215,7 +212,7 @@ final class ShopManagementController extends AbstractController
         $errorMessage = $this->getSyliusAttribute(
             $request,
             'error_flash',
-            'madcoders_rma.ui.return.user_not_login'
+            'madcoders_rma.ui.return.user_not_login',
         );
 
         /** @var FlashBagInterface $flashBag */

@@ -53,7 +53,6 @@ interface OrderReturnConsentInterface extends
     public function setConsentRequire(bool $consentRequire): void;
 
     /**
-     * @param string|null $locale
      * @return OrderReturnConsentTranslationInterface
      */
     public function getTranslation(?string $locale = null): TranslationInterface;

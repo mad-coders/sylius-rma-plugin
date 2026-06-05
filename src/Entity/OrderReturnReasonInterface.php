@@ -53,7 +53,6 @@ interface OrderReturnReasonInterface extends
     public function setDeadlineToReturn(?int $deadlineToReturn): void;
 
     /**
-     * @param string|null $locale
      * @return OrderReturnReasonTranslationInterface
      */
     public function getTranslation(?string $locale = null): TranslationInterface;

@@ -22,7 +22,7 @@ use Twig\TwigFunction;
 
 class RmaTimeLineExtension extends AbstractExtension
 {
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [

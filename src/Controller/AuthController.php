@@ -16,9 +16,11 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Exception;
+use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
+use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthStartType;
-use Madcoders\SyliusRmaPlugin\Entity\AuthCode;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnAuthVerificationType;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
@@ -37,8 +39,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use Madcoders\SyliusRmaPlugin\Email\AuthCodeEmailSenderInterface;
-use Exception;
 
 final class AuthController
 {
@@ -63,13 +63,13 @@ final class AuthController
     /** @var OrderByNumberProviderInterface */
     private $orderByNumberProvider;
 
-    /** @var AuthCodeFactoryInterface  */
+    /** @var AuthCodeFactoryInterface */
     private $authCodeFactory;
 
-    /** @var AuthorizationCheckerInterface  */
+    /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /** @var RepositoryInterface  */
+    /** @var RepositoryInterface */
     private $authCodeRepository;
 
     public function __construct(
@@ -82,9 +82,8 @@ final class AuthController
         OrderByNumberProviderInterface $orderByNumberProvider,
         AuthCodeFactoryInterface $authCodeFactory,
         AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $authCodeRepository
-    )
-    {
+        RepositoryInterface $authCodeRepository,
+    ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
         $this->router = $router;
@@ -104,16 +103,15 @@ final class AuthController
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod(Request::METHOD_POST) && $form->handleRequest($request)->isValid()) {
-
             /** @var array $data */
             $data = $form->getData();
-            $orderNumber = (string)$data['orderNumber'];
+            $orderNumber = (string) $data['orderNumber'];
 
             if (!$order = $this->orderByNumberProvider->findOneByNumber($orderNumber)) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_number_not_valid',
-                    ['%orderNumber%' => $orderNumber]
+                    ['%orderNumber%' => $orderNumber],
                 );
             }
 
@@ -121,13 +119,13 @@ final class AuthController
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
-                    [ '%orderNumber%' => $orderNumber ]
+                    ['%orderNumber%' => $orderNumber],
                 );
             }
 
             // redirect forward if access is already granted
             if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
-                return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, [ 'orderNumber' => $order->getNumber() ]));
+                return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
             }
 
             $authCode = $this->authCodeFactory->createForOrder($order);
@@ -136,7 +134,7 @@ final class AuthController
             $successMessage = $this->getSyliusAttribute(
                 $request,
                 'success_flash',
-                $this->translator->trans('madcoders_rma.ui.first_step.success.message', [ '%orderNumber%' => $orderNumber ])
+                $this->translator->trans('madcoders_rma.ui.first_step.success.message', ['%orderNumber%' => $orderNumber]),
             );
 
             /** @var FlashBagInterface $flashBag */
@@ -167,14 +165,11 @@ final class AuthController
         if ($redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }
+
         return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }
 
     /**
-     * @param Request $request
-     * @param string $template
-     * @param string $code
-     * @return Response
      * @throws Exception
      */
     public function verification(Request $request, string $template, string $code): Response
@@ -190,7 +185,7 @@ final class AuthController
             throw new \InvalidArgumentException('$redirectErrorRoute has not been configured properly');
         }
 
-        $authData = $this->authCodeRepository->findOneBy(array('hash' => $code));
+        $authData = $this->authCodeRepository->findOneBy(['hash' => $code]);
         if (!$authData instanceof AuthCodeInterface) {
             throw new NotFoundHttpException(sprintf('Auth code %s has not been found', $code));
         }
@@ -200,7 +195,7 @@ final class AuthController
             $errorMessage = $this->getSyliusAttribute(
                 $request,
                 'error_flash',
-                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_expired')
+                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_expired'),
             );
 
             /** @var FlashBagInterface $flashBag */
@@ -214,14 +209,13 @@ final class AuthController
 
         // redirect forward if access is already granted
         if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
-            return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $order->getNumber() ]));
+            return new RedirectResponse($this->router->generate($redirectRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
         }
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthVerificationType::class);
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-
             $data = $form->getData();
             $authCode = $data['authCode'];
 
@@ -232,7 +226,7 @@ final class AuthController
                 // this is success path
                 $this->orderReturnAuthorizer->authorize($order);
 
-                return new RedirectResponse($this->router->generate($redirectRoute, [ 'orderNumber' => $orderNumber ]));
+                return new RedirectResponse($this->router->generate($redirectRoute, ['orderNumber' => $orderNumber]));
             }
 
             // this is error handling
@@ -243,7 +237,7 @@ final class AuthController
                 $errorMessage = $this->getSyliusAttribute(
                     $request,
                     'error_flash',
-                    $this->translator->trans('madcoders_rma.ui.verification_step.error.max_attempts_exceeded')
+                    $this->translator->trans('madcoders_rma.ui.verification_step.error.max_attempts_exceeded'),
                 );
 
                 /** @var FlashBagInterface $flashBag */
@@ -256,9 +250,10 @@ final class AuthController
             $errorMessage = $this->getSyliusAttribute(
                 $request,
                 'error_flash',
-                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_not_valid',
-                    [ '%max%' => AuthCode::DEFAULT_MAX_ATTEMPTS, '%attempts%' => $authData->getAttempts() ]
-                )
+                $this->translator->trans(
+                    'madcoders_rma.ui.verification_step.error.code_not_valid',
+                    ['%max%' => AuthCode::DEFAULT_MAX_ATTEMPTS, '%attempts%' => $authData->getAttempts()],
+                ),
             );
 
             /** @var FlashBagInterface $flashBag */
@@ -269,7 +264,7 @@ final class AuthController
                 return new RedirectResponse($this->router->generate('madcoders_rma_start'));
             }
 
-            return new RedirectResponse($this->router->generate($errorRedirectRoute, [ 'code' => $code]));
+            return new RedirectResponse($this->router->generate($errorRedirectRoute, ['code' => $code]));
         }
 
         if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
@@ -277,7 +272,7 @@ final class AuthController
         }
 
         return new Response($this->templatingEngine->render($templateWithAttribute, [
-            'code' => $code, 'form' => $form->createView()
+            'code' => $code, 'form' => $form->createView(),
         ]));
     }
 

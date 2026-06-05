@@ -26,7 +26,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ReturnReasonFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void {
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
         $builder
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
@@ -42,7 +43,7 @@ final class ReturnReasonFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.days_to_deadline_to_return.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('position', IntegerType::class, [
@@ -50,14 +51,14 @@ final class ReturnReasonFormType extends AbstractType
                 'label' => 'madcoders_rma.admin.reason.form.position',
             ])
             ->addEventSubscriber(new AddCodeFormSubscriber(
-                NULL,
+                null,
                 [
                     'constraints' => [
                         new NotBlank([
                             'message' => 'vsf_navi.admin.vsf_navi_item.form.code.not_blank',
-                        ])
+                        ]),
                     ],
-                ]
+                ],
             ))
         ;
     }

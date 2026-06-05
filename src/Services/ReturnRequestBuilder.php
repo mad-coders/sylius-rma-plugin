@@ -16,16 +16,16 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
 
+use Exception;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
-use Exception;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
@@ -42,7 +42,7 @@ class ReturnRequestBuilder
     /** @var MaxQtyCalculator */
     private $maxQtyCalculator;
 
-    /** @var OrderByNumberProviderInterface  */
+    /** @var OrderByNumberProviderInterface */
     private $orderByNumberProvider;
 
     /** @var RmaChangesLogger */
@@ -54,9 +54,8 @@ class ReturnRequestBuilder
         ReturnNumberGenerator $orderReturnGenerator,
         MaxQtyCalculator $maxQtyCalculator,
         OrderByNumberProviderInterface $orderByNumberProvider,
-        RmaChangesLogger $changesLogger
-    )
-    {
+        RmaChangesLogger $changesLogger,
+    ) {
         $this->orderRepository = $orderRepository;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->orderReturnGenerator = $orderReturnGenerator;
@@ -66,19 +65,17 @@ class ReturnRequestBuilder
     }
 
     /**
-     * @param string $orderNumber
-     * @return OrderReturnInterface
      * @throws Exception
      */
     public function build(string $orderNumber): OrderReturnInterface
     {
-        $order  = $this->orderByNumberProvider->findOneByNumber($orderNumber);
+        $order = $this->orderByNumberProvider->findOneByNumber($orderNumber);
 
         if (!$order instanceof OrderInterface) {
             throw new Exception(sprintf('$order must implement %s interface', OrderInterface::class));
         }
 
-        $draftOrderSearchData = [ 'orderNumber' => $orderNumber, 'orderReturnStatus' => OrderReturnInterface::STATUS_DRAFT ];
+        $draftOrderSearchData = ['orderNumber' => $orderNumber, 'orderReturnStatus' => OrderReturnInterface::STATUS_DRAFT];
         $draftOrderReturn = $this->orderReturnRepository->findOneBy($draftOrderSearchData);
 
         // if draft order already exists then return it
@@ -104,7 +101,7 @@ class ReturnRequestBuilder
         $orderReturn->setCustomerEmail($customer->getEmail());
 
         // set customer number
-        $orderReturn->setCustomerNumber((string)$order->getCustomer()->getId());
+        $orderReturn->setCustomerNumber((string) $order->getCustomer()->getId());
 
         // check if address exists
         if (!$address = $order->getBillingAddress()) {
@@ -136,7 +133,7 @@ class ReturnRequestBuilder
             $originalQty = $item->getQuantity();
             $maxQty = $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);
 
-            $orderReturnItem= new OrderReturnItem();
+            $orderReturnItem = new OrderReturnItem();
             $orderReturnItem->setUnitPrice($item->getUnitPrice());
             $orderReturnItem->setProductName($item->getProductName());
             $orderReturnItem->setProductSku($orderItemVariant->getCode());

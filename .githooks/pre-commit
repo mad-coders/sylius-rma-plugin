@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Pre-commit hook for madcoders/sylius-rma-plugin.
+#
+# 1. Auto-fixes code style (ECS) on staged PHP files and re-stages the result.
+# 2. Verifies static analysis (PHPStan, ECS) and unit tests.
+#
+# A failing static analysis or unit test aborts the commit.
+# Install with: make install-hooks   (sets git core.hooksPath to .githooks)
+#
+# Skip in an emergency with: git commit --no-verify
+
+set -eu
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+# Only act on staged, non-deleted PHP files under src/ or tests/ (newline separated).
+STAGED_PHP="$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^(src|tests)/.*\.php$' || true)"
+
+if [ -z "$STAGED_PHP" ]; then
+    echo "pre-commit: no staged PHP files, skipping."
+    exit 0
+fi
+
+echo "==> Auto-fixing code style (ECS)…"
+vendor/bin/ecs check src --fix --no-progress-bar || true
+
+# Re-stage any files ECS modified that are part of this commit.
+echo "$STAGED_PHP" | while IFS= read -r f; do
+    [ -n "$f" ] && [ -f "$f" ] && git add "$f"
+done
+
+echo "==> PHPStan…"
+vendor/bin/phpstan analyse -c phpstan.neon --no-progress
+
+echo "==> ECS (verify)…"
+vendor/bin/ecs check src --no-progress-bar
+
+echo "==> PHPUnit…"
+vendor/bin/phpunit -c phpunit.xml.dist
+
+echo "pre-commit: all checks passed."

@@ -37,43 +37,36 @@ class RmaConfiguration implements RmaConfigurationInterface, ResourceInterface, 
     /** @var ChannelInterface */
     private $channel;
 
-    /** @return int */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /** @return string|null */
     public function getParameter(): ?string
     {
         return $this->parameter;
     }
 
-    /** @param string|null $parameter */
     public function setParameter(?string $parameter): void
     {
         $this->parameter = $parameter;
     }
 
-    /** @return string|null */
     public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /** @param string|null $value */
     public function setValue(?string $value): void
     {
         $this->value = $value;
     }
 
-    /** @return ChannelInterface */
     public function getChannel(): ChannelInterface
     {
         return $this->channel;
     }
 
-    /** @param ChannelInterface $channel */
     public function setChannel(ChannelInterface $channel): void
     {
         $this->channel = $channel;

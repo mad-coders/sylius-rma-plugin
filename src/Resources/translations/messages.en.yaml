@@ -4,6 +4,9 @@ madcoders_rma:
         return_reason_list: 'Order return reasons'
         return:
             session_not_valid: 'Your session has expired'
+            pdf_disabled: 'Return form PDF download is currently disabled.'
+        footer:
+            start_return: 'Return an order'
         action:
             create_new_return: 'Return'
             submit_return_form: 'Submit return form'

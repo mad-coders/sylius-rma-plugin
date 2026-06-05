@@ -21,5 +21,5 @@ Feature: Managing store return address in plugin configuration
           | company             | field             | MADCODERS                           |
           | country             | select            | Poland                              |
         And I click continue button
-        Then I should be notified that it has been successfully edited
+        Then I should be notified that the configuration has been successfully updated
         And I should see "MADCODERS", "Rokicinska 163", "92-620", "Łódź", "Poland" as return address information

@@ -1,0 +1,46 @@
+# Docker services for running the plugin test suite (PHPUnit, Behat).
+#
+# PHP is run from the host (PHP 8.2). These containers provide the external
+# services the test application needs: a MySQL 8 database and a headless Chrome
+# for the Behat @javascript suite.
+#
+# Usage:
+#   docker compose up -d mysql            # database only (unit/component + non-JS Behat)
+#   docker compose up -d                  # database + chrome (for @javascript Behat)
+#
+# The test application connects with
+# DATABASE_URL=mysql://root:rma@127.0.0.1:3307/... (see tests/Application/.env).
+# Host port 3307 is used (not 3306) to avoid clashing with any MySQL already
+# installed on the host machine.
+services:
+    mysql:
+        image: mysql:8.0
+        platform: linux/amd64
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_ROOT_PASSWORD: rma
+        ports:
+            - "${MYSQL_PORT:-3307}:3306"
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+            interval: 5s
+            timeout: 5s
+            retries: 20
+        volumes:
+            - mysql_data:/var/lib/mysql
+
+    chrome:
+        image: zenika/alpine-chrome:latest
+        platform: linux/amd64
+        command:
+            - --no-sandbox
+            - --disable-gpu
+            - --disable-dev-shm-usage
+            - --remote-debugging-address=0.0.0.0
+            - --remote-debugging-port=9222
+            - --window-size=1920,1080
+        ports:
+            - "${CHROME_PORT:-9222}:9222"
+
+volumes:
+    mysql_data: {}

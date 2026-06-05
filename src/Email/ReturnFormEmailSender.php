@@ -16,13 +16,13 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Email;
 
+use Exception;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Filesystem\TemporaryFilesystem;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
-use Exception;
 
 final class ReturnFormEmailSender implements ReturnFormEmailSenderInterface
 {
@@ -38,45 +38,56 @@ final class ReturnFormEmailSender implements ReturnFormEmailSenderInterface
     /** @var TemporaryFilesystem */
     private $temporaryFilesystem;
 
+    /** @var bool */
+    private $returnFormPdfEnabled;
+
     public function __construct(
         SenderInterface $emailSender,
         OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        ReturnAddressConfigurator $returnAddressConfigurator
-    )
-    {
+        ReturnAddressConfigurator $returnAddressConfigurator,
+        bool $returnFormPdfEnabled = false,
+    ) {
         $this->emailSender = $emailSender;
         $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
         $this->returnAddressConfigurator = $returnAddressConfigurator;
         $this->temporaryFilesystem = new TemporaryFilesystem();
+        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**
-     * @param OrderReturnInterface $orderReturn
-     * @param ChannelInterface $channel
-     * @param string $customerEmail
      * @throws Exception
      */
     public function sendReturnOrderFormEmail(
         OrderReturnInterface $orderReturn,
         ChannelInterface $channel,
-        string $customerEmail
+        string $customerEmail,
     ): void {
-        $orderReturnFormPdf = $this->orderReturnFormPdfFileGenerator->generate($orderReturn);
-        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel))
-        {
+        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel)) {
             throw new Exception('Address not defined for Selected channel');
         }
+
+        $emailData = [
+            'orderReturn' => $orderReturn,
+            'channel' => $channel,
+            'returnAddress' => $returnAddress,
+        ];
+
+        // The return-form PDF is opt-in (madcoders_rma.return_form_pdf_enabled). When disabled,
+        // the confirmation email is sent without the PDF attachment, so wkhtmltopdf is not required.
+        if (!$this->returnFormPdfEnabled) {
+            $this->emailSender->send(Emails::RETURN_GENERATED, [$customerEmail], $emailData);
+
+            return;
+        }
+
+        $orderReturnFormPdf = $this->orderReturnFormPdfFileGenerator->generate($orderReturn);
 
         $this->temporaryFilesystem->executeWithFile(
             $orderReturnFormPdf->filename(),
             $orderReturnFormPdf->content(),
-            function (string $filepath) use ($orderReturn, $customerEmail, $channel, $returnAddress): void {
-                $this->emailSender->send(Emails::RETURN_GENERATED, [$customerEmail], [
-                    'orderReturn' => $orderReturn,
-                    'channel' => $channel,
-                    'returnAddress' => $returnAddress
-                ], [$filepath]);
-            }
+            function (string $filepath) use ($customerEmail, $emailData): void {
+                $this->emailSender->send(Emails::RETURN_GENERATED, [$customerEmail], $emailData, [$filepath]);
+            },
         );
     }
 }

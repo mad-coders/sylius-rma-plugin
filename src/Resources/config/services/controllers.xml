@@ -36,7 +36,7 @@ Architects of this package:
             <argument type="service" id="twig" />
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="SM\Factory\FactoryInterface" />
@@ -46,6 +46,8 @@ Architects of this package:
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="translator" />
+            <argument type="service" id="doctrine" />
+            <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.admin_management_controller"
@@ -54,7 +56,7 @@ Architects of this package:
             <argument type="service" id="twig" />
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="security.token_storage" />
@@ -68,7 +70,7 @@ Architects of this package:
             <argument type="service" id="twig" />
             <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="security.token_storage" />
@@ -76,6 +78,7 @@ Architects of this package:
             <argument type="service" id= "sylius.repository.order" />
             <argument type="service" id="translator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
+            <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.rma_configuration_controller"
@@ -83,7 +86,7 @@ Architects of this package:
             <argument type="service" id="form.factory" />
             <argument type="service" id="twig" />
             <argument type="service" id="router" />
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
             <argument type="service" id= "sylius.repository.channel" />

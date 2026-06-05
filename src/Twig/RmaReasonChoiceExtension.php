@@ -20,7 +20,7 @@ use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProviderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class RmaReasonChoiceExtension  extends AbstractExtension
+class RmaReasonChoiceExtension extends AbstractExtension
 {
     /** @var ChoiceProviderInterface */
     private $reasonChoiceProvider;
@@ -30,7 +30,7 @@ class RmaReasonChoiceExtension  extends AbstractExtension
         $this->reasonChoiceProvider = $reasonChoiceProvider;
     }
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [

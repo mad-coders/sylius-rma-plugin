@@ -15,7 +15,7 @@ default:
             contexts:
                 # hook
                 - sylius.behat.context.hook.doctrine_orm
-                - sylius.behat.context.hook.email_spool
+                - sylius.behat.context.hook.mailer
 
                 # setup
                 - sylius.behat.context.setup.channel

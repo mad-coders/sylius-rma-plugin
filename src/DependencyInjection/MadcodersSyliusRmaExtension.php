@@ -17,12 +17,12 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\DependencyInjection;
 
 use Sylius\Bundle\CoreBundle\DependencyInjection\PrependDoctrineMigrationsTrait;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 
 final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -34,6 +34,8 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $this->registerResources('madcoders_rma', 'doctrine/orm', $config['resources'], $container);
+
+        $container->setParameter('madcoders_rma.return_form_pdf_enabled', (bool) $config['return_form_pdf_enabled']);
 
         $loader->load('services.xml');
     }

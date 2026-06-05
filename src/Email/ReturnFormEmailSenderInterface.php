@@ -21,5 +21,5 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 
 interface ReturnFormEmailSenderInterface
 {
-    public function sendReturnOrderFormEmail(OrderReturnInterface $orderReturn,  ChannelInterface $channel, string $customerEmail): void;
+    public function sendReturnOrderFormEmail(OrderReturnInterface $orderReturn, ChannelInterface $channel, string $customerEmail): void;
 }

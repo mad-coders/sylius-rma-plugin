@@ -28,16 +28,14 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
 
     /**
      * RmaVerificationPossibilityOfReturnExtension constructor.
-     * @param RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
      */
     public function __construct(
-        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn
-    )
-    {
+        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+    ) {
         $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
     }
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     public function getFunctions()
     {
         return [
@@ -46,8 +44,6 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
     }
 
     /**
-     * @param OrderInterface $order
-     * @return bool
      * @throws \Exception
      */
     public function verificationPossibilityOfReturn(OrderInterface $order): bool

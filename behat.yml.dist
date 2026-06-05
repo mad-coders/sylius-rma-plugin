@@ -5,12 +5,6 @@ imports:
 default:
     extensions:
         DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
-        Bex\Behat\ScreenshotExtension:
-            screenshot_taking_mode: failed_scenarios
-            image_drivers:
-                local:
-                    screenshot_directory: /Users/leonidmoshko/projects/sylius/sylius-plugin-rma/tests/etc/build/s
-                    clear_screenshot_directory: true
 
         FriendsOfBehat\MinkDebugExtension:
             directory: etc/build
@@ -19,7 +13,7 @@ default:
 
         Behat\MinkExtension:
             files_path: "%paths.base%/vendor/sylius/sylius/src/Sylius/Behat/Resources/fixtures/"
-            base_url: "https://127.0.0.1:8080/"
+            base_url: "https://127.0.0.1:8081/"
             default_session: symfony
             javascript_session: chrome_headless
             sessions:
@@ -29,24 +23,6 @@ default:
                     chrome:
                         api_url: http://127.0.0.1:9222
                         validate_certificate: false
-                chrome:
-                    selenium2:
-                        browser: chrome
-                        capabilities:
-                            browserName: chrome
-                            browser: chrome
-                            version: ""
-                            marionette: null # https://github.com/Behat/MinkExtension/pull/311
-                            chrome:
-                                switches:
-                                    - "start-fullscreen"
-                                    - "start-maximized"
-                                    - "no-sandbox"
-                            extra_capabilities:
-                                unexpectedAlertBehaviour: accept
-                firefox:
-                    selenium2:
-                        browser: firefox
             show_auto: false
 
         FriendsOfBehat\SymfonyExtension:

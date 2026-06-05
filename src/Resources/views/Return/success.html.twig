@@ -15,11 +15,13 @@
          </h1>
          <div class="ui segment">
             <strong>{{ 'madcoders_rma.ui.return_number'|trans }}: {{ returnNumber }}</strong><br/>
-            {{ 'madcoders_rma.ui.success.order_return_instruction'|trans }}
-            <div class="ui hidden divider"></div>
-            <a href="{{ path('madcoders_rma_return_form_print', { 'returnNumber': returnNumber }) }}" class="ui large primary button">
-               {{ 'madcoders_rma.ui.success.print_order_return_form'|trans }}
-            </a>
+            {% if madcoders_rma_return_form_pdf_enabled() %}
+               {{ 'madcoders_rma.ui.success.order_return_instruction'|trans }}
+               <div class="ui hidden divider"></div>
+               <a href="{{ path('madcoders_rma_return_form_print', { 'returnNumber': returnNumber }) }}" class="ui large primary button">
+                  {{ 'madcoders_rma.ui.success.print_order_return_form'|trans }}
+               </a>
+            {% endif %}
          </div>
       </div>
    </div>

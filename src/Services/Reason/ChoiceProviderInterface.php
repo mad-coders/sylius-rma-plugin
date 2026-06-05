@@ -20,11 +20,6 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 
 interface ChoiceProviderInterface
 {
-    /**
-     * @param OrderReturnInterface $orderReturn
-     *
-     * @return array
-     */
     public function getChoices(OrderReturnInterface $orderReturn): array;
 
     public function getNameByCode(string $code): ?string;

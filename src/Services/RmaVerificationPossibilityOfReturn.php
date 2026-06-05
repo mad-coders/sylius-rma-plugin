@@ -16,10 +16,10 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services;
 
+use Exception;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
-use Exception;
 
 class RmaVerificationPossibilityOfReturn
 {
@@ -31,21 +31,16 @@ class RmaVerificationPossibilityOfReturn
 
     /**
      * RmaVerificationPossibilityOfReturn constructor.
-     * @param MaxQtyCalculator $maxQtyCalculator
-     * @param ChoiceProvider $availableReasonsCreator
      */
     public function __construct(
         MaxQtyCalculator $maxQtyCalculator,
-        ChoiceProvider $availableReasonsCreator
-    )
-    {
+        ChoiceProvider $availableReasonsCreator,
+    ) {
         $this->maxQtyCalculator = $maxQtyCalculator;
         $this->availableReasonsCreator = $availableReasonsCreator;
     }
 
     /**
-     * @param OrderInterface $order
-     * @return bool
      * @throws Exception
      */
     public function verificationForButtonRender(OrderInterface $order): bool
@@ -57,9 +52,8 @@ class RmaVerificationPossibilityOfReturn
         $orderItems = $order->getItems();
         $orderQty = 0;
 
-        /** @var OrderItemInterface $items */
+        /** @var OrderItemInterface $item */
         foreach ($orderItems as $item) {
-
             $originalQty = $item->getQuantity();
             if (!$itemVariant = $item->getVariant()) {
                 throw new Exception('itemVariant not find');

@@ -27,7 +27,6 @@ class RmaChangesLogger
 
     /**
      * RmaChangesLogger constructor.
-     * @param RepositoryInterface $changeLogRepository
      */
     public function __construct(RepositoryInterface $changeLogRepository)
     {
@@ -38,9 +37,8 @@ class RmaChangesLogger
         string $returnNumber,
         string $type,
         string $note,
-        OrderReturnChangeLogAuthor $newChangeLogAuthor
-    )
-    {
+        OrderReturnChangeLogAuthor $newChangeLogAuthor,
+    ) {
         $newChangeLog = new OrderReturnChangeLog();
         $newChangeLog->setReturnNumber($returnNumber);
         $newChangeLog->setType($type);

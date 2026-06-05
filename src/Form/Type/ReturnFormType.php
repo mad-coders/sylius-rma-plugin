@@ -44,14 +44,12 @@ final class ReturnFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $builder
             ->add('items', CollectionType::class, [
                 'entry_type' => ReturnItemFormType::class,
-                'label'    => false,
+                'label' => false,
                 'required' => false,
-                'entry_options' => ['label' => false ],
-
+                'entry_options' => ['label' => false],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'sylius.form.address.first_name',
@@ -59,7 +57,7 @@ final class ReturnFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('lastName', TextType::class, [
@@ -68,7 +66,7 @@ final class ReturnFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ])
             ->add('phoneNumber', TextType::class, [
@@ -100,7 +98,7 @@ final class ReturnFormType extends AbstractType
                 'label' => 'sylius.form.province.name',
             ])
             ->add('customerNote', TextareaType::class, [
-                'attr'        => ['rows' => '2'],
+                'attr' => ['rows' => '2'],
                 'required' => false,
                 'label' => 'madcoders_rma.ui.add_notes',
             ])
@@ -113,12 +111,12 @@ final class ReturnFormType extends AbstractType
                     ]),
                     new Iban([
                         'message' => 'madcoders_rma.validator.bank_account_number.not_a_valid',
-                    ])
+                    ]),
                 ],
             ])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $orderReturn = $event->getData();
             $form = $event->getForm();
 
@@ -129,7 +127,7 @@ final class ReturnFormType extends AbstractType
             $choices = $this->reasonChoiceProvider->getChoices($orderReturn);
 
             $form->add('returnReason', ChoiceType::class, [
-                'label'    => 'madcoders_rma.ui.form.return_reason',
+                'label' => 'madcoders_rma.ui.form.return_reason',
                 'required' => true,
                 'placeholder' => 'madcoders_rma.ui.form.placeholder.reason',
                 'empty_data' => '',
@@ -137,18 +135,18 @@ final class ReturnFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.not_blank',
-                    ])
+                    ]),
                 ],
             ]);
         });
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('data_class',  OrderReturn::class);
+        $resolver->setDefault('data_class', OrderReturn::class);
     }
 
     public function getBlockPrefix(): string

@@ -13,3 +13,10 @@
 /phpunit.xml
 /coverage
 /php.ini
+/logs
+
+# IDE / editor
+/.idea/
+
+# Local Claude Code settings (personal, not shared)
+/.claude/settings.local.json
