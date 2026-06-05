@@ -38,9 +38,13 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use Webmozart\Assert\Assert;
 
 final readonly class AuthController
 {
+    /**
+     * @param RepositoryInterface<AuthCodeInterface> $authCodeRepository
+     */
     public function __construct(private FormFactoryInterface $formFactory, private Environment $templatingEngine, private RouterInterface $router, private AuthCodeEmailSenderInterface $authCodeEmailSender, private TranslatorInterface $translator, private OrderReturnAuthorizerInterface $orderReturnAuthorizer, private OrderByNumberProviderInterface $orderByNumberProvider, private AuthCodeFactoryInterface $authCodeFactory, private AuthorizationCheckerInterface $authorizationChecker, private RepositoryInterface $authCodeRepository)
     {
     }
@@ -54,9 +58,11 @@ final readonly class AuthController
         if ($request->isMethod(Request::METHOD_POST) && $form->handleRequest($request)->isValid()) {
             /** @var array $data */
             $data = $form->getData();
-            $orderNumber = (string) $data['orderNumber'];
+            Assert::string($data['orderNumber']);
+            $orderNumber = $data['orderNumber'];
 
-            if (!$order = $this->orderByNumberProvider->findOneByNumber($orderNumber)) {
+            $order = $this->orderByNumberProvider->findOneByNumber($orderNumber);
+            if (null === $order) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_number_not_valid',
@@ -92,7 +98,7 @@ final readonly class AuthController
 
             $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
 
-            if ($redirectRoute) {
+            if ('' !== $redirectRoute) {
                 return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $authCode->getHash()]));
             }
 
@@ -111,7 +117,7 @@ final readonly class AuthController
         $flashBag->add('error', $this->translator->trans($errorMessage, $context));
 
         $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
-        if ($redirectRoute) {
+        if ('' !== $redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }
 
@@ -126,11 +132,11 @@ final readonly class AuthController
         $redirectRoute = $this->getSyliusAttribute($request, 'redirect', '');
         $redirectErrorRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
 
-        if (!$redirectRoute) {
+        if ('' === $redirectRoute) {
             throw new \InvalidArgumentException('$redirectRoute has not been configured properly');
         }
 
-        if (!$redirectErrorRoute) {
+        if ('' === $redirectErrorRoute) {
             throw new \InvalidArgumentException('$redirectErrorRoute has not been configured properly');
         }
 
@@ -155,6 +161,9 @@ final readonly class AuthController
         }
 
         $order = $this->orderByNumberProvider->findOneByNumber($authData->getOrderNumber());
+        if (!$order instanceof OrderInterface) {
+            throw new NotFoundHttpException(sprintf('Order %s has not been found', $authData->getOrderNumber()));
+        }
 
         // redirect forward if access is already granted
         if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
@@ -165,6 +174,7 @@ final readonly class AuthController
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            /** @var array $data */
             $data = $form->getData();
             $authCode = $data['authCode'];
 
@@ -209,35 +219,37 @@ final readonly class AuthController
             $flashBag = $request->getSession()->getBag('flashes');
             $flashBag->add('error', $errorMessage);
 
-            if (!$errorRedirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'madcoders_rma_verification')) {
+            $errorRedirectRoute = $this->getSyliusAttribute($request, 'error_redirect', 'madcoders_rma_verification');
+            if ('' === $errorRedirectRoute) {
                 return new RedirectResponse($this->router->generate('madcoders_rma_start'));
             }
 
             return new RedirectResponse($this->router->generate($errorRedirectRoute, ['code' => $code]));
         }
 
-        if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
-            throw new Exception('Template not find');
-        }
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
 
         return new Response($this->templatingEngine->render($templateWithAttribute, [
             'code' => $code, 'form' => $form->createView(),
         ]));
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
         if (!is_array($attributes)) {
-            return null;
+            return $default;
         }
 
         if (!isset($attributes[$attributeName]) || !is_string($attributes[$attributeName])) {
             return $default;
         }
 
-        if (empty($attributes[$attributeName])) {
+        if ('' === $attributes[$attributeName]) {
             return $default;
         }
 

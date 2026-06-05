@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
-interface AuthCodeInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+interface AuthCodeInterface extends ResourceInterface
 {
     public function getId(): ?int;
 
