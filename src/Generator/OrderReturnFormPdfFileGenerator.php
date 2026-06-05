@@ -34,7 +34,8 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
     /**
      * OrderReturnFormPdfFileGenerator constructor.
      *
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment            $templatingEngine
+     * @param RepositoryInterface<ChannelInterface> $channelsRepository
      */
     public function __construct(private $templatingEngine, private readonly GeneratorInterface $pdfGenerator, private readonly FileLocatorInterface $fileLocator, private readonly string $template, private readonly string $orderReturnFormLogoPath, private readonly ReturnAddressConfigurator $returnAddressConfigurator, private readonly RepositoryInterface $channelsRepository)
     {
@@ -50,11 +51,8 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
         if (!$channel instanceof ChannelInterface) {
             throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));
         }
-        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel)) {
-            throw new Exception('Address not defined for Selected channel');
-        }
+        $returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel);
 
-        /** @var string $filename */
         $filename = str_replace('/', '_', $orderReturnForm->getReturnNumber()) . self::FILE_EXTENSION;
 
         $pdf = $this->pdfGenerator->getOutputFromHtml(

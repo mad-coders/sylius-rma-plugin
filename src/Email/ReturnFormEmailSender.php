@@ -45,9 +45,7 @@ final readonly class ReturnFormEmailSender implements ReturnFormEmailSenderInter
         ChannelInterface $channel,
         string $customerEmail,
     ): void {
-        if (!$returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel)) {
-            throw new Exception('Address not defined for Selected channel');
-        }
+        $returnAddress = $this->returnAddressConfigurator->getReturnAddressForReturnForm($channel);
 
         $emailData = [
             'orderReturn' => $orderReturn,

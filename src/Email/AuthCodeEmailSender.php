@@ -34,7 +34,12 @@ final readonly class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
         OrderInterface $order,
         array $context = [],
     ): void {
-        $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$order->getCustomer()->getEmail()], [
+        $customer = $order->getCustomer();
+        if (null === $customer) {
+            throw new \InvalidArgumentException('Order has no customer defined');
+        }
+
+        $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$customer->getEmail()], [
             'authCode' => $authCode,
             'channel' => $context['channel'],
         ]);

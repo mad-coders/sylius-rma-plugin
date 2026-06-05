@@ -265,30 +265,6 @@ parameters:
 			path: src/Controller/ShopManagementController.php
 
 		-
-			message: '#^Parameter \#3 \$registeredResources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Extension\\AbstractResourceExtension\:\:registerResources\(\) expects array, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/DependencyInjection/MadcodersSyliusRmaExtension.php
-
-		-
-			message: '#^Cannot call method getEmail\(\) on Sylius\\Component\\Customer\\Model\\CustomerInterface\|null\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Email/AuthCodeEmailSender.php
-
-		-
-			message: '#^Negated boolean expression is always false\.$#'
-			identifier: booleanNot.alwaysFalse
-			count: 1
-			path: src/Email/ReturnFormEmailSender.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, Madcoders\\SyliusRmaPlugin\\Services\\Configuration\\ReturnAddressData given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Email/ReturnFormEmailSender.php
-
-		-
 			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:getCustomerIp\(\) should return string but returns string\|null\.$#'
 			identifier: return.type
 			count: 1
@@ -581,30 +557,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Form/Type/ReturnFormType.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Generator\\OrderReturnFormPdfFileGenerator\:\:__construct\(\) has parameter \$channelsRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Generator/OrderReturnFormPdfFileGenerator.php
-
-		-
-			message: '#^Negated boolean expression is always false\.$#'
-			identifier: booleanNot.alwaysFalse
-			count: 1
-			path: src/Generator/OrderReturnFormPdfFileGenerator.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, Madcoders\\SyliusRmaPlugin\\Services\\Configuration\\ReturnAddressData given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Generator/OrderReturnFormPdfFileGenerator.php
-
-		-
-			message: '#^PHPDoc tag @var with type string is not subtype of type non\-falsy\-string\.$#'
-			identifier: varTag.type
-			count: 1
-			path: src/Generator/OrderReturnFormPdfFileGenerator.php
 
 		-
 			message: '#^Cannot access offset ''city'' on mixed\.$#'
