@@ -17,8 +17,9 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
-interface RmaConfigurationInterface
+interface RmaConfigurationInterface extends ResourceInterface
 {
     public function getId(): int;
 

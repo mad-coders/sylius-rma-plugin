@@ -29,6 +29,9 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
 {
+    /**
+     * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
+     */
     public function __construct(private readonly RepositoryInterface $orderReturnRepository, private readonly ReturnNumberGenerator $orderReturnGenerator, private readonly MaxQtyCalculator $maxQtyCalculator, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly RmaChangesLogger $changesLogger)
     {
     }
@@ -58,11 +61,21 @@ class ReturnRequestBuilder
         // populate order data
         $orderReturnNumber = $this->orderReturnGenerator->returnNumberGenerate($orderNumber);
         $orderReturn->setReturnNumber($orderReturnNumber);
-        $orderReturn->setChannelCode($order->getChannel()->getCode());
+
+        $channel = $order->getChannel();
+        if (null === $channel) {
+            throw new Exception('Order channel is missing');
+        }
+        $channelCode = $channel->getCode();
+        if (null === $channelCode) {
+            throw new Exception('Order channel code is missing');
+        }
+        $orderReturn->setChannelCode($channelCode);
         $orderReturn->setOrderNumber($orderNumber);
 
         // check if customer exists
-        if (!$customer = $order->getCustomer()) {
+        $customer = $order->getCustomer();
+        if (null === $customer) {
             throw new Exception('Customer is missing');
         }
 
@@ -70,10 +83,12 @@ class ReturnRequestBuilder
         $orderReturn->setCustomerEmail($customer->getEmail());
 
         // set customer number
-        $orderReturn->setCustomerNumber((string) $order->getCustomer()->getId());
+        $customerId = $customer->getId();
+        $orderReturn->setCustomerNumber(is_scalar($customerId) ? (string) $customerId : '');
 
         // check if address exists
-        if (!$address = $order->getBillingAddress()) {
+        $address = $order->getBillingAddress();
+        if (null === $address) {
             throw new Exception('Customer address is missing');
         }
 
@@ -94,7 +109,8 @@ class ReturnRequestBuilder
                 throw new \Exception(sprintf('$item->getVariant() must return %s', ProductVariantInterface::class));
             }
 
-            if (!$itemVariantCode = $orderItemVariant->getCode()) {
+            $itemVariantCode = $orderItemVariant->getCode();
+            if (null === $itemVariantCode || '' === $itemVariantCode) {
                 throw new \Exception('Cannot create OrderItemReturnRequest for OrderItem without code.');
             }
 
@@ -105,7 +121,7 @@ class ReturnRequestBuilder
             $orderReturnItem = new OrderReturnItem();
             $orderReturnItem->setUnitPrice($item->getUnitPrice());
             $orderReturnItem->setProductName($item->getProductName());
-            $orderReturnItem->setProductSku($orderItemVariant->getCode());
+            $orderReturnItem->setProductSku($itemVariantCode);
             $orderReturnItem->setMaxQty($maxQty);
             $orderReturnItem->setReturnQty($maxQty);
 
@@ -114,8 +130,8 @@ class ReturnRequestBuilder
 
         //Logger functionality
         $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
-        $newChangeLogAuthor->setFirstName($address->getFirstName());
-        $newChangeLogAuthor->setLastName($address->getLastName());
+        $newChangeLogAuthor->setFirstName($address->getFirstName() ?? '');
+        $newChangeLogAuthor->setLastName($address->getLastName() ?? '');
         $newChangeLogAuthor->setType('customer');
 
         $this->changesLogger->add($orderReturnNumber, 'created_draft', '', $newChangeLogAuthor);

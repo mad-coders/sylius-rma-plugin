@@ -20,11 +20,12 @@ use Exception;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Webmozart\Assert\Assert;
 
 class ReturnAddressConfigurator
 {
     /**
-     * ReturnAddressConfigurator constructor.
+     * @param RepositoryInterface<RmaConfigurationInterface> $configurationRepository
      */
     public function __construct(private readonly RepositoryInterface $configurationRepository)
     {
@@ -32,7 +33,6 @@ class ReturnAddressConfigurator
 
     public function getReturnAddressForReturnForm(ChannelInterface $channel): ReturnAddressData
     {
-        /** @var RmaConfigurationInterface|null $addressConfigByChannel */
         $addressConfigByChannel = $this->configurationRepository
             ->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
@@ -40,9 +40,16 @@ class ReturnAddressConfigurator
             throw new Exception('Address not defined for Selected channel');
         }
 
-        if (!$addressData = json_decode((string) $addressConfigByChannel->getValue(), true)) {
+        $addressData = json_decode((string) $addressConfigByChannel->getValue(), true);
+        if (!is_array($addressData)) {
             throw new Exception('Address not defined for Selected channel');
         }
+
+        Assert::string($addressData['company']);
+        Assert::string($addressData['countryCode']);
+        Assert::string($addressData['street']);
+        Assert::string($addressData['city']);
+        Assert::string($addressData['postcode']);
 
         return new ReturnAddressData(
             $addressData['company'],
