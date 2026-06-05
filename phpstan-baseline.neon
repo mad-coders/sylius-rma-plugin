@@ -193,18 +193,6 @@ parameters:
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^PHPDoc tag @var with type Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfigurationInterface\|null is not subtype of type Sylius\\Resource\\Model\\ResourceInterface\|null\.$#'
-			identifier: varTag.type
-			count: 2
-			path: src/Controller/RmaConfigurationController.php
-
-		-
-			message: '#^Parameter \#1 \$resource of method Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:add\(\) expects Sylius\\Resource\\Model\\ResourceInterface, Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfigurationInterface given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Controller/RmaConfigurationController.php
-
-		-
 			message: '#^Parameter \#1 \$value of method Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfiguration\:\:setValue\(\) expects string\|null, string\|false given\.$#'
 			identifier: argument.type
 			count: 1
@@ -265,64 +253,10 @@ parameters:
 			path: src/Controller/ShopManagementController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:getCustomerIp\(\) should return string but returns string\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Parameter \#1 \$element of method Doctrine\\Common\\Collections\\Collection\<int,Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItem\>\:\:add\(\) expects Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItem, Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItemInterface given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Parameter \#1 \$element of method Doctrine\\Common\\Collections\\Collection\<int,Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItem\>\:\:removeElement\(\) expects Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItem, Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItemInterface given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLog\:\:getNote\(\) should return string but returns string\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity/OrderReturnChangeLog.php
-
-		-
 			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLog\:\:\$author type mapping mismatch\: database can contain Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\|null but property expects Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\.$#'
 			identifier: doctrine.associationType
 			count: 1
 			path: src/Entity/OrderReturnChangeLog.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getFirstName\(\) should return string but returns string\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity/OrderReturnChangeLogAuthor.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getLastName\(\) should return string but returns string\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity/OrderReturnChangeLogAuthor.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getType\(\) should return string but returns string\|null\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Entity/OrderReturnChangeLogAuthor.php
-
-		-
-			message: '#^Cannot call method getCode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Entity/OrderReturnConsent.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:getId\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Entity/OrderReturnConsent.php
 
 		-
 			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:\$code type mapping mismatch\: property can contain string\|null but database expects string\.$#'
@@ -337,12 +271,6 @@ parameters:
 			path: src/Entity/OrderReturnConsent.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsentTranslation\:\:getId\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Entity/OrderReturnConsentTranslation.php
-
-		-
 			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsentTranslation\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'
 			identifier: doctrine.columnType
 			count: 1
@@ -353,18 +281,6 @@ parameters:
 			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnConsentTranslation.php
-
-		-
-			message: '#^Cannot call method getCode\(\) on mixed\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: src/Entity/OrderReturnReason.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:getId\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Entity/OrderReturnReason.php
 
 		-
 			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:\$code type mapping mismatch\: property can contain string\|null but database expects string\.$#'
@@ -383,12 +299,6 @@ parameters:
 			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnReason.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReasonTranslation\:\:getId\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/Entity/OrderReturnReasonTranslation.php
 
 		-
 			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReasonTranslation\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'

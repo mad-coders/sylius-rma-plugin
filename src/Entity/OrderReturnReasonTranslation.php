@@ -20,7 +20,7 @@ use Sylius\Component\Resource\Model\AbstractTranslation;
 
 class OrderReturnReasonTranslation extends AbstractTranslation implements OrderReturnReasonTranslationInterface, \Stringable
 {
-    /** @var mixed */
+    /** @var int */
     private $id;
 
     private ?string $name = null;
@@ -34,7 +34,7 @@ class OrderReturnReasonTranslation extends AbstractTranslation implements OrderR
         return (string) $this->getName();
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

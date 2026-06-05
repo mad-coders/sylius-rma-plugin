@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
+use Webmozart\Assert\Assert;
 
 class OrderReturn implements OrderReturnInterface, TimestampableInterface
 {
@@ -70,7 +71,6 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     private ?string $bankAccountNumber = null;
 
-    /** @var OrderReturnItem[] */
     /** @var Collection<int, OrderReturnItem> */
     private Collection $items;
 
@@ -271,7 +271,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function getCustomerIp(): string
     {
-        return $this->customerIp;
+        return $this->customerIp ?? '';
     }
 
     public function setCustomerIp(string $customerIp): void
@@ -299,6 +299,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function addItem(OrderReturnItemInterface $item): void
     {
+        Assert::isInstanceOf($item, OrderReturnItem::class);
         if (!$this->items->contains($item)) {
             $this->items->add($item);
             $item->setOrderReturn($this);
@@ -307,6 +308,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function removeItem(OrderReturnItemInterface $item): void
     {
+        Assert::isInstanceOf($item, OrderReturnItem::class);
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }

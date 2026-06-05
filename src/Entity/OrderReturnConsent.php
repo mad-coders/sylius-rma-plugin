@@ -22,6 +22,10 @@ use Sylius\Component\Resource\Model\ToggleableTrait;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
+/**
+ * @method void initializeTranslationsCollection()
+ * @method TranslationInterface doGetTranslation(?string $locale = null)
+ */
 class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \Stringable
 {
     use TranslatableTrait {
@@ -50,7 +54,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
         return (string) $this->getName();
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -82,6 +86,10 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
 
     public function compareTo($other): int
     {
+        if (!$other instanceof self) {
+            return 1;
+        }
+
         return $this->code === $other->getCode() ? 0 : 1;
     }
 

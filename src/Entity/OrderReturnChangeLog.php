@@ -52,7 +52,7 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
 
     public function getNote(): string
     {
-        return $this->note;
+        return $this->note ?? '';
     }
 
     public function setNote(string $note): void
