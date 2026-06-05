@@ -50,7 +50,7 @@ class RmaTimeAgoExtension extends AbstractExtension
             }
             $numberOfUnits = floor($diff / $unit);
 
-            return ($val == 'second') ? 'a few seconds ago' :
+            return ('second' === $val) ? 'a few seconds ago' :
                 (($numberOfUnits > 1) ? $numberOfUnits : 'a')
                 . ' ' . $val . (($numberOfUnits > 1) ? 's' : '') . ' ago';
         }

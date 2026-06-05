@@ -30,7 +30,8 @@ final readonly class OrderByNumberProvider implements OrderByNumberProviderInter
     public function findOneByNumber(string $orderNumber): ?OrderInterface
     {
         $orderNumber = trim(str_replace([$this->prefixSign], '', $orderNumber));
-        if (!$order = $this->orderRepository->findOneByNumber($orderNumber)) {
+        $order = $this->orderRepository->findOneByNumber($orderNumber);
+        if (!$order instanceof OrderInterface) {
             $order = $this->orderRepository->findOneByNumber($this->prefixSign . $orderNumber);
         }
 

@@ -26,7 +26,12 @@ class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
 
     public function isAllowed(OrderInterface $order): bool
     {
-        return $this->storage->exists($order->getNumber());
+        $number = $order->getNumber();
+        if (null === $number) {
+            return false;
+        }
+
+        return $this->storage->exists($number);
     }
 
     public function authorize(OrderInterface $order): void

@@ -23,7 +23,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 class RmaChangesLogger
 {
     /**
-     * RmaChangesLogger constructor.
+     * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
     public function __construct(private readonly RepositoryInterface $changeLogRepository)
     {

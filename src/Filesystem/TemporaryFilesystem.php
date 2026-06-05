@@ -29,7 +29,7 @@ final readonly class TemporaryFilesystem
     {
         $filepath = $this->directory . \DIRECTORY_SEPARATOR . $filename;
 
-        if (!file_put_contents($filepath, $content)) {
+        if (false === file_put_contents($filepath, $content)) {
             throw new \RuntimeException(sprintf('Not create file "%s"!', $filepath));
         }
 

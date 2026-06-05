@@ -38,8 +38,12 @@ class RmaOrderViewExtension extends AbstractExtension
         ];
     }
 
-    public function findOrderByOrderNumber(string $orderNumber = null): ?OrderInterface
+    public function findOrderByOrderNumber(?string $orderNumber = null): ?OrderInterface
     {
+        if (null === $orderNumber) {
+            return null;
+        }
+
         $order = $this->orderRepository->findOneByNumber($orderNumber);
         if (!$order instanceof OrderInterface) {
             return null;

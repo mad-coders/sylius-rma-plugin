@@ -433,12 +433,6 @@ parameters:
 			path: src/Entity/RmaConfiguration.php
 
 		-
-			message: '#^Only booleans are allowed in a negated boolean, int\<0, max\>\|false given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Filesystem/TemporaryFilesystem.php
-
-		-
 			message: '#^Call to an undefined method Madcoders\\SyliusRmaPlugin\\Repository\\OrderReturnRepository\:\:findOneByReturnNumber\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -611,60 +605,6 @@ parameters:
 			identifier: varTag.type
 			count: 1
 			path: src/Generator/OrderReturnFormPdfFileGenerator.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Generator\\ReturnNumberGenerator\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Generator/ReturnNumberGenerator.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Order\\Model\\OrderInterface\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Provider/OrderByNumberProvider.php
-
-		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Repository/OrderReturnRepository.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Repository\\OrderReturnRepository\:\:createCustomersReturnListQueryBuilder\(\) has parameter \$customerNumber with no type specified\.$#'
-			identifier: missingType.parameter
-			count: 1
-			path: src/Repository/OrderReturnRepository.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Repository\\OrderReturnRepository\:\:findOneByReturnNumberAndCustomerEmail\(\) should return Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnInterface\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Repository/OrderReturnRepository.php
-
-		-
-			message: '#^Parameter \#1 \$orderNumber of method Madcoders\\SyliusRmaPlugin\\Security\\OrderReturnAuthorizerStorageInterface\:\:exists\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Security/OrderReturnAuthorizer.php
-
-		-
-			message: '#^Call to an undefined method Sylius\\Component\\User\\Model\\UserInterface\:\:getUserIdentifier\(\)\.$#'
-			identifier: method.notFound
-			count: 1
-			path: src/Security/Voter/OrderReturnVoter.php
-
-		-
-			message: '#^Call to function in_array\(\) requires parameter \#3 to be set\.$#'
-			identifier: function.strict
-			count: 1
-			path: src/Security/Voter/OrderReturnVoter.php
-
-		-
-			message: '#^Class Madcoders\\SyliusRmaPlugin\\Security\\Voter\\OrderReturnVoter extends generic class Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter but does not specify its types\: TAttribute, TSubject$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Security/Voter/OrderReturnVoter.php
 
 		-
 			message: '#^Cannot cast mixed to string\.$#'
@@ -877,12 +817,6 @@ parameters:
 			path: src/Services/RmaAdminUserData.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\RmaChangesLogger\:\:__construct\(\) has parameter \$changeLogRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Services/RmaChangesLogger.php
-
-		-
 			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Core\\Model\\ProductVariantInterface\|null given\.$#'
 			identifier: booleanNot.exprNotBoolean
 			count: 1
@@ -899,15 +833,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Services/RmaVerificationPossibilityOfReturn.php
-
-		-
-			message: '#^Parameter \#1 \$number of method Sylius\\Component\\Order\\Repository\\OrderRepositoryInterface\:\:findOneByNumber\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Twig/RmaOrderViewExtension.php
-
-		-
-			message: '#^Loose comparison via "\=\=" is not allowed\.$#'
-			identifier: equal.notAllowed
-			count: 1
-			path: src/Twig/RmaTimeAgoExtension.php

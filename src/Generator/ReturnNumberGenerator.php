@@ -16,12 +16,13 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Generator;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnNumberGenerator
 {
     /**
-     * ReturnNumberGenerator constructor.
+     * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
      */
     public function __construct(private readonly RepositoryInterface $orderReturnRepository)
     {
@@ -32,7 +33,7 @@ class ReturnNumberGenerator
         $returnOrderNumberId = 1;
         $returnOrderNumber = 'R' . $orderNumber . '-' . $returnOrderNumberId;
 
-        while ($this->orderReturnRepository->findOneBy(['returnNumber' => $returnOrderNumber])) {
+        while ($this->orderReturnRepository->findOneBy(['returnNumber' => $returnOrderNumber]) instanceof OrderReturnInterface) {
             ++$returnOrderNumberId;
             $returnOrderNumber = 'R' . $orderNumber . '-' . $returnOrderNumberId;
         }

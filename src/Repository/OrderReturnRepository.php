@@ -22,7 +22,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 class OrderReturnRepository extends EntityRepository
 {
-    public function createCustomersReturnListQueryBuilder($customerNumber): QueryBuilder
+    public function createCustomersReturnListQueryBuilder(int|string $customerNumber): QueryBuilder
     {
         $qb = $this->createQueryBuilder('r');
         $qb->where('r.customerNumber = :customerNumber');
@@ -33,7 +33,8 @@ class OrderReturnRepository extends EntityRepository
 
     public function findOneByReturnNumberAndCustomerEmail(string $returnNumber, string $customerEmail): ?OrderReturnInterface
     {
-        return $this->createQueryBuilder('o')
+        /** @var OrderReturnInterface|null $result */
+        $result = $this->createQueryBuilder('o')
             ->where('o.customerEmail = :customerEmail')
             ->andWhere('o.returnNumber = :returnNumber')
             ->setParameter('returnNumber', $returnNumber)
@@ -41,5 +42,7 @@ class OrderReturnRepository extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        return $result;
     }
 }
