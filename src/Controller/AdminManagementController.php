@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
@@ -70,9 +69,6 @@ final class AdminManagementController extends AbstractController
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var ManagerRegistry */
-    private $managerRegistry;
-
     /**
      * AdminManagementController constructor
      *
@@ -89,7 +85,6 @@ final class AdminManagementController extends AbstractController
         TokenStorageInterface $tokenStorage,
         RmaChangesLogger $changesLogger,
         TranslatorInterface $translator,
-        ManagerRegistry $managerRegistry,
     ) {
         $this->formFactory = $formFactory;
         $this->templatingEngine = $templatingEngine;
@@ -101,15 +96,15 @@ final class AdminManagementController extends AbstractController
         $this->tokenStorage = $tokenStorage;
         $this->changesLogger = $changesLogger;
         $this->translator = $translator;
-        $this->managerRegistry = $managerRegistry;
     }
 
     public function viewIndex(Request $request, string $template): Response
     {
         $orderReturnId = $request->attributes->get('id');
 
-        if (!$orderReturn = $this->managerRegistry->getRepository(OrderReturn::class)
-            ->findOneBy(['id' => $orderReturnId])) {
+        /** @var OrderReturn|null $orderReturn */
+        $orderReturn = $this->orderReturnRepository->findOneBy(['id' => $orderReturnId]);
+        if (!$orderReturn) {
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_index'));
         }
 
@@ -118,7 +113,7 @@ final class AdminManagementController extends AbstractController
                 ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
         }
 
-        $changeLog = $this->managerRegistry->getRepository(OrderReturnChangeLog::class)
+        $changeLog = $this->changeLogRepository
             ->findBy(['returnNumber' => $returnNumber], ['createdAt' => 'DESC']);
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnNotesType::class);
