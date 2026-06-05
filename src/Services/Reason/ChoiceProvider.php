@@ -32,6 +32,9 @@ class ChoiceProvider implements ChoiceProviderInterface
     {
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getChoices(OrderReturnInterface $orderReturn): array
     {
         $orderNumber = $orderReturn->getOrderNumber();
@@ -48,6 +51,9 @@ class ChoiceProvider implements ChoiceProviderInterface
         return $this->createAvailableReasons($order);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function createAvailableReasons(OrderInterface $order): array
     {
         $orderShipment = $order->getShipments()->first();

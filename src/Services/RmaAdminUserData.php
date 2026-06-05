@@ -31,18 +31,27 @@ class RmaAdminUserData
 
     public function getAdminUserData(): OrderReturnChangeLogAuthor
     {
-        /** @var AdminUserInterface $user */
-        $user = $this->tokenStorage->getToken()->getUser();
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
+            throw new \RuntimeException('No authentication token available');
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof AdminUserInterface) {
+            throw new \RuntimeException('Authenticated user is not an admin user');
+        }
 
         $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
 
-        if ($userFirstName = $user->getFirstName()) {
+        $userFirstName = $user->getFirstName();
+        if (null !== $userFirstName && '' !== $userFirstName) {
             $newChangeLogAuthor->setFirstName($userFirstName);
         } else {
-            $newChangeLogAuthor->setFirstName($user->getEmail());
+            $newChangeLogAuthor->setFirstName($user->getEmail() ?? '');
         }
 
-        if ($userLastName = $user->getLastName()) {
+        $userLastName = $user->getLastName();
+        if (null !== $userLastName && '' !== $userLastName) {
             $newChangeLogAuthor->setLastName($userLastName);
         } else {
             $newChangeLogAuthor->setLastName('');
