@@ -50,88 +50,11 @@ use Webmozart\Assert\Assert;
 
 final class ReturnController extends AbstractController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var ChannelContextInterface */
-    private $channelContext;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var ManagerRegistry */
-    private $managerRegistry;
-
-    /** @var ReturnRequestBuilder */
-    private $returnRequestBuilder;
-
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
-    /** @var StateMachineFactoryInterface */
-    private $stateMachineFactory;
-
-    /** @var OrderReturnFormPdfFileGeneratorInterface */
-    private $orderReturnFormPdfFileGenerator;
-
-    /** @var ReturnFormEmailSenderInterface */
-    private $orderReturnFormPdfEmailSender;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
-    /** @var RmaVerificationPossibilityOfReturn */
-    private $verificationPossibilityOfReturn;
-
-    /** @var OrderByNumberProviderInterface */
-    private $orderByNumberProvider;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var bool */
-    private $returnFormPdfEnabled;
-
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        $templatingEngine,
-        ChannelContextInterface $channelContext,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        ReturnRequestBuilder $returnRequestBuilder,
-        RepositoryInterface $orderReturnRepository,
-        StateMachineFactoryInterface $stateMachineFactory,
-        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
-        RmaChangesLogger $changesLogger,
-        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
-        OrderByNumberProviderInterface $orderByNumberProvider,
-        TranslatorInterface $translator,
-        ManagerRegistry $managerRegistry,
-        bool $returnFormPdfEnabled = false,
-    ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->channelContext = $channelContext;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->returnRequestBuilder = $returnRequestBuilder;
-        $this->orderReturnRepository = $orderReturnRepository;
-        $this->stateMachineFactory = $stateMachineFactory;
-        $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
-        $this->orderReturnFormPdfEmailSender = $orderReturnFormPdfEmailSender;
-        $this->changesLogger = $changesLogger;
-        $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
-        $this->orderByNumberProvider = $orderByNumberProvider;
-        $this->translator = $translator;
-        $this->managerRegistry = $managerRegistry;
-        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
+    /**
+     * @param EngineInterface|Environment $templatingEngine
+     */
+    public function __construct(private readonly FormFactoryInterface $formFactory, private $templatingEngine, private readonly ChannelContextInterface $channelContext, private readonly RouterInterface $router, private readonly RequestStack $requestStack, private readonly ReturnRequestBuilder $returnRequestBuilder, private readonly RepositoryInterface $orderReturnRepository, private readonly StateMachineFactoryInterface $stateMachineFactory, private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator, private readonly ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender, private readonly RmaChangesLogger $changesLogger, private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly TranslatorInterface $translator, private readonly ManagerRegistry $managerRegistry, private readonly bool $returnFormPdfEnabled = false)
+    {
     }
 
     /**
@@ -383,7 +306,7 @@ final class ReturnController extends AbstractController
         $flashBag->add('success', $this->translator->trans($infoMessage, $context));
     }
 
-    private function errorRedirect(Request $request, string $errorMessage, array $context = [], string $code = null): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = [], string $code = null): RedirectResponse
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');

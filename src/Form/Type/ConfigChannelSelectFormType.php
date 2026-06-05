@@ -24,15 +24,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ConfigChannelSelectFormType extends AbstractType
 {
-    /** @var RepositoryInterface */
-    private $channelsRepository;
-
     /**
      * ConfigChannelSelectFormType constructor.
      */
-    public function __construct(RepositoryInterface $channelsRepository)
+    public function __construct(private readonly RepositoryInterface $channelsRepository)
     {
-        $this->channelsRepository = $channelsRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

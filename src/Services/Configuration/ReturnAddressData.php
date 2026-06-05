@@ -18,36 +18,11 @@ namespace Madcoders\SyliusRmaPlugin\Services\Configuration;
 
 class ReturnAddressData
 {
-    /** @var string */
-    private $company;
-
-    /** @var string */
-    private $countryCode;
-
-    /** @var string */
-    private $street;
-
-    /** @var string */
-    private $city;
-
-    /** @var string */
-    private $postcode;
-
     /**
      * ReturnAddressData constructor.
      */
-    public function __construct(
-        string $company,
-        string $countryCode,
-        string $street,
-        string $city,
-        string $postcode,
-    ) {
-        $this->company = $company;
-        $this->countryCode = $countryCode;
-        $this->street = $street;
-        $this->city = $city;
-        $this->postcode = $postcode;
+    public function __construct(private readonly string $company, private readonly string $countryCode, private readonly string $street, private readonly string $city, private readonly string $postcode)
+    {
     }
 
     public function getCompany(): string

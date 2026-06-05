@@ -16,18 +16,10 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Model;
 
-final class OrderReturnFormPdf
+final readonly class OrderReturnFormPdf
 {
-    /** @var string */
-    private $filename;
-
-    /** @var string */
-    private $content;
-
-    public function __construct(string $filename, string $content)
+    public function __construct(private string $filename, private string $content)
     {
-        $this->filename = $filename;
-        $this->content = $content;
     }
 
     public function filename(): string

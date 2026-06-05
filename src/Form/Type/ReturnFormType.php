@@ -34,12 +34,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ReturnFormType extends AbstractType
 {
-    /** @var ChoiceProviderInterface */
-    private $reasonChoiceProvider;
-
-    public function __construct(ChoiceProviderInterface $reasonChoiceProvider)
+    public function __construct(private readonly ChoiceProviderInterface $reasonChoiceProvider)
     {
-        $this->reasonChoiceProvider = $reasonChoiceProvider;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -116,7 +112,7 @@ final class ReturnFormType extends AbstractType
             ])
         ;
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $orderReturn = $event->getData();
             $form = $event->getForm();
 
@@ -144,7 +140,7 @@ final class ReturnFormType extends AbstractType
     /**
      * @inheritdoc
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', OrderReturn::class);
     }

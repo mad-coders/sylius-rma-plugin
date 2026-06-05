@@ -21,19 +21,15 @@ use Twig\TwigFunction;
 
 final class RmaConfigExtension extends AbstractExtension
 {
-    /** @var bool */
-    private $returnFormPdfEnabled;
-
-    public function __construct(bool $returnFormPdfEnabled = false)
+    public function __construct(private readonly bool $returnFormPdfEnabled = false)
     {
-        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /** @inheritdoc */
     public function getFunctions()
     {
         return [
-            new TwigFunction('madcoders_rma_return_form_pdf_enabled', [$this, 'isReturnFormPdfEnabled']),
+            new TwigFunction('madcoders_rma_return_form_pdf_enabled', $this->isReturnFormPdfEnabled(...)),
         ];
     }
 

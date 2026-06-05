@@ -22,15 +22,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class RmaAdminUserData
 {
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
     /**
      * RmaAdminUserData constructor.
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(private readonly TokenStorageInterface $tokenStorage)
     {
-        $this->tokenStorage = $tokenStorage;
     }
 
     public function getAdminUserData(): OrderReturnChangeLogAuthor

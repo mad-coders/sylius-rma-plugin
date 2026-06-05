@@ -24,15 +24,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
-    /** @var OptionsResolver */
-    private $optionsResolver;
-
-    /** @var \Faker\Generator */
-    private $faker;
+    private readonly OptionsResolver $optionsResolver;
 
     public function __construct()
     {
-        $this->faker = \Faker\Factory::create();
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);

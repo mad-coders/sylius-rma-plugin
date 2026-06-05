@@ -20,20 +20,15 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface, ResourceInterface
 {
-    /** @var int */
-    private $id;
+    private int $id = 0;
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var string */
-    private $firstName;
+    private string $firstName;
 
-    /** @var string */
-    private $lastName;
+    private string $lastName;
 
-    /** @var OrderReturnChangeLog */
-    private $changeLog;
+    private OrderReturnChangeLog $changeLog;
 
     public function getId(): int
     {

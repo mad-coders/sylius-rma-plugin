@@ -18,19 +18,16 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Resource\Model\AbstractTranslation;
 
-class OrderReturnReasonTranslation extends AbstractTranslation implements OrderReturnReasonTranslationInterface
+class OrderReturnReasonTranslation extends AbstractTranslation implements OrderReturnReasonTranslationInterface, \Stringable
 {
     /** @var mixed */
     private $id;
 
-    /** @var string|null */
-    private $name;
+    private ?string $name = null;
 
-    /** @var string|null */
-    private $slug;
+    private ?string $slug = null;
 
-    /** @var string|null */
-    private $description;
+    private ?string $description = null;
 
     public function __toString(): string
     {

@@ -36,64 +36,13 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-final class AuthController
+final readonly class AuthController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var AuthCodeEmailSenderInterface */
-    private $authCodeEmailSender;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var OrderReturnAuthorizerInterface */
-    private $orderReturnAuthorizer;
-
-    /** @var OrderByNumberProviderInterface */
-    private $orderByNumberProvider;
-
-    /** @var AuthCodeFactoryInterface */
-    private $authCodeFactory;
-
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
-
-    /** @var RepositoryInterface */
-    private $authCodeRepository;
-
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        Environment $templatingEngine,
-        RouterInterface $router,
-        AuthCodeEmailSenderInterface $authCodeEmailSender,
-        TranslatorInterface $translator,
-        OrderReturnAuthorizerInterface $orderReturnAuthorizer,
-        OrderByNumberProviderInterface $orderByNumberProvider,
-        AuthCodeFactoryInterface $authCodeFactory,
-        AuthorizationCheckerInterface $authorizationChecker,
-        RepositoryInterface $authCodeRepository,
-    ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->router = $router;
-        $this->authCodeEmailSender = $authCodeEmailSender;
-        $this->translator = $translator;
-        $this->orderReturnAuthorizer = $orderReturnAuthorizer;
-        $this->orderByNumberProvider = $orderByNumberProvider;
-        $this->authCodeFactory = $authCodeFactory;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->authCodeRepository = $authCodeRepository;
+    public function __construct(private FormFactoryInterface $formFactory, private Environment $templatingEngine, private RouterInterface $router, private AuthCodeEmailSenderInterface $authCodeEmailSender, private TranslatorInterface $translator, private OrderReturnAuthorizerInterface $orderReturnAuthorizer, private OrderByNumberProviderInterface $orderByNumberProvider, private AuthCodeFactoryInterface $authCodeFactory, private AuthorizationCheckerInterface $authorizationChecker, private RepositoryInterface $authCodeRepository)
+    {
     }
 
     public function start(Request $request, string $template): Response
@@ -155,7 +104,7 @@ final class AuthController
         return new Response($this->templatingEngine->render($templateWithAttribute, ['form' => $form->createView()]));
     }
 
-    private function errorRedirect(Request $request, string $errorMessage, array $context = []): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = []): RedirectResponse
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');

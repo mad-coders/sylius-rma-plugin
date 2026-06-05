@@ -27,17 +27,13 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
     /** @var int */
     private $id;
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var string */
-    private $note;
+    private string $note;
 
-    /** @var string */
-    private $returnNumber;
+    private string $returnNumber;
 
-    /** @var OrderReturnChangeLogAuthor */
-    private $author;
+    private OrderReturnChangeLogAuthor $author;
 
     public function getId(): int
     {

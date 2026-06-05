@@ -25,7 +25,7 @@ class RmaTimeAgoExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_time_ago_view', [$this, 'createTimeAgo']),
+            new TwigFunction('rma_time_ago_view', $this->createTimeAgo(...)),
         ];
     }
 

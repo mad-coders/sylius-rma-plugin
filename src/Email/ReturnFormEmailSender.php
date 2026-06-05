@@ -24,34 +24,17 @@ use Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 
-final class ReturnFormEmailSender implements ReturnFormEmailSenderInterface
+final readonly class ReturnFormEmailSender implements ReturnFormEmailSenderInterface
 {
-    /** @var SenderInterface */
-    private $emailSender;
-
-    /** @var OrderReturnFormPdfFileGeneratorInterface */
-    private $orderReturnFormPdfFileGenerator;
-
-    /** @var ReturnAddressConfigurator */
-    private $returnAddressConfigurator;
-
-    /** @var TemporaryFilesystem */
-    private $temporaryFilesystem;
-
-    /** @var bool */
-    private $returnFormPdfEnabled;
+    private TemporaryFilesystem $temporaryFilesystem;
 
     public function __construct(
-        SenderInterface $emailSender,
-        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        ReturnAddressConfigurator $returnAddressConfigurator,
-        bool $returnFormPdfEnabled = false,
+        private SenderInterface $emailSender,
+        private OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
+        private ReturnAddressConfigurator $returnAddressConfigurator,
+        private bool $returnFormPdfEnabled = false,
     ) {
-        $this->emailSender = $emailSender;
-        $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
-        $this->returnAddressConfigurator = $returnAddressConfigurator;
         $this->temporaryFilesystem = new TemporaryFilesystem();
-        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**

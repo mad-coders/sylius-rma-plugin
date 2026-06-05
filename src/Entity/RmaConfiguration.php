@@ -28,14 +28,11 @@ class RmaConfiguration implements RmaConfigurationInterface, ResourceInterface, 
     /** @var int */
     private $id;
 
-    /** @var string|null */
-    private $parameter;
+    private ?string $parameter = null;
 
-    /** @var string|null */
-    private $value;
+    private ?string $value = null;
 
-    /** @var ChannelInterface */
-    private $channel;
+    private ChannelInterface $channel;
 
     public function getId(): int
     {

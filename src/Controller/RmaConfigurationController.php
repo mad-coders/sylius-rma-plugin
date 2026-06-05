@@ -21,76 +21,27 @@ use Madcoders\SyliusRmaPlugin\Entity\RmaConfiguration;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigAddressToChannelFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigChannelSelectFormType;
-use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class RmaConfigurationController extends AbstractController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
-    /** @var RepositoryInterface */
-    private $channelsRepository;
-
-    /** @var RepositoryInterface */
-    private $configurationRepository;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
     /**
      * RmaConfigurationController constructor.
      *
      * @param EngineInterface|Environment $templatingEngine
      */
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        $templatingEngine,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        TokenStorageInterface $tokenStorage,
-        RmaChangesLogger $changesLogger,
-        RepositoryInterface $channelsRepository,
-        RepositoryInterface $configurationRepository,
-        TranslatorInterface $translator,
-    ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->tokenStorage = $tokenStorage;
-        $this->changesLogger = $changesLogger;
-        $this->channelsRepository = $channelsRepository;
-        $this->configurationRepository = $configurationRepository;
-        $this->translator = $translator;
+    public function __construct(private $templatingEngine, private readonly RouterInterface $router, private readonly RepositoryInterface $channelsRepository, private readonly RepositoryInterface $configurationRepository, private readonly TranslatorInterface $translator)
+    {
     }
 
     public function viewIndex(Request $request, string $template, ?string $channelId = null): Response
@@ -110,7 +61,7 @@ final class RmaConfigurationController extends AbstractController
         $addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
         if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
-            $addressByChannel = json_decode($addressConfigByChannel->getValue());
+            $addressByChannel = json_decode((string) $addressConfigByChannel->getValue());
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
@@ -131,7 +82,7 @@ final class RmaConfigurationController extends AbstractController
             ));
     }
 
-    public function changeChannel(Request $request): Response
+    public function changeChannel(Request $request): RedirectResponse
     {
         if (!$channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class)) {
             throw new Exception('Channel form not defined');
@@ -224,7 +175,7 @@ final class RmaConfigurationController extends AbstractController
         );
     }
 
-    private function errorRedirect(Request $request, string $errorMessage, array $context = []): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = []): RedirectResponse
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');

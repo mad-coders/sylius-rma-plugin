@@ -20,29 +20,22 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class OrderReturnItem implements OrderReturnItemInterface, ResourceInterface
 {
-    /** @var bool */
-    private $itemToReturn = false;
+    private bool $itemToReturn = false;
 
     /** @var int */
     private $id;
 
-    /** @var int */
-    private $maxQty = 0;
+    private int $maxQty = 0;
 
-    /** @var OrderReturn */
-    private $orderReturn;
+    private OrderReturn $orderReturn;
 
-    /** @var string */
-    private $productSku;
+    private string $productSku;
 
-    /** @var string|null */
-    private $productName;
+    private ?string $productName = null;
 
-    /** @var int */
-    private $returnQty = 0;
+    private int $returnQty = 0;
 
-    /** @var int */
-    private $unitPrice;
+    private int $unitPrice = 0;
 
     public function isItemToReturn(): bool
     {

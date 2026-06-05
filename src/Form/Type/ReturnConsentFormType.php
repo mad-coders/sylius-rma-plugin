@@ -19,21 +19,9 @@ namespace Madcoders\SyliusRmaPlugin\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ReturnConsentFormType extends AbstractType
 {
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /**
-     * ReturnConsentFormType constructor.
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder

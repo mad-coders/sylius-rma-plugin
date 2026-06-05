@@ -23,22 +23,18 @@ use Twig\TwigFunction;
 
 class RmaOrderViewExtension extends AbstractExtension
 {
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
     /**
      * RmaOrderViewExtension constructor.
      */
-    public function __construct(OrderRepositoryInterface $orderRepository)
+    public function __construct(private readonly OrderRepositoryInterface $orderRepository)
     {
-        $this->orderRepository = $orderRepository;
     }
 
     /** @inheritdoc */
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_order_number_view', [$this, 'findOrderByOrderNumber']),
+            new TwigFunction('rma_order_number_view', $this->findOrderByOrderNumber(...)),
         ];
     }
 

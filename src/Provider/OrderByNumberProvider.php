@@ -19,20 +19,12 @@ namespace Madcoders\SyliusRmaPlugin\Provider;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 
-final class OrderByNumberProvider implements OrderByNumberProviderInterface
+final readonly class OrderByNumberProvider implements OrderByNumberProviderInterface
 {
     private const ORDER_PREFIX_SIGN = '#';
 
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
-    /** @var string */
-    private $prefixSign;
-
-    public function __construct(OrderRepositoryInterface $orderRepository, string $prefixSign = self::ORDER_PREFIX_SIGN)
+    public function __construct(private OrderRepositoryInterface $orderRepository, private string $prefixSign = self::ORDER_PREFIX_SIGN)
     {
-        $this->orderRepository = $orderRepository;
-        $this->prefixSign = $prefixSign;
     }
 
     public function findOneByNumber(string $orderNumber): ?OrderInterface

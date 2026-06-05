@@ -25,16 +25,8 @@ class OrderReturnVoter extends Voter implements VoterInterface
 
     public const SUPPORTED_ATTRIBUTES = [self::ATTRIBUTE_RETURN];
 
-    /** @var Security */
-    private $security;
-
-    /** @var OrderReturnAuthorizerInterface */
-    private $orderReturnAuthenticator;
-
-    public function __construct(Security $security, OrderReturnAuthorizerInterface $orderReturnAuthenticator)
+    public function __construct(private readonly Security $security, private readonly OrderReturnAuthorizerInterface $orderReturnAuthenticator)
     {
-        $this->security = $security;
-        $this->orderReturnAuthenticator = $orderReturnAuthenticator;
     }
 
     protected function supports(string $attribute, mixed $subject): bool

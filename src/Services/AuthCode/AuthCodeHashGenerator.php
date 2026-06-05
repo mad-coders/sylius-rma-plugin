@@ -30,6 +30,6 @@ final class AuthCodeHashGenerator implements AuthCodeHashGeneratorInterface
             ));
         }
 
-        return hash('sha256', ((string) $order->getNumber()) . time());
+        return hash('sha256', ($order->getNumber()) . time());
     }
 }

@@ -20,15 +20,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnNumberGenerator
 {
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
     /**
      * ReturnNumberGenerator constructor.
      */
-    public function __construct(RepositoryInterface $orderReturnRepository)
+    public function __construct(private readonly RepositoryInterface $orderReturnRepository)
     {
-        $this->orderReturnRepository = $orderReturnRepository;
     }
 
     public function returnNumberGenerate(string $orderNumber): string

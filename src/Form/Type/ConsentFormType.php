@@ -52,7 +52,7 @@ class ConsentFormType extends AbstractType
                 [
                     'label_attr' => ['style' => 'margin-top: 7px'],
                     'label' => (string) $data['label'] ?: '-- missing --',
-                    'required' => (bool) $data['consentRequire'] ?: false,
+                    'required' => (bool) $data['consentRequire'],
                     'constraints' => $constraints,
                 ],
             );

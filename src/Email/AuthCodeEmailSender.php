@@ -20,18 +20,13 @@ use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 
-final class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
+final readonly class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
 {
-    /** @var SenderInterface */
-    private $emailSender;
-
     /**
      * AuthCodeEmailSender constructor.
      */
-    public function __construct(
-        SenderInterface $emailSender,
-    ) {
-        $this->emailSender = $emailSender;
+    public function __construct(private SenderInterface $emailSender)
+    {
     }
 
     public function sendAuthCodeEmail(

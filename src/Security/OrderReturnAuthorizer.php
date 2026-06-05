@@ -20,12 +20,8 @@ use Sylius\Component\Core\Model\OrderInterface;
 
 class OrderReturnAuthorizer implements OrderReturnAuthorizerInterface
 {
-    /** @var OrderReturnAuthorizerStorageInterface */
-    private $storage;
-
-    public function __construct(OrderReturnAuthorizerStorageInterface $storage)
+    public function __construct(private readonly OrderReturnAuthorizerStorageInterface $storage)
     {
-        $this->storage = $storage;
     }
 
     public function isAllowed(OrderInterface $order): bool

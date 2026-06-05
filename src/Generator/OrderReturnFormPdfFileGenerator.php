@@ -31,48 +31,13 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
 {
     private const FILE_EXTENSION = '.pdf';
 
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var GeneratorInterface */
-    private $pdfGenerator;
-
-    /** @var FileLocatorInterface */
-    private $fileLocator;
-
-    /** @var string */
-    private $template;
-
-    /** @var string */
-    private $orderReturnFormLogoPath;
-
-    /** @var ReturnAddressConfigurator */
-    private $returnAddressConfigurator;
-
-    /** @var RepositoryInterface */
-    private $channelsRepository;
-
     /**
      * OrderReturnFormPdfFileGenerator constructor.
      *
      * @param EngineInterface|Environment $templatingEngine
      */
-    public function __construct(
-        $templatingEngine,
-        GeneratorInterface $pdfGenerator,
-        FileLocatorInterface $fileLocator,
-        string $template,
-        string $orderReturnFormLogoPath,
-        ReturnAddressConfigurator $returnAddressConfigurator,
-        RepositoryInterface $channelsRepository,
-    ) {
-        $this->templatingEngine = $templatingEngine;
-        $this->pdfGenerator = $pdfGenerator;
-        $this->fileLocator = $fileLocator;
-        $this->template = $template;
-        $this->orderReturnFormLogoPath = $orderReturnFormLogoPath;
-        $this->returnAddressConfigurator = $returnAddressConfigurator;
-        $this->channelsRepository = $channelsRepository;
+    public function __construct(private $templatingEngine, private readonly GeneratorInterface $pdfGenerator, private readonly FileLocatorInterface $fileLocator, private readonly string $template, private readonly string $orderReturnFormLogoPath, private readonly ReturnAddressConfigurator $returnAddressConfigurator, private readonly RepositoryInterface $channelsRepository)
+    {
     }
 
     /**

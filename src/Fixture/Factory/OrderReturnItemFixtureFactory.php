@@ -26,22 +26,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class OrderReturnItemFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
-    /** @var OptionsResolver */
-    private $optionsResolver;
+    private readonly OptionsResolver $optionsResolver;
 
-    /** @var \Faker\Generator */
-    private $faker;
-
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
-    public function __construct(RepositoryInterface $orderReturnRepository)
+    public function __construct(private readonly RepositoryInterface $orderReturnRepository)
     {
-        $this->faker = \Faker\Factory::create();
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
-        $this->orderReturnRepository = $orderReturnRepository;
     }
 
     /**

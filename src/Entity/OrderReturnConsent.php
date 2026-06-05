@@ -22,7 +22,7 @@ use Sylius\Component\Resource\Model\ToggleableTrait;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
-class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
+class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \Stringable
 {
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
@@ -34,14 +34,11 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
     /** @var int */
     private $id;
 
-    /** @var string|null */
-    private $code;
+    private ?string $code = null;
 
-    /** @var int|null */
-    private $position;
+    private ?int $position = null;
 
-    /** @var bool */
-    private $consentRequire = false;
+    private bool $consentRequire = false;
 
     public function __construct()
     {

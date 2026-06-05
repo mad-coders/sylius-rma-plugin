@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Fixture\Factory;
 
+use Faker\Factory;
+use Faker\Generator;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
@@ -28,20 +30,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class OrderReturnFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
-    /** @var ChannelRepositoryInterface */
-    private $channelRepository;
+    private readonly OptionsResolver $optionsResolver;
 
-    /** @var OptionsResolver */
-    private $optionsResolver;
-
-    /** @var \Faker\Generator */
+    /** @var Generator */
     private $faker;
 
-    public function __construct(ChannelRepositoryInterface $channelRepository)
+    public function __construct(private readonly ChannelRepositoryInterface $channelRepository)
     {
-        $this->channelRepository = $channelRepository;
-
-        $this->faker = \Faker\Factory::create();
+        $this->faker = Factory::create();
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
@@ -97,29 +93,19 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
             ->setRequired('return_reason')
             ->setAllowedTypes('return_reason', 'string')
 
-            ->setDefault('customer_ip', function (Options $options): string {
-                return (string) $this->faker->ipv4;
-            })
+            ->setDefault('customer_ip', fn (Options $options): string => (string) $this->faker->ipv4)
             ->setAllowedTypes('customer_ip', 'string')
 
-            ->setDefault('city', function (Options $options): string {
-                return $this->faker->city;
-            })
+            ->setDefault('city', fn (Options $options): string => $this->faker->city)
             ->setAllowedTypes('city', 'string')
 
-            ->setDefault('postcode', function (Options $options): string {
-                return (string) $this->faker->postcode;
-            })
+            ->setDefault('postcode', fn (Options $options): string => (string) $this->faker->postcode)
             ->setAllowedTypes('postcode', 'string')
 
-            ->setDefault('street', function (Options $options): string {
-                return (string) $this->faker->postcode;
-            })
+            ->setDefault('street', fn (Options $options): string => (string) $this->faker->postcode)
             ->setAllowedTypes('street', 'string')
 
-            ->setDefault('phone_number', function (Options $options): string {
-                return (string) $this->faker->phoneNumber;
-            })
+            ->setDefault('phone_number', fn (Options $options): string => (string) $this->faker->phoneNumber)
             ->setAllowedTypes('phone_number', 'string')
 
             ->setRequired('customer_number')

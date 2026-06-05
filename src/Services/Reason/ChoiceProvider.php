@@ -25,21 +25,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ChoiceProvider implements ChoiceProviderInterface
 {
-    /** @var RepositoryInterface */
-    private $orderReturnReasonRepository;
-
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
     /**
      * ChoiceProvider constructor.
      */
-    public function __construct(
-        RepositoryInterface $orderReturnReasonRepository,
-        OrderRepositoryInterface $orderRepository,
-    ) {
-        $this->orderReturnReasonRepository = $orderReturnReasonRepository;
-        $this->orderRepository = $orderRepository;
+    public function __construct(private readonly RepositoryInterface $orderReturnReasonRepository, private readonly OrderRepositoryInterface $orderRepository)
+    {
     }
 
     public function getChoices(OrderReturnInterface $orderReturn): array

@@ -54,9 +54,7 @@ Architects of this package:
                  class="Madcoders\SyliusRmaPlugin\Controller\AdminManagementController">
             <argument type="service" id="form.factory" />
             <argument type="service" id="twig" />
-            <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
-            <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="security.token_storage" />
@@ -66,16 +64,12 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.controller.shop_management_controller"
                  class="Madcoders\SyliusRmaPlugin\Controller\ShopManagementController">
-            <argument type="service" id="form.factory" />
-            <argument type="service" id="twig" />
-            <argument id="sylius.context.channel" />
             <argument type="service" id="router" />
             <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
-            <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="security.token_storage" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.order_return_form_pdf_file_generator" />
-            <argument type="service" id= "sylius.repository.order" />
+            <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="translator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
             <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
@@ -83,14 +77,10 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.controller.rma_configuration_controller"
                  class="Madcoders\SyliusRmaPlugin\Controller\RmaConfigurationController">
-            <argument type="service" id="form.factory" />
             <argument type="service" id="twig" />
             <argument type="service" id="router" />
-            <argument type="service" id="request_stack" />
-            <argument type="service" id="security.token_storage" />
-            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
-            <argument type="service" id= "sylius.repository.channel" />
-            <argument type="service" id= "madcoders_rma.repository.madcoders_rma_configuration" />
+            <argument type="service" id="sylius.repository.channel" />
+            <argument type="service" id="madcoders_rma.repository.madcoders_rma_configuration" />
             <argument type="service" id="translator" />
         </service>
 

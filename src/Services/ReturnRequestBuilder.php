@@ -25,43 +25,12 @@ use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
-use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
 {
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
-    /** @var ReturnNumberGenerator */
-    private $orderReturnGenerator;
-
-    /** @var MaxQtyCalculator */
-    private $maxQtyCalculator;
-
-    /** @var OrderByNumberProviderInterface */
-    private $orderByNumberProvider;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
-    public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        RepositoryInterface $orderReturnRepository,
-        ReturnNumberGenerator $orderReturnGenerator,
-        MaxQtyCalculator $maxQtyCalculator,
-        OrderByNumberProviderInterface $orderByNumberProvider,
-        RmaChangesLogger $changesLogger,
-    ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderReturnRepository = $orderReturnRepository;
-        $this->orderReturnGenerator = $orderReturnGenerator;
-        $this->maxQtyCalculator = $maxQtyCalculator;
-        $this->orderByNumberProvider = $orderByNumberProvider;
-        $this->changesLogger = $changesLogger;
+    public function __construct(private readonly RepositoryInterface $orderReturnRepository, private readonly ReturnNumberGenerator $orderReturnGenerator, private readonly MaxQtyCalculator $maxQtyCalculator, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly RmaChangesLogger $changesLogger)
+    {
     }
 
     /**

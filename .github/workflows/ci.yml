@@ -51,6 +51,9 @@ jobs:
             - name: PHPStan
               run: make phpstan
 
+            - name: Rector (dry-run)
+              run: make rector
+
             - name: ECS
               run: make ecs
 

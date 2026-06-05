@@ -23,21 +23,11 @@ use Sylius\Component\Core\Model\OrderItemInterface;
 
 class RmaVerificationPossibilityOfReturn
 {
-    /** @var MaxQtyCalculator */
-    private $maxQtyCalculator;
-
-    /** @var ChoiceProvider */
-    private $availableReasonsCreator;
-
     /**
      * RmaVerificationPossibilityOfReturn constructor.
      */
-    public function __construct(
-        MaxQtyCalculator $maxQtyCalculator,
-        ChoiceProvider $availableReasonsCreator,
-    ) {
-        $this->maxQtyCalculator = $maxQtyCalculator;
-        $this->availableReasonsCreator = $availableReasonsCreator;
+    public function __construct(private readonly MaxQtyCalculator $maxQtyCalculator, private readonly ChoiceProvider $availableReasonsCreator)
+    {
     }
 
     /**

@@ -3,7 +3,7 @@
         docker-up docker-up-all docker-down docker-logs \
         backend backend-test frontend cache-clean db-reset fixtures serve serve-test \
         test phpunit behat behat-js \
-        static phpstan ecs fix \
+        static rector rector-fix phpstan ecs fix \
         verify pre-commit install-hooks \
         ci
 
@@ -98,6 +98,12 @@ behat-js: ## Run the JavaScript Behat suite (needs docker-up-all + a running ser
 ## --- Static analysis & code style -------------------------------------------
 
 static: phpstan ecs ## Run all static analysis and code style checks
+
+rector: ## Report pending Rector changes (no writes)
+	vendor/bin/rector process --dry-run
+
+rector-fix: ## Apply Rector (PHP 8.2 modernization of src)
+	vendor/bin/rector process
 
 phpstan: ## Run PHPStan
 	vendor/bin/phpstan analyse -c phpstan.neon

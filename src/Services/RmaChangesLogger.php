@@ -22,15 +22,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class RmaChangesLogger
 {
-    /** @var RepositoryInterface */
-    private $changeLogRepository;
-
     /**
      * RmaChangesLogger constructor.
      */
-    public function __construct(RepositoryInterface $changeLogRepository)
+    public function __construct(private readonly RepositoryInterface $changeLogRepository)
     {
-        $this->changeLogRepository = $changeLogRepository;
     }
 
     public function add(
@@ -38,7 +34,7 @@ class RmaChangesLogger
         string $type,
         string $note,
         OrderReturnChangeLogAuthor $newChangeLogAuthor,
-    ) {
+    ): void {
         $newChangeLog = new OrderReturnChangeLog();
         $newChangeLog->setReturnNumber($returnNumber);
         $newChangeLog->setType($type);

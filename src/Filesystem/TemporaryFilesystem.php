@@ -16,10 +16,9 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Filesystem;
 
-final class TemporaryFilesystem
+final readonly class TemporaryFilesystem
 {
-    /** @var string */
-    private $directory;
+    private string $directory;
 
     public function __construct(?string $targetDirectory = null)
     {

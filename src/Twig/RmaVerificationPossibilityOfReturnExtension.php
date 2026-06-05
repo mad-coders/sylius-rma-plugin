@@ -23,23 +23,18 @@ use Twig\TwigFunction;
 
 class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
 {
-    /** @var RmaVerificationPossibilityOfReturn */
-    private $verificationPossibilityOfReturn;
-
     /**
      * RmaVerificationPossibilityOfReturnExtension constructor.
      */
-    public function __construct(
-        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
-    ) {
-        $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
+    public function __construct(private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn)
+    {
     }
 
     /** @inheritdoc */
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_order_has_items_to_returned_view', [$this, 'verificationPossibilityOfReturn']),
+            new TwigFunction('rma_order_has_items_to_returned_view', $this->verificationPossibilityOfReturn(...)),
         ];
     }
 

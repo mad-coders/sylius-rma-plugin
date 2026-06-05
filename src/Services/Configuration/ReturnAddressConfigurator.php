@@ -23,15 +23,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnAddressConfigurator
 {
-    /** @var RepositoryInterface */
-    private $configurationRepository;
-
     /**
      * ReturnAddressConfigurator constructor.
      */
-    public function __construct(RepositoryInterface $configurationRepository)
+    public function __construct(private readonly RepositoryInterface $configurationRepository)
     {
-        $this->configurationRepository = $configurationRepository;
     }
 
     public function getReturnAddressForReturnForm(ChannelInterface $channel): ReturnAddressData
@@ -44,7 +40,7 @@ class ReturnAddressConfigurator
             throw new Exception('Address not defined for Selected channel');
         }
 
-        if (!$addressData = json_decode($addressConfigByChannel->getValue(), true)) {
+        if (!$addressData = json_decode((string) $addressConfigByChannel->getValue(), true)) {
             throw new Exception('Address not defined for Selected channel');
         }
 
