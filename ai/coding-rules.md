@@ -8,12 +8,16 @@ compatible, do not modernize for its own sake.
 
 - Every PHP file starts with `declare(strict_types=1);` and keeps the existing license
   docblock header.
-- Target runtime is PHP `^8.2`. New or changed code may use 8.x features (constructor
-  property promotion, typed properties, `match`, nullable types), but **do not mass-rewrite**
-  existing classes to adopt them. Touch only what the upgrade requires.
-- Keep explicit parameter and return type hints. Add types where the upgrade surfaces missing
-  ones, but prefer the smallest change that satisfies the analysers.
+- Target runtime is PHP `^8.2`, and `src/` now follows PHP 8.2 standards (typed properties,
+  constructor property promotion). Use those idioms in new/changed code; run `make rector`
+  before committing so it stays consistent (see
+  [docs/adr-log/0012](../docs/adr-log/0012-rector-and-php82-modernization.md)).
+- Keep explicit parameter and return type hints. Satisfy the analysers by fixing the real type:
+  narrow `mixed` with `Webmozart\Assert` or guard for null. Do **not** cast `mixed` or widen
+  parameter/return types to silence PHPStan (`phpstan-strict-rules` forbids casting `mixed`).
 - PHP 8.2: avoid dynamic (undeclared) properties - declare any property you assign to.
+- When Rector or a refactor removes an injected dependency, also remove its `<argument>` in the
+  service XML; the test-container compile and Behat catch mismatches.
 
 ## Sylius / Symfony conventions
 

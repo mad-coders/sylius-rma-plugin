@@ -9,6 +9,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Changed
+
+- Modernize `src/` to PHP 8.2 standards with Rector (typed properties, constructor property
+  promotion) and remove unused injected dependencies. Reduce static-analysis debt by driving the
+  PHPStan baseline down (293 -> 253 entries and counting; see
+  [docs/adr-log/0012](docs/adr-log/0012-rector-and-php82-modernization.md) and
+  [ai/tasks/12-phpstan-baseline-free.md](ai/tasks/12-phpstan-baseline-free.md)).
+
 ## [1.1.0] - 2026-06-07
 
 ### Changed

@@ -47,3 +47,4 @@ flip the old one's status.
 | [0009](0009-conventional-commits.md) | Adopt Conventional Commits | Accepted |
 | [0010](0010-github-actions-ci.md) | CI on GitHub Actions (replacing Bitbucket Pipelines) | Accepted |
 | [0011](0011-return-form-pdf-feature-flag.md) | Return-form PDF generation is opt-in (feature flag, default off) | Accepted |
+| [0012](0012-rector-and-php82-modernization.md) | Rector for PHP 8.2 modernization and a baseline-free PHPStan target | Accepted |
