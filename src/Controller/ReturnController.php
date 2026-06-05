@@ -283,11 +283,18 @@ final class ReturnController extends AbstractController
         return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes) || !isset($attributes[$attributeName]) || !is_string($attributes[$attributeName]) || '' === $attributes[$attributeName]) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 
     private function addSuccessMessageWithInformationForCheck(Request $request, array $context = []): void
@@ -313,7 +320,7 @@ final class ReturnController extends AbstractController
         $flashBag->add('error', $this->translator->trans($errorMessage, $context));
 
         $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
-        if ($redirectRoute) {
+        if ('' !== $redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute, ['code' => $code]));
         }
 

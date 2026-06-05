@@ -123,10 +123,17 @@ final class AdminManagementController extends AbstractController
         $flashBag->add('success', $successMessage);
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes) || !isset($attributes[$attributeName]) || !is_string($attributes[$attributeName]) || '' === $attributes[$attributeName]) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 }

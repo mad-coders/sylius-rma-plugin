@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Controller/AdminManagementController.php
-
-		-
 			message: '#^Cannot call method getUser\(\) on Symfony\\Component\\Security\\Core\\Authentication\\Token\\TokenInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -27,12 +21,6 @@ parameters:
 		-
 			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AdminManagementController\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
 			identifier: missingType.generics
-			count: 1
-			path: src/Controller/AdminManagementController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AdminManagementController\:\:getSyliusAttribute\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Controller/AdminManagementController.php
 
@@ -62,18 +50,6 @@ parameters:
 
 		-
 			message: '#^Parameter \#1 \$firstName of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:setFirstName\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Controller/AdminManagementController.php
-
-		-
-			message: '#^Parameter \#1 \$name of method Symfony\\Component\\Templating\\EngineInterface\:\:render\(\) expects string\|Symfony\\Component\\Templating\\TemplateReferenceInterface\|Twig\\TemplateWrapper, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Controller/AdminManagementController.php
-
-		-
-			message: '#^Parameter \#1 \$type of method Symfony\\Component\\Form\\FormFactoryInterface\:\:create\(\) expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Controller/AdminManagementController.php
@@ -109,12 +85,6 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
 			message: '#^Cannot cast mixed to string\.$#'
 			identifier: cast.string
 			count: 2
@@ -123,12 +93,6 @@ parameters:
 		-
 			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
 			identifier: missingType.generics
-			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:getSyliusAttribute\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Controller/ReturnController.php
 
@@ -151,12 +115,6 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
-			identifier: if.condNotBoolean
-			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
 			message: '#^Parameter \#1 \$firstName of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:setFirstName\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
@@ -166,12 +124,6 @@ parameters:
 			message: '#^Parameter \#1 \$lastName of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:setLastName\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
-			message: '#^Parameter \#1 \$name of method Symfony\\Component\\Templating\\EngineInterface\:\:render\(\) expects string\|Symfony\\Component\\Templating\\TemplateReferenceInterface\|Twig\\TemplateWrapper, string\|null given\.$#'
-			identifier: argument.type
-			count: 3
 			path: src/Controller/ReturnController.php
 
 		-
@@ -193,22 +145,10 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Parameter \#1 \$type of method Symfony\\Component\\Form\\FormFactoryInterface\:\:create\(\) expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/Controller/ReturnController.php
-
-		-
 			message: '#^Parameter \#3 \$customerEmail of method Madcoders\\SyliusRmaPlugin\\Email\\ReturnFormEmailSenderInterface\:\:sendReturnOrderFormEmail\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Controller/ReturnController.php
-
-		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Controller/RmaConfigurationController.php
 
 		-
 			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:__construct\(\) has parameter \$channelsRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
@@ -223,21 +163,9 @@ parameters:
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:getSyliusAttribute\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Controller/RmaConfigurationController.php
-
-		-
 			message: '#^Only booleans are allowed in a negated boolean, array given\.$#'
 			identifier: booleanNot.exprNotBoolean
 			count: 1
-			path: src/Controller/RmaConfigurationController.php
-
-		-
-			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 9
 			path: src/Controller/RmaConfigurationController.php
 
 		-
@@ -261,7 +189,7 @@ parameters:
 		-
 			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
 			identifier: if.condNotBoolean
-			count: 2
+			count: 1
 			path: src/Controller/RmaConfigurationController.php
 
 		-
@@ -289,20 +217,8 @@ parameters:
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^Cannot access offset string on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Controller/ShopManagementController.php
-
-		-
 			message: '#^Cannot call method getUser\(\) on Symfony\\Component\\Security\\Core\\Authentication\\Token\\TokenInterface\|null\.$#'
 			identifier: method.nonObject
-			count: 1
-			path: src/Controller/ShopManagementController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ShopManagementController\:\:getSyliusAttribute\(\) should return string\|null but returns mixed\.$#'
-			identifier: return.type
 			count: 1
 			path: src/Controller/ShopManagementController.php
 
@@ -339,12 +255,6 @@ parameters:
 		-
 			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
 			identifier: booleanNot.exprNotBoolean
-			count: 1
-			path: src/Controller/ShopManagementController.php
-
-		-
-			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
-			identifier: if.condNotBoolean
 			count: 1
 			path: src/Controller/ShopManagementController.php
 
