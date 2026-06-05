@@ -19,6 +19,18 @@ parameters:
 			path: src/Controller/AdminManagementController.php
 
 		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AdminManagementController\:\:__construct\(\) has parameter \$changeLogRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/AdminManagementController.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AdminManagementController\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/AdminManagementController.php
+
+		-
 			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AdminManagementController\:\:getSyliusAttribute\(\) should return string\|null but returns mixed\.$#'
 			identifier: return.type
 			count: 1
@@ -91,8 +103,8 @@ parameters:
 			path: src/Controller/AuthController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AuthController\:\:errorRedirect\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\AuthController\:\:__construct\(\) has parameter \$authCodeRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Controller/AuthController.php
 
@@ -112,12 +124,6 @@ parameters:
 			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
 			identifier: if.condNotBoolean
 			count: 2
-			path: src/Controller/AuthController.php
-
-		-
-			message: '#^PHPDoc tag @var for variable \$data has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
 			path: src/Controller/AuthController.php
 
 		-
@@ -145,6 +151,36 @@ parameters:
 			path: src/Controller/AuthController.php
 
 		-
+			message: '#^Call to an undefined method object\:\:getCustomerEmail\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getFirstName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getLastName\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Call to an undefined method object\:\:getOrderNumber\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Call to an undefined method object\:\:setOrderReturnConsents\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
 			message: '#^Cannot access offset string on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
@@ -157,20 +193,8 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:addSuccessMessageAboutReturnFormCreated\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:addSuccessMessageWithInformationForCheck\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Controller/ReturnController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:errorRedirect\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ReturnController\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Controller/ReturnController.php
 
@@ -181,15 +205,15 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Only booleans are allowed in a negated boolean, Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 2
-			path: src/Controller/ReturnController.php
-
-		-
 			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Core\\Model\\OrderInterface\|null given\.$#'
 			identifier: booleanNot.exprNotBoolean
 			count: 3
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Only booleans are allowed in a negated boolean, object\|null given\.$#'
+			identifier: booleanNot.exprNotBoolean
+			count: 2
 			path: src/Controller/ReturnController.php
 
 		-
@@ -199,20 +223,20 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^Only booleans are allowed in a negated boolean, string\|null given\.$#'
-			identifier: booleanNot.exprNotBoolean
-			count: 3
-			path: src/Controller/ReturnController.php
-
-		-
 			message: '#^Only booleans are allowed in an if condition, string\|null given\.$#'
 			identifier: if.condNotBoolean
 			count: 1
 			path: src/Controller/ReturnController.php
 
 		-
-			message: '#^PHPDoc tag @var for variable \$data has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Parameter \#1 \$firstName of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:setFirstName\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Parameter \#1 \$lastName of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:setLastName\(\) expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Controller/ReturnController.php
 
@@ -223,9 +247,33 @@ parameters:
 			path: src/Controller/ReturnController.php
 
 		-
+			message: '#^Parameter \#1 \$orderNumber of method Madcoders\\SyliusRmaPlugin\\Provider\\OrderByNumberProviderInterface\:\:findOneByNumber\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Parameter \#1 \$orderReturn of method Madcoders\\SyliusRmaPlugin\\Email\\ReturnFormEmailSenderInterface\:\:sendReturnOrderFormEmail\(\) expects Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnInterface, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Parameter \#1 \$resource of method Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface\<Sylius\\Resource\\Model\\ResourceInterface\>\:\:add\(\) expects Sylius\\Resource\\Model\\ResourceInterface, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ReturnController.php
+
+		-
 			message: '#^Parameter \#1 \$type of method Symfony\\Component\\Form\\FormFactoryInterface\:\:create\(\) expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 2
+			path: src/Controller/ReturnController.php
+
+		-
+			message: '#^Parameter \#3 \$customerEmail of method Madcoders\\SyliusRmaPlugin\\Email\\ReturnFormEmailSenderInterface\:\:sendReturnOrderFormEmail\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
 			path: src/Controller/ReturnController.php
 
 		-
@@ -235,14 +283,14 @@ parameters:
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:addSuccessMessageAboutConfigurationChanged\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:__construct\(\) has parameter \$channelsRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:errorRedirect\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\RmaConfigurationController\:\:__construct\(\) has parameter \$configurationRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Controller/RmaConfigurationController.php
 
@@ -289,12 +337,6 @@ parameters:
 			path: src/Controller/RmaConfigurationController.php
 
 		-
-			message: '#^PHPDoc tag @var for variable \$data has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 2
-			path: src/Controller/RmaConfigurationController.php
-
-		-
 			message: '#^PHPDoc tag @var with type Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfigurationInterface\|null is not subtype of type Sylius\\Resource\\Model\\ResourceInterface\|null\.$#'
 			identifier: varTag.type
 			count: 2
@@ -327,12 +369,6 @@ parameters:
 		-
 			message: '#^Cannot call method getUser\(\) on Symfony\\Component\\Security\\Core\\Authentication\\Token\\TokenInterface\|null\.$#'
 			identifier: method.nonObject
-			count: 1
-			path: src/Controller/ShopManagementController.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Controller\\ShopManagementController\:\:errorRedirect\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
 			count: 1
 			path: src/Controller/ShopManagementController.php
 
@@ -391,46 +427,16 @@ parameters:
 			path: src/Controller/ShopManagementController.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\DependencyInjection\\MadcodersSyliusRmaExtension\:\:getConfiguration\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/DependencyInjection/MadcodersSyliusRmaExtension.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\DependencyInjection\\MadcodersSyliusRmaExtension\:\:getNamespacesOfMigrationsExecutedBefore\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/DependencyInjection/MadcodersSyliusRmaExtension.php
-
-		-
 			message: '#^Parameter \#3 \$registeredResources of method Sylius\\Bundle\\ResourceBundle\\DependencyInjection\\Extension\\AbstractResourceExtension\:\:registerResources\(\) expects array, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/DependencyInjection/MadcodersSyliusRmaExtension.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Email\\AuthCodeChannelAwareEmailSender\:\:sendAuthCodeEmail\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Email/AuthCodeChannelAwareEmailSender.php
-
-		-
 			message: '#^Cannot call method getEmail\(\) on Sylius\\Component\\Customer\\Model\\CustomerInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 1
 			path: src/Email/AuthCodeEmailSender.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Email\\AuthCodeEmailSender\:\:sendAuthCodeEmail\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Email/AuthCodeEmailSender.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Email\\AuthCodeEmailSenderInterface\:\:sendAuthCodeEmail\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Email/AuthCodeEmailSenderInterface.php
 
 		-
 			message: '#^Negated boolean expression is always false\.$#'
@@ -445,26 +451,8 @@ parameters:
 			path: src/Email/ReturnFormEmailSender.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\AuthCode\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
-			count: 1
-			path: src/Entity/AuthCode.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:addOrderReturnConsent\(\) has parameter \$orderReturnConsent with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:getOrderReturnConsents\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:setOrderReturnConsents\(\) has parameter \$orderReturnConsents with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:getCustomerIp\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Entity/OrderReturn.php
 
@@ -481,22 +469,46 @@ parameters:
 			path: src/Entity/OrderReturn.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:\$orderReturnConsents type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Entity/OrderReturn.php
-
-		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLog\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLog\:\:getNote\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Entity/OrderReturnChangeLog.php
+
+		-
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLog\:\:\$author type mapping mismatch\: database can contain Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\|null but property expects Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/OrderReturnChangeLog.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getFirstName\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/OrderReturnChangeLogAuthor.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getLastName\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/OrderReturnChangeLogAuthor.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnChangeLogAuthor\:\:getType\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/OrderReturnChangeLogAuthor.php
+
+		-
+			message: '#^Call to an undefined method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:doGetTranslation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Entity/OrderReturnConsent.php
+
+		-
+			message: '#^Call to an undefined method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:initializeTranslationsCollection\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Entity/OrderReturnConsent.php
 
 		-
 			message: '#^Cannot call method getCode\(\) on mixed\.$#'
@@ -511,8 +523,14 @@ parameters:
 			path: src/Entity/OrderReturnConsent.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:\$code type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/OrderReturnConsent.php
+
+		-
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:\$position type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnConsent.php
 
@@ -523,34 +541,28 @@ parameters:
 			path: src/Entity/OrderReturnConsentTranslation.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsentTranslation\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsentTranslation\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnConsentTranslation.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnInterface\:\:addOrderReturnConsent\(\) has parameter \$orderReturnConsent with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsentTranslation\:\:\$slug type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
 			count: 1
-			path: src/Entity/OrderReturnInterface.php
+			path: src/Entity/OrderReturnConsentTranslation.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnInterface\:\:getOrderReturnConsents\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Call to an undefined method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:doGetTranslation\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: src/Entity/OrderReturnInterface.php
+			path: src/Entity/OrderReturnReason.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnInterface\:\:setOrderReturnConsents\(\) has parameter \$orderReturnConsents with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Call to an undefined method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:initializeTranslationsCollection\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: src/Entity/OrderReturnInterface.php
-
-		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnItem\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
-			count: 1
-			path: src/Entity/OrderReturnItem.php
+			path: src/Entity/OrderReturnReason.php
 
 		-
 			message: '#^Cannot call method getCode\(\) on mixed\.$#'
@@ -565,8 +577,20 @@ parameters:
 			path: src/Entity/OrderReturnReason.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:\$code type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/OrderReturnReason.php
+
+		-
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:\$deadlineToReturn type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/OrderReturnReason.php
+
+		-
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:\$position type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnReason.php
 
@@ -577,14 +601,20 @@ parameters:
 			path: src/Entity/OrderReturnReasonTranslation.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReasonTranslation\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReasonTranslation\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
 			count: 1
 			path: src/Entity/OrderReturnReasonTranslation.php
 
 		-
-			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfiguration\:\:\$id is never written, only read\.$#'
-			identifier: property.onlyRead
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReasonTranslation\:\:\$slug type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/OrderReturnReasonTranslation.php
+
+		-
+			message: '#^Property Madcoders\\SyliusRmaPlugin\\Entity\\RmaConfiguration\:\:\$channel type mapping mismatch\: property can contain Sylius\\Component\\Core\\Model\\ChannelInterface but database expects Sylius\\Component\\Core\\Model\\Channel\.$#'
+			identifier: doctrine.associationType
 			count: 1
 			path: src/Entity/RmaConfiguration.php
 
@@ -593,12 +623,6 @@ parameters:
 			identifier: booleanNot.exprNotBoolean
 			count: 1
 			path: src/Filesystem/TemporaryFilesystem.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Fixture\\Factory\\OrderReturnConsentFixtureFactory\:\:create\(\) has parameter \$options with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Fixture/Factory/OrderReturnConsentFixtureFactory.php
 
 		-
 			message: '#^Parameter \#1 \$code of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnConsent\:\:setCode\(\) expects string\|null, mixed given\.$#'
@@ -640,12 +664,6 @@ parameters:
 			message: '#^Casting to string something that''s already string\.$#'
 			identifier: cast.useless
 			count: 4
-			path: src/Fixture/Factory/OrderReturnFixtureFactory.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Fixture\\Factory\\OrderReturnFixtureFactory\:\:create\(\) has parameter \$options with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
 			path: src/Fixture/Factory/OrderReturnFixtureFactory.php
 
 		-
@@ -727,14 +745,14 @@ parameters:
 			path: src/Fixture/Factory/OrderReturnFixtureFactory.php
 
 		-
-			message: '#^Call to an undefined method Sylius\\Component\\Resource\\Repository\\RepositoryInterface\:\:findOneByReturnNumber\(\)\.$#'
+			message: '#^Call to an undefined method Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface\:\:findOneByReturnNumber\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/Fixture/Factory/OrderReturnItemFixtureFactory.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Fixture\\Factory\\OrderReturnItemFixtureFactory\:\:create\(\) has parameter \$options with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Fixture\\Factory\\OrderReturnItemFixtureFactory\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Fixture/Factory/OrderReturnItemFixtureFactory.php
 
@@ -773,12 +791,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Fixture/Factory/OrderReturnItemFixtureFactory.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Fixture\\Factory\\OrderReturnReasonFixtureFactory\:\:create\(\) has parameter \$options with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Fixture/Factory/OrderReturnReasonFixtureFactory.php
 
 		-
 			message: '#^Parameter \#1 \$code of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturnReason\:\:setCode\(\) expects string\|null, mixed given\.$#'
@@ -919,6 +931,12 @@ parameters:
 			path: src/Form/Type/ConfigChannelSelectFormType.php
 
 		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Form\\Type\\ConfigChannelSelectFormType\:\:__construct\(\) has parameter \$channelsRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/Type/ConfigChannelSelectFormType.php
+
+		-
 			message: '#^Parameter \#1 \$array of function array_flip expects array\<int\|string\>, array\<mixed\> given\.$#'
 			identifier: argument.type
 			count: 1
@@ -955,6 +973,12 @@ parameters:
 			path: src/Form/Type/ReturnFormType.php
 
 		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Generator\\OrderReturnFormPdfFileGenerator\:\:__construct\(\) has parameter \$channelsRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Generator/OrderReturnFormPdfFileGenerator.php
+
+		-
 			message: '#^Negated boolean expression is always false\.$#'
 			identifier: booleanNot.alwaysFalse
 			count: 1
@@ -971,6 +995,12 @@ parameters:
 			identifier: varTag.type
 			count: 1
 			path: src/Generator/OrderReturnFormPdfFileGenerator.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Generator\\ReturnNumberGenerator\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Generator/ReturnNumberGenerator.php
 
 		-
 			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Order\\Model\\OrderInterface\|null given\.$#'
@@ -1003,36 +1033,6 @@ parameters:
 			path: src/Security/OrderReturnAuthorizer.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Security\\OrderReturnAuthorizerStorage\:\:get\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/OrderReturnAuthorizerStorage.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Security\\OrderReturnAuthorizerStorage\:\:read\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/OrderReturnAuthorizerStorage.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Security\\OrderReturnAuthorizerStorage\:\:write\(\) has parameter \$data with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/OrderReturnAuthorizerStorage.php
-
-		-
-			message: '#^PHPDoc tag @var for variable \$data has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/OrderReturnAuthorizerStorage.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Security\\OrderReturnAuthorizerStorageInterface\:\:get\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Security/OrderReturnAuthorizerStorageInterface.php
-
-		-
 			message: '#^Call to an undefined method Sylius\\Component\\User\\Model\\UserInterface\:\:getUserIdentifier\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -1053,6 +1053,12 @@ parameters:
 		-
 			message: '#^Cannot cast mixed to string\.$#'
 			identifier: cast.string
+			count: 1
+			path: src/Services/AuthCode/AuthCodeFactory.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\AuthCode\\AuthCodeFactory\:\:__construct\(\) has parameter \$authCodeRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Services/AuthCode/AuthCodeFactory.php
 
@@ -1089,6 +1095,12 @@ parameters:
 		-
 			message: '#^Cannot access offset ''street'' on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Services/Configuration/ReturnAddressConfigurator.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Configuration\\ReturnAddressConfigurator\:\:__construct\(\) has parameter \$configurationRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Services/Configuration/ReturnAddressConfigurator.php
 
@@ -1141,14 +1153,8 @@ parameters:
 			path: src/Services/Reason/ChoiceProvider.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Reason\\ChoiceProvider\:\:createAvailableReasons\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Services/Reason/ChoiceProvider.php
-
-		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Reason\\ChoiceProvider\:\:getChoices\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Reason\\ChoiceProvider\:\:__construct\(\) has parameter \$orderReturnReasonRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Services/Reason/ChoiceProvider.php
 
@@ -1165,12 +1171,6 @@ parameters:
 			path: src/Services/Reason/ChoiceProvider.php
 
 		-
-			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\Reason\\ChoiceProviderInterface\:\:getChoices\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Services/Reason/ChoiceProviderInterface.php
-
-		-
 			message: '#^Cannot call method getCode\(\) on Sylius\\Component\\Core\\Model\\ChannelInterface\|null\.$#'
 			identifier: method.nonObject
 			count: 1
@@ -1185,6 +1185,12 @@ parameters:
 		-
 			message: '#^Cannot cast mixed to string\.$#'
 			identifier: cast.string
+			count: 1
+			path: src/Services/ReturnRequestBuilder.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\ReturnRequestBuilder\:\:__construct\(\) has parameter \$orderReturnRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: src/Services/ReturnRequestBuilder.php
 
@@ -1253,6 +1259,12 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Services/RmaAdminUserData.php
+
+		-
+			message: '#^Method Madcoders\\SyliusRmaPlugin\\Services\\RmaChangesLogger\:\:__construct\(\) has parameter \$changeLogRepository with generic interface Sylius\\Resource\\Doctrine\\Persistence\\RepositoryInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Services/RmaChangesLogger.php
 
 		-
 			message: '#^Only booleans are allowed in a negated boolean, Sylius\\Component\\Core\\Model\\ProductVariantInterface\|null given\.$#'

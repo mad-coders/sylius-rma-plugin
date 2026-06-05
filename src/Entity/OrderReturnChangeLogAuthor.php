@@ -22,11 +22,11 @@ class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface,
 {
     private int $id = 0;
 
-    private string $type;
+    private ?string $type = null;
 
-    private string $firstName;
+    private ?string $firstName = null;
 
-    private string $lastName;
+    private ?string $lastName = null;
 
     private OrderReturnChangeLog $changeLog;
 

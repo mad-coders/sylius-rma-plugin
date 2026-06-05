@@ -62,7 +62,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     private string $orderReturnStatus = self::STATUS_DRAFT;
 
-    private string $customerIp;
+    private ?string $customerIp = null;
 
     private ?string $customerNote = null;
 

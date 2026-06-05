@@ -29,7 +29,7 @@ class OrderReturnChangeLog implements OrderReturnChangeLogInterface, ResourceInt
 
     private string $type;
 
-    private string $note;
+    private ?string $note = null;
 
     private string $returnNumber;
 
