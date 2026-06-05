@@ -16,19 +16,20 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Fixture\Factory;
 
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
+use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class OrderReturnItemFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private readonly OptionsResolver $optionsResolver;
 
-    public function __construct(private readonly RepositoryInterface $orderReturnRepository)
+    public function __construct(private readonly OrderReturnRepository $orderReturnRepository)
     {
         $this->optionsResolver = new OptionsResolver();
 
@@ -42,8 +43,14 @@ final class OrderReturnItemFixtureFactory extends AbstractExampleFactory impleme
     {
         $options = $this->optionsResolver->resolve($options);
 
+        Assert::string($options['return_number']);
+        Assert::string($options['product_sku']);
+        Assert::string($options['product_name']);
+        Assert::integer($options['return_qty']);
+        Assert::integer($options['unit_price']);
+
         $orderReturn = $this->orderReturnRepository->findOneByReturnNumber($options['return_number']);
-        if (!$orderReturn instanceof OrderReturnInterface) {
+        if (!$orderReturn instanceof OrderReturn) {
             throw new \Exception(sprintf('Return %s has not been found, please create it before adding this fixture!', $options['return_number']));
         }
 

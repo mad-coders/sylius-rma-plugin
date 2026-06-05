@@ -21,6 +21,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
@@ -39,6 +40,12 @@ final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory imple
     public function create(array $options = []): OrderReturnReasonInterface
     {
         $options = $this->optionsResolver->resolve($options);
+        Assert::boolean($options['enabled']);
+        Assert::string($options['code']);
+        Assert::integer($options['deadline_to_return']);
+        Assert::string($options['name']);
+        Assert::string($options['slug']);
+        Assert::string($options['description']);
 
         $orderReturnReason = new OrderReturnReason();
         $orderReturnReason->setCurrentLocale('en_US');
