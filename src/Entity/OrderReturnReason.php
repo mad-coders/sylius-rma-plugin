@@ -38,11 +38,11 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface, \Stri
     /** @var int */
     private $id;
 
-    private ?string $code = null;
+    private string $code = '';
 
-    private ?int $position = null;
+    private int $position = 0;
 
-    private ?int $deadlineToReturn = null;
+    private int $deadlineToReturn = 0;
 
     public function __construct()
     {
@@ -66,7 +66,7 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface, \Stri
 
     public function setCode(?string $code): void
     {
-        $this->code = $code;
+        $this->code = $code ?? '';
     }
 
     public function getName(): ?string
@@ -110,7 +110,7 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface, \Stri
 
     public function setPosition(?int $position): void
     {
-        $this->position = $position;
+        $this->position = $position ?? 0;
     }
 
     public function getSlug(): ?string
@@ -130,7 +130,7 @@ class OrderReturnReason implements Comparable, OrderReturnReasonInterface, \Stri
 
     public function setDeadlineToReturn(?int $deadlineToReturn): void
     {
-        $this->deadlineToReturn = $deadlineToReturn;
+        $this->deadlineToReturn = $deadlineToReturn ?? 0;
     }
 
     /**

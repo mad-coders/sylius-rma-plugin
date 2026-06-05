@@ -38,9 +38,9 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
     /** @var int */
     private $id;
 
-    private ?string $code = null;
+    private string $code = '';
 
-    private ?int $position = null;
+    private int $position = 0;
 
     private bool $consentRequire = false;
 
@@ -66,7 +66,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
 
     public function setCode(?string $code): void
     {
-        $this->code = $code;
+        $this->code = $code ?? '';
     }
 
     public function getName(): ?string
@@ -110,7 +110,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
 
     public function setPosition(?int $position): void
     {
-        $this->position = $position;
+        $this->position = $position ?? 0;
     }
 
     public function getSlug(): ?string

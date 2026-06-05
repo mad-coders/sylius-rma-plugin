@@ -23,9 +23,9 @@ class OrderReturnConsentTranslation extends AbstractTranslation implements Order
     /** @var int */
     private $id;
 
-    private ?string $name = null;
+    private string $name = '';
 
-    private ?string $slug = null;
+    private string $slug = '';
 
     private ?string $description = null;
 
@@ -46,7 +46,7 @@ class OrderReturnConsentTranslation extends AbstractTranslation implements Order
 
     public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->name = $name ?? '';
     }
 
     public function getSlug(): ?string
@@ -56,7 +56,7 @@ class OrderReturnConsentTranslation extends AbstractTranslation implements Order
 
     public function setSlug(?string $slug): void
     {
-        $this->slug = $slug;
+        $this->slug = $slug ?? '';
     }
 
     public function getDescription(): ?string
