@@ -49,7 +49,7 @@ final class OrderReturnItemFixtureFactory extends AbstractExampleFactory impleme
         Assert::integer($options['return_qty']);
         Assert::integer($options['unit_price']);
 
-        $orderReturn = $this->orderReturnRepository->findOneByReturnNumber($options['return_number']);
+        $orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $options['return_number']]);
         if (!$orderReturn instanceof OrderReturn) {
             throw new \Exception(sprintf('Return %s has not been found, please create it before adding this fixture!', $options['return_number']));
         }
