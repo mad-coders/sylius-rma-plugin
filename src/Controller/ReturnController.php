@@ -18,7 +18,6 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface;
-use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
@@ -34,6 +33,7 @@ use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\Order;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -51,7 +51,8 @@ use Webmozart\Assert\Assert;
 final class ReturnController extends AbstractController
 {
     /**
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment            $templatingEngine
+     * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
      */
     public function __construct(private readonly FormFactoryInterface $formFactory, private $templatingEngine, private readonly ChannelContextInterface $channelContext, private readonly RouterInterface $router, private readonly RequestStack $requestStack, private readonly ReturnRequestBuilder $returnRequestBuilder, private readonly RepositoryInterface $orderReturnRepository, private readonly StateMachineFactoryInterface $stateMachineFactory, private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator, private readonly ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender, private readonly RmaChangesLogger $changesLogger, private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly TranslatorInterface $translator, private readonly ManagerRegistry $managerRegistry, private readonly bool $returnFormPdfEnabled = false)
     {
@@ -64,7 +65,8 @@ final class ReturnController extends AbstractController
     {
         $formType = $this->getSyliusAttribute($request, 'form', ReturnFormType::class);
 
-        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderNumber)) {
+        $order = $this->orderByNumberProvider->findOneByNumber($orderNumber);
+        if (!$order instanceof OrderInterface) {
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_number_not_valid',
@@ -102,13 +104,13 @@ final class ReturnController extends AbstractController
 
     public function acceptIndex(Request $request, string $returnNumber, string $template): Response
     {
-        if (!$orderReturn = $this->managerRegistry
-            ->getRepository(OrderReturn::class)
-            ->findOneBy(['returnNumber' => $returnNumber])) {
+        $orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $returnNumber]);
+        if (!$orderReturn instanceof OrderReturnInterface) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber())) {
+        $order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber());
+        if (!$order instanceof OrderInterface) {
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_number_not_valid',
@@ -152,15 +154,18 @@ final class ReturnController extends AbstractController
 
             // TODO align entity instead - either allow nullable fields or not and avoid workarounds
             // TODO: create change log service
-            if (!$userFirstName = $orderReturn->getFirstName()) {
+            $userFirstName = $orderReturn->getFirstName();
+            if (null === $userFirstName || '' === $userFirstName) {
                 $userFirstName = 'no Name';
             }
 
-            if (!$userLastName = $orderReturn->getLastName()) {
+            $userLastName = $orderReturn->getLastName();
+            if (null === $userLastName || '' === $userLastName) {
                 $userLastName = 'no Last Name';
             }
 
-            if (!$customerEmail = $orderReturn->getCustomerEmail()) {
+            $customerEmail = $orderReturn->getCustomerEmail();
+            if (null === $customerEmail || '' === $customerEmail) {
                 $customerEmail = 'no email address';
             }
 
@@ -189,16 +194,16 @@ final class ReturnController extends AbstractController
 
     public function successIndex(Request $request, string $template): Response
     {
-        $returnNumber = (string) $request->attributes->get('returnNumber');
+        $returnNumber = $request->attributes->get('returnNumber');
+        Assert::string($returnNumber);
 
-        // TODO: inject repository instead
-        if (!$orderReturn = $this->managerRegistry
-            ->getRepository(OrderReturn::class)
-            ->findOneBy(['returnNumber' => $returnNumber])) {
+        $orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $returnNumber]);
+        if (!$orderReturn instanceof OrderReturnInterface) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        if (!$order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber())) {
+        $order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber());
+        if (!$order instanceof OrderInterface) {
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_number_not_valid',
@@ -226,11 +231,11 @@ final class ReturnController extends AbstractController
             return $this->createPdfDisabledResponse($request);
         }
 
-        if (!$returnNumber = (string) $this->requestStack->getSession()->get('madcoders_rma_allowed_order_return')) {
+        $returnNumber = $this->requestStack->getSession()->get('madcoders_rma_allowed_order_return');
+        if (!is_string($returnNumber) || '' === $returnNumber) {
             return $this->createMissingOrderNumberResponse($request);
         }
 
-        /** @var OrderReturnInterface|null $orderReturn */
         $orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $returnNumber]);
         Assert::notNull($orderReturn);
 

@@ -40,7 +40,9 @@ final class AdminManagementController extends AbstractController
     /**
      * AdminManagementController constructor
      *
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment              $templatingEngine
+     * @param RepositoryInterface<OrderReturn>         $orderReturnRepository
+     * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
     public function __construct(private readonly FormFactoryInterface $formFactory, private $templatingEngine, private readonly RouterInterface $router, private readonly RepositoryInterface $orderReturnRepository, private readonly RepositoryInterface $changeLogRepository, private readonly TokenStorageInterface $tokenStorage, private readonly RmaChangesLogger $changesLogger, private readonly TranslatorInterface $translator)
     {
@@ -50,13 +52,13 @@ final class AdminManagementController extends AbstractController
     {
         $orderReturnId = $request->attributes->get('id');
 
-        /** @var OrderReturn|null $orderReturn */
         $orderReturn = $this->orderReturnRepository->findOneBy(['id' => $orderReturnId]);
-        if (!$orderReturn) {
+        if (!$orderReturn instanceof OrderReturn) {
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_index'));
         }
 
-        if (!$returnNumber = (string) $orderReturn->getReturnNumber()) {
+        $returnNumber = $orderReturn->getReturnNumber();
+        if ('' === $returnNumber) {
             return new RedirectResponse($this->router
                 ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
         }
@@ -75,24 +77,36 @@ final class AdminManagementController extends AbstractController
                     ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
             }
 
-            if (!$note = $newChangeLog->getNote()) {
+            $note = $newChangeLog->getNote();
+            if ('' === $note) {
                 return new RedirectResponse($this->router
                     ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
             }
 
-            /** @var AdminUserInterface $user */
-            $user = $this->tokenStorage->getToken()->getUser();
+            $token = $this->tokenStorage->getToken();
+            if (null === $token) {
+                return new RedirectResponse($this->router
+                    ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
+            }
+
+            $user = $token->getUser();
+            if (!$user instanceof AdminUserInterface) {
+                return new RedirectResponse($this->router
+                    ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
+            }
 
             $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
             $newChangeLogAuthor->setType('admin');
 
-            if ($userFirstName = $user->getFirstName()) {
+            $userFirstName = $user->getFirstName();
+            if (null !== $userFirstName && '' !== $userFirstName) {
                 $newChangeLogAuthor->setFirstName($userFirstName);
             } else {
-                $newChangeLogAuthor->setFirstName($user->getEmail());
+                $newChangeLogAuthor->setFirstName($user->getEmail() ?? '');
             }
 
-            if ($userLastName = $user->getLastName()) {
+            $userLastName = $user->getLastName();
+            if (null !== $userLastName && '' !== $userLastName) {
                 $newChangeLogAuthor->setLastName($userLastName);
             } else {
                 $newChangeLogAuthor->setLastName('');

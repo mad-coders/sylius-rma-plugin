@@ -38,7 +38,9 @@ final class RmaConfigurationController extends AbstractController
     /**
      * RmaConfigurationController constructor.
      *
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment                    $templatingEngine
+     * @param RepositoryInterface<ChannelInterface>          $channelsRepository
+     * @param RepositoryInterface<RmaConfigurationInterface> $configurationRepository
      */
     public function __construct(private $templatingEngine, private readonly RouterInterface $router, private readonly RepositoryInterface $channelsRepository, private readonly RepositoryInterface $configurationRepository, private readonly TranslatorInterface $translator)
     {
@@ -59,7 +61,6 @@ final class RmaConfigurationController extends AbstractController
         $channel = $this->getSelectedChannel($channelId);
         $addressByChannel = [];
 
-        /** @var RmaConfigurationInterface|null $addressConfigByChannel */
         $addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
         if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
@@ -67,7 +68,7 @@ final class RmaConfigurationController extends AbstractController
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
+        $channelForm = $this->createForm($channelFormType, (null !== $channelId && '' !== $channelId) ? ['channelChoice' => $channelId] : null);
 
         $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
         if ('' === $templateWithAttribute) {
@@ -129,7 +130,7 @@ final class RmaConfigurationController extends AbstractController
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
+        $channelForm = $this->createForm($channelFormType, '' !== $channelId ? ['channelChoice' => $channelId] : null);
 
         if ($request->isMethod('POST')) {
             $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
@@ -151,23 +152,26 @@ final class RmaConfigurationController extends AbstractController
                     ));
             }
 
-            /** @var array $data */
             $data = $addressFormToSelectedChannel->getData();
-            if (!$data) {
+            if (!is_array($data) || [] === $data) {
                 throw new Exception('Address form not have data');
             }
 
-            /** @var RmaConfigurationInterface|null $addressConfigByChannel */
+            $encodedData = json_encode($data);
+            if (false === $encodedData) {
+                throw new Exception('Address data cannot be encoded');
+            }
+
             $addressConfigByChannel = $this->configurationRepository->findOneBy([
                 'channel' => $channel,
                 'parameter' => 'address',
             ]);
-            if ($addressConfigByChannel) {
-                $addressConfigByChannel->setValue(json_encode($data));
+            if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
+                $addressConfigByChannel->setValue($encodedData);
             } else {
                 $addressConfigByChannel = new RmaConfiguration();
                 $addressConfigByChannel->setParameter('address');
-                $addressConfigByChannel->setValue(json_encode($data));
+                $addressConfigByChannel->setValue($encodedData);
                 $addressConfigByChannel->setChannel($channel);
             }
 
@@ -204,7 +208,7 @@ final class RmaConfigurationController extends AbstractController
 
     private function getSelectedChannel(?string $channelId = null): ChannelInterface
     {
-        if ($channelId) {
+        if (null !== $channelId && '' !== $channelId) {
             $channel = $this->channelsRepository->findOneBy(['id' => $channelId]);
             if (!$channel instanceof ChannelInterface) {
                 throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));

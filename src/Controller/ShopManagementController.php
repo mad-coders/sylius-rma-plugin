@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
@@ -47,24 +48,23 @@ final class ShopManagementController extends AbstractController
      */
     public function createAction(Request $request, string $orderNumber): RedirectResponse
     {
-        if (!$token = $this->tokenStorage->getToken()) {
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var ShopUserInterface|null $user */
         $user = $token->getUser();
-        if (!$user) {
+        if (!$user instanceof ShopUserInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var CustomerInterface|null $customer */
         $customer = $user->getCustomer();
-        if (!$customer) {
+        if (!$customer instanceof CustomerInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$order = $this->orderRepository
-            ->findOneByNumberAndCustomer($orderNumber, $customer)) {
+        $order = $this->orderRepository->findOneByNumberAndCustomer($orderNumber, $customer);
+        if (!$order instanceof OrderInterface) {
             return $this->createMissingPrivilegesResponse($request);
         }
 
@@ -95,18 +95,23 @@ final class ShopManagementController extends AbstractController
             return $this->errorRedirect($request, 'madcoders_rma.ui.return.pdf_disabled');
         }
 
-        /** @var ShopUserInterface|null $customer */
-        $customer = $this->tokenStorage->getToken()->getUser();
-        if (!$customer) {
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$customerEmail = $customer->getEmail()) {
+        $customer = $token->getUser();
+        if (!$customer instanceof ShopUserInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$orderReturn = $this->orderReturnRepository
-            ->findOneByReturnNumberAndCustomerEmail($returnNumber, $customerEmail)) {
+        $customerEmail = $customer->getEmail();
+        if (null === $customerEmail || '' === $customerEmail) {
+            return $this->createMissingUserResponse($request);
+        }
+
+        $orderReturn = $this->orderReturnRepository->findOneByReturnNumberAndCustomerEmail($returnNumber, $customerEmail);
+        if (!$orderReturn instanceof OrderReturnInterface) {
             return $this->createMissingPrivilegesResponse($request);
         }
 
