@@ -22,8 +22,10 @@ use Sylius\Component\Core\Model\OrderInterface;
 
 final readonly class AuthCodeChannelAwareEmailSender implements AuthCodeEmailSenderInterface
 {
-    public function __construct(private AuthCodeEmailSenderInterface $emailSender, private ChannelContextInterface $channelContext)
-    {
+    public function __construct(
+        private AuthCodeEmailSenderInterface $emailSender,
+        private ChannelContextInterface $channelContext,
+    ) {
     }
 
     public function sendAuthCodeEmail(

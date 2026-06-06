@@ -39,8 +39,17 @@ final class ShopManagementController extends AbstractController
     /**
      * ShopManagementController constructor.
      */
-    public function __construct(private readonly RouterInterface $router, private readonly RequestStack $requestStack, private readonly OrderReturnRepository $orderReturnRepository, private readonly TokenStorageInterface $tokenStorage, private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator, private readonly OrderRepository $orderRepository, private readonly TranslatorInterface $translator, private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn, private readonly bool $returnFormPdfEnabled = false)
-    {
+    public function __construct(
+        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
+        private readonly OrderReturnRepository $orderReturnRepository,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
+        private readonly OrderRepository $orderRepository,
+        private readonly TranslatorInterface $translator,
+        private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly bool $returnFormPdfEnabled = false,
+    ) {
     }
 
     /**

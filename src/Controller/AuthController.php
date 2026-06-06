@@ -45,8 +45,18 @@ final readonly class AuthController
     /**
      * @param RepositoryInterface<AuthCodeInterface> $authCodeRepository
      */
-    public function __construct(private FormFactoryInterface $formFactory, private Environment $templatingEngine, private RouterInterface $router, private AuthCodeEmailSenderInterface $authCodeEmailSender, private TranslatorInterface $translator, private OrderReturnAuthorizerInterface $orderReturnAuthorizer, private OrderByNumberProviderInterface $orderByNumberProvider, private AuthCodeFactoryInterface $authCodeFactory, private AuthorizationCheckerInterface $authorizationChecker, private RepositoryInterface $authCodeRepository)
-    {
+    public function __construct(
+        private FormFactoryInterface $formFactory,
+        private Environment $templatingEngine,
+        private RouterInterface $router,
+        private AuthCodeEmailSenderInterface $authCodeEmailSender,
+        private TranslatorInterface $translator,
+        private OrderReturnAuthorizerInterface $orderReturnAuthorizer,
+        private OrderByNumberProviderInterface $orderByNumberProvider,
+        private AuthCodeFactoryInterface $authCodeFactory,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private RepositoryInterface $authCodeRepository,
+    ) {
     }
 
     public function start(Request $request, string $template): Response

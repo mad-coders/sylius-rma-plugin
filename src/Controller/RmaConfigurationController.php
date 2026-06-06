@@ -42,8 +42,13 @@ final class RmaConfigurationController extends AbstractController
      * @param RepositoryInterface<ChannelInterface>          $channelsRepository
      * @param RepositoryInterface<RmaConfigurationInterface> $configurationRepository
      */
-    public function __construct(private $templatingEngine, private readonly RouterInterface $router, private readonly RepositoryInterface $channelsRepository, private readonly RepositoryInterface $configurationRepository, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private $templatingEngine,
+        private readonly RouterInterface $router,
+        private readonly RepositoryInterface $channelsRepository,
+        private readonly RepositoryInterface $configurationRepository,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function viewIndex(Request $request, string $template, ?string $channelId = null): Response

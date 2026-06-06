@@ -26,8 +26,10 @@ class RmaVerificationPossibilityOfReturn
     /**
      * RmaVerificationPossibilityOfReturn constructor.
      */
-    public function __construct(private readonly MaxQtyCalculator $maxQtyCalculator, private readonly ChoiceProvider $availableReasonsCreator)
-    {
+    public function __construct(
+        private readonly MaxQtyCalculator $maxQtyCalculator,
+        private readonly ChoiceProvider $availableReasonsCreator,
+    ) {
     }
 
     /**

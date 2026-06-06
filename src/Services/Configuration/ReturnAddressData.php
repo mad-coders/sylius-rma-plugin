@@ -21,8 +21,13 @@ class ReturnAddressData
     /**
      * ReturnAddressData constructor.
      */
-    public function __construct(private readonly string $company, private readonly string $countryCode, private readonly string $street, private readonly string $city, private readonly string $postcode)
-    {
+    public function __construct(
+        private readonly string $company,
+        private readonly string $countryCode,
+        private readonly string $street,
+        private readonly string $city,
+        private readonly string $postcode,
+    ) {
     }
 
     public function getCompany(): string

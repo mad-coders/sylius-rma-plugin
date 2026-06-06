@@ -22,8 +22,10 @@ final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorI
 
     private const DEFAULT_MAX_CODE = 999999;
 
-    public function __construct(private int $min = self::DEFAULT_MIN_CODE, private int $max = self::DEFAULT_MAX_CODE)
-    {
+    public function __construct(
+        private int $min = self::DEFAULT_MIN_CODE,
+        private int $max = self::DEFAULT_MAX_CODE,
+    ) {
     }
 
     public function generate(): int

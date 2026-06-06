@@ -25,8 +25,10 @@ class UpdatedChangelogOnComplete
     /**
      * UpdatedChangelogOnCancel constructor.
      */
-    public function __construct(private readonly RmaAdminUserData $adminUser, private readonly RmaChangesLogger $changesLogger)
-    {
+    public function __construct(
+        private readonly RmaAdminUserData $adminUser,
+        private readonly RmaChangesLogger $changesLogger,
+    ) {
     }
 
     public function UpdatedChangelogOnComplete(OrderReturnInterface $orderReturn): void

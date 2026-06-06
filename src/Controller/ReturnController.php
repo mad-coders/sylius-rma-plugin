@@ -54,8 +54,24 @@ final class ReturnController extends AbstractController
      * @param EngineInterface|Environment            $templatingEngine
      * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
      */
-    public function __construct(private readonly FormFactoryInterface $formFactory, private $templatingEngine, private readonly ChannelContextInterface $channelContext, private readonly RouterInterface $router, private readonly RequestStack $requestStack, private readonly ReturnRequestBuilder $returnRequestBuilder, private readonly RepositoryInterface $orderReturnRepository, private readonly StateMachineFactoryInterface $stateMachineFactory, private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator, private readonly ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender, private readonly RmaChangesLogger $changesLogger, private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly TranslatorInterface $translator, private readonly ManagerRegistry $managerRegistry, private readonly bool $returnFormPdfEnabled = false)
-    {
+    public function __construct(
+        private readonly FormFactoryInterface $formFactory,
+        private $templatingEngine,
+        private readonly ChannelContextInterface $channelContext,
+        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
+        private readonly ReturnRequestBuilder $returnRequestBuilder,
+        private readonly RepositoryInterface $orderReturnRepository,
+        private readonly StateMachineFactoryInterface $stateMachineFactory,
+        private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
+        private readonly ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
+        private readonly RmaChangesLogger $changesLogger,
+        private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly OrderByNumberProviderInterface $orderByNumberProvider,
+        private readonly TranslatorInterface $translator,
+        private readonly ManagerRegistry $managerRegistry,
+        private readonly bool $returnFormPdfEnabled = false,
+    ) {
     }
 
     /**

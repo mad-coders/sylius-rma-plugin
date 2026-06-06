@@ -23,8 +23,10 @@ final readonly class OrderByNumberProvider implements OrderByNumberProviderInter
 {
     private const ORDER_PREFIX_SIGN = '#';
 
-    public function __construct(private OrderRepositoryInterface $orderRepository, private string $prefixSign = self::ORDER_PREFIX_SIGN)
-    {
+    public function __construct(
+        private OrderRepositoryInterface $orderRepository,
+        private string $prefixSign = self::ORDER_PREFIX_SIGN,
+    ) {
     }
 
     public function findOneByNumber(string $orderNumber): ?OrderInterface

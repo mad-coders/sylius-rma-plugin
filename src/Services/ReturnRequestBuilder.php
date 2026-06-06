@@ -32,8 +32,13 @@ class ReturnRequestBuilder
     /**
      * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
      */
-    public function __construct(private readonly RepositoryInterface $orderReturnRepository, private readonly ReturnNumberGenerator $orderReturnGenerator, private readonly MaxQtyCalculator $maxQtyCalculator, private readonly OrderByNumberProviderInterface $orderByNumberProvider, private readonly RmaChangesLogger $changesLogger)
-    {
+    public function __construct(
+        private readonly RepositoryInterface $orderReturnRepository,
+        private readonly ReturnNumberGenerator $orderReturnGenerator,
+        private readonly MaxQtyCalculator $maxQtyCalculator,
+        private readonly OrderByNumberProviderInterface $orderByNumberProvider,
+        private readonly RmaChangesLogger $changesLogger,
+    ) {
     }
 
     /**

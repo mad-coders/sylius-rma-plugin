@@ -44,8 +44,16 @@ final class AdminManagementController extends AbstractController
      * @param RepositoryInterface<OrderReturn>         $orderReturnRepository
      * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
-    public function __construct(private readonly FormFactoryInterface $formFactory, private $templatingEngine, private readonly RouterInterface $router, private readonly RepositoryInterface $orderReturnRepository, private readonly RepositoryInterface $changeLogRepository, private readonly TokenStorageInterface $tokenStorage, private readonly RmaChangesLogger $changesLogger, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly FormFactoryInterface $formFactory,
+        private $templatingEngine,
+        private readonly RouterInterface $router,
+        private readonly RepositoryInterface $orderReturnRepository,
+        private readonly RepositoryInterface $changeLogRepository,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly RmaChangesLogger $changesLogger,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function viewIndex(Request $request, string $template): Response

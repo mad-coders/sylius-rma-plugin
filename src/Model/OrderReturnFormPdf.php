@@ -18,8 +18,10 @@ namespace Madcoders\SyliusRmaPlugin\Model;
 
 final readonly class OrderReturnFormPdf
 {
-    public function __construct(private string $filename, private string $content)
-    {
+    public function __construct(
+        private string $filename,
+        private string $content,
+    ) {
     }
 
     public function filename(): string

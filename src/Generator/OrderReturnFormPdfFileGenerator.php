@@ -37,8 +37,15 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
      * @param EngineInterface|Environment            $templatingEngine
      * @param RepositoryInterface<ChannelInterface> $channelsRepository
      */
-    public function __construct(private $templatingEngine, private readonly GeneratorInterface $pdfGenerator, private readonly FileLocatorInterface $fileLocator, private readonly string $template, private readonly string $orderReturnFormLogoPath, private readonly ReturnAddressConfigurator $returnAddressConfigurator, private readonly RepositoryInterface $channelsRepository)
-    {
+    public function __construct(
+        private $templatingEngine,
+        private readonly GeneratorInterface $pdfGenerator,
+        private readonly FileLocatorInterface $fileLocator,
+        private readonly string $template,
+        private readonly string $orderReturnFormLogoPath,
+        private readonly ReturnAddressConfigurator $returnAddressConfigurator,
+        private readonly RepositoryInterface $channelsRepository,
+    ) {
     }
 
     /**

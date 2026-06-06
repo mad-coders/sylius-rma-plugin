@@ -27,8 +27,12 @@ final readonly class AuthCodeFactory implements AuthCodeFactoryInterface
     /**
      * @param RepositoryInterface<AuthCodeInterface> $authCodeRepository
      */
-    public function __construct(private AuthCodeHashGeneratorInterface $authCodeHashGenerator, private AuthCodeSecretGeneratorInterface $authCodeSecretGenerator, private RepositoryInterface $authCodeRepository, private AuthCodeExpiryDateCalculatorInterface $authCodeExpiryDate)
-    {
+    public function __construct(
+        private AuthCodeHashGeneratorInterface $authCodeHashGenerator,
+        private AuthCodeSecretGeneratorInterface $authCodeSecretGenerator,
+        private RepositoryInterface $authCodeRepository,
+        private AuthCodeExpiryDateCalculatorInterface $authCodeExpiryDate,
+    ) {
     }
 
     public function createForOrder(OrderInterface $order): AuthCodeInterface
