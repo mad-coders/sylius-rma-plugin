@@ -48,6 +48,7 @@
         "polishsymfonycommunity/symfony-mocker-container": "^1.0",
         "rector/rector": "^2.0",
         "sylius-labs/coding-standard": "^4.0",
+        "sylius/sylius-rector": "^3.7",
         "symfony/browser-kit": "^6.4",
         "symfony/debug-bundle": "^6.4",
         "symfony/dotenv": "^6.4",
@@ -59,6 +60,7 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
+            "rector/extension-installer": true,
             "symfony/flex": true,
             "symfony/runtime": true
         },
