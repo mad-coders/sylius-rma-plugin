@@ -42,7 +42,7 @@ class AuthContext implements Context
 
         $authCode = new AuthCode();
         $authCode->setAuthCode($code);
-        $authCode->setHash(hash('sha256', $order->getNumber().time()));
+        $authCode->setHash(hash('sha256', $order->getNumber() . time()));
         $authCode->setOrderNumber(str_replace('#', '', $order->getNumber()));
         $authCode->setExpiresAt($expiryDate);
 

@@ -31,7 +31,7 @@ class ReturnConsentContext implements Context
     /** @var IndexPageInterface */
     private $returnConsentIndexPage;
 
-    /** @var CreatePageInterface  */
+    /** @var CreatePageInterface */
     private $returnConsentCreatePage;
 
     /** @var UpdatePageInterface */
@@ -45,21 +45,14 @@ class ReturnConsentContext implements Context
 
     /**
      * ReturnConsentContext constructor.
-     *
-     * @param IndexPageInterface $returnConsentIndexPage
-     * @param CreatePageInterface $returnConsentCreatePage
-     * @param UpdatePageInterface $returnConsentUpdatePage
-     * @param RepositoryInterface $orderReturnConsentRepository
-     * @param SharedStorageInterface $sharedStorage
      */
     public function __construct(
         IndexPageInterface $returnConsentIndexPage,
         CreatePageInterface $returnConsentCreatePage,
         UpdatePageInterface $returnConsentUpdatePage,
         RepositoryInterface $orderReturnConsentRepository,
-        SharedStorageInterface $sharedStorage
-    )
-    {
+        SharedStorageInterface $sharedStorage,
+    ) {
         $this->returnConsentIndexPage = $returnConsentIndexPage;
         $this->returnConsentCreatePage = $returnConsentCreatePage;
         $this->sharedStorage = $sharedStorage;
@@ -109,8 +102,8 @@ class ReturnConsentContext implements Context
     {
         $formName = 'madcoders_rma_return_consent';
         $localeCode = $this->getAdminLocaleCode();
-        foreach($table as $row) {
-            $translationPrefix = $row['type'] === 'translations' ? 'translations_'. $localeCode . '_' : '';
+        foreach ($table as $row) {
+            $translationPrefix = $row['type'] === 'translations' ? 'translations_' . $localeCode . '_' : '';
             $locator = sprintf('%s_%s%s', $formName, $translationPrefix, $row['field']);
 
             $this->returnConsentCreatePage->choosesFormElement($row['value'], $locator);
@@ -148,8 +141,8 @@ class ReturnConsentContext implements Context
     {
         $formName = 'madcoders_rma_return_consent';
         $localeCode = $this->getAdminLocaleCode();
-        foreach($table as $row) {
-            $translationPrefix = $row['type'] === 'translations' ? 'translations_'. $localeCode . '_' : '';
+        foreach ($table as $row) {
+            $translationPrefix = $row['type'] === 'translations' ? 'translations_' . $localeCode . '_' : '';
             $locator = sprintf('%s_%s%s', $formName, $translationPrefix, $row['field']);
 
             $this->returnConsentUpdatePage->choosesFormElement($row['value'], $locator);
@@ -168,6 +161,7 @@ class ReturnConsentContext implements Context
     {
         /** @var AdminUserInterface $adminUser */
         $adminUser = $this->sharedStorage->get('administrator');
+
         return $adminUser->getLocaleCode();
     }
 }

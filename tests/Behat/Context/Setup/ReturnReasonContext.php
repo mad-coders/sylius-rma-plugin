@@ -38,7 +38,7 @@ class ReturnReasonContext implements Context
      */
     public function thereAreReasons(TableNode $table): void
     {
-        foreach($table as $row) {
+        foreach ($table as $row) {
             $this->createOrderReturnReason($row['code'], $row['name'], $row['deadline_to_return']);
         }
     }
@@ -50,7 +50,7 @@ class ReturnReasonContext implements Context
         $reason->setSlug(StringInflector::nameToSlug($name));
         $reason->setCode($code);
         $reason->setName($name);
-        $reason->setDeadlineToReturn((int)$days);
+        $reason->setDeadlineToReturn((int) $days);
 
         $this->returnReasonRepository->add($reason);
 

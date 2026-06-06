@@ -36,15 +36,11 @@ class ReturnReviewContext implements Context
 
     /**
      * ReturnReviewContext constructor
-     *
-     * @param ReturnReviewPageInterface $returnReviewPage
-     * @param RepositoryInterface $orderReturnRepository
      */
     public function __construct(
         ReturnReviewPageInterface $returnReviewPage,
-        RepositoryInterface $orderReturnRepository
-    )
-    {
+        RepositoryInterface $orderReturnRepository,
+    ) {
         $this->returnReviewPage = $returnReviewPage;
         $this->orderReturnRepository = $orderReturnRepository;
     }
@@ -84,13 +80,13 @@ class ReturnReviewContext implements Context
     {
         $orderReturnDraftList = $this->orderReturnRepository->findBy([
             'orderNumber' => str_replace('#', '', $orderNumber),
-            'orderReturnStatus' => 'draft'
+            'orderReturnStatus' => 'draft',
         ]);
 
-        if (count($orderReturnDraftList) < 1 ) {
+        if (count($orderReturnDraftList) < 1) {
             $orderReturnDraftList = $this->orderReturnRepository->findBy([
                 'orderNumber' => $orderNumber,
-                'orderReturnStatus' => 'draft'
+                'orderReturnStatus' => 'draft',
             ]);
         }
 
@@ -101,9 +97,6 @@ class ReturnReviewContext implements Context
         return $orderReturnDraft->getReturnNumber();
     }
 
-    /**
-     * @return SymfonyPageInterface
-     */
     private function getPage(): SymfonyPageInterface
     {
         return $this->returnReviewPage;

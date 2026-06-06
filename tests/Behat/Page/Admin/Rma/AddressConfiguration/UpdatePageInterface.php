@@ -37,6 +37,6 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
         string $street,
         string $postcode,
         string $city,
-        string $countryName
+        string $countryName,
     ): bool;
 }

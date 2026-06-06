@@ -19,8 +19,8 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 use Behat\Behat\Context\Context;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
-use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Behat\Service\Checker\EmailCheckerInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\FlashNotificationContextTrait;
@@ -44,7 +44,7 @@ class AuthContext implements Context
     /** @var EmailCheckerInterface */
     private $emailChecker;
 
-    /** @var TranslatorInterface  */
+    /** @var TranslatorInterface */
     private $translator;
 
     public function __construct(
@@ -52,9 +52,8 @@ class AuthContext implements Context
         AuthPageInterface $authPage,
         RepositoryInterface $authCodeRepository,
         EmailCheckerInterface $emailChecker,
-        TranslatorInterface $translator
-    )
-    {
+        TranslatorInterface $translator,
+    ) {
         $this->startPage = $startPage;
         $this->authCodeRepository = $authCodeRepository;
         $this->authPage = $authPage;
@@ -132,9 +131,9 @@ class AuthContext implements Context
 
         $message = $this->translator->trans(
             'madcoders_rma.email.order_return_auth_email.auth_code_info',
-            [ '%auth_code%' => $authCode->getAuthCode() ],
+            ['%auth_code%' => $authCode->getAuthCode()],
             null,
-            $localeCode
+            $localeCode,
         );
 
         $this->emailChecker->hasMessageTo($message, $recipient);
@@ -149,7 +148,7 @@ class AuthContext implements Context
         Assert::notNull($authCode);
         Assert::notNull($authCode->getHash());
 
-        $this->authPage->open([ 'code' => $authCode->getHash() ]);
+        $this->authPage->open(['code' => $authCode->getHash()]);
     }
 
     /**
@@ -178,9 +177,6 @@ class AuthContext implements Context
         return $authCode[0];
     }
 
-    /**
-     * @return SymfonyPageInterface
-     */
     private function getPage(): SymfonyPageInterface
     {
         return $this->authPage;

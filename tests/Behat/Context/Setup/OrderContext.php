@@ -33,9 +33,8 @@ class OrderContext implements Context
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        FactoryInterface $shipmentFactory
-    )
-    {
+        FactoryInterface $shipmentFactory,
+    ) {
         $this->orderRepository = $orderRepository;
         $this->shipmentFactory = $shipmentFactory;
     }

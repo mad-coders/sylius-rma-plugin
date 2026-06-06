@@ -45,14 +45,14 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
 
     public function getStatus(): string
     {
-       return $this->getElement('sylius-order-state')->getText();
+        return $this->getElement('sylius-order-state')->getText();
     }
 
     public function fillNoteField(string $text): void
     {
         try {
             $this->getElement('rma_return_notes_note')->setValue($text);
-         } catch (ElementNotFoundException $e) {
+        } catch (ElementNotFoundException $e) {
         }
     }
 
@@ -72,14 +72,14 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'rma-complete-button' =>  '.complete-button',
-            'rma-cancel-button' =>  '.cancel-button',
+            'rma-complete-button' => '.complete-button',
+            'rma-cancel-button' => '.cancel-button',
             'sylius-order-state' => '#sylius-order-state',
             'rma-add-note-to-timeline' => '[data-test-madcoders-rma-add-note-to-timeline]',
             'rma_return_notes_note' => '#madcoders_rma_return_notes_note',
             'rma_send_note_button' => '[data-test-send-note-button]',
             'rma-timeline' => '[data-test-madcoders-rma-timeline]',
-            'rma-timeline-note-text' => '[data-test-madcoders-rma-timeline-note-text]'
+            'rma-timeline-note-text' => '[data-test-madcoders-rma-timeline-note-text]',
         ]);
     }
 

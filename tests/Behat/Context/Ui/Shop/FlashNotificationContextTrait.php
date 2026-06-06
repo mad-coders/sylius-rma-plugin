@@ -22,7 +22,7 @@ use Webmozart\Assert\Assert;
 
 trait FlashNotificationContextTrait
 {
-    protected abstract function getPage(): SymfonyPageInterface;
+    abstract protected function getPage(): SymfonyPageInterface;
 
     /**
      * @Then I see single success message containing text :message
@@ -38,7 +38,6 @@ trait FlashNotificationContextTrait
     /**
      * It provides notifications for given page or page
      *
-     * @param SymfonyPageInterface|null $page
      *
      * @return string[]
      */

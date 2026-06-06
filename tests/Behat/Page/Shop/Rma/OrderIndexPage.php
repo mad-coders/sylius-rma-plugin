@@ -29,11 +29,10 @@ class OrderIndexPage extends SymfonyPage implements OrderIndexPageInterface
 
     public function __construct(
         Session $session,
-                $minkParameters,
+        $minkParameters,
         RouterInterface $router,
-        TableAccessorInterface $tableAccessor
-    )
-    {
+        TableAccessorInterface $tableAccessor,
+    ) {
         parent::__construct($session, $minkParameters, $router);
         $this->tableAccessor = $tableAccessor;
     }
@@ -42,7 +41,7 @@ class OrderIndexPage extends SymfonyPage implements OrderIndexPageInterface
     {
         $row = $this->tableAccessor->getRowWithFields(
             $this->getElement('customer_orders'),
-            ['number' => $order->getNumber()]
+            ['number' => $order->getNumber()],
         );
 
         $link = $row->find('css', '[data-test-button="madcoders_rma.ui.action.create_new_return"]');

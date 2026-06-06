@@ -28,26 +28,21 @@ class AddressConfigurationContext implements Context
 {
     /** @var UpdatePageInterface */
     private $returnConsentUpdatePage;
-    /**
-     * @var ChannelRepositoryInterface
-     */
+
+    /** @var ChannelRepositoryInterface */
     private $channelRepository;
 
     /** @var NotificationCheckerInterface */
     private $notificationChecker;
 
-
     /**
      * AddressConfigurationContext constructor
-     *
-     * @param UpdatePageInterface $returnConsentUpdatePage
      */
     public function __construct(
         UpdatePageInterface $returnConsentUpdatePage,
         ChannelRepositoryInterface $channelRepository,
-        NotificationCheckerInterface $notificationChecker
-    )
-    {
+        NotificationCheckerInterface $notificationChecker,
+    ) {
         $this->returnConsentUpdatePage = $returnConsentUpdatePage;
         $this->channelRepository = $channelRepository;
         $this->notificationChecker = $notificationChecker;
@@ -77,7 +72,7 @@ class AddressConfigurationContext implements Context
         $channelId = $this->returnConsentUpdatePage->getSelectedChannelId();
         $channel = $this->channelRepository->findOneBy(['id' => $channelId]);
 
-        Assert::true(stripos($channelName,$channel->getName()) !== false);
+        Assert::true(stripos($channelName, $channel->getName()) !== false);
     }
 
     /**
@@ -85,7 +80,7 @@ class AddressConfigurationContext implements Context
      */
     public function fillStoreReturnAddressDataForSelectedChannel(TableNode $table): void
     {
-        foreach($table as $row) {
+        foreach ($table as $row) {
             if ($row['type'] == 'field') {
                 $this->returnConsentUpdatePage->fillFormField($row);
             } elseif ($row['type'] == 'select') {

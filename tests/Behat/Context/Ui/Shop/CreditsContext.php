@@ -22,14 +22,9 @@ use Webmozart\Assert\Assert;
 
 final class CreditsContext implements Context
 {
-    /**
-     * @var CreditsPageInterface
-     */
+    /** @var CreditsPageInterface */
     private $creditsPage;
 
-    /**
-     * @param CreditsPageInterface $creditsPage
-     */
     public function __construct(CreditsPageInterface $creditsPage)
     {
         $this->creditsPage = $creditsPage;

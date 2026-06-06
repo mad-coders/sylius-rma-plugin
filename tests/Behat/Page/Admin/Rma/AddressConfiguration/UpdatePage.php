@@ -16,9 +16,9 @@ declare(strict_types=1);
 
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\AddressConfiguration;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use Sylius\Behat\Page\Admin\Crud\UpdatePage as BaseUpdatePage;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
-use Behat\Mink\Exception\ElementNotFoundException;
 
 class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 {
@@ -60,7 +60,7 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         string $street,
         string $postcode,
         string $city,
-        string $countryName
+        string $countryName,
     ): bool {
         $itsCompany = $this->getElement('company')->getValue();
         $itsStreet = $this->getElement('street')->getValue();
@@ -79,7 +79,7 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         string $street,
         string $postcode,
         string $city,
-        string $countryName
+        string $countryName,
     ): bool {
         return
             (stripos($elementText, $company) !== false) &&
@@ -87,7 +87,7 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
             (stripos($elementText, $city) !== false) &&
             (stripos($elementText, $postcode) !== false) &&
             (stripos($elementText, $countryName) !== false)
-            ;
+        ;
     }
 
     protected function getDefinedElements(): array

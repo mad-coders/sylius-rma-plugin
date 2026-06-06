@@ -41,7 +41,7 @@ class ReturnReviewPage extends SymfonyPage implements ReturnReviewPageInterface,
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'rma_approve_return_form' => '[data-test-madcoders-rma-approve-return-form-button]'
+            'rma_approve_return_form' => '[data-test-madcoders-rma-approve-return-form-button]',
         ]);
     }
 }

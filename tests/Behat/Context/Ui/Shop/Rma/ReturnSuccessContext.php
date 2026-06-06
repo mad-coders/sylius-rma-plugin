@@ -18,8 +18,8 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Behat\Service\Checker\EmailCheckerInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnSuccessPageInterface;
@@ -41,19 +41,13 @@ class ReturnSuccessContext implements Context
 
     /**
      * ReturnSuccessContext constructor
-     *
-     * @param ReturnSuccessPageInterface $returnSuccessPage
-     * @param RepositoryInterface $orderReturnRepository
-     * @param EmailCheckerInterface $emailChecker
-     * @param TranslatorInterface $translator
      */
     public function __construct(
         ReturnSuccessPageInterface $returnSuccessPage,
         RepositoryInterface $orderReturnRepository,
         EmailCheckerInterface $emailChecker,
-        TranslatorInterface $translator
-    )
-    {
+        TranslatorInterface $translator,
+    ) {
         $this->returnSuccessPage = $returnSuccessPage;
         $this->orderReturnRepository = $orderReturnRepository;
         $this->emailChecker = $emailChecker;
@@ -81,9 +75,9 @@ class ReturnSuccessContext implements Context
 
         $message = $this->translator->trans(
             'madcoders_rma.email.order_return_form.greeting',
-            [ '%name%' => $returnNumber ],
+            ['%name%' => $returnNumber],
             null,
-            $localeCode
+            $localeCode,
         );
 
         Assert::true($this->emailChecker->hasMessageTo($message, $recipient));
@@ -96,13 +90,13 @@ class ReturnSuccessContext implements Context
     {
         $orderReturnList = $this->orderReturnRepository->findBy([
             'orderNumber' => str_replace('#', '', $orderNumber),
-            'orderReturnStatus' => 'new'
+            'orderReturnStatus' => 'new',
         ]);
 
-        if (count($orderReturnList) < 1 ) {
+        if (count($orderReturnList) < 1) {
             $orderReturnList = $this->orderReturnRepository->findBy([
                 'orderNumber' => $orderNumber,
-                'orderReturnStatus' => 'new'
+                'orderReturnStatus' => 'new',
             ]);
         }
 

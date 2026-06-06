@@ -48,9 +48,8 @@ class ReturnFormContext implements Context
         SessionFactoryInterface $sessionFactory,
         CookieSetterInterface $cookieSetter,
         ReturnFormPageInterface $returnFormPage,
-        OrderReturnAuthorizerInterface $authorizer
-    )
-    {
+        OrderReturnAuthorizerInterface $authorizer,
+    ) {
         $this->requestStack = $requestStack;
         $this->sessionFactory = $sessionFactory;
         $this->cookieSetter = $cookieSetter;
