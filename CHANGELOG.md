@@ -9,6 +9,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-07
+
 ### Changed
 
 - Upgrade the plugin to Sylius `~1.12`, PHP `^8.2`, and Symfony `^6.4` (from Sylius
@@ -52,5 +54,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/mad-coders/sylius-rma-plugin/releases/tag/1.0.0
