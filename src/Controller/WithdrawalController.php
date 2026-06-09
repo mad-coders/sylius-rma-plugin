@@ -37,7 +37,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-final class WithdrawalController
+final readonly class WithdrawalController
 {
     private const CSRF_TOKEN_ID = 'madcoders_rma_withdrawal';
 
@@ -45,17 +45,17 @@ final class WithdrawalController
      * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
      */
     public function __construct(
-        private readonly Environment $twig,
-        private readonly RouterInterface $router,
-        private readonly AuthorizationCheckerInterface $authorizationChecker,
-        private readonly OrderByNumberProviderInterface $orderByNumberProvider,
-        private readonly WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
-        private readonly ReturnRequestBuilder $returnRequestBuilder,
-        private readonly OrderWithdrawalProcessorInterface $orderWithdrawalProcessor,
-        private readonly StateMachineFactoryInterface $stateMachineFactory,
-        private readonly RepositoryInterface $orderReturnRepository,
-        private readonly CsrfTokenManagerInterface $csrfTokenManager,
-        private readonly TranslatorInterface $translator,
+        private Environment $twig,
+        private RouterInterface $router,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private OrderByNumberProviderInterface $orderByNumberProvider,
+        private WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
+        private ReturnRequestBuilder $returnRequestBuilder,
+        private OrderWithdrawalProcessorInterface $orderWithdrawalProcessor,
+        private StateMachineFactoryInterface $stateMachineFactory,
+        private RepositoryInterface $orderReturnRepository,
+        private CsrfTokenManagerInterface $csrfTokenManager,
+        private TranslatorInterface $translator,
     ) {
     }
 
