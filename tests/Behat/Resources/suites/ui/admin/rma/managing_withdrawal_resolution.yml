@@ -47,6 +47,7 @@ default:
                 # ui
                 - sylius.behat.context.ui.admin.notification
                 - madcoders.rma.context.ui.admin.rma.managing_return_status
+                - madcoders.rma.context.ui.admin.rma.withdrawal_resolution
 
             filters:
                 tags: "@managing_withdrawal_resolution && @ui"

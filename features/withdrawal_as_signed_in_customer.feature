@@ -22,6 +22,7 @@ Feature: Withdraw from an order before it ships
         Then I should be on the order withdrawal page for latest order
         When I confirm the withdrawal
         Then order return for latest order should have status "cancellation_request"
+        And order return for latest order should have a "withdrawal_requested" change-log entry authored by a customer
         And a withdrawal "requested" email should be sent to "john.doe@madcoders.pl" for latest order
 
     @ui
@@ -33,5 +34,6 @@ Feature: Withdraw from an order before it ships
         Then I should be on the order withdrawal page for latest order
         When I confirm the withdrawal
         Then order return for latest order should have status "withdrawn"
+        And order return for latest order should have a "withdrawn" change-log entry authored by a customer
         And latest order should be cancelled
         And a withdrawal "cancelled" email should be sent to "john.doe@madcoders.pl" for latest order

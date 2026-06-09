@@ -24,6 +24,8 @@ Feature: Resolving a pre-shipment cancellation request
         And I click confirm cancellation button
         Then I should be notified that status has been successfully updated
         And order return status is "Cancelled"
+        And order return "R000000010-1" should have a "withdrawal_confirmed" change-log entry authored by an administrator
+        And a withdrawal "confirmed" email should be sent to "john.doe@madcoders.pl" for order return "R000000010-1"
 
     @ui
     Scenario: Redirecting a cancellation request into the return process
@@ -32,3 +34,5 @@ Feature: Resolving a pre-shipment cancellation request
         And I click handle as return button
         Then I should be notified that status has been successfully updated
         And order return status is "New"
+        And order return "R000000010-1" should have a "withdrawal_fallback" change-log entry authored by an administrator
+        And a withdrawal "fallback" email should be sent to "john.doe@madcoders.pl" for order return "R000000010-1"

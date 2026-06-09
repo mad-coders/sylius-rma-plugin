@@ -18,6 +18,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
 use Doctrine\Persistence\ObjectManager;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Behat\Service\Checker\EmailCheckerInterface;
@@ -30,10 +31,12 @@ final class WithdrawalContext implements Context
 {
     /**
      * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
+     * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
     public function __construct(
         private readonly WithdrawalPageInterface $withdrawalPage,
         private readonly RepositoryInterface $orderReturnRepository,
+        private readonly RepositoryInterface $changeLogRepository,
         private readonly EmailCheckerInterface $emailChecker,
         private readonly TranslatorInterface $translator,
         private readonly ObjectManager $orderManager,
@@ -90,6 +93,18 @@ final class WithdrawalContext implements Context
         );
 
         Assert::true($this->emailChecker->hasMessageTo($message, $recipient));
+    }
+
+    /**
+     * @Then /^order return for (latest order) should have a "([^"]+)" change-log entry authored by a (customer|admin)$/
+     */
+    public function orderReturnForOrderShouldHaveChangeLogEntryAuthoredBy(OrderInterface $order, string $type, string $authorType): void
+    {
+        $returnNumber = $this->findReturnForOrder($order)->getReturnNumber();
+
+        $changeLog = $this->changeLogRepository->findOneBy(['returnNumber' => $returnNumber, 'type' => $type]);
+        Assert::isInstanceOf($changeLog, OrderReturnChangeLog::class);
+        Assert::same($changeLog->getAuthor()->getType(), $authorType);
     }
 
     private function findReturnForOrder(OrderInterface $order): OrderReturnInterface
