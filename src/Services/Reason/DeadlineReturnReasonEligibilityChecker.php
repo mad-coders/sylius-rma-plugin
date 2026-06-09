@@ -17,21 +17,33 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services\Reason;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\ShipmentInterface;
 
 /**
- * Allows a return while the total number of days elapsed since shipment does not
- * exceed the reason's deadline.
+ * A reason is eligible for an order while the total number of days elapsed since
+ * shipment does not exceed the reason's deadline.
  *
  * Uses DateInterval::$days (total elapsed days), not DateInterval::$d (the
  * day-of-month component), so the deadline keeps being enforced even when more
  * than a calendar month has passed since shipment.
  */
-final class ElapsedDaysReturnDeadlineChecker implements ReturnDeadlineCheckerInterface
+final class DeadlineReturnReasonEligibilityChecker implements ReturnReasonEligibilityCheckerInterface
 {
-    public function isWithinDeadline(OrderReturnReasonInterface $reason, \DateTimeInterface $shippedAt): bool
+    public function isEligible(OrderInterface $order, OrderReturnReasonInterface $reason): bool
     {
         $deadlineToReturn = $reason->getDeadlineToReturn();
         if (null === $deadlineToReturn) {
+            return false;
+        }
+
+        $shipment = $order->getShipments()->first();
+        if (!$shipment instanceof ShipmentInterface) {
+            return false;
+        }
+
+        $shippedAt = $shipment->getShippedAt();
+        if (null === $shippedAt) {
             return false;
         }
 

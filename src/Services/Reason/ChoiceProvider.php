@@ -19,7 +19,6 @@ namespace Madcoders\SyliusRmaPlugin\Services\Reason;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
@@ -31,7 +30,7 @@ class ChoiceProvider implements ChoiceProviderInterface
     public function __construct(
         private readonly RepositoryInterface $orderReturnReasonRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly ReturnDeadlineCheckerInterface $returnDeadlineChecker,
+        private readonly ReturnReasonEligibilityCheckerInterface $returnReasonEligibilityChecker,
     ) {
     }
 
@@ -59,17 +58,7 @@ class ChoiceProvider implements ChoiceProviderInterface
      */
     public function createAvailableReasons(OrderInterface $order): array
     {
-        $orderShipment = $order->getShipments()->first();
-        if (!$orderShipment instanceof ShipmentInterface) {
-            return [];
-        }
-
         if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
-            return [];
-        }
-
-        $shipmentDate = $orderShipment->getShippedAt();
-        if (null === $shipmentDate) {
             return [];
         }
 
@@ -85,7 +74,7 @@ class ChoiceProvider implements ChoiceProviderInterface
             if (null === $reasonName || '' === $reasonName) {
                 continue;
             }
-            if ($this->returnDeadlineChecker->isWithinDeadline($reason, $shipmentDate)) {
+            if ($this->returnReasonEligibilityChecker->isEligible($order, $reason)) {
                 $availableReasons[$reasonCode] = $reasonName;
             }
         }

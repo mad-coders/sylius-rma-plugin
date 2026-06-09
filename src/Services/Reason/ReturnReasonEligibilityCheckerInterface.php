@@ -17,11 +17,12 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services\Reason;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 
-interface ReturnDeadlineCheckerInterface
+interface ReturnReasonEligibilityCheckerInterface
 {
     /**
-     * Whether a return for the given reason is still allowed for a shipment sent at $shippedAt.
+     * Whether the given reason can be used to return the given order.
      */
-    public function isWithinDeadline(OrderReturnReasonInterface $reason, \DateTimeInterface $shippedAt): bool;
+    public function isEligible(OrderInterface $order, OrderReturnReasonInterface $reason): bool;
 }
