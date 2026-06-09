@@ -77,6 +77,8 @@ madcoders_rma:
             confirm_button: 'Withdraw from order'
             success_requested: 'Your cancellation request has been registered'
             success_withdrawn: 'Your order has been cancelled upon withdrawal'
+            confirm_cancellation: 'Confirm cancellation'
+            fallback_to_return: 'Handle as return'
 
         verification_step:
             secondary_headline: 'Verification step'

@@ -137,3 +137,37 @@ madcoders_rma_admin_order_return_show_complete:
       state_machine:
         graph: return_status
         transition: complete
+
+madcoders_rma_admin_order_return_show_confirm_cancellation:
+  path: /order-returns/{id}/confirm-cancellation/{_csrf_token}
+  methods: [ GET ]
+  controller: madcoders_rma.controller.order_return::applyStateMachineTransitionAction
+  defaults:
+    _sylius:
+      section: admin
+      permission: true
+      flash: madcoders.admin.history.withdrawal_confirmed
+      repository:
+        method: findOneById
+        arguments:
+          - $id
+      state_machine:
+        graph: return_status
+        transition: confirm_cancellation
+
+madcoders_rma_admin_order_return_show_fallback_to_return:
+  path: /order-returns/{id}/fallback-to-return/{_csrf_token}
+  methods: [ GET ]
+  controller: madcoders_rma.controller.order_return::applyStateMachineTransitionAction
+  defaults:
+    _sylius:
+      section: admin
+      permission: true
+      flash: madcoders.admin.history.withdrawal_fallback
+      repository:
+        method: findOneById
+        arguments:
+          - $id
+      state_machine:
+        graph: return_status
+        transition: fallback_to_return
