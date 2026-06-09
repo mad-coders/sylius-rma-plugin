@@ -100,6 +100,15 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return" />
         </service>
 
+        <service id="madcoders.rma.context.ui.shop.rma.withdrawal"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\WithdrawalContext">
+            <argument type="service" id="madcoders.rma.page.shop.rma.withdrawal" />
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="sylius.behat.email_checker" />
+            <argument type="service" id="translator" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
         <service id="madcoders.rma.context.ui.admin.rma.managing_return_reasons"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnReasonContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_index" />
@@ -158,6 +167,10 @@ Architects of this package:
 
         <service id="madcoders.rma.page.shop.rma.return_success"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnSuccessPage"
+                 parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.shop.rma.withdrawal"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\WithdrawalPage"
                  parent="sylius.behat.symfony_page" public="false" />
 
         <service id="madcoders.rma.page.admin.rma.return_consents_index"

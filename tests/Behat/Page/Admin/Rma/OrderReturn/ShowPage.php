@@ -43,6 +43,27 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         }
     }
 
+    public function isCancellationRequestPage(): bool
+    {
+        return $this->hasElement('rma-confirm-cancellation-button');
+    }
+
+    public function confirmCancellation(): void
+    {
+        try {
+            $this->getElement('rma-confirm-cancellation-button')->click();
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    public function fallbackToReturn(): void
+    {
+        try {
+            $this->getElement('rma-fallback-to-return-button')->click();
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
     public function getStatus(): string
     {
         return $this->getElement('sylius-order-state')->getText();
@@ -74,6 +95,8 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         return array_merge(parent::getDefinedElements(), [
             'rma-complete-button' => '.complete-button',
             'rma-cancel-button' => '.cancel-button',
+            'rma-confirm-cancellation-button' => '.confirm-cancellation-button',
+            'rma-fallback-to-return-button' => '.fallback-to-return-button',
             'sylius-order-state' => '#sylius-order-state',
             'rma-add-note-to-timeline' => '[data-test-madcoders-rma-add-note-to-timeline]',
             'rma_return_notes_note' => '#madcoders_rma_return_notes_note',

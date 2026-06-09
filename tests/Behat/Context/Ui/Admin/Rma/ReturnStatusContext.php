@@ -136,6 +136,22 @@ class ReturnStatusContext implements Context
         $this->orderReturnShowPage->cancelThisOrderReturn();
     }
 
+    /**
+     * @When I click confirm cancellation button
+     */
+    public function iConfirmCancellationOfThisOrderReturn(): void
+    {
+        $this->orderReturnShowPage->confirmCancellation();
+    }
+
+    /**
+     * @When I click handle as return button
+     */
+    public function iFallbackThisOrderReturnToTheReturnProcess(): void
+    {
+        $this->orderReturnShowPage->fallbackToReturn();
+    }
+
     private function findOrderReturnByNumber(string $number): OrderReturnInterface
     {
         if (!$orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $number])) {

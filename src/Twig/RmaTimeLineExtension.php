@@ -40,6 +40,10 @@ class RmaTimeLineExtension extends AbstractExtension
             'customer_accepted' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_customerAccepted.html.twig',
             'cancelled' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_cancelled.html.twig',
             'completed' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_completed.html.twig',
+            'withdrawal_requested' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_withdrawalRequested.html.twig',
+            'withdrawal_confirmed' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_withdrawalConfirmed.html.twig',
+            'withdrawal_fallback' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_withdrawalFallback.html.twig',
+            'withdrawn' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_withdrawn.html.twig',
             default => throw new \Exception('Type not identified'),
         };
     }
