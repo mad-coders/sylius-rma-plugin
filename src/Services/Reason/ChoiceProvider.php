@@ -31,6 +31,7 @@ class ChoiceProvider implements ChoiceProviderInterface
     public function __construct(
         private readonly RepositoryInterface $orderReturnReasonRepository,
         private readonly OrderRepositoryInterface $orderRepository,
+        private readonly ReturnDeadlineCheckerInterface $returnDeadlineChecker,
     ) {
     }
 
@@ -72,9 +73,6 @@ class ChoiceProvider implements ChoiceProviderInterface
             return [];
         }
 
-        $dateNow = new \DateTime('@' . strtotime('now'));
-        $daysAreGone = $shipmentDate->diff($dateNow)->days;
-
         $reasons = $this->orderReturnReasonRepository->findBy(['enabled' => true]);
         $availableReasons = [];
 
@@ -87,7 +85,7 @@ class ChoiceProvider implements ChoiceProviderInterface
             if (null === $reasonName || '' === $reasonName) {
                 continue;
             }
-            if ($reason->getDeadlineToReturn() >= $daysAreGone) {
+            if ($this->returnDeadlineChecker->isWithinDeadline($reason, $shipmentDate)) {
                 $availableReasons[$reasonCode] = $reasonName;
             }
         }

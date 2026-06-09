@@ -19,6 +19,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Unit\Services\Reason;
 use Doctrine\Common\Collections\ArrayCollection;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider;
+use Madcoders\SyliusRmaPlugin\Services\Reason\ElapsedDaysReturnDeadlineChecker;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
@@ -107,6 +108,7 @@ class ChoiceProviderTest extends UnitTestCase
         return new ChoiceProvider(
             $reasonRepository->reveal(),
             $this->prophesize(OrderRepositoryInterface::class)->reveal(),
+            new ElapsedDaysReturnDeadlineChecker(),
         );
     }
 }

@@ -31,9 +31,15 @@ Architects of this package:
             <tag name="form.type"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.services.reason.return_deadline_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\Reason\ElapsedDaysReturnDeadlineChecker" />
+        <service id="Madcoders\SyliusRmaPlugin\Services\Reason\ReturnDeadlineCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.reason.return_deadline_checker" />
+
         <service id="madcoders.sylius_rma_plugin.form.choice_provider.reason" class="Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider">
             <argument type="service" id="madcoders_rma.repository.order_return_reason" />
             <argument type="service" id= "sylius.repository.order" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.reason.return_deadline_checker" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.form.type.return_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType">
