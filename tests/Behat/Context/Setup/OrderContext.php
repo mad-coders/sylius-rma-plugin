@@ -49,6 +49,24 @@ class OrderContext implements Context
     }
 
     /**
+     * @Given /^(the order)'s payment state is "([^"]+)"/
+     */
+    public function setOrderPaymentState(OrderInterface $order, string $paymentState): void
+    {
+        $order->setPaymentState($paymentState);
+        $this->orderRepository->add($order);
+    }
+
+    /**
+     * @Given /^(the order)'s shipping state is "([^"]+)"/
+     */
+    public function setOrderShippingState(OrderInterface $order, string $shippingState): void
+    {
+        $order->setShippingState($shippingState);
+        $this->orderRepository->add($order);
+    }
+
+    /**
      * @Given /^(the order) has single shipment with ("[^"]+" shipping method)/
      */
     public function addSingleShipment(OrderInterface $order, ShippingMethodInterface $shippingMethod): void
