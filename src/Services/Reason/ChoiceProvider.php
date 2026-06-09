@@ -73,7 +73,7 @@ class ChoiceProvider implements ChoiceProviderInterface
         }
 
         $dateNow = new \DateTime('@' . strtotime('now'));
-        $daysAreGone = $shipmentDate->diff($dateNow)->d;
+        $daysAreGone = $shipmentDate->diff($dateNow)->days;
 
         $reasons = $this->orderReturnReasonRepository->findBy(['enabled' => true]);
         $availableReasons = [];
