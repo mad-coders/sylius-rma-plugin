@@ -9,6 +9,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-06-09
+
 ### Changed
 
 - Modernize `src/` to PHP 8.2 standards with Rector (typed properties, constructor property
@@ -16,6 +18,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   PHPStan baseline down (293 -> 253 entries and counting; see
   [docs/adr-log/0012](docs/adr-log/0012-rector-and-php82-modernization.md) and
   [ai/tasks/12-phpstan-baseline-free.md](ai/tasks/12-phpstan-baseline-free.md)).
+
+### Fixed
+
+- Enforce the return deadline by the total number of days elapsed since shipment
+  (`DateInterval::$days`) instead of the day-of-month component (`DateInterval::$d`). Previously a
+  reason's deadline stopped being enforced once more than a calendar month had passed and
+  eligibility flipped on/off around month and year boundaries
+  ([#8](https://github.com/mad-coders/sylius-rma-plugin/issues/8)). The deadline decision now lives
+  in a dedicated, injectable `ReturnDeadlineCheckerInterface`, wrapped by a
+  `ReturnReasonEligibilityCheckerInterface` that resolves the order's shipment.
 
 ## [1.1.0] - 2026-06-07
 
@@ -62,6 +74,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/mad-coders/sylius-rma-plugin/releases/tag/1.0.0
