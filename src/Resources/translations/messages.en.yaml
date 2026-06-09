@@ -130,6 +130,10 @@ madcoders_rma:
             completed_return: 'completed return'
             cancelled_return: 'cancelled return'
             added_new_note: 'added new note'
+            withdrawal_requested: 'requested order cancellation (withdrawal)'
+            withdrawal_confirmed: 'confirmed cancellation (withdrawal)'
+            withdrawal_fallback: 'redirected withdrawal to the return process'
+            withdrawn: 'withdrew the order (auto-cancelled)'
         return_details_header: 'Return details'
 
         return_consent:
@@ -166,3 +170,5 @@ madcoders_rma:
         new: 'New'
         completed: 'Completed'
         cancelled: "Cancelled"
+        cancellation_request: 'Cancellation request'
+        withdrawn: 'Withdrawn'

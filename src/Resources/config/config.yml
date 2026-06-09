@@ -125,6 +125,8 @@ winzou_state_machine:
       new: ~
       completed: ~
       canceled: ~
+      cancellation_request: ~
+      withdrawn: ~
     callbacks:
       after:
         updated_changelog_on_cancel:
@@ -146,6 +148,18 @@ winzou_state_machine:
       cancel:
         from: ['draft', 'new']
         to: canceled
+      request_cancellation:
+        from: ['draft']
+        to: cancellation_request
+      withdraw:
+        from: ['draft']
+        to: withdrawn
+      confirm_cancellation:
+        from: ['cancellation_request']
+        to: canceled
+      fallback_to_return:
+        from: ['cancellation_request']
+        to: new
 
 # HOW TO USE ORDER RETURN STATE MACHINE
 
