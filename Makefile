@@ -1,7 +1,7 @@
 .PHONY: help \
         install update setup init app \
         docker-up docker-up-all docker-down docker-logs \
-        backend backend-test frontend cache-clean db-reset fixtures serve serve-test \
+        backend backend-test frontend cache-clean db-reset fixtures fixtures-test serve serve-test \
         test phpunit behat behat-js \
         static phpstan ecs fix \
         verify pre-commit install-hooks \
@@ -63,6 +63,9 @@ db-reset: ## Drop and recreate the database schema
 
 fixtures: ## (Re)load the default Sylius + RMA fixtures
 	$(TEST_APP)/bin/console sylius:fixtures:load default --no-interaction
+
+fixtures-test: ## Load the default Sylius + RMA fixtures into the test database (used by CI)
+	APP_ENV=test $(TEST_APP)/bin/console sylius:fixtures:load default --no-interaction
 
 serve: ## Serve the local DEV application on https://127.0.0.1:8080 (dev database)
 	APP_ENV=dev $(TEST_APP)/bin/console cache:clear
