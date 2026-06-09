@@ -28,10 +28,10 @@ use Sylius\Component\Core\Model\ShipmentInterface;
  * ReturnDeadlineCheckerInterface, which keeps the deadline rule reusable and
  * independently testable.
  */
-final class ReturnReasonEligibilityChecker implements ReturnReasonEligibilityCheckerInterface
+final readonly class ReturnReasonEligibilityChecker implements ReturnReasonEligibilityCheckerInterface
 {
     public function __construct(
-        private readonly ReturnDeadlineCheckerInterface $returnDeadlineChecker,
+        private ReturnDeadlineCheckerInterface $returnDeadlineChecker,
     ) {
     }
 
