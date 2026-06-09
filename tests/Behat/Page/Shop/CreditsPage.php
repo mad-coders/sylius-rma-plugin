@@ -21,7 +21,7 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
 class CreditsPage extends SymfonyPage implements CreditsPageInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHeader(): string
     {
@@ -29,7 +29,7 @@ class CreditsPage extends SymfonyPage implements CreditsPageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRouteName(): string
     {
@@ -37,7 +37,7 @@ class CreditsPage extends SymfonyPage implements CreditsPageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefinedElements(): array
     {

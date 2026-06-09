@@ -34,14 +34,12 @@ final class OrderReturnReasonFixture extends AbstractResourceFixture
      */
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
-        $resourceNode
-            ->children()
-                ->scalarNode('code')->cannotBeEmpty()->end()
-                ->scalarNode('slug')->cannotBeEmpty()->end()
-                ->scalarNode('name')->cannotBeEmpty()->end()
-                ->scalarNode('deadline_to_return')->cannotBeEmpty()->end()
-                ->scalarNode('description')->end()
-                ->scalarNode('enabled')->end()
-        ;
+        $nodeBuilder = $resourceNode->children();
+        $nodeBuilder->scalarNode('code')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('slug')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('name')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('deadline_to_return')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('description');
+        $nodeBuilder->scalarNode('enabled');
     }
 }

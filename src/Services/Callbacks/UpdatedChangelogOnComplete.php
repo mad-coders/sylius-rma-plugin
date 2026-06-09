@@ -22,19 +22,13 @@ use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 
 class UpdatedChangelogOnComplete
 {
-    /** @var RmaAdminUserData */
-    private $adminUser;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
     /**
      * UpdatedChangelogOnCancel constructor.
      */
-    public function __construct(RmaAdminUserData $adminUser, RmaChangesLogger $changesLogger)
-    {
-        $this->adminUser = $adminUser;
-        $this->changesLogger = $changesLogger;
+    public function __construct(
+        private readonly RmaAdminUserData $adminUser,
+        private readonly RmaChangesLogger $changesLogger,
+    ) {
     }
 
     public function UpdatedChangelogOnComplete(OrderReturnInterface $orderReturn): void

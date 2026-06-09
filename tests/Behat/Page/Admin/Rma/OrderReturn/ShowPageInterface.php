@@ -19,7 +19,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Admin\Rma\OrderReturn;
 use Behat\Mink\Element\NodeElement;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 
-interface ShowPageInterface  extends SymfonyPageInterface
+interface ShowPageInterface extends SymfonyPageInterface
 {
     public function isNewOrderReturnPage(): bool;
 

@@ -21,18 +21,14 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\AbstractExampleFactory;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
-    /** @var OptionsResolver */
-    private $optionsResolver;
-
-    /** @var \Faker\Generator */
-    private $faker;
+    private readonly OptionsResolver $optionsResolver;
 
     public function __construct()
     {
-        $this->faker = \Faker\Factory::create();
         $this->optionsResolver = new OptionsResolver();
 
         $this->configureOptions($this->optionsResolver);
@@ -44,6 +40,12 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
     public function create(array $options = []): OrderReturnConsentInterface
     {
         $options = $this->optionsResolver->resolve($options);
+        Assert::string($options['current_locale']);
+        Assert::boolean($options['enabled']);
+        Assert::string($options['code']);
+        Assert::string($options['name']);
+        Assert::string($options['slug']);
+        Assert::string($options['description']);
 
         $orderReturnConsent = new OrderReturnConsent();
         $orderReturnConsent->setCurrentLocale($options['current_locale']);

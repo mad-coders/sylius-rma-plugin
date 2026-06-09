@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,15 +25,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ConfigChannelSelectFormType extends AbstractType
 {
-    /** @var RepositoryInterface */
-    private $channelsRepository;
-
     /**
-     * ConfigChannelSelectFormType constructor.
+     * @param RepositoryInterface<ChannelInterface> $channelsRepository
      */
-    public function __construct(RepositoryInterface $channelsRepository)
+    public function __construct(private readonly RepositoryInterface $channelsRepository)
     {
-        $this->channelsRepository = $channelsRepository;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -40,7 +37,12 @@ final class ConfigChannelSelectFormType extends AbstractType
         $choices = $this->channelsRepository->findAll();
         $choicesChannel = [];
         foreach ($choices as $choice) {
-            $choicesChannel[$choice->getId()] = $choice->getName();
+            $id = $choice->getId();
+            $name = $choice->getName();
+            if ((!is_int($id) && !is_string($id)) || null === $name) {
+                continue;
+            }
+            $choicesChannel[$id] = $name;
         }
         $builder->add('channelChoice', ChoiceType::class, [
             'label' => false,

@@ -25,7 +25,7 @@ class RmaTimeAgoExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_time_ago_view', [$this, 'createTimeAgo']),
+            new TwigFunction('rma_time_ago_view', $this->createTimeAgo(...)),
         ];
     }
 
@@ -50,7 +50,7 @@ class RmaTimeAgoExtension extends AbstractExtension
             }
             $numberOfUnits = floor($diff / $unit);
 
-            return ($val == 'second') ? 'a few seconds ago' :
+            return ('second' === $val) ? 'a few seconds ago' :
                 (($numberOfUnits > 1) ? $numberOfUnits : 'a')
                 . ' ' . $val . (($numberOfUnits > 1) ? 's' : '') . ' ago';
         }

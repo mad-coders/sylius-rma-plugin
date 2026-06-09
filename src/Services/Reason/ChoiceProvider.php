@@ -25,29 +25,24 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ChoiceProvider implements ChoiceProviderInterface
 {
-    /** @var RepositoryInterface */
-    private $orderReturnReasonRepository;
-
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
     /**
-     * ChoiceProvider constructor.
+     * @param RepositoryInterface<OrderReturnReasonInterface> $orderReturnReasonRepository
      */
     public function __construct(
-        RepositoryInterface $orderReturnReasonRepository,
-        OrderRepositoryInterface $orderRepository,
+        private readonly RepositoryInterface $orderReturnReasonRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
     ) {
-        $this->orderReturnReasonRepository = $orderReturnReasonRepository;
-        $this->orderRepository = $orderRepository;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getChoices(OrderReturnInterface $orderReturn): array
     {
         $orderNumber = $orderReturn->getOrderNumber();
         $order = $this->orderRepository->findOneByNumber($orderNumber);
 
-        if (!$order) {
+        if (!$order instanceof OrderInterface) {
             $order = $this->orderRepository->findOneByNumber('#' . $orderNumber);
         }
 
@@ -58,6 +53,9 @@ class ChoiceProvider implements ChoiceProviderInterface
         return $this->createAvailableReasons($order);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function createAvailableReasons(OrderInterface $order): array
     {
         $orderShipment = $order->getShipments()->first();
@@ -70,6 +68,10 @@ class ChoiceProvider implements ChoiceProviderInterface
         }
 
         $shipmentDate = $orderShipment->getShippedAt();
+        if (null === $shipmentDate) {
+            return [];
+        }
+
         $dateNow = new \DateTime('@' . strtotime('now'));
         $daysAreGone = $shipmentDate->diff($dateNow)->d;
 
@@ -77,13 +79,12 @@ class ChoiceProvider implements ChoiceProviderInterface
         $availableReasons = [];
 
         foreach ($reasons as $reason) {
-            if (!$reason instanceof OrderReturnReasonInterface) {
+            $reasonCode = $reason->getCode();
+            if (null === $reasonCode || '' === $reasonCode) {
                 continue;
             }
-            if (!$reasonCode = $reason->getCode()) {
-                continue;
-            }
-            if (!$reasonName = $reason->getName()) {
+            $reasonName = $reason->getName();
+            if (null === $reasonName || '' === $reasonName) {
                 continue;
             }
             if ($reason->getDeadlineToReturn() >= $daysAreGone) {

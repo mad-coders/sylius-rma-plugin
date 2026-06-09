@@ -42,7 +42,7 @@ class StartPage extends SymfonyPage implements StartPageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDefinedElements(): array
     {

@@ -34,13 +34,11 @@ final class OrderReturnItemFixture extends AbstractResourceFixture
      */
     protected function configureResourceNode(ArrayNodeDefinition $resourceNode): void
     {
-        $resourceNode
-            ->children()
-                ->scalarNode('return_number')->cannotBeEmpty()->end()
-                ->scalarNode('product_sku')->cannotBeEmpty()->end()
-                ->scalarNode('product_name')->cannotBeEmpty()->end()
-                ->scalarNode('return_qty')->cannotBeEmpty()->end()
-                ->scalarNode('unit_price')->end()
-        ;
+        $nodeBuilder = $resourceNode->children();
+        $nodeBuilder->scalarNode('return_number')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('product_sku')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('product_name')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('return_qty')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('unit_price');
     }
 }

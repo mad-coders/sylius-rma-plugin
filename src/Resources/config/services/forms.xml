@@ -17,7 +17,6 @@ Architects of this package:
         <defaults autoconfigure="true" autowire="true" public="true" />
 
         <service id="madcoders.sylius_rma_plugin.form.type.return_consent_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnConsentFormType">
-            <argument type="service" id="translator" />
             <tag name="form.type"/>
         </service>
 

@@ -22,19 +22,15 @@ use Twig\TwigFunction;
 
 class RmaReasonChoiceExtension extends AbstractExtension
 {
-    /** @var ChoiceProviderInterface */
-    private $reasonChoiceProvider;
-
-    public function __construct(ChoiceProviderInterface $reasonChoiceProvider)
+    public function __construct(private readonly ChoiceProviderInterface $reasonChoiceProvider)
     {
-        $this->reasonChoiceProvider = $reasonChoiceProvider;
     }
 
     /** @inheritdoc */
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_reason_name_view', [$this, 'findReasonNameByCode']),
+            new TwigFunction('rma_reason_name_view', $this->findReasonNameByCode(...)),
         ];
     }
 

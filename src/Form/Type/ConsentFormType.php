@@ -41,18 +41,23 @@ class ConsentFormType extends AbstractType
                 throw new \RuntimeException('Consent data must be an array');
             }
 
+            $consentRequire = (bool) ($data['consentRequire'] ?? false);
+
             $constraints = [];
-            if ($data['consentRequire']) {
+            if ($consentRequire) {
                 $constraints[] = new IsTrue();
             }
+
+            $label = $data['label'] ?? null;
+            $labelText = (is_scalar($label) && '' !== (string) $label) ? (string) $label : '-- missing --';
 
             $form->add(
                 'checked',
                 CheckboxType::class,
                 [
                     'label_attr' => ['style' => 'margin-top: 7px'],
-                    'label' => (string) $data['label'] ?: '-- missing --',
-                    'required' => (bool) $data['consentRequire'] ?: false,
+                    'label' => $labelText,
+                    'required' => $consentRequire,
                     'constraints' => $constraints,
                 ],
             );

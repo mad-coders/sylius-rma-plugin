@@ -16,16 +16,15 @@ declare(strict_types=1);
 
 namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
-use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\SelectFormElement;
-use  Behat\Mink\Exception\ElementNotFoundException;
+use  Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\SelectFormElement;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
 
 class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, FlashNotificationInterface
 {
     use FlashNotificationTrait;
-
     use SelectFormElement;
 
     /**
@@ -46,7 +45,7 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
         if ($this->returnFormHasBankAccountField()) {
             $this->getDocument()->fillField(
                 'madcoders_rma_return_item_bankAccountNumber',
-                'PL39116000061780056464618314'
+                'PL39116000061780056464618314',
             );
         }
     }
@@ -59,7 +58,7 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
         if ($this->returnFormHasNoteField()) {
             $this->getDocument()->fillField(
                 'madcoders_rma_return_item_customerNote',
-                $noteText
+                $noteText,
             );
         }
     }
@@ -84,13 +83,13 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
 
     private function checkReturnFormHasReasonSelect(): bool
     {
-       return $this->getDocument()->hasSelect('madcoders_rma_return_item_returnReason');
+        return $this->getDocument()->hasSelect('madcoders_rma_return_item_returnReason');
     }
 
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'rma_submit_return_form' => '[data-test-madcoders-rma-submit-return-form-button]'
+            'rma_submit_return_form' => '[data-test-madcoders-rma-submit-return-form-button]',
         ]);
     }
 

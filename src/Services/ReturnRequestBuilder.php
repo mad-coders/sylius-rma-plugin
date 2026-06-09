@@ -25,43 +25,20 @@ use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
-use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 class ReturnRequestBuilder
 {
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
-    /** @var ReturnNumberGenerator */
-    private $orderReturnGenerator;
-
-    /** @var MaxQtyCalculator */
-    private $maxQtyCalculator;
-
-    /** @var OrderByNumberProviderInterface */
-    private $orderByNumberProvider;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
+    /**
+     * @param RepositoryInterface<OrderReturnInterface> $orderReturnRepository
+     */
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        RepositoryInterface $orderReturnRepository,
-        ReturnNumberGenerator $orderReturnGenerator,
-        MaxQtyCalculator $maxQtyCalculator,
-        OrderByNumberProviderInterface $orderByNumberProvider,
-        RmaChangesLogger $changesLogger,
+        private readonly RepositoryInterface $orderReturnRepository,
+        private readonly ReturnNumberGenerator $orderReturnGenerator,
+        private readonly MaxQtyCalculator $maxQtyCalculator,
+        private readonly OrderByNumberProviderInterface $orderByNumberProvider,
+        private readonly RmaChangesLogger $changesLogger,
     ) {
-        $this->orderRepository = $orderRepository;
-        $this->orderReturnRepository = $orderReturnRepository;
-        $this->orderReturnGenerator = $orderReturnGenerator;
-        $this->maxQtyCalculator = $maxQtyCalculator;
-        $this->orderByNumberProvider = $orderByNumberProvider;
-        $this->changesLogger = $changesLogger;
     }
 
     /**
@@ -89,11 +66,21 @@ class ReturnRequestBuilder
         // populate order data
         $orderReturnNumber = $this->orderReturnGenerator->returnNumberGenerate($orderNumber);
         $orderReturn->setReturnNumber($orderReturnNumber);
-        $orderReturn->setChannelCode($order->getChannel()->getCode());
+
+        $channel = $order->getChannel();
+        if (null === $channel) {
+            throw new Exception('Order channel is missing');
+        }
+        $channelCode = $channel->getCode();
+        if (null === $channelCode) {
+            throw new Exception('Order channel code is missing');
+        }
+        $orderReturn->setChannelCode($channelCode);
         $orderReturn->setOrderNumber($orderNumber);
 
         // check if customer exists
-        if (!$customer = $order->getCustomer()) {
+        $customer = $order->getCustomer();
+        if (null === $customer) {
             throw new Exception('Customer is missing');
         }
 
@@ -101,10 +88,12 @@ class ReturnRequestBuilder
         $orderReturn->setCustomerEmail($customer->getEmail());
 
         // set customer number
-        $orderReturn->setCustomerNumber((string) $order->getCustomer()->getId());
+        $customerId = $customer->getId();
+        $orderReturn->setCustomerNumber(is_scalar($customerId) ? (string) $customerId : '');
 
         // check if address exists
-        if (!$address = $order->getBillingAddress()) {
+        $address = $order->getBillingAddress();
+        if (null === $address) {
             throw new Exception('Customer address is missing');
         }
 
@@ -125,7 +114,8 @@ class ReturnRequestBuilder
                 throw new \Exception(sprintf('$item->getVariant() must return %s', ProductVariantInterface::class));
             }
 
-            if (!$itemVariantCode = $orderItemVariant->getCode()) {
+            $itemVariantCode = $orderItemVariant->getCode();
+            if (null === $itemVariantCode || '' === $itemVariantCode) {
                 throw new \Exception('Cannot create OrderItemReturnRequest for OrderItem without code.');
             }
 
@@ -136,7 +126,7 @@ class ReturnRequestBuilder
             $orderReturnItem = new OrderReturnItem();
             $orderReturnItem->setUnitPrice($item->getUnitPrice());
             $orderReturnItem->setProductName($item->getProductName());
-            $orderReturnItem->setProductSku($orderItemVariant->getCode());
+            $orderReturnItem->setProductSku($itemVariantCode);
             $orderReturnItem->setMaxQty($maxQty);
             $orderReturnItem->setReturnQty($maxQty);
 
@@ -145,8 +135,8 @@ class ReturnRequestBuilder
 
         //Logger functionality
         $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
-        $newChangeLogAuthor->setFirstName($address->getFirstName());
-        $newChangeLogAuthor->setLastName($address->getLastName());
+        $newChangeLogAuthor->setFirstName($address->getFirstName() ?? '');
+        $newChangeLogAuthor->setLastName($address->getLastName() ?? '');
         $newChangeLogAuthor->setType('customer');
 
         $this->changesLogger->add($orderReturnNumber, 'created_draft', '', $newChangeLogAuthor);

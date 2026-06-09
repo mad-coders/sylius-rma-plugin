@@ -25,20 +25,15 @@ class AuthCode implements ResourceInterface, AuthCodeInterface
     /** @var int */
     private $id;
 
-    /** @var string */
-    private $orderNumber;
+    private string $orderNumber;
 
-    /** @var string */
-    private $hash;
+    private string $hash;
 
-    /** @var int */
-    private $authCode;
+    private int $authCode = 0;
 
-    /** @var int */
-    private $attempts = 0;
+    private int $attempts = 0;
 
-    /** @var \DateTimeInterface|null */
-    private $expiresAt;
+    private \DateTime|\DateTimeInterface $expiresAt;
 
     public function __construct()
     {

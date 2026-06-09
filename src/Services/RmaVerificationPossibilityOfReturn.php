@@ -23,21 +23,13 @@ use Sylius\Component\Core\Model\OrderItemInterface;
 
 class RmaVerificationPossibilityOfReturn
 {
-    /** @var MaxQtyCalculator */
-    private $maxQtyCalculator;
-
-    /** @var ChoiceProvider */
-    private $availableReasonsCreator;
-
     /**
      * RmaVerificationPossibilityOfReturn constructor.
      */
     public function __construct(
-        MaxQtyCalculator $maxQtyCalculator,
-        ChoiceProvider $availableReasonsCreator,
+        private readonly MaxQtyCalculator $maxQtyCalculator,
+        private readonly ChoiceProvider $availableReasonsCreator,
     ) {
-        $this->maxQtyCalculator = $maxQtyCalculator;
-        $this->availableReasonsCreator = $availableReasonsCreator;
     }
 
     /**
@@ -45,7 +37,8 @@ class RmaVerificationPossibilityOfReturn
      */
     public function verificationForButtonRender(OrderInterface $order): bool
     {
-        if (!$orderNumber = $order->getNumber()) {
+        $orderNumber = $order->getNumber();
+        if (null === $orderNumber) {
             throw new Exception('Order number not find');
         }
 
@@ -55,11 +48,16 @@ class RmaVerificationPossibilityOfReturn
         /** @var OrderItemInterface $item */
         foreach ($orderItems as $item) {
             $originalQty = $item->getQuantity();
-            if (!$itemVariant = $item->getVariant()) {
+            $itemVariant = $item->getVariant();
+            if (null === $itemVariant) {
                 throw new Exception('itemVariant not find');
             }
 
             $itemVariantCode = $itemVariant->getCode();
+            if (null === $itemVariantCode) {
+                throw new Exception('itemVariant code not find');
+            }
+
             $orderQty = $orderQty + $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);
         }
 

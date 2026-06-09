@@ -20,5 +20,4 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 
 interface ReturnSuccessPageInterface extends SymfonyPageInterface
 {
-
 }

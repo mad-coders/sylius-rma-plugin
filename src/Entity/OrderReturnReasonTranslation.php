@@ -18,26 +18,23 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Sylius\Component\Resource\Model\AbstractTranslation;
 
-class OrderReturnReasonTranslation extends AbstractTranslation implements OrderReturnReasonTranslationInterface
+class OrderReturnReasonTranslation extends AbstractTranslation implements OrderReturnReasonTranslationInterface, \Stringable
 {
-    /** @var mixed */
+    /** @var int */
     private $id;
 
-    /** @var string|null */
-    private $name;
+    private string $name = '';
 
-    /** @var string|null */
-    private $slug;
+    private string $slug = '';
 
-    /** @var string|null */
-    private $description;
+    private ?string $description = null;
 
     public function __toString(): string
     {
         return (string) $this->getName();
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -49,7 +46,7 @@ class OrderReturnReasonTranslation extends AbstractTranslation implements OrderR
 
     public function setName(?string $name): void
     {
-        $this->name = $name;
+        $this->name = $name ?? '';
     }
 
     public function getSlug(): ?string
@@ -59,7 +56,7 @@ class OrderReturnReasonTranslation extends AbstractTranslation implements OrderR
 
     public function setSlug(?string $slug): void
     {
-        $this->slug = $slug;
+        $this->slug = $slug ?? '';
     }
 
     public function getDescription(): ?string

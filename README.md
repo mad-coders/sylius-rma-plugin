@@ -1,18 +1,22 @@
 # [Madcoders](https://www.madcoders.co) Sylius RMA Plugin
 
-Sylius RMA (Return Merchandise Authorization) plugin by Madcoders enables customer to create return form and submit return request.
+[![Latest Version](https://img.shields.io/packagist/v/madcoders/sylius-rma-plugin.svg)](https://packagist.org/packages/madcoders/sylius-rma-plugin)
+[![CI](https://github.com/mad-coders/sylius-rma-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/mad-coders/sylius-rma-plugin/actions/workflows/ci.yml)
+[![PHP Version](https://img.shields.io/packagist/php-v/madcoders/sylius-rma-plugin.svg)](composer.json)
+[![License](https://img.shields.io/badge/license-EUPL--1.2-blue.svg)](LICENSE)
+
+Sylius RMA (Return Merchandise Authorization) plugin by Madcoders lets customers create a return
+form and submit a return request from a delivered order.
 
 ## Features
-- return form for guest customers
-- return form for signed in customers
-- customer is able to select items and quantities from 
-- customer selects reason of return
-- customer is notified by e-mail about each step in the process
-- creates pdf form
-- merchant can define return reasons
-- return reasons can be limited in time since shipment
-- merchant can define terms and conditions that needs to be accepted by customer prior submitting the form
-- return management area in admin
+- return form for both guest and signed-in customers
+- customers select the items and quantities to return from a delivered order
+- customers choose a return reason for the request
+- customers are notified by e-mail at each step of the process
+- optional PDF return form (opt-in, off by default - see [below](#optional-enable-the-return-form-pdf))
+- merchant-defined return reasons, optionally limited by time since shipment
+- merchant-defined terms and conditions the customer must accept before submitting the form
+- return management area in the Sylius admin
 
 ## Requirements
 | | Version |

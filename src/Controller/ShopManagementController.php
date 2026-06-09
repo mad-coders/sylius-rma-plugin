@@ -16,17 +16,15 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
-use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShopUserInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,109 +32,48 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Twig\Environment;
 
 final class ShopManagementController extends AbstractController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var ChannelContextInterface */
-    private $channelContext;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var OrderReturnRepository */
-    private $orderReturnRepository;
-
-    /** @var RepositoryInterface */
-    private $changeLogRepository;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var OrderReturnFormPdfFileGeneratorInterface */
-    private $orderReturnFormPdfFileGenerator;
-
-    /** @var OrderRepository */
-    private $orderRepository;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var RmaVerificationPossibilityOfReturn */
-    private $verificationPossibilityOfReturn;
-
-    /** @var bool */
-    private $returnFormPdfEnabled;
-
     /**
      * ShopManagementController constructor.
-     *
-     * @param EngineInterface|Environment $templatingEngine
      */
     public function __construct(
-        FormFactoryInterface $formFactory,
-        $templatingEngine,
-        ChannelContextInterface $channelContext,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        OrderReturnRepository $orderReturnRepository,
-        RepositoryInterface $changeLogRepository,
-        TokenStorageInterface $tokenStorage,
-        OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
-        OrderRepository $orderRepository,
-        TranslatorInterface $translator,
-        RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
-        bool $returnFormPdfEnabled = false,
+        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
+        private readonly OrderReturnRepository $orderReturnRepository,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
+        private readonly OrderRepository $orderRepository,
+        private readonly TranslatorInterface $translator,
+        private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly bool $returnFormPdfEnabled = false,
     ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->channelContext = $channelContext;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->orderReturnRepository = $orderReturnRepository;
-        $this->changeLogRepository = $changeLogRepository;
-        $this->tokenStorage = $tokenStorage;
-        $this->orderReturnFormPdfFileGenerator = $orderReturnFormPdfFileGenerator;
-        $this->orderRepository = $orderRepository;
-        $this->translator = $translator;
-        $this->verificationPossibilityOfReturn = $verificationPossibilityOfReturn;
-        $this->returnFormPdfEnabled = $returnFormPdfEnabled;
     }
 
     /**
      * @throws \Exception
      */
-    public function createAction(Request $request, string $orderNumber): Response
+    public function createAction(Request $request, string $orderNumber): RedirectResponse
     {
-        if (!$token = $this->tokenStorage->getToken()) {
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var ShopUserInterface|null $user */
         $user = $token->getUser();
-        if (!$user) {
+        if (!$user instanceof ShopUserInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        /** @var CustomerInterface|null $customer */
         $customer = $user->getCustomer();
-        if (!$customer) {
+        if (!$customer instanceof CustomerInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$order = $this->orderRepository
-            ->findOneByNumberAndCustomer($orderNumber, $customer)) {
+        $order = $this->orderRepository->findOneByNumberAndCustomer($orderNumber, $customer);
+        if (!$order instanceof OrderInterface) {
             return $this->createMissingPrivilegesResponse($request);
         }
 
@@ -167,18 +104,23 @@ final class ShopManagementController extends AbstractController
             return $this->errorRedirect($request, 'madcoders_rma.ui.return.pdf_disabled');
         }
 
-        /** @var ShopUserInterface|null $customer */
-        $customer = $this->tokenStorage->getToken()->getUser();
-        if (!$customer) {
+        $token = $this->tokenStorage->getToken();
+        if (null === $token) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$customerEmail = $customer->getEmail()) {
+        $customer = $token->getUser();
+        if (!$customer instanceof ShopUserInterface) {
             return $this->createMissingUserResponse($request);
         }
 
-        if (!$orderReturn = $this->orderReturnRepository
-            ->findOneByReturnNumberAndCustomerEmail($returnNumber, $customerEmail)) {
+        $customerEmail = $customer->getEmail();
+        if (null === $customerEmail || '' === $customerEmail) {
+            return $this->createMissingUserResponse($request);
+        }
+
+        $orderReturn = $this->orderReturnRepository->findOneByReturnNumberAndCustomerEmail($returnNumber, $customerEmail);
+        if (!$orderReturn instanceof OrderReturnInterface) {
             return $this->createMissingPrivilegesResponse($request);
         }
 
@@ -222,21 +164,28 @@ final class ShopManagementController extends AbstractController
         return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes) || !isset($attributes[$attributeName]) || !is_string($attributes[$attributeName]) || '' === $attributes[$attributeName]) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 
-    private function errorRedirect(Request $request, string $errorMessage, array $context = []): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = []): RedirectResponse
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
         $flashBag->add('error', $this->translator->trans($errorMessage, $context));
 
         $redirectRoute = $this->getSyliusAttribute($request, 'error_redirect', '');
-        if ($redirectRoute) {
+        if ('' !== $redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }
 

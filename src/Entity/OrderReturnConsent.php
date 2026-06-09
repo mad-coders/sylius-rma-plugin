@@ -22,7 +22,11 @@ use Sylius\Component\Resource\Model\ToggleableTrait;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
-class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
+/**
+ * @method void initializeTranslationsCollection()
+ * @method TranslationInterface doGetTranslation(?string $locale = null)
+ */
+class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \Stringable
 {
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
@@ -34,14 +38,11 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
     /** @var int */
     private $id;
 
-    /** @var string|null */
-    private $code;
+    private string $code = '';
 
-    /** @var int|null */
-    private $position;
+    private int $position = 0;
 
-    /** @var bool */
-    private $consentRequire = false;
+    private bool $consentRequire = false;
 
     public function __construct()
     {
@@ -53,7 +54,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
         return (string) $this->getName();
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -65,7 +66,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
 
     public function setCode(?string $code): void
     {
-        $this->code = $code;
+        $this->code = $code ?? '';
     }
 
     public function getName(): ?string
@@ -85,6 +86,10 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
 
     public function compareTo($other): int
     {
+        if (!$other instanceof self) {
+            return 1;
+        }
+
         return $this->code === $other->getCode() ? 0 : 1;
     }
 
@@ -105,7 +110,7 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface
 
     public function setPosition(?int $position): void
     {
-        $this->position = $position;
+        $this->position = $position ?? 0;
     }
 
     public function getSlug(): ?string

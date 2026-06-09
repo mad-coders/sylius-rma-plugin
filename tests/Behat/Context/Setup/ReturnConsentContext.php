@@ -25,7 +25,7 @@ use Sylius\Component\Core\Formatter\StringInflector;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class ReturnConsentContext  implements Context
+class ReturnConsentContext implements Context
 {
     /** @var RepositoryInterface */
     private $returnConsentRepository;
@@ -35,15 +35,11 @@ class ReturnConsentContext  implements Context
 
     /**
      * ReturnConsentContext constructor.
-     *
-     * @param RepositoryInterface $returnConsentRepository
-     * @param SharedStorageInterface $sharedStorage
      */
     public function __construct(
         RepositoryInterface $returnConsentRepository,
-        SharedStorageInterface $sharedStorage
-    )
-    {
+        SharedStorageInterface $sharedStorage,
+    ) {
         $this->returnConsentRepository = $returnConsentRepository;
         $this->sharedStorage = $sharedStorage;
     }
@@ -53,7 +49,7 @@ class ReturnConsentContext  implements Context
      */
     public function thereAreConsents(TableNode $table): void
     {
-        foreach($table as $row) {
+        foreach ($table as $row) {
             $this->createOrderReturnConsent($row['code'], $row['name']);
         }
     }
@@ -76,6 +72,7 @@ class ReturnConsentContext  implements Context
     {
         /** @var AdminUserInterface $adminUser */
         $adminUser = $this->sharedStorage->get('administrator');
+
         return $adminUser->getLocaleCode();
     }
 }

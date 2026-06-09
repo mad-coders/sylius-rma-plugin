@@ -40,19 +40,13 @@ class ReturnStatusContext implements Context
 
     /**
      * ReturnContext constructor
-     *
-     * @param IndexPageInterface $orderReturnIndexPage
-     * @param ShowPageInterface $orderReturnShowPage
-     * @param RepositoryInterface $orderReturnRepository
-     * @param NotificationCheckerInterface $notificationChecker
      */
     public function __construct(
         IndexPageInterface $orderReturnIndexPage,
         ShowPageInterface $orderReturnShowPage,
         RepositoryInterface $orderReturnRepository,
-        NotificationCheckerInterface $notificationChecker
-    )
-    {
+        NotificationCheckerInterface $notificationChecker,
+    ) {
         $this->orderReturnIndexPage = $orderReturnIndexPage;
         $this->orderReturnShowPage = $orderReturnShowPage;
         $this->orderReturnRepository = $orderReturnRepository;
@@ -81,14 +75,14 @@ class ReturnStatusContext implements Context
     }
 
     /**
+     * @Given I am on order return show page of return number :orderReturnNumber
      * @When I open order return :orderReturnNumber page
      * @When order return show page of return number :orderReturnNumber will be refreshed
-     * @Given I am on order return show page of return number :orderReturnNumber
      */
     public function iOpenOrderReturnPage(string $orderReturnNumber): void
     {
-       $orderReturn = $this->findOrderReturnByNumber($orderReturnNumber);
-       $this->orderReturnShowPage->open(['id' => $orderReturn->getId()]);
+        $orderReturn = $this->findOrderReturnByNumber($orderReturnNumber);
+        $this->orderReturnShowPage->open(['id' => $orderReturn->getId()]);
     }
 
     /**
@@ -107,7 +101,7 @@ class ReturnStatusContext implements Context
     {
         $this->notificationChecker->checkNotification(
             'Order return has been successfully updated.',
-            NotificationType::success()
+            NotificationType::success(),
         );
     }
 
@@ -116,12 +110,12 @@ class ReturnStatusContext implements Context
      */
     public function orderReturnHasStatus(string $status): void
     {
-       if (!$originalStatus = $this->orderReturnShowPage->getStatus()) {
-           throw new \InvalidArgumentException('Order return status cannot be found');
-       }
-       if (strcasecmp($originalStatus, $status) !== 0) {
-           throw new \Exception(sprintf('Order return has "%s" status', $originalStatus));
-       }
+        if (!$originalStatus = $this->orderReturnShowPage->getStatus()) {
+            throw new \InvalidArgumentException('Order return status cannot be found');
+        }
+        if (strcasecmp($originalStatus, $status) !== 0) {
+            throw new \Exception(sprintf('Order return has "%s" status', $originalStatus));
+        }
     }
 
     /**

@@ -21,102 +21,62 @@ use Madcoders\SyliusRmaPlugin\Entity\RmaConfiguration;
 use Madcoders\SyliusRmaPlugin\Entity\RmaConfigurationInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigAddressToChannelFormType;
 use Madcoders\SyliusRmaPlugin\Form\Type\ConfigChannelSelectFormType;
-use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class RmaConfigurationController extends AbstractController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
-    /** @var RepositoryInterface */
-    private $channelsRepository;
-
-    /** @var RepositoryInterface */
-    private $configurationRepository;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
     /**
      * RmaConfigurationController constructor.
      *
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment                    $templatingEngine
+     * @param RepositoryInterface<ChannelInterface>          $channelsRepository
+     * @param RepositoryInterface<RmaConfigurationInterface> $configurationRepository
      */
     public function __construct(
-        FormFactoryInterface $formFactory,
-        $templatingEngine,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        TokenStorageInterface $tokenStorage,
-        RmaChangesLogger $changesLogger,
-        RepositoryInterface $channelsRepository,
-        RepositoryInterface $configurationRepository,
-        TranslatorInterface $translator,
+        private $templatingEngine,
+        private readonly RouterInterface $router,
+        private readonly RepositoryInterface $channelsRepository,
+        private readonly RepositoryInterface $configurationRepository,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->tokenStorage = $tokenStorage;
-        $this->changesLogger = $changesLogger;
-        $this->channelsRepository = $channelsRepository;
-        $this->configurationRepository = $configurationRepository;
-        $this->translator = $translator;
     }
 
     public function viewIndex(Request $request, string $template, ?string $channelId = null): Response
     {
-        if (!$channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class)) {
+        $channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class);
+        if ('' === $channelFormType) {
             throw new Exception('Channel form not defined');
         }
 
-        if (!$addressFormTypeToSelectedChannel = $this->getSyliusAttribute($request, 'addressForm', ConfigAddressToChannelFormType::class)) {
+        $addressFormTypeToSelectedChannel = $this->getSyliusAttribute($request, 'addressForm', ConfigAddressToChannelFormType::class);
+        if ('' === $addressFormTypeToSelectedChannel) {
             throw new Exception('Address form not defined');
         }
 
         $channel = $this->getSelectedChannel($channelId);
         $addressByChannel = [];
 
-        /** @var RmaConfigurationInterface|null $addressConfigByChannel */
         $addressConfigByChannel = $this->configurationRepository->findOneBy(['channel' => $channel, 'parameter' => 'address']);
 
         if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
-            $addressByChannel = json_decode($addressConfigByChannel->getValue());
+            $addressByChannel = json_decode((string) $addressConfigByChannel->getValue());
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel, $addressByChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
+        $channelForm = $this->createForm($channelFormType, (null !== $channelId && '' !== $channelId) ? ['channelChoice' => $channelId] : null);
 
-        if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+        if ('' === $templateWithAttribute) {
             throw new Exception('Template not defined');
         }
 
@@ -131,13 +91,15 @@ final class RmaConfigurationController extends AbstractController
             ));
     }
 
-    public function changeChannel(Request $request): Response
+    public function changeChannel(Request $request): RedirectResponse
     {
-        if (!$channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class)) {
+        $channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class);
+        if ('' === $channelFormType) {
             throw new Exception('Channel form not defined');
         }
 
-        if (!$redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'madcoders_rma_admin_order_return_index')) {
+        $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'madcoders_rma_admin_order_return_index');
+        if ('' === $redirectRoute) {
             throw new Exception('Redirect url not defined');
         }
 
@@ -157,23 +119,27 @@ final class RmaConfigurationController extends AbstractController
 
     public function saveAddressToSelectedChannel(Request $request, string $channelId, string $template): Response
     {
-        if (!$addressFormTypeToSelectedChannel = $this->getSyliusAttribute($request, 'addressForm', ConfigAddressToChannelFormType::class)) {
+        $addressFormTypeToSelectedChannel = $this->getSyliusAttribute($request, 'addressForm', ConfigAddressToChannelFormType::class);
+        if ('' === $addressFormTypeToSelectedChannel) {
             throw new Exception('Address form not defined');
         }
 
-        if (!$channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class)) {
+        $channelFormType = $this->getSyliusAttribute($request, 'channelForm', ConfigChannelSelectFormType::class);
+        if ('' === $channelFormType) {
             throw new Exception('Channel form not defined');
         }
 
-        if (!$redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'madcoders_rma_admin_order_return_index')) {
+        $redirectRoute = $this->getSyliusAttribute($request, 'redirect', 'madcoders_rma_admin_order_return_index');
+        if ('' === $redirectRoute) {
             throw new Exception('Redirect url not defined');
         }
 
         $addressFormToSelectedChannel = $this->createForm($addressFormTypeToSelectedChannel);
-        $channelForm = $this->createForm($channelFormType, $channelId ? ['channelChoice' => $channelId] : null);
+        $channelForm = $this->createForm($channelFormType, '' !== $channelId ? ['channelChoice' => $channelId] : null);
 
         if ($request->isMethod('POST')) {
-            if (!$templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template)) {
+            $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+            if ('' === $templateWithAttribute) {
                 throw new Exception('Template not defined');
             }
 
@@ -191,23 +157,26 @@ final class RmaConfigurationController extends AbstractController
                     ));
             }
 
-            /** @var array $data */
             $data = $addressFormToSelectedChannel->getData();
-            if (!$data) {
+            if (!is_array($data) || [] === $data) {
                 throw new Exception('Address form not have data');
             }
 
-            /** @var RmaConfigurationInterface|null $addressConfigByChannel */
+            $encodedData = json_encode($data);
+            if (false === $encodedData) {
+                throw new Exception('Address data cannot be encoded');
+            }
+
             $addressConfigByChannel = $this->configurationRepository->findOneBy([
                 'channel' => $channel,
                 'parameter' => 'address',
             ]);
-            if ($addressConfigByChannel) {
-                $addressConfigByChannel->setValue(json_encode($data));
+            if ($addressConfigByChannel instanceof RmaConfigurationInterface) {
+                $addressConfigByChannel->setValue($encodedData);
             } else {
                 $addressConfigByChannel = new RmaConfiguration();
                 $addressConfigByChannel->setParameter('address');
-                $addressConfigByChannel->setValue(json_encode($data));
+                $addressConfigByChannel->setValue($encodedData);
                 $addressConfigByChannel->setChannel($channel);
             }
 
@@ -224,7 +193,7 @@ final class RmaConfigurationController extends AbstractController
         );
     }
 
-    private function errorRedirect(Request $request, string $errorMessage, array $context = []): Response
+    private function errorRedirect(Request $request, string $errorMessage, array $context = []): RedirectResponse
     {
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
@@ -235,7 +204,7 @@ final class RmaConfigurationController extends AbstractController
             'madcoders_rma_admin_order_return_config_edit',
         );
 
-        if ($redirectRoute) {
+        if ('' !== $redirectRoute) {
             return new RedirectResponse($this->router->generate($redirectRoute));
         }
 
@@ -244,7 +213,7 @@ final class RmaConfigurationController extends AbstractController
 
     private function getSelectedChannel(?string $channelId = null): ChannelInterface
     {
-        if ($channelId) {
+        if (null !== $channelId && '' !== $channelId) {
             $channel = $this->channelsRepository->findOneBy(['id' => $channelId]);
             if (!$channel instanceof ChannelInterface) {
                 throw new \InvalidArgumentException(sprintf('Channel must implement %s', ChannelInterface::class));
@@ -266,11 +235,18 @@ final class RmaConfigurationController extends AbstractController
         return $channel;
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes) || !isset($attributes[$attributeName]) || !is_string($attributes[$attributeName]) || '' === $attributes[$attributeName]) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 
     private function addSuccessMessageAboutConfigurationChanged(Request $request, array $context = []): void

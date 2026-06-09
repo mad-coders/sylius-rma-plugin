@@ -46,21 +46,14 @@ class ReturnReasonContext implements Context
 
     /**
      * ReturnReasonContext constructor.
-     *
-     * @param IndexPageInterface $returnReasonIndexPage
-     * @param CreatePageInterface $returnReasonCreatePage
-     * @param UpdatePageInterface $returnReasonUpdatePage
-     * @param RepositoryInterface $orderReturnReasonRepository
-     * @param SharedStorageInterface $sharedStorage
      */
     public function __construct(
         IndexPageInterface $returnReasonIndexPage,
         CreatePageInterface $returnReasonCreatePage,
         UpdatePageInterface $returnReasonUpdatePage,
         RepositoryInterface $orderReturnReasonRepository,
-        SharedStorageInterface $sharedStorage
-    )
-    {
+        SharedStorageInterface $sharedStorage,
+    ) {
         $this->returnReasonIndexPage = $returnReasonIndexPage;
         $this->returnReasonCreatePage = $returnReasonCreatePage;
         $this->returnReasonUpdatePage = $returnReasonUpdatePage;
@@ -110,8 +103,8 @@ class ReturnReasonContext implements Context
     {
         $formName = 'madcoders_rma_return_reason';
         $localeCode = $this->getAdminLocaleCode();
-        foreach($table as $row) {
-            $translationPrefix = $row['type'] === 'translations' ? 'translations_'. $localeCode . '_' : '';
+        foreach ($table as $row) {
+            $translationPrefix = $row['type'] === 'translations' ? 'translations_' . $localeCode . '_' : '';
             $locator = sprintf('%s_%s%s', $formName, $translationPrefix, $row['field']);
 
             $this->returnReasonCreatePage->choosesFormElement($row['value'], $locator);
@@ -125,8 +118,8 @@ class ReturnReasonContext implements Context
     {
         $formName = 'madcoders_rma_return_reason';
         $localeCode = $this->getAdminLocaleCode();
-        foreach($table as $row) {
-            $translationPrefix = $row['type'] === 'translations' ? 'translations_'. $localeCode . '_' : '';
+        foreach ($table as $row) {
+            $translationPrefix = $row['type'] === 'translations' ? 'translations_' . $localeCode . '_' : '';
             $locator = sprintf('%s_%s%s', $formName, $translationPrefix, $row['field']);
 
             $this->returnReasonUpdatePage->choosesFormElement($row['value'], $locator);
@@ -159,8 +152,8 @@ class ReturnReasonContext implements Context
 
     private function findReturnReasonIdByCode(string $code): ?int
     {
-       $returnReason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);
-       Assert::notNull($returnReason);
+        $returnReason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);
+        Assert::notNull($returnReason);
 
         return $returnReason->getId();
     }
@@ -169,12 +162,10 @@ class ReturnReasonContext implements Context
     {
         /** @var AdminUserInterface $adminUser */
         $adminUser = $this->sharedStorage->get('administrator');
+
         return $adminUser->getLocaleCode();
     }
 
-    /**
-     * @return SymfonyPageInterface
-     */
     private function getPage(): SymfonyPageInterface
     {
         return $this->returnReasonIndexPage;

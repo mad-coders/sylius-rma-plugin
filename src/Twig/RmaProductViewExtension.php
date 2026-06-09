@@ -24,22 +24,18 @@ use Twig\TwigFunction;
 
 class RmaProductViewExtension extends AbstractExtension
 {
-    /** @var ProductVariantRepositoryInterface */
-    private $productVariantRepository;
-
     /**
      * RmaProductViewExtension constructor.
      */
-    public function __construct(ProductVariantRepositoryInterface $productVariantRepository)
+    public function __construct(private readonly ProductVariantRepositoryInterface $productVariantRepository)
     {
-        $this->productVariantRepository = $productVariantRepository;
     }
 
     /** @inheritdoc */
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_product_view', [$this, 'findProductByVariantCode']),
+            new TwigFunction('rma_product_view', $this->findProductByVariantCode(...)),
         ];
     }
 

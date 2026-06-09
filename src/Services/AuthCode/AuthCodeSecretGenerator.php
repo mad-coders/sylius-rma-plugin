@@ -16,22 +16,16 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
-final class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorInterface
+final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorInterface
 {
     private const DEFAULT_MIN_CODE = 100000;
 
     private const DEFAULT_MAX_CODE = 999999;
 
-    /** @var int */
-    private $min;
-
-    /** @var int */
-    private $max;
-
-    public function __construct(int $min = self::DEFAULT_MIN_CODE, int $max = self::DEFAULT_MAX_CODE)
-    {
-        $this->min = $min;
-        $this->max = $max;
+    public function __construct(
+        private int $min = self::DEFAULT_MIN_CODE,
+        private int $max = self::DEFAULT_MAX_CODE,
+    ) {
     }
 
     public function generate(): int

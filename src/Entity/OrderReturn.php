@@ -17,8 +17,10 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
+use Webmozart\Assert\Assert;
 
 class OrderReturn implements OrderReturnInterface, TimestampableInterface
 {
@@ -27,71 +29,50 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
     /** @var int */
     private $id;
 
-    /** @var string */
-    private $orderNumber;
+    private string $orderNumber;
 
-    /** @var string */
-    private $customerNumber;
+    private string $customerNumber;
 
-    /** @var string */
-    private $returnNumber;
+    private string $returnNumber;
 
-    /** @var string */
-    private $channelCode;
+    private string $channelCode;
 
-    /** @var string */
-    private $returnReason;
+    private ?string $returnReason = null;
 
-    /** @var string|null */
-    private $firstname;
+    private ?string $firstname = null;
 
-    /** @var string|null */
-    private $lastname;
+    private ?string $lastname = null;
 
-    /** @var string|null */
-    private $phoneNumber;
+    private ?string $phoneNumber = null;
 
-    /** @var string|null */
-    private $customerEmail;
+    private ?string $customerEmail = null;
 
-    /** @var string|null */
-    private $company;
+    private ?string $company = null;
 
-    /** @var string|null */
-    private $countryCode;
+    private ?string $countryCode = null;
 
-    /** @var string|null */
-    private $provinceCode;
+    private ?string $provinceCode = null;
 
-    /** @var string|null */
-    private $provinceName;
+    private ?string $provinceName = null;
 
-    /** @var string|null */
-    private $street;
+    private ?string $street = null;
 
-    /** @var string|null */
-    private $city;
+    private ?string $city = null;
 
-    /** @var string|null */
-    private $postcode;
+    private ?string $postcode = null;
 
-    /** @var string */
-    private $orderReturnStatus = self::STATUS_DRAFT;
+    private string $orderReturnStatus = self::STATUS_DRAFT;
 
-    /** @var string */
-    private $customerIp;
+    private ?string $customerIp = null;
 
-    /** @var string|null */
-    private $customerNote;
+    private ?string $customerNote = null;
 
-    /** @var array */
-    private $orderReturnConsents = [];
+    private array $orderReturnConsents = [];
 
-    /** @var string|null */
-    private $bankAccountNumber;
+    private ?string $bankAccountNumber = null;
 
-    /** @var OrderReturnItem[] */
-    private $items;
+    /** @var Collection<int, OrderReturnItem> */
+    private Collection $items;
 
     public function __construct()
     {
@@ -290,7 +271,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function getCustomerIp(): string
     {
-        return $this->customerIp;
+        return $this->customerIp ?? '';
     }
 
     public function setCustomerIp(string $customerIp): void
@@ -318,6 +299,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function addItem(OrderReturnItemInterface $item): void
     {
+        Assert::isInstanceOf($item, OrderReturnItem::class);
         if (!$this->items->contains($item)) {
             $this->items->add($item);
             $item->setOrderReturn($this);
@@ -326,6 +308,7 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     public function removeItem(OrderReturnItemInterface $item): void
     {
+        Assert::isInstanceOf($item, OrderReturnItem::class);
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }

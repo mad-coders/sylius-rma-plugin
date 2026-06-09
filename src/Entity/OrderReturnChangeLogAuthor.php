@@ -20,20 +20,15 @@ use Sylius\Component\Resource\Model\ResourceInterface as ResourceInterface;
 
 class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface, ResourceInterface
 {
-    /** @var int */
-    private $id;
+    private int $id = 0;
 
-    /** @var string */
-    private $type;
+    private ?string $type = null;
 
-    /** @var string */
-    private $firstName;
+    private ?string $firstName = null;
 
-    /** @var string */
-    private $lastName;
+    private ?string $lastName = null;
 
-    /** @var OrderReturnChangeLog */
-    private $changeLog;
+    private OrderReturnChangeLog $changeLog;
 
     public function getId(): int
     {
@@ -47,7 +42,7 @@ class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface,
 
     public function getType(): string
     {
-        return $this->type;
+        return $this->type ?? '';
     }
 
     public function setType(string $type): void
@@ -57,7 +52,7 @@ class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface,
 
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->firstName ?? '';
     }
 
     public function setFirstName(string $firstName): void
@@ -67,7 +62,7 @@ class OrderReturnChangeLogAuthor implements OrderReturnChangeLogAuthorInterface,
 
     public function getLastName(): string
     {
-        return $this->lastName;
+        return $this->lastName ?? '';
     }
 
     public function setLastName(string $lastName): void

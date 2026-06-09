@@ -7,6 +7,9 @@ parameters:
     paths:
         - src
 
+    doctrine:
+        objectManagerLoader: tests/object-manager.php
+
     excludePaths:
         # Makes PHPStan crash
         - 'src/DependencyInjection/Configuration.php'
@@ -16,3 +19,5 @@ parameters:
 
     ignoreErrors:
         - '/Parameter #1 \$configuration of method Symfony\\Component\\DependencyInjection\\Extension\\Extension::processConfiguration\(\) expects Symfony\\Component\\Config\\Definition\\ConfigurationInterface, Symfony\\Component\\Config\\Definition\\ConfigurationInterface\|null given\./'
+        # Untyped iterables are accepted by the Sylius PHPStan standard.
+        - identifier: missingType.iterableValue

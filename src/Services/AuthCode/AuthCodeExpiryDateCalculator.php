@@ -20,16 +20,12 @@ use DateInterval;
 use DateTime;
 use Exception;
 
-final class AuthCodeExpiryDateCalculator implements AuthCodeExpiryDateCalculatorInterface
+final readonly class AuthCodeExpiryDateCalculator implements AuthCodeExpiryDateCalculatorInterface
 {
-    /** @var string */
-    private $timeInterval;
-
     private const DEFAULT_TIME_INTERVAL = 'PT5M';
 
-    public function __construct(string $timeInterval = self::DEFAULT_TIME_INTERVAL)
+    public function __construct(private string $timeInterval = self::DEFAULT_TIME_INTERVAL)
     {
-        $this->timeInterval = $timeInterval;
     }
 
     /**

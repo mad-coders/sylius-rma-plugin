@@ -24,12 +24,8 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
 {
     private const SESSION_KEY = 'madcoders_rma_auth_order';
 
-    /** @var RequestStack */
-    private $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     private function getSession(): SessionInterface
@@ -77,7 +73,7 @@ class OrderReturnAuthorizerStorage implements OrderReturnAuthorizerStorageInterf
     {
         try {
             $this->get($orderNumber);
-        } catch(NotExistsException $e) {
+        } catch(NotExistsException) {
             return false;
         }
 

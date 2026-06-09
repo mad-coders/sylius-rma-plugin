@@ -21,12 +21,8 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 
 class MaxQtyCalculator
 {
-    /** @var EntityManager */
-    private $entityManager;
-
-    public function __construct(EntityManager $entityManager)
+    public function __construct(private readonly EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
     public function calculation(string $orderNumber, string $itemVariantCode, int $originalQty): int

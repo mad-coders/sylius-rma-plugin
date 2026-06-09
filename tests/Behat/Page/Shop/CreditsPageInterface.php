@@ -20,6 +20,5 @@ use FriendsOfBehat\PageObjectExtension\Page\SymfonyPageInterface;
 
 interface CreditsPageInterface extends SymfonyPageInterface
 {
-    /** @return string */
     public function getHeader(): string;
 }

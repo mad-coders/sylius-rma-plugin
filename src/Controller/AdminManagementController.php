@@ -21,14 +21,12 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnNotesType;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
-use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -39,76 +37,36 @@ use Twig\Environment;
 
 final class AdminManagementController extends AbstractController
 {
-    /** @var FormFactoryInterface */
-    private $formFactory;
-
-    /** @var EngineInterface|Environment */
-    private $templatingEngine;
-
-    /** @var ChannelContextInterface */
-    private $channelContext;
-
-    /** @var RouterInterface */
-    private $router;
-
-    /** @var RequestStack */
-    private $requestStack;
-
-    /** @var RepositoryInterface */
-    private $orderReturnRepository;
-
-    /** @var RepositoryInterface */
-    private $changeLogRepository;
-
-    /** @var TokenStorageInterface */
-    private $tokenStorage;
-
-    /** @var RmaChangesLogger */
-    private $changesLogger;
-
-    /** @var TranslatorInterface */
-    private $translator;
-
     /**
      * AdminManagementController constructor
      *
-     * @param EngineInterface|Environment $templatingEngine
+     * @param EngineInterface|Environment              $templatingEngine
+     * @param RepositoryInterface<OrderReturn>         $orderReturnRepository
+     * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
     public function __construct(
-        FormFactoryInterface $formFactory,
-        $templatingEngine,
-        ChannelContextInterface $channelContext,
-        RouterInterface $router,
-        RequestStack $requestStack,
-        RepositoryInterface $orderReturnRepository,
-        RepositoryInterface $changeLogRepository,
-        TokenStorageInterface $tokenStorage,
-        RmaChangesLogger $changesLogger,
-        TranslatorInterface $translator,
+        private readonly FormFactoryInterface $formFactory,
+        private $templatingEngine,
+        private readonly RouterInterface $router,
+        private readonly RepositoryInterface $orderReturnRepository,
+        private readonly RepositoryInterface $changeLogRepository,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly RmaChangesLogger $changesLogger,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->formFactory = $formFactory;
-        $this->templatingEngine = $templatingEngine;
-        $this->channelContext = $channelContext;
-        $this->router = $router;
-        $this->requestStack = $requestStack;
-        $this->orderReturnRepository = $orderReturnRepository;
-        $this->changeLogRepository = $changeLogRepository;
-        $this->tokenStorage = $tokenStorage;
-        $this->changesLogger = $changesLogger;
-        $this->translator = $translator;
     }
 
     public function viewIndex(Request $request, string $template): Response
     {
         $orderReturnId = $request->attributes->get('id');
 
-        /** @var OrderReturn|null $orderReturn */
         $orderReturn = $this->orderReturnRepository->findOneBy(['id' => $orderReturnId]);
-        if (!$orderReturn) {
+        if (!$orderReturn instanceof OrderReturn) {
             return new RedirectResponse($this->router->generate('madcoders_rma_admin_order_return_index'));
         }
 
-        if (!$returnNumber = (string) $orderReturn->getReturnNumber()) {
+        $returnNumber = $orderReturn->getReturnNumber();
+        if ('' === $returnNumber) {
             return new RedirectResponse($this->router
                 ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
         }
@@ -127,24 +85,36 @@ final class AdminManagementController extends AbstractController
                     ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
             }
 
-            if (!$note = $newChangeLog->getNote()) {
+            $note = $newChangeLog->getNote();
+            if ('' === $note) {
                 return new RedirectResponse($this->router
                     ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
             }
 
-            /** @var AdminUserInterface $user */
-            $user = $this->tokenStorage->getToken()->getUser();
+            $token = $this->tokenStorage->getToken();
+            if (null === $token) {
+                return new RedirectResponse($this->router
+                    ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
+            }
+
+            $user = $token->getUser();
+            if (!$user instanceof AdminUserInterface) {
+                return new RedirectResponse($this->router
+                    ->generate('madcoders_rma_admin_order_return_show', ['id' => $orderReturnId]));
+            }
 
             $newChangeLogAuthor = new OrderReturnChangeLogAuthor();
             $newChangeLogAuthor->setType('admin');
 
-            if ($userFirstName = $user->getFirstName()) {
+            $userFirstName = $user->getFirstName();
+            if (null !== $userFirstName && '' !== $userFirstName) {
                 $newChangeLogAuthor->setFirstName($userFirstName);
             } else {
-                $newChangeLogAuthor->setFirstName($user->getEmail());
+                $newChangeLogAuthor->setFirstName($user->getEmail() ?? '');
             }
 
-            if ($userLastName = $user->getLastName()) {
+            $userLastName = $user->getLastName();
+            if (null !== $userLastName && '' !== $userLastName) {
                 $newChangeLogAuthor->setLastName($userLastName);
             } else {
                 $newChangeLogAuthor->setLastName('');
@@ -175,10 +145,17 @@ final class AdminManagementController extends AbstractController
         $flashBag->add('success', $successMessage);
     }
 
+    /**
+     * @return ($default is null ? string|null : string)
+     */
     private function getSyliusAttribute(Request $request, string $attributeName, ?string $default): ?string
     {
         $attributes = $request->attributes->get('_sylius');
 
-        return $attributes[$attributeName] ?? $default;
+        if (!is_array($attributes) || !isset($attributes[$attributeName]) || !is_string($attributes[$attributeName]) || '' === $attributes[$attributeName]) {
+            return $default;
+        }
+
+        return $attributes[$attributeName];
     }
 }

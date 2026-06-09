@@ -16,10 +16,9 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Filesystem;
 
-final class TemporaryFilesystem
+final readonly class TemporaryFilesystem
 {
-    /** @var string */
-    private $directory;
+    private string $directory;
 
     public function __construct(?string $targetDirectory = null)
     {
@@ -30,7 +29,7 @@ final class TemporaryFilesystem
     {
         $filepath = $this->directory . \DIRECTORY_SEPARATOR . $filename;
 
-        if (!file_put_contents($filepath, $content)) {
+        if (false === file_put_contents($filepath, $content)) {
             throw new \RuntimeException(sprintf('Not create file "%s"!', $filepath));
         }
 

@@ -22,38 +22,27 @@ use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Sylius\Component\Order\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-final class AuthCodeFactory implements AuthCodeFactoryInterface
+final readonly class AuthCodeFactory implements AuthCodeFactoryInterface
 {
-    /** @var AuthCodeHashGeneratorInterface */
-    private $authCodeHashGenerator;
-
-    /** @var AuthCodeSecretGeneratorInterface */
-    private $authCodeSecretGenerator;
-
-    /** @var RepositoryInterface */
-    private $authCodeRepository;
-
-    /** @var AuthCodeExpiryDateCalculatorInterface */
-    private $authCodeExpiryDate;
-
+    /**
+     * @param RepositoryInterface<AuthCodeInterface> $authCodeRepository
+     */
     public function __construct(
-        AuthCodeHashGeneratorInterface $authCodeHashGenerator,
-        AuthCodeSecretGeneratorInterface $authCodeSecretGenerator,
-        RepositoryInterface $authCodeRepository,
-        AuthCodeExpiryDateCalculatorInterface $authCodeExpiryDate,
+        private AuthCodeHashGeneratorInterface $authCodeHashGenerator,
+        private AuthCodeSecretGeneratorInterface $authCodeSecretGenerator,
+        private RepositoryInterface $authCodeRepository,
+        private AuthCodeExpiryDateCalculatorInterface $authCodeExpiryDate,
     ) {
-        $this->authCodeHashGenerator = $authCodeHashGenerator;
-        $this->authCodeSecretGenerator = $authCodeSecretGenerator;
-        $this->authCodeRepository = $authCodeRepository;
-        $this->authCodeExpiryDate = $authCodeExpiryDate;
     }
 
     public function createForOrder(OrderInterface $order): AuthCodeInterface
     {
         if (!is_string($order->getNumber())) {
+            $orderId = $order->getId();
+
             throw new InvalidArgumentException(sprintf(
                 'Order id: "%s", has not order number defined',
-                (string) $order->getId(),
+                is_scalar($orderId) ? (string) $orderId : '',
             ));
         }
 
@@ -61,7 +50,7 @@ final class AuthCodeFactory implements AuthCodeFactoryInterface
         $hash = $this->authCodeHashGenerator->generateForOrder($order);
 
         $authCode = new AuthCode();
-        $authCode->setOrderNumber((string) $order->getNumber());
+        $authCode->setOrderNumber($order->getNumber());
         $authCode->setAuthCode($authCodeSecret);
         $authCode->setHash($hash);
         $authCode->setExpiresAt($this->authCodeExpiryDate->calculate());

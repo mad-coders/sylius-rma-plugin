@@ -23,6 +23,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Webmozart\Assert\Assert;
 
 final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
@@ -33,6 +34,7 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
+        Assert::isArray($config['resources']);
         $this->registerResources('madcoders_rma', 'doctrine/orm', $config['resources'], $container);
 
         $container->setParameter('madcoders_rma.return_form_pdf_enabled', (bool) $config['return_form_pdf_enabled']);

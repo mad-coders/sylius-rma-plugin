@@ -6,11 +6,11 @@ namespace Madcoders\SyliusRmaPlugin\Security\Voter;
 
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\User\Model\UserInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Sylius RMA Plugin by MADCODERS
@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Security;
  * @licence For the full copyright and license information, please view the LICENSE file
  *
  * Architects of this package:
+ *
+ * @extends Voter<string, OrderInterface>
  */
 class OrderReturnVoter extends Voter implements VoterInterface
 {
@@ -25,16 +27,10 @@ class OrderReturnVoter extends Voter implements VoterInterface
 
     public const SUPPORTED_ATTRIBUTES = [self::ATTRIBUTE_RETURN];
 
-    /** @var Security */
-    private $security;
-
-    /** @var OrderReturnAuthorizerInterface */
-    private $orderReturnAuthenticator;
-
-    public function __construct(Security $security, OrderReturnAuthorizerInterface $orderReturnAuthenticator)
-    {
-        $this->security = $security;
-        $this->orderReturnAuthenticator = $orderReturnAuthenticator;
+    public function __construct(
+        private readonly Security $security,
+        private readonly OrderReturnAuthorizerInterface $orderReturnAuthenticator,
+    ) {
     }
 
     protected function supports(string $attribute, mixed $subject): bool
@@ -43,7 +39,7 @@ class OrderReturnVoter extends Voter implements VoterInterface
             return false;
         }
 
-        if (!in_array($attribute, self::SUPPORTED_ATTRIBUTES)) {
+        if (!in_array($attribute, self::SUPPORTED_ATTRIBUTES, true)) {
             return false;
         }
 
@@ -52,10 +48,6 @@ class OrderReturnVoter extends Voter implements VoterInterface
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        if (!$subject instanceof OrderInterface) {
-            return false;
-        }
-
         $user = $token->getUser();
         if ($user instanceof UserInterface && $this->security->isGranted('ROLE_USER')) {
             $orderUser = $subject->getUser();

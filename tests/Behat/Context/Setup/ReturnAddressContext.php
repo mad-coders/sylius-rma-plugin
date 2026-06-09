@@ -22,7 +22,6 @@ use Madcoders\SyliusRmaPlugin\Entity\RmaConfiguration;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Intl;
 use Webmozart\Assert\Assert;
 
 class ReturnAddressContext implements Context
@@ -35,15 +34,11 @@ class ReturnAddressContext implements Context
 
     /**
      * ReturnAddressContext constructor
-     *
-     * @param RepositoryInterface $channelRepository
-     * @param RepositoryInterface $rmaConfigurationRepository
      */
     public function __construct(
         RepositoryInterface $channelRepository,
-        RepositoryInterface $rmaConfigurationRepository
-    )
-    {
+        RepositoryInterface $rmaConfigurationRepository,
+    ) {
         $this->channelRepository = $channelRepository;
         $this->rmaConfigurationRepository = $rmaConfigurationRepository;
     }
@@ -89,9 +84,9 @@ class ReturnAddressContext implements Context
     private function createAddressData(TableNode $table): array
     {
         $addressData = [];
-        foreach($table as $row) {
+        foreach ($table as $row) {
             if ($row['field'] === 'country') {
-                $addressData['countryCode'] =  $this->getCountryCodeByName($row['value']);
+                $addressData['countryCode'] = $this->getCountryCodeByName($row['value']);
             } else {
                 $addressData[$row['field']] = $row['value'];
             }
@@ -106,7 +101,7 @@ class ReturnAddressContext implements Context
         Assert::keyExists(
             $countryList,
             $countryName,
-            sprintf('The country with name "%s" not found', $countryName)
+            sprintf('The country with name "%s" not found', $countryName),
         );
 
         return $countryList[$countryName];

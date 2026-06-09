@@ -36,9 +36,8 @@ class CustomerAreaContext implements Context
     public function __construct(
         DashboardPageInterface $dashboardPage,
         OrderIndexPageInterface $orderIndexPage,
-        OrderShowPageInterface $orderShowPage
-    )
-    {
+        OrderShowPageInterface $orderShowPage,
+    ) {
         $this->dashboardPage = $dashboardPage;
         $this->orderIndexPage = $orderIndexPage;
         $this->orderShowPage = $orderShowPage;

@@ -20,18 +20,13 @@ use Madcoders\SyliusRmaPlugin\Entity\AuthCodeInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 
-final class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
+final readonly class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
 {
-    /** @var SenderInterface */
-    private $emailSender;
-
     /**
      * AuthCodeEmailSender constructor.
      */
-    public function __construct(
-        SenderInterface $emailSender,
-    ) {
-        $this->emailSender = $emailSender;
+    public function __construct(private SenderInterface $emailSender)
+    {
     }
 
     public function sendAuthCodeEmail(
@@ -39,7 +34,12 @@ final class AuthCodeEmailSender implements AuthCodeEmailSenderInterface
         OrderInterface $order,
         array $context = [],
     ): void {
-        $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$order->getCustomer()->getEmail()], [
+        $customer = $order->getCustomer();
+        if (null === $customer) {
+            throw new \InvalidArgumentException('Order has no customer defined');
+        }
+
+        $this->emailSender->send(Emails::AUTHCODE_GENERATED, [$customer->getEmail()], [
             'authCode' => $authCode,
             'channel' => $context['channel'],
         ]);

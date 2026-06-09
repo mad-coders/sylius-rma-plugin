@@ -26,26 +26,21 @@ class RmaTimeLineExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('rma_time_line_item_view', [$this, 'createTimeLineItemView']),
+            new TwigFunction('rma_time_line_item_view', $this->createTimeLineItemView(...)),
         ];
     }
 
     public function createTimeLineItemView(OrderReturnChangeLog $changeLog): string
     {
         $changeLogType = $changeLog->getType();
-        switch ($changeLogType) {
-            case 'added_note':
-                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_addedNote.html.twig';
-            case 'created_draft':
-                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_createdDraft.html.twig';
-            case 'customer_accepted':
-                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_customerAccepted.html.twig';
-            case 'cancelled':
-                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_cancelled.html.twig';
-            case 'completed':
-                return '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_completed.html.twig';
-            default:
-                throw new \Exception('Type not identified');
-        }
+
+        return match ($changeLogType) {
+            'added_note' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_addedNote.html.twig',
+            'created_draft' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_createdDraft.html.twig',
+            'customer_accepted' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_customerAccepted.html.twig',
+            'cancelled' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_cancelled.html.twig',
+            'completed' => '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Management/Timeline/_completed.html.twig',
+            default => throw new \Exception('Type not identified'),
+        };
     }
 }
