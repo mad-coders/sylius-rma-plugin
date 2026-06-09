@@ -17,6 +17,8 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Component\Core\Model\OrderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -26,8 +28,10 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
     /**
      * RmaVerificationPossibilityOfReturnExtension constructor.
      */
-    public function __construct(private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn)
-    {
+    public function __construct(
+        private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
+    ) {
     }
 
     /** @inheritdoc */
@@ -35,6 +39,7 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
     {
         return [
             new TwigFunction('rma_order_has_items_to_returned_view', $this->verificationPossibilityOfReturn(...)),
+            new TwigFunction('rma_order_withdrawable_view', $this->verificationWithdrawable(...)),
         ];
     }
 
@@ -44,5 +49,10 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
     public function verificationPossibilityOfReturn(OrderInterface $order): bool
     {
         return $this->verificationPossibilityOfReturn->verificationForButtonRender($order);
+    }
+
+    public function verificationWithdrawable(OrderInterface $order): bool
+    {
+        return WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order);
     }
 }

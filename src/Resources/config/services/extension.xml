@@ -49,6 +49,7 @@ Architects of this package:
         <service id="madcoders.sylius_rma_plugin.twig.rma_verification_possibility_of_return_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaVerificationPossibilityOfReturnExtension">
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
             <tag name="twig.extension"/>
         </service>
 

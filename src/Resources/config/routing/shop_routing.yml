@@ -44,6 +44,27 @@ madcoders_rma_return_form:
             error_redirect: madcoders_rma_start
             redirect: sylius_shop_homepage
 
+madcoders_rma_withdrawal:
+    path: /rma-withdrawal/{orderNumber}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::withdrawIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Withdrawal/confirm.html.twig'
+        _sylius:
+            error_redirect: madcoders_rma_start
+            redirect: sylius_shop_homepage
+
+madcoders_rma_withdrawal_success:
+    path: /rma-withdrawal-success/{returnNumber}
+    methods: [ GET ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::successIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Withdrawal/success.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
+
 madcoders_rma_return_form_accept:
     path: /rma-summary/{returnNumber}
     methods: [ GET, POST ]

@@ -66,6 +66,17 @@ madcoders_rma:
                 order_number_not_valid: 'Order number %orderNumber% is not valid'
                 order_not_fullfiled_yet: 'Order %orderNumber% is not fulfilled yet. Please contact customer support'
                 order_already_returned_or_cannot_be_returned: 'Order %orderNumber% has already been returned or cannot be returned'
+                withdrawal_not_available: 'Order %orderNumber% cannot be withdrawn'
+
+        withdrawal:
+            title: 'Withdraw from order'
+            headline: 'Withdraw from order'
+            secondary_headline: 'Cancel your order before it ships'
+            info_paid: 'You can withdraw from this order before it ships. We will register a cancellation request and our team will confirm the cancellation and any refund.'
+            info_unpaid: 'You can withdraw from this order before it ships. As it has not been paid, the order will be cancelled immediately.'
+            confirm_button: 'Withdraw from order'
+            success_requested: 'Your cancellation request has been registered'
+            success_withdrawn: 'Your order has been cancelled upon withdrawal'
 
         verification_step:
             secondary_headline: 'Verification step'

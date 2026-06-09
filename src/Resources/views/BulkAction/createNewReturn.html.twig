@@ -3,8 +3,9 @@
 {% set path = options.link.url|default(path(options.link.route, options.link.parameters|default({}))) %}
 
 {% set orderHasItemsToReturned =  rma_order_has_items_to_returned_view(data) %}
+{% set orderWithdrawable = rma_order_withdrawable_view(data) %}
 
-{% if data.state == 'fulfilled' and orderHasItemsToReturned == true %}
+{% if (data.state == 'fulfilled' and orderHasItemsToReturned == true) or orderWithdrawable == true %}
 
     {{ buttons.default(path, action.label, null, 'undo alternate', 'primary') }}
 

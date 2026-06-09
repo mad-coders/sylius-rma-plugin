@@ -20,6 +20,8 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -48,6 +50,7 @@ final class ShopManagementController extends AbstractController
         private readonly OrderRepository $orderRepository,
         private readonly TranslatorInterface $translator,
         private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
         private readonly bool $returnFormPdfEnabled = false,
     ) {
     }
@@ -75,6 +78,14 @@ final class ShopManagementController extends AbstractController
         $order = $this->orderRepository->findOneByNumberAndCustomer($orderNumber, $customer);
         if (!$order instanceof OrderInterface) {
             return $this->createMissingPrivilegesResponse($request);
+        }
+
+        // Pre-shipment withdrawal takes precedence over the post-shipment return flow: a
+        // not-yet-shipped order is dispatched to the withdrawal flow instead of the return form.
+        if (WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order)) {
+            $this->requestStack->getSession()->set('madcoders_rma_allowed_order', $orderNumber);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_withdrawal', ['orderNumber' => str_replace('#', '', $orderNumber)]));
         }
 
         if ($order->getState() !== OrderInterface::STATE_FULFILLED) {

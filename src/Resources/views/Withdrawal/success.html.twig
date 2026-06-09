@@ -1,0 +1,27 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %} {{ 'madcoders_rma.ui.withdrawal.title'|trans }} {% endblock %}
+
+{% block content %}
+    <div class="ui hidden divider"></div>
+    <div class="ui grid">
+        <div class="center aligned sixteen wide column">
+            <h1 class="ui icon header">
+                <i class="circular check icon"></i>
+                <div class="content" id="sylius-thank-you" {{ sylius_test_html_attribute('thank-you') }}>
+                    {{ 'madcoders_rma.ui.success.thank_you'|trans }}
+                    <div class="sub header">
+                        {% if withdrawn %}
+                            {{ 'madcoders_rma.ui.withdrawal.success_withdrawn'|trans }}
+                        {% else %}
+                            {{ 'madcoders_rma.ui.withdrawal.success_requested'|trans }}
+                        {% endif %}
+                    </div>
+                </div>
+            </h1>
+            <div class="ui segment">
+                <strong>{{ 'madcoders_rma.ui.return_number'|trans }}: {{ orderReturn.returnNumber }}</strong>
+            </div>
+        </div>
+    </div>
+{% endblock %}
