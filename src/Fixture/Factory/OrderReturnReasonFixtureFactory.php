@@ -45,7 +45,7 @@ final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory imple
         Assert::integer($options['deadline_to_return']);
         Assert::string($options['name']);
         Assert::string($options['slug']);
-        Assert::string($options['description']);
+        Assert::nullOrString($options['description']);
 
         $orderReturnReason = new OrderReturnReason();
         $orderReturnReason->setCurrentLocale('en_US');
