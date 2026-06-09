@@ -20,6 +20,18 @@ sylius_mailer:
     return_generated:
       subject: sylius.emails.return_generated.subject
       template: "@MadcodersSyliusRmaPlugin/Email/returnFormGenerated.html.twig"
+    withdrawal_requested:
+      subject: madcoders_rma.email.withdrawal_requested.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/withdrawalRequested.html.twig"
+    withdrawal_confirmed:
+      subject: madcoders_rma.email.withdrawal_confirmed.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/withdrawalConfirmed.html.twig"
+    withdrawal_fallback:
+      subject: madcoders_rma.email.withdrawal_fallback.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/withdrawalFallback.html.twig"
+    withdrawal_cancelled:
+      subject: madcoders_rma.email.withdrawal_cancelled.subject
+      template: "@MadcodersSyliusRmaPlugin/Email/withdrawalCancelled.html.twig"
 
 sylius_ui:
   events:
@@ -136,6 +148,22 @@ winzou_state_machine:
         updated_changelog_on_complete:
           on: [ 'complete' ]
           do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete', 'UpdatedChangelogOnComplete' ]
+          args: [ 'object' ]
+        withdrawal_request_notifier:
+          on: [ 'request_cancellation' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier', 'onRequestCancellation' ]
+          args: [ 'object' ]
+        withdrawal_completed_notifier:
+          on: [ 'withdraw' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier', 'onWithdraw' ]
+          args: [ 'object' ]
+        withdrawal_resolution_confirm:
+          on: [ 'confirm_cancellation' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onConfirmCancellation' ]
+          args: [ 'object' ]
+        withdrawal_resolution_fallback:
+          on: [ 'fallback_to_return' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onFallbackToReturn' ]
           args: [ 'object' ]
 
     transitions:

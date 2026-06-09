@@ -165,6 +165,26 @@ madcoders_rma:
             auth_code_info: 'to continue return process please enter %auth_code% code on'
             verification_page: 'verification page'
 
+        withdrawal_requested:
+            subject: 'Withdrawal request received #%returnNumber%'
+            greeting: 'Hello'
+            info: 'We have received your request to withdraw from order %orderNumber%. Our team will review it and confirm the cancellation shortly.'
+
+        withdrawal_confirmed:
+            subject: 'Order cancellation confirmed #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your withdrawal from order %orderNumber% has been confirmed and the order has been cancelled.'
+
+        withdrawal_fallback:
+            subject: 'Your withdrawal is being handled as a return #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your withdrawal request for order %orderNumber% will be handled through our standard return process. We will be in touch with the next steps.'
+
+        withdrawal_cancelled:
+            subject: 'Order cancelled upon withdrawal #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your order %orderNumber% has been cancelled following your withdrawal. As it was not paid, there is nothing further to do.'
+
     state:
         draft: 'Draft'
         new: 'New'

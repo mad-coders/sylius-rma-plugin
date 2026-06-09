@@ -27,5 +27,29 @@ Architects of this package:
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface"
                  alias="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
+
+        <service id="madcoders.sylius_rma_plugin.services.rma_customer_data"
+                 class="Madcoders\SyliusRmaPlugin\Services\RmaCustomerData" />
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalRequestNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_customer_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalCompletedNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_customer_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalResolutionNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_admin_user_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
     </services>
 </container>
