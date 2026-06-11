@@ -66,6 +66,97 @@ madcoders_rma:
 
 See [ADR 0011](docs/adr-log/0011-return-form-pdf-feature-flag.md).
 
+## Returns state machine
+
+Every return form is an `OrderReturn` entity driven by a single
+[winzou state machine](src/Resources/config/config.yml) (graph `return_status`,
+property `orderReturnStatus`). A form is created in `draft` and then moves through the
+graph depending on whether the customer is filing a **return** or **withdrawing**
+(cancelling) a pre-shipment order. The same graph also carries the admin-side resolution
+of a withdrawal request.
+
+States: `draft`, `new`, `completed`, `canceled`, `cancellation_request`, `withdrawn`.
+
+### Full graph
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft: form created
+
+    draft --> new: new
+    new --> completed: complete
+
+    draft --> canceled: cancel
+    new --> canceled: cancel
+
+    draft --> withdrawn: withdraw
+    draft --> cancellation_request: request_cancellation
+    cancellation_request --> canceled: confirm_cancellation
+    cancellation_request --> new: fallback_to_return
+
+    completed --> [*]
+    canceled --> [*]
+    withdrawn --> [*]
+```
+
+### Standard return flow
+
+A customer fills in the return form for a delivered order. On submit the `new` transition
+moves the form out of `draft`; an admin then either completes or cancels it.
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft: customer starts return form
+    draft --> new: new (form submitted)
+    new --> completed: complete (admin)
+    new --> canceled: cancel (admin)
+    draft --> canceled: cancel
+    completed --> [*]
+    canceled --> [*]
+```
+
+### Withdrawal (pre-shipment cancellation) flow
+
+When a customer withdraws a pre-shipment order, the
+[`WithdrawalEligibilityChecker`](src/Services/Withdrawal/WithdrawalEligibilityChecker.php)
+resolves one of two paths (see [`WithdrawalPath`](src/Services/Withdrawal/WithdrawalPath.php)):
+
+- **`UNPAID_AUTOCANCEL`** - an unpaid pre-shipment order (with the unpaid-withdrawal flag
+  on): the Sylius order is auto-cancelled and the form resolves straight to `withdrawn` via
+  the `withdraw` transition.
+- **`PAID_REQUEST`** - a paid/authorized pre-shipment order: the `request_cancellation`
+  transition raises a `cancellation_request` that an admin resolves, either confirming the
+  cancellation (`confirm_cancellation` -> `canceled`) or handling it as a normal return
+  (`fallback_to_return` -> `new`).
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft: customer requests withdrawal
+    state withdrawal_path <<choice>>
+    draft --> withdrawal_path
+    withdrawal_path --> withdrawn: withdraw\n(UNPAID_AUTOCANCEL, order auto-cancelled)
+    withdrawal_path --> cancellation_request: request_cancellation\n(PAID_REQUEST)
+    cancellation_request --> canceled: confirm_cancellation (admin)
+    cancellation_request --> new: fallback_to_return (admin, handle as return)
+    withdrawn --> [*]
+    canceled --> [*]
+```
+
+### Transitions and notifications
+
+Several transitions fire `after` callbacks (changelog updates and customer e-mails),
+configured in [`config.yml`](src/Resources/config/config.yml):
+
+| Transition | From | To | After callback |
+| :--- | :--- | :--- | :--- |
+| `new` | `draft` | `new` | - |
+| `complete` | `new` | `completed` | changelog update |
+| `cancel` | `draft`, `new` | `canceled` | changelog update |
+| `request_cancellation` | `draft` | `cancellation_request` | withdrawal-requested e-mail |
+| `withdraw` | `draft` | `withdrawn` | withdrawal-confirmed e-mail |
+| `confirm_cancellation` | `cancellation_request` | `canceled` | resolution (confirmed) e-mail |
+| `fallback_to_return` | `cancellation_request` | `new` | resolution (fallback) e-mail |
+
 ## Development
 
 Requires PHP 8.2, Composer, Docker (for the database) and Node/Yarn (for the test
