@@ -21,6 +21,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ElapsedDaysReturnDeadlineChecker;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ReturnReasonEligibilityChecker;
+use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityChecker;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
@@ -110,6 +111,7 @@ class ChoiceProviderTest extends UnitTestCase
             $reasonRepository->reveal(),
             $this->prophesize(OrderRepositoryInterface::class)->reveal(),
             new ReturnReasonEligibilityChecker(new ElapsedDaysReturnDeadlineChecker()),
+            new ReturnEligibilityChecker(),
         );
     }
 }

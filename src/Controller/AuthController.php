@@ -26,6 +26,9 @@ use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface;
+use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -56,6 +59,8 @@ final readonly class AuthController
         private AuthCodeFactoryInterface $authCodeFactory,
         private AuthorizationCheckerInterface $authorizationChecker,
         private RepositoryInterface $authCodeRepository,
+        private WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
+        private ReturnEligibilityCheckerInterface $returnEligibilityChecker,
     ) {
     }
 
@@ -80,7 +85,11 @@ final readonly class AuthController
                 );
             }
 
-            if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
+            // A pre-shipment order that qualifies for withdrawal is routed to the withdrawal flow
+            // instead of being rejected as "not fulfilled yet".
+            $isWithdrawable = WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order);
+
+            if (!$isWithdrawable && !$this->returnEligibilityChecker->isReturnable($order)) {
                 return $this->errorRedirect(
                     $request,
                     'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',
@@ -90,7 +99,11 @@ final readonly class AuthController
 
             // redirect forward if access is already granted
             if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
-                return new RedirectResponse($this->router->generate($redirectToOrderReturnRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
+                $forwardRoute = $isWithdrawable
+                    ? $this->getSyliusAttribute($request, 'redirect_to_withdrawal', 'madcoders_rma_withdrawal')
+                    : $redirectToOrderReturnRoute;
+
+                return new RedirectResponse($this->router->generate($forwardRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
             }
 
             $authCode = $this->authCodeFactory->createForOrder($order);
@@ -175,9 +188,15 @@ final readonly class AuthController
             throw new NotFoundHttpException(sprintf('Order %s has not been found', $authData->getOrderNumber()));
         }
 
+        // A withdrawable pre-shipment order continues to the withdrawal flow once authorized;
+        // everything else proceeds to the post-shipment return form.
+        $successRoute = WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order)
+            ? $this->getSyliusAttribute($request, 'redirect_to_withdrawal', 'madcoders_rma_withdrawal')
+            : $redirectRoute;
+
         // redirect forward if access is already granted
         if ($this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
-            return new RedirectResponse($this->router->generate($redirectRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
+            return new RedirectResponse($this->router->generate($successRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
         }
 
         $formType = $this->getSyliusAttribute($request, 'form', ReturnAuthVerificationType::class);
@@ -195,7 +214,7 @@ final readonly class AuthController
                 // this is success path
                 $this->orderReturnAuthorizer->authorize($order);
 
-                return new RedirectResponse($this->router->generate($redirectRoute, ['orderNumber' => $orderNumber]));
+                return new RedirectResponse($this->router->generate($successRoute, ['orderNumber' => $orderNumber]));
             }
 
             // this is error handling

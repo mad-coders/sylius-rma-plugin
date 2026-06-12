@@ -1,0 +1,27 @@
+<?php
+
+/*
+ * This file is part of package:
+ * Sylius RMA Plugin
+ *
+ * @copyright MADCODERS Team (www.madcoders.co)
+ * @licence For the full copyright and license information, please view the LICENSE
+ *
+ * Architects of this package:
+ * @author Leonid Moshko <l.moshko@madcoders.pl>
+ * @author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+ */
+
+declare(strict_types=1);
+
+namespace Madcoders\SyliusRmaPlugin\Services;
+
+use Sylius\Component\Core\Model\OrderInterface;
+
+interface ReturnEligibilityCheckerInterface
+{
+    /**
+     * Tells whether the given order is in a state that allows the post-shipment return flow.
+     */
+    public function isReturnable(OrderInterface $order): bool;
+}

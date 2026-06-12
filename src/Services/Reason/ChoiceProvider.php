@@ -18,6 +18,7 @@ namespace Madcoders\SyliusRmaPlugin\Services\Reason;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -31,6 +32,7 @@ class ChoiceProvider implements ChoiceProviderInterface
         private readonly RepositoryInterface $orderReturnReasonRepository,
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ReturnReasonEligibilityCheckerInterface $returnReasonEligibilityChecker,
+        private readonly ReturnEligibilityCheckerInterface $returnEligibilityChecker,
     ) {
     }
 
@@ -58,7 +60,7 @@ class ChoiceProvider implements ChoiceProviderInterface
      */
     public function createAvailableReasons(OrderInterface $order): array
     {
-        if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
+        if (!$this->returnEligibilityChecker->isReturnable($order)) {
             return [];
         }
 

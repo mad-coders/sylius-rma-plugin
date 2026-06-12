@@ -29,6 +29,11 @@ Architects of this package:
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.services.return_eligibility_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityChecker" />
+        <service id="Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.return_eligibility_checker" />
+
         <service id="madcoders.sylius_rma_plugin.return_request_builder" class="Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder">
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.return_number_generator" />
