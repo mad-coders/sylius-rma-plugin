@@ -75,7 +75,7 @@ graph depending on whether the customer is filing a **return** or **withdrawing*
 (cancelling) a pre-shipment order. The same graph also carries the admin-side resolution
 of a withdrawal request.
 
-States: `draft`, `new`, `completed`, `canceled`, `cancellation_request`, `withdrawn`.
+States: `draft`, `new`, `completed`, `canceled`, `withdrawal_request`, `withdrawn`.
 
 ### Full graph
 
@@ -90,9 +90,9 @@ stateDiagram-v2
     new --> canceled: cancel
 
     draft --> withdrawn: withdraw
-    draft --> cancellation_request: request_cancellation
-    cancellation_request --> canceled: confirm_cancellation
-    cancellation_request --> new: fallback_to_return
+    draft --> withdrawal_request: request_withdrawal
+    withdrawal_request --> withdrawn: withdraw
+    withdrawal_request --> new: fallback_to_return
 
     completed --> [*]
     canceled --> [*]
@@ -115,47 +115,52 @@ stateDiagram-v2
     canceled --> [*]
 ```
 
-### Withdrawal (pre-shipment cancellation) flow
+### Withdrawal (pre-shipment) flow
 
-When a customer withdraws a pre-shipment order, the
-[`WithdrawalEligibilityChecker`](src/Services/Withdrawal/WithdrawalEligibilityChecker.php)
-resolves one of two paths (see [`WithdrawalPath`](src/Services/Withdrawal/WithdrawalPath.php)):
+A withdrawal is a single process that always ends in the terminal `withdrawn` state with the
+underlying Sylius order cancelled. Whether it gets there instantly or via admin approval is the
+only difference, decided by two checkers:
 
-- **`UNPAID_AUTOCANCEL`** - an unpaid pre-shipment order (with the unpaid-withdrawal flag
-  on): the Sylius order is auto-cancelled and the form resolves straight to `withdrawn` via
-  the `withdraw` transition.
-- **`PAID_REQUEST`** - a paid/authorized pre-shipment order: the `request_cancellation`
-  transition raises a `cancellation_request` that an admin resolves, either confirming the
-  cancellation (`confirm_cancellation` -> `canceled`) or handling it as a normal return
-  (`fallback_to_return` -> `new`).
+- [`WithdrawalEligibilityChecker::isWithdrawable()`](src/Services/Withdrawal/WithdrawalEligibilityChecker.php)
+  - is the withdrawal flow offered at all? (placed, not shipped, not a cart; unpaid only when the
+  `allow_unpaid_withdrawal` flag is on).
+- [`InstantCancellationEligibilityChecker::isEligible()`](src/Services/Withdrawal/InstantCancellationEligibilityChecker.php)
+  - true when the order is **not paid**, so it can be withdrawn instantly with nothing to refund.
+
+When instant-eligible (unpaid), the form fast-forwards straight to `withdrawn` via the `withdraw`
+transition and the Sylius order is cancelled. Otherwise (paid/authorized) the `request_withdrawal`
+transition raises a `withdrawal_request` that an admin resolves, either confirming the withdrawal
+(`withdraw` -> `withdrawn`, cancelling the Sylius order) or handling it as a normal return
+(`fallback_to_return` -> `new`).
 
 ```mermaid
 stateDiagram-v2
     [*] --> draft: customer requests withdrawal
-    state withdrawal_path <<choice>>
-    draft --> withdrawal_path
-    withdrawal_path --> withdrawn: withdraw\n(UNPAID_AUTOCANCEL, order auto-cancelled)
-    withdrawal_path --> cancellation_request: request_cancellation\n(PAID_REQUEST)
-    cancellation_request --> canceled: confirm_cancellation (admin)
-    cancellation_request --> new: fallback_to_return (admin, handle as return)
+    state instant_eligible <<choice>>
+    draft --> instant_eligible
+    instant_eligible --> withdrawn: withdraw\n(unpaid, order cancelled)
+    instant_eligible --> withdrawal_request: request_withdrawal\n(paid, needs approval)
+    withdrawal_request --> withdrawn: withdraw (admin confirm, order cancelled)
+    withdrawal_request --> new: fallback_to_return (admin, handle as return)
     withdrawn --> [*]
-    canceled --> [*]
 ```
 
 ### Transitions and notifications
 
 Several transitions fire `after` callbacks (changelog updates and customer e-mails),
-configured in [`config.yml`](src/Resources/config/config.yml):
+configured in [`config.yml`](src/Resources/config/config.yml). The `withdraw` transition uses
+winzou `from`-filtered callbacks so the instant (customer) and admin-approved cases send different
+notifications:
 
 | Transition | From | To | After callback |
 | :--- | :--- | :--- | :--- |
 | `new` | `draft` | `new` | - |
 | `complete` | `new` | `completed` | changelog update |
 | `cancel` | `draft`, `new` | `canceled` | changelog update |
-| `request_cancellation` | `draft` | `cancellation_request` | withdrawal-requested e-mail |
-| `withdraw` | `draft` | `withdrawn` | withdrawal-confirmed e-mail |
-| `confirm_cancellation` | `cancellation_request` | `canceled` | resolution (confirmed) e-mail |
-| `fallback_to_return` | `cancellation_request` | `new` | resolution (fallback) e-mail |
+| `request_withdrawal` | `draft` | `withdrawal_request` | withdrawal-requested e-mail |
+| `withdraw` | `draft` | `withdrawn` | instant withdrawal e-mail (customer) |
+| `withdraw` | `withdrawal_request` | `withdrawn` | resolution (confirmed) e-mail (admin) |
+| `fallback_to_return` | `withdrawal_request` | `new` | resolution (fallback) e-mail |
 
 ## Development
 

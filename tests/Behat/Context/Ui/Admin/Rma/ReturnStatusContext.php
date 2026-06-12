@@ -137,7 +137,7 @@ class ReturnStatusContext implements Context
     }
 
     /**
-     * @When I click confirm cancellation button
+     * @When I click confirm withdrawal button
      */
     public function iConfirmCancellationOfThisOrderReturn(): void
     {

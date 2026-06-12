@@ -15,13 +15,13 @@ Feature: Withdraw from an order before it ships
         And there is a customer "john.doe@madcoders.pl" that placed order with "Product A" product to "United States" based billing address with "Standard shipping" shipping method and "Offline" payment method
 
     @ui
-    Scenario: A paid not-yet-shipped order becomes a cancellation request
+    Scenario: A paid not-yet-shipped order becomes a withdrawal request
         Given I am on dashboard in customer area
         When I browse my orders
         And I click return button at latest order
         Then I should be on the order withdrawal page for latest order
         When I confirm the withdrawal
-        Then order return for latest order should have status "cancellation_request"
+        Then order return for latest order should have status "withdrawal_request"
         And order return for latest order should have a "withdrawal_requested" change-log entry authored by a customer
         And a withdrawal "requested" email should be sent to "john.doe@madcoders.pl" for latest order
 

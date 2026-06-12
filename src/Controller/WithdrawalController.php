@@ -20,9 +20,9 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -50,6 +50,7 @@ final readonly class WithdrawalController
         private AuthorizationCheckerInterface $authorizationChecker,
         private OrderByNumberProviderInterface $orderByNumberProvider,
         private WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
+        private InstantCancellationEligibilityCheckerInterface $instantCancellationEligibilityChecker,
         private ReturnRequestBuilder $returnRequestBuilder,
         private OrderWithdrawalProcessorInterface $orderWithdrawalProcessor,
         private StateMachineFactoryInterface $stateMachineFactory,
@@ -73,20 +74,23 @@ final readonly class WithdrawalController
             return $this->errorRedirect($request, 'madcoders_rma.ui.return.user_not_privileges_to_this_order');
         }
 
-        $path = $this->withdrawalEligibilityChecker->resolvePath($order);
-        if (WithdrawalPath::NONE === $path) {
+        if (!$this->withdrawalEligibilityChecker->isWithdrawable($order)) {
             return $this->errorRedirect($request, 'madcoders_rma.ui.first_step.error.withdrawal_not_available', ['%orderNumber%' => $orderNumber]);
         }
+
+        $isInstant = $this->instantCancellationEligibilityChecker->isEligible($order);
 
         if ($request->isMethod('POST') && $this->csrfTokenManager->isTokenValid(new CsrfToken(self::CSRF_TOKEN_ID, (string) $request->request->get('_token')))) {
             $orderReturn = $this->returnRequestBuilder->build($orderNumber);
 
-            if (WithdrawalPath::UNPAID_AUTOCANCEL === $path) {
+            if ($isInstant) {
+                // Fast-forward: cancel the order and resolve the return straight to "withdrawn".
                 $this->orderWithdrawalProcessor->process($order, $orderReturn);
             } else {
+                // Paid order: register a withdrawal request for admin approval.
                 $stateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-                if ($stateMachine->can(OrderReturnInterface::TRANSITION_REQUEST_CANCELLATION)) {
-                    $stateMachine->apply(OrderReturnInterface::TRANSITION_REQUEST_CANCELLATION);
+                if ($stateMachine->can(OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL)) {
+                    $stateMachine->apply(OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL);
                 }
             }
 
@@ -98,7 +102,7 @@ final readonly class WithdrawalController
         return new Response($this->twig->render($template, [
             'order' => $order,
             'orderNumber' => $orderNumber,
-            'isUnpaid' => WithdrawalPath::UNPAID_AUTOCANCEL === $path,
+            'isUnpaid' => $isInstant,
             'csrfToken' => $this->csrfTokenManager->getToken(self::CSRF_TOKEN_ID)->getValue(),
         ]));
     }

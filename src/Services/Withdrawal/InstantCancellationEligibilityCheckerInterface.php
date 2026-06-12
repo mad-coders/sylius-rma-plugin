@@ -16,14 +16,13 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services\Withdrawal;
 
-enum WithdrawalPath
+use Sylius\Component\Core\Model\OrderInterface;
+
+interface InstantCancellationEligibilityCheckerInterface
 {
-    /** The order cannot be withdrawn (already shipped/fulfilled, not a placed order, or unpaid with the flag off). */
-    case NONE;
-
-    /** Paid/authorized pre-shipment order: withdrawal becomes an admin-resolved cancellation request. */
-    case PAID_REQUEST;
-
-    /** Unpaid pre-shipment order with the flag on: withdrawal auto-cancels the order and resolves to withdrawn. */
-    case UNPAID_AUTOCANCEL;
+    /**
+     * Tells whether a withdrawable order can be withdrawn instantly (fast-forward to "withdrawn"
+     * with the order cancelled) instead of going through the admin approval step.
+     */
+    public function isEligible(OrderInterface $order): bool;
 }

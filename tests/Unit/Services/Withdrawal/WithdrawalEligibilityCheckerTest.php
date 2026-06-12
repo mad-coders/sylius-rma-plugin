@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Tests\Madcoders\SyliusRmaPlugin\Unit\Services\Withdrawal;
 
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityChecker;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
@@ -34,7 +33,7 @@ class WithdrawalEligibilityCheckerTest extends UnitTestCase
     {
         $order = $this->order(OrderInterface::STATE_FULFILLED, OrderShippingStates::STATE_SHIPPED, OrderPaymentStates::STATE_PAID);
 
-        $this->assertSame(WithdrawalPath::NONE, $this->checker(true)->resolvePath($order));
+        $this->assertFalse($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
@@ -42,7 +41,7 @@ class WithdrawalEligibilityCheckerTest extends UnitTestCase
     {
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_PARTIALLY_SHIPPED, OrderPaymentStates::STATE_PAID);
 
-        $this->assertSame(WithdrawalPath::NONE, $this->checker(true)->resolvePath($order));
+        $this->assertFalse($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
@@ -50,39 +49,39 @@ class WithdrawalEligibilityCheckerTest extends UnitTestCase
     {
         $order = $this->order(OrderInterface::STATE_CANCELLED, OrderShippingStates::STATE_CANCELLED, OrderPaymentStates::STATE_CANCELLED);
 
-        $this->assertSame(WithdrawalPath::NONE, $this->checker(true)->resolvePath($order));
+        $this->assertFalse($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
-    function paid_not_shipped_order_takes_the_admin_request_path()
+    function a_paid_not_shipped_order_is_withdrawable()
     {
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_PAID);
 
-        $this->assertSame(WithdrawalPath::PAID_REQUEST, $this->checker(true)->resolvePath($order));
+        $this->assertTrue($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
-    function authorized_not_shipped_order_takes_the_admin_request_path()
+    function an_authorized_not_shipped_order_is_withdrawable()
     {
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_AUTHORIZED);
 
-        $this->assertSame(WithdrawalPath::PAID_REQUEST, $this->checker(true)->resolvePath($order));
+        $this->assertTrue($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
-    function unpaid_not_shipped_order_auto_cancels_when_the_flag_is_on()
+    function an_unpaid_not_shipped_order_is_withdrawable_when_the_flag_is_on()
     {
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_AWAITING_PAYMENT);
 
-        $this->assertSame(WithdrawalPath::UNPAID_AUTOCANCEL, $this->checker(true)->resolvePath($order));
+        $this->assertTrue($this->checker(true)->isWithdrawable($order));
     }
 
     /** @test */
-    function unpaid_not_shipped_order_is_not_withdrawable_when_the_flag_is_off()
+    function an_unpaid_not_shipped_order_is_not_withdrawable_when_the_flag_is_off()
     {
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_AWAITING_PAYMENT);
 
-        $this->assertSame(WithdrawalPath::NONE, $this->checker(false)->resolvePath($order));
+        $this->assertFalse($this->checker(false)->isWithdrawable($order));
     }
 
     /** @test */
@@ -91,7 +90,7 @@ class WithdrawalEligibilityCheckerTest extends UnitTestCase
         // otherwise withdrawable (placed, not shipped, paid) but still a cart in checkout
         $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_PAID, OrderCheckoutStates::STATE_CART);
 
-        $this->assertSame(WithdrawalPath::NONE, $this->checker(true)->resolvePath($order));
+        $this->assertFalse($this->checker(true)->isWithdrawable($order));
     }
 
     private function checker(bool $allowUnpaidWithdrawal): WithdrawalEligibilityChecker

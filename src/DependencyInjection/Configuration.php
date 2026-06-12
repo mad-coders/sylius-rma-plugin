@@ -60,7 +60,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultFalse()
                 ->end()
                 ->scalarNode('allow_unpaid_withdrawal')
-                    ->info('When true (default), an unpaid not-yet-shipped order can be withdrawn by the customer: the Sylius order is cancelled and the return resolves directly to the terminal "withdrawn" state with no admin step. When false, an unpaid order cannot start a withdrawal. Backed by the MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed).')
+                    ->info('When true (default), an unpaid not-yet-shipped order is offered the withdrawal flow: because it is not paid it is withdrawn instantly (the Sylius order is cancelled and the return resolves directly to the terminal "withdrawn" state with no admin step). When false, an unpaid order is not offered withdrawal at all. Paid orders are always withdrawable via admin approval regardless of this flag. Backed by the MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed).')
                     ->defaultValue('%env(bool:MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL)%')
                 ->end()
                 ->arrayNode('resources')

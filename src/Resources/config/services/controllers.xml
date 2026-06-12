@@ -86,10 +86,21 @@ Architects of this package:
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
             <argument type="service" id="SM\Factory\FactoryInterface" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="security.csrf.token_manager" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.controller.admin_withdrawal_confirm"
+                 class="Madcoders\SyliusRmaPlugin\Controller\AdminWithdrawalConfirmController" public="true">
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
+            <argument type="service" id="router" />
             <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="translator" />
         </service>

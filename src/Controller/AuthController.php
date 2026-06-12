@@ -28,7 +28,6 @@ use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -87,7 +86,7 @@ final readonly class AuthController
 
             // A pre-shipment order that qualifies for withdrawal is routed to the withdrawal flow
             // instead of being rejected as "not fulfilled yet".
-            $isWithdrawable = WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order);
+            $isWithdrawable = $this->withdrawalEligibilityChecker->isWithdrawable($order);
 
             if (!$isWithdrawable && !$this->returnEligibilityChecker->isReturnable($order)) {
                 return $this->errorRedirect(
@@ -190,7 +189,7 @@ final readonly class AuthController
 
         // A withdrawable pre-shipment order continues to the withdrawal flow once authorized;
         // everything else proceeds to the post-shipment return form.
-        $successRoute = WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order)
+        $successRoute = $this->withdrawalEligibilityChecker->isWithdrawable($order)
             ? $this->getSyliusAttribute($request, 'redirect_to_withdrawal', 'madcoders_rma_withdrawal')
             : $redirectRoute;
 

@@ -22,8 +22,8 @@ use Madcoders\SyliusRmaPlugin\Services\RmaAdminUserData;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 
 /**
- * Runs after an admin resolves a paid cancellation request: logs the acting admin and sends the
- * follow-up e-mail for either outcome (confirm -> canceled, or fall back to the return process).
+ * Runs after an admin resolves a paid withdrawal request: logs the acting admin and sends the
+ * follow-up e-mail for either outcome (confirm -> withdrawn, or fall back to the return process).
  */
 final readonly class WithdrawalResolutionNotifier
 {
@@ -34,7 +34,7 @@ final readonly class WithdrawalResolutionNotifier
     ) {
     }
 
-    public function onConfirmCancellation(OrderReturnInterface $orderReturn): void
+    public function onConfirmWithdrawal(OrderReturnInterface $orderReturn): void
     {
         $this->changesLogger->add(
             $orderReturn->getReturnNumber(),

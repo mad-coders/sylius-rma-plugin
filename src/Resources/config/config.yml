@@ -137,7 +137,7 @@ winzou_state_machine:
       new: ~
       completed: ~
       canceled: ~
-      cancellation_request: ~
+      withdrawal_request: ~
       withdrawn: ~
     callbacks:
       after:
@@ -150,16 +150,20 @@ winzou_state_machine:
           do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete', 'UpdatedChangelogOnComplete' ]
           args: [ 'object' ]
         withdrawal_request_notifier:
-          on: [ 'request_cancellation' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier', 'onRequestCancellation' ]
+          on: [ 'request_withdrawal' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier', 'onRequestWithdrawal' ]
           args: [ 'object' ]
-        withdrawal_completed_notifier:
+        # withdraw FROM draft = instant/fast-forward withdrawal (customer-initiated)
+        withdrawal_instant_notifier:
           on: [ 'withdraw' ]
+          from: [ 'draft' ]
           do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier', 'onWithdraw' ]
           args: [ 'object' ]
-        withdrawal_resolution_confirm:
-          on: [ 'confirm_cancellation' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onConfirmCancellation' ]
+        # withdraw FROM withdrawal_request = admin-approved withdrawal (admin-initiated)
+        withdrawal_approved_notifier:
+          on: [ 'withdraw' ]
+          from: [ 'withdrawal_request' ]
+          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onConfirmWithdrawal' ]
           args: [ 'object' ]
         withdrawal_resolution_fallback:
           on: [ 'fallback_to_return' ]
@@ -176,17 +180,14 @@ winzou_state_machine:
       cancel:
         from: ['draft', 'new']
         to: canceled
-      request_cancellation:
+      request_withdrawal:
         from: ['draft']
-        to: cancellation_request
+        to: withdrawal_request
       withdraw:
-        from: ['draft']
+        from: ['draft', 'withdrawal_request']
         to: withdrawn
-      confirm_cancellation:
-        from: ['cancellation_request']
-        to: canceled
       fallback_to_return:
-        from: ['cancellation_request']
+        from: ['withdrawal_request']
         to: new
 
 # HOW TO USE ORDER RETURN STATE MACHINE
