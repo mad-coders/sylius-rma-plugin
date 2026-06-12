@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services;
 
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\OrderCheckoutStates;
 
 /**
  * Resolves whether an order qualifies for the post-shipment return flow from its order state.
@@ -31,6 +32,11 @@ final readonly class ReturnEligibilityChecker implements ReturnEligibilityChecke
 {
     public function isReturnable(OrderInterface $order): bool
     {
+        // An order still in checkout (a cart) is never returnable.
+        if (OrderCheckoutStates::STATE_CART === $order->getCheckoutState()) {
+            return false;
+        }
+
         return OrderInterface::STATE_FULFILLED === $order->getState();
     }
 }
