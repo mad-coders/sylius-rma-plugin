@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services\Withdrawal;
 
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\OrderShippingStates;
 
@@ -37,6 +38,11 @@ final readonly class WithdrawalEligibilityChecker implements WithdrawalEligibili
 
     public function resolvePath(OrderInterface $order): WithdrawalPath
     {
+        // An order still in checkout (a cart) is never withdrawable.
+        if (OrderCheckoutStates::STATE_CART === $order->getCheckoutState()) {
+            return WithdrawalPath::NONE;
+        }
+
         if (OrderInterface::STATE_NEW !== $order->getState()) {
             return WithdrawalPath::NONE;
         }

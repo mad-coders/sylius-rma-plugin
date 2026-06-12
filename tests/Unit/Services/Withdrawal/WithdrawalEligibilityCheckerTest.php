@@ -20,6 +20,7 @@ use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityChecker;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\OrderShippingStates;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
@@ -84,17 +85,27 @@ class WithdrawalEligibilityCheckerTest extends UnitTestCase
         $this->assertSame(WithdrawalPath::NONE, $this->checker(false)->resolvePath($order));
     }
 
+    /** @test */
+    function an_order_still_in_checkout_is_not_withdrawable()
+    {
+        // otherwise withdrawable (placed, not shipped, paid) but still a cart in checkout
+        $order = $this->order(OrderInterface::STATE_NEW, OrderShippingStates::STATE_READY, OrderPaymentStates::STATE_PAID, OrderCheckoutStates::STATE_CART);
+
+        $this->assertSame(WithdrawalPath::NONE, $this->checker(true)->resolvePath($order));
+    }
+
     private function checker(bool $allowUnpaidWithdrawal): WithdrawalEligibilityChecker
     {
         return new WithdrawalEligibilityChecker($allowUnpaidWithdrawal);
     }
 
-    private function order(string $state, string $shippingState, string $paymentState): OrderInterface
+    private function order(string $state, string $shippingState, string $paymentState, string $checkoutState = OrderCheckoutStates::STATE_COMPLETED): OrderInterface
     {
         $order = $this->prophesize(OrderInterface::class);
         $order->getState()->willReturn($state);
         $order->getShippingState()->willReturn($shippingState);
         $order->getPaymentState()->willReturn($paymentState);
+        $order->getCheckoutState()->willReturn($checkoutState);
 
         return $order->reveal();
     }

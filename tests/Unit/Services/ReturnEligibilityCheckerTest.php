@@ -19,6 +19,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Unit\Services;
 use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityChecker;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\OrderCheckoutStates;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
 
 class ReturnEligibilityCheckerTest extends UnitTestCase
@@ -49,10 +50,20 @@ class ReturnEligibilityCheckerTest extends UnitTestCase
         $this->assertFalse((new ReturnEligibilityChecker())->isReturnable($this->order(OrderInterface::STATE_CANCELLED)));
     }
 
-    private function order(string $state): OrderInterface
+    /** @test */
+    function an_order_still_in_checkout_is_not_returnable()
+    {
+        // even with a fulfilled order state, a cart checkout state must short-circuit to not returnable
+        $order = $this->order(OrderInterface::STATE_FULFILLED, OrderCheckoutStates::STATE_CART);
+
+        $this->assertFalse((new ReturnEligibilityChecker())->isReturnable($order));
+    }
+
+    private function order(string $state, string $checkoutState = OrderCheckoutStates::STATE_COMPLETED): OrderInterface
     {
         $order = $this->prophesize(OrderInterface::class);
         $order->getState()->willReturn($state);
+        $order->getCheckoutState()->willReturn($checkoutState);
 
         return $order->reveal();
     }
