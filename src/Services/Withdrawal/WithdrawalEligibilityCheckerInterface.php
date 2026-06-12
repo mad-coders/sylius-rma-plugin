@@ -21,7 +21,7 @@ use Sylius\Component\Core\Model\OrderInterface;
 interface WithdrawalEligibilityCheckerInterface
 {
     /**
-     * Decides which pre-shipment withdrawal path (if any) applies to the given order.
+     * Tells whether the pre-shipment withdrawal flow is offered for the given order.
      */
-    public function resolvePath(OrderInterface $order): WithdrawalPath;
+    public function isWithdrawable(OrderInterface $order): bool;
 }

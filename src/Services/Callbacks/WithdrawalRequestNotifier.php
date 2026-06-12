@@ -22,7 +22,7 @@ use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Madcoders\SyliusRmaPlugin\Services\RmaCustomerData;
 
 /**
- * Runs after the paid pre-shipment `request_cancellation` transition: logs the customer-initiated
+ * Runs after the paid pre-shipment `request_withdrawal` transition: logs the customer-initiated
  * change and sends the request-received e-mail.
  */
 final readonly class WithdrawalRequestNotifier
@@ -34,7 +34,7 @@ final readonly class WithdrawalRequestNotifier
     ) {
     }
 
-    public function onRequestCancellation(OrderReturnInterface $orderReturn): void
+    public function onRequestWithdrawal(OrderReturnInterface $orderReturn): void
     {
         $this->changesLogger->add(
             $orderReturn->getReturnNumber(),

@@ -18,7 +18,6 @@ namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Component\Core\Model\OrderInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -53,6 +52,6 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
 
     public function verificationWithdrawable(OrderInterface $order): bool
     {
-        return WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order);
+        return $this->withdrawalEligibilityChecker->isWithdrawable($order);
     }
 }

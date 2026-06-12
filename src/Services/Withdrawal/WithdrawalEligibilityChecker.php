@@ -22,12 +22,15 @@ use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\OrderShippingStates;
 
 /**
- * Resolves the pre-shipment withdrawal path for an order from its order/payment/shipping state.
+ * Decides whether the pre-shipment withdrawal flow is offered for an order from its
+ * order/payment/shipping state.
  *
  * Only a placed-but-not-yet-fulfilled order (OrderInterface::STATE_NEW) that has not shipped is
  * withdrawable; this excludes carts, cancelled orders, and shipped/fulfilled orders, leaving the
- * post-shipment return flow untouched. A paid or authorized order takes the admin cancellation
- * request path; anything else takes the unpaid auto-cancel path when the feature flag is on.
+ * post-shipment return flow untouched. A paid or authorized order is always withdrawable; an unpaid
+ * order is withdrawable only when the allow_unpaid_withdrawal flag is on. Whether a withdrawable
+ * order is withdrawn instantly or via admin approval is a separate decision made by
+ * {@see InstantCancellationEligibilityChecker}.
  */
 final readonly class WithdrawalEligibilityChecker implements WithdrawalEligibilityCheckerInterface
 {
@@ -36,31 +39,32 @@ final readonly class WithdrawalEligibilityChecker implements WithdrawalEligibili
     ) {
     }
 
-    public function resolvePath(OrderInterface $order): WithdrawalPath
+    public function isWithdrawable(OrderInterface $order): bool
     {
         // An order still in checkout (a cart) is never withdrawable.
         if (OrderCheckoutStates::STATE_CART === $order->getCheckoutState()) {
-            return WithdrawalPath::NONE;
+            return false;
         }
 
         if (OrderInterface::STATE_NEW !== $order->getState()) {
-            return WithdrawalPath::NONE;
+            return false;
         }
 
         if (in_array($order->getShippingState(), [
             OrderShippingStates::STATE_SHIPPED,
             OrderShippingStates::STATE_PARTIALLY_SHIPPED,
         ], true)) {
-            return WithdrawalPath::NONE;
+            return false;
         }
 
         if (in_array($order->getPaymentState(), [
             OrderPaymentStates::STATE_PAID,
             OrderPaymentStates::STATE_AUTHORIZED,
         ], true)) {
-            return WithdrawalPath::PAID_REQUEST;
+            return true;
         }
 
-        return $this->allowUnpaidWithdrawal ? WithdrawalPath::UNPAID_AUTOCANCEL : WithdrawalPath::NONE;
+        // Unpaid order: only withdrawable when the feature flag allows it.
+        return $this->allowUnpaidWithdrawal;
     }
 }

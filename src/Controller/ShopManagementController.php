@@ -22,7 +22,6 @@ use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
 use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalPath;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -84,7 +83,7 @@ final class ShopManagementController extends AbstractController
 
         // Pre-shipment withdrawal takes precedence over the post-shipment return flow: a
         // not-yet-shipped order is dispatched to the withdrawal flow instead of the return form.
-        if (WithdrawalPath::NONE !== $this->withdrawalEligibilityChecker->resolvePath($order)) {
+        if ($this->withdrawalEligibilityChecker->isWithdrawable($order)) {
             $this->requestStack->getSession()->set('madcoders_rma_allowed_order', $orderNumber);
 
             return new RedirectResponse($this->router->generate('madcoders_rma_withdrawal', ['orderNumber' => str_replace('#', '', $orderNumber)]));

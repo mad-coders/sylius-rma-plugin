@@ -95,7 +95,7 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
         return array_merge(parent::getDefinedElements(), [
             'rma-complete-button' => '.complete-button',
             'rma-cancel-button' => '.cancel-button',
-            'rma-confirm-cancellation-button' => '.confirm-cancellation-button',
+            'rma-confirm-cancellation-button' => '.confirm-withdrawal-button',
             'rma-fallback-to-return-button' => '.fallback-to-return-button',
             'sylius-order-state' => '#sylius-order-state',
             'rma-add-note-to-timeline' => '[data-test-madcoders-rma-add-note-to-timeline]',

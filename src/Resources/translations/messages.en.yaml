@@ -71,14 +71,16 @@ madcoders_rma:
         withdrawal:
             title: 'Withdraw from order'
             headline: 'Withdraw from order'
-            secondary_headline: 'Cancel your order before it ships'
-            info_paid: 'You can withdraw from this order before it ships. We will register a cancellation request and our team will confirm the cancellation and any refund.'
-            info_unpaid: 'You can withdraw from this order before it ships. As it has not been paid, the order will be cancelled immediately.'
+            secondary_headline: 'Withdraw from your order before it ships'
+            info_paid: 'You can withdraw from this order before it ships. We will register a withdrawal request and our team will confirm the withdrawal and any refund.'
+            info_unpaid: 'You can withdraw from this order before it ships. As it has not been paid, the order will be withdrawn immediately.'
             confirm_button: 'Withdraw from order'
-            success_requested: 'Your cancellation request has been registered'
-            success_withdrawn: 'Your order has been cancelled upon withdrawal'
-            confirm_cancellation: 'Confirm cancellation'
+            success_requested: 'Your withdrawal request has been registered'
+            success_withdrawn: 'Your order has been withdrawn'
+            confirm_withdrawal: 'Confirm withdrawal'
             fallback_to_return: 'Handle as return'
+            error:
+                not_cancellable: 'This order can no longer be withdrawn'
 
         verification_step:
             secondary_headline: 'Verification step'
@@ -143,10 +145,10 @@ madcoders_rma:
             completed_return: 'completed return'
             cancelled_return: 'cancelled return'
             added_new_note: 'added new note'
-            withdrawal_requested: 'requested order cancellation (withdrawal)'
-            withdrawal_confirmed: 'confirmed cancellation (withdrawal)'
+            withdrawal_requested: 'requested withdrawal'
+            withdrawal_confirmed: 'confirmed withdrawal'
             withdrawal_fallback: 'redirected withdrawal to the return process'
-            withdrawn: 'withdrew the order (auto-cancelled)'
+            withdrawn: 'withdrew the order'
         return_details_header: 'Return details'
 
         return_consent:
@@ -181,10 +183,10 @@ madcoders_rma:
         withdrawal_requested:
             subject: 'Withdrawal request received #%returnNumber%'
             greeting: 'Hello'
-            info: 'We have received your request to withdraw from order %orderNumber%. Our team will review it and confirm the cancellation shortly.'
+            info: 'We have received your request to withdraw from order %orderNumber%. Our team will review it and confirm the withdrawal shortly.'
 
         withdrawal_confirmed:
-            subject: 'Order cancellation confirmed #%returnNumber%'
+            subject: 'Order withdrawal confirmed #%returnNumber%'
             greeting: 'Hello'
             info: 'Your withdrawal from order %orderNumber% has been confirmed and the order has been cancelled.'
 
@@ -194,14 +196,14 @@ madcoders_rma:
             info: 'Your withdrawal request for order %orderNumber% will be handled through our standard return process. We will be in touch with the next steps.'
 
         withdrawal_cancelled:
-            subject: 'Order cancelled upon withdrawal #%returnNumber%'
+            subject: 'Order withdrawn #%returnNumber%'
             greeting: 'Hello'
-            info: 'Your order %orderNumber% has been cancelled following your withdrawal. As it was not paid, there is nothing further to do.'
+            info: 'Your order %orderNumber% has been withdrawn. As it was not paid, there is nothing further to do.'
 
     state:
         draft: 'Draft'
         new: 'New'
         completed: 'Completed'
         cancelled: "Cancelled"
-        cancellation_request: 'Cancellation request'
+        withdrawal_request: 'Withdrawal requested'
         withdrawn: 'Withdrawn'

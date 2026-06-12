@@ -21,6 +21,11 @@ Architects of this package:
         <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface"
                  alias="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
 
+        <service id="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityChecker" />
+        <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker" />
+
         <service id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor"
                  class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessor">
             <argument type="service" id="SM\Factory\FactoryInterface" />
