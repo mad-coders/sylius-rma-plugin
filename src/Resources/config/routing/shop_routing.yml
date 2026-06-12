@@ -18,6 +18,7 @@ madcoders_rma_start:
         _sylius:
             error_redirect: madcoders_rma_start
             redirect_to_order_return: madcoders_rma_return_form
+            redirect_to_withdrawal: madcoders_rma_withdrawal
             redirect: madcoders_rma_verification
 
 madcoders_rma_verification:
@@ -29,6 +30,7 @@ madcoders_rma_verification:
         _sylius:
             error_redirect: madcoders_rma_verification
             redirect: madcoders_rma_return_form
+            redirect_to_withdrawal: madcoders_rma_withdrawal
             repository:
                 method: findOneByCode
                 arguments:
