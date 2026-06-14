@@ -39,6 +39,7 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
         return [
             new TwigFunction('rma_order_has_items_to_returned_view', $this->verificationPossibilityOfReturn(...)),
             new TwigFunction('rma_order_withdrawable_view', $this->verificationWithdrawable(...)),
+            new TwigFunction('rma_order_can_start_rma', $this->canStartRma(...)),
         ];
     }
 
@@ -53,5 +54,18 @@ class RmaVerificationPossibilityOfReturnExtension extends AbstractExtension
     public function verificationWithdrawable(OrderInterface $order): bool
     {
         return $this->withdrawalEligibilityChecker->isWithdrawable($order);
+    }
+
+    /**
+     * Whether the customer can start any RMA process for this order - a pre-shipment withdrawal or a
+     * post-shipment return. The fulfilled-state requirement is already enforced inside
+     * verificationForButtonRender (it offers no return reasons unless the order is returnable).
+     *
+     * @throws \Exception
+     */
+    public function canStartRma(OrderInterface $order): bool
+    {
+        return $this->withdrawalEligibilityChecker->isWithdrawable($order) ||
+            $this->verificationPossibilityOfReturn->verificationForButtonRender($order);
     }
 }
