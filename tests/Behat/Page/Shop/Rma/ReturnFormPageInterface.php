@@ -32,5 +32,7 @@ interface ReturnFormPageInterface extends SymfonyPageInterface
 
     public function fillNoteField(string $noteText): void;
 
+    public function setItemReturnQty(int $index, int $qty): void;
+
     public function submitThisOrderReturnForm(): void;
 }

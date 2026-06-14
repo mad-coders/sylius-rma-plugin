@@ -23,6 +23,7 @@ Feature: Resolving a pre-shipment withdrawal request
         When I open order return "R000000010-1" page
         And I click confirm withdrawal button
         Then order return status is "Withdrawn"
+        And the order behind order return "R000000010-1" should not be cancelled
         And order return "R000000010-1" should have a "withdrawal_confirmed" change-log entry authored by an administrator
         And a withdrawal "confirmed" email should be sent to "john.doe@madcoders.pl" for order return "R000000010-1"
 

@@ -35,6 +35,11 @@ class WithdrawalPage extends SymfonyPage implements WithdrawalPageInterface
         $this->getElement('confirm_button')->press();
     }
 
+    public function hasReturnForm(): bool
+    {
+        return $this->hasElement('rma_submit_return_form');
+    }
+
     /**
      * @inheritdoc
      */
@@ -42,6 +47,7 @@ class WithdrawalPage extends SymfonyPage implements WithdrawalPageInterface
     {
         return array_merge(parent::getDefinedElements(), [
             'confirm_button' => '[data-test-withdraw-confirm-button]',
+            'rma_submit_return_form' => '[data-test-madcoders-rma-submit-return-form-button]',
         ]);
     }
 }

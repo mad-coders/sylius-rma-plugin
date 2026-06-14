@@ -56,6 +56,17 @@ madcoders_rma_withdrawal:
             error_redirect: madcoders_rma_start
             redirect: sylius_shop_homepage
 
+madcoders_rma_withdrawal_form_accept:
+    path: /rma-withdrawal-summary/{returnNumber}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::withdrawAcceptIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/summary.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
+
 madcoders_rma_withdrawal_success:
     path: /rma-withdrawal-success/{returnNumber}
     methods: [ GET ]

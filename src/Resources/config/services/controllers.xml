@@ -93,13 +93,14 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="translator" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.admin_withdrawal_confirm"
                  class="Madcoders\SyliusRmaPlugin\Controller\AdminWithdrawalConfirmController" public="true">
             <argument type="service" id="madcoders_rma.repository.order_return" />
-            <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
-            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
+            <argument type="service" id="SM\Factory\FactoryInterface" />
             <argument type="service" id="router" />
             <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="translator" />

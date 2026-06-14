@@ -23,4 +23,6 @@ interface WithdrawalPageInterface extends SymfonyPageInterface
     public function hasConfirmButton(): bool;
 
     public function confirm(): void;
+
+    public function hasReturnForm(): bool;
 }

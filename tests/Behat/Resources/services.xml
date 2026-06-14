@@ -25,6 +25,7 @@ Architects of this package:
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
             <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="sylius.factory.shipment" />
+            <argument type="service" id="sylius.order_item_quantity_modifier" />
         </service>
 
         <service id="madcoders.rma.context.setup.auth"
@@ -142,6 +143,8 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
             <argument type="service" id="sylius.behat.email_checker" />
             <argument type="service" id="translator" />
+            <argument type="service" id="sylius.repository.order" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
 
         <service id="madcoders.rma.context.ui.admin.rma.managing_return_notes"
