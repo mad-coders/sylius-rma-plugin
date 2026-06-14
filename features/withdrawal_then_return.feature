@@ -60,3 +60,20 @@ Feature: Withdrawing part of an order then returning the rest after it ships
         And I fill in my bank account in IBAN format
         And I click submit button for return form
         Then I should still be on the order return form for latest order
+
+    @ui
+    Scenario: After withdrawing the whole order pre-shipment it can no longer be returned once shipped
+        Given I am on dashboard in customer area
+        When I browse my orders
+        And I click return button at latest order
+        Then I should be on the order withdrawal item-selection page for latest order
+        When I choose reason with code "reason_360"
+        And I fill in my bank account in IBAN format
+        And I click submit button for return form
+        And I approve return form
+        Then order return for latest order should have status "withdrawal_request"
+        And order return for latest order should record quantity 3 for "Product A"
+        When this order has already been shipped
+        And the order's state is "fulfilled"
+        And I try to return latest order
+        Then I should see an error message containing "has already been returned or cannot be returned"
