@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPageInterface;
+use Webmozart\Assert\Assert;
 
 class ReturnFormContext implements Context
 {
@@ -147,6 +148,14 @@ class ReturnFormContext implements Context
         } catch (UnexpectedPageException $e) {
             // the order is not returnable: the controller redirects away from the form
         }
+    }
+
+    /**
+     * @Then /^the first item should show (\d+) returnable$/
+     */
+    public function theFirstItemShouldShowReturnable(int $qty): void
+    {
+        Assert::same($this->returnFormPage->getItemReturnQty(0), (string) $qty);
     }
 
     /**
