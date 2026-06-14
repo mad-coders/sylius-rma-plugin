@@ -56,6 +56,20 @@ madcoders_sylius_rma_plugin:
 php bin/console doctrine:migrations:migrate
 ```
 
+## Configuration
+
+All settings live under the `madcoders_rma` key (`config/packages/madcoders_rma.yaml`) and are
+optional; the defaults below match the plugin's out-of-the-box behaviour.
+
+| Setting | Env var | Type | Default | Effect |
+| :--- | :--- | :--- | :--- | :--- |
+| `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires wkhtmltopdf. See [below](#optional-enable-the-return-form-pdf). |
+| `allow_unpaid_withdrawal` | `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL` | bool | `true` | Offer instant withdrawal of unpaid, not-yet-shipped orders (cancels the Sylius order). When `false`, unpaid orders are not offered withdrawal. See [below](#optional-instant-withdrawal-of-unpaid-orders). |
+| `resources.*` | - | map | Sylius defaults | Standard Sylius ResourceBundle overrides (model / interface / controller / factory / repository / form) for the plugin's entities. |
+
+Store data managed in the **Sylius admin** rather than config files: the return address per channel,
+return reasons (with optional time-since-shipment deadlines), and the consents a customer must accept.
+
 ### Optional: enable the return-form PDF
 
 PDF generation (the confirmation-email attachment and the print/download links) is **off by
