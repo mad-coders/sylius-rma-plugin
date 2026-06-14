@@ -25,6 +25,7 @@ use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Webmozart\Assert\Assert;
 
 final class OrderReturnFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
@@ -53,6 +54,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
     public function create(array $options = []): OrderReturnInterface
     {
         $options = $this->optionsResolver->resolve($options);
+        Assert::scalar($options['customer_number']);
 
         /** @var ChannelInterface|null $channel */
         $channel = $this->channelRepository->findOneByCode($options['channel_code']);
@@ -71,7 +73,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         $orderReturn->setStreet($options['street']);
         $orderReturn->setPhoneNumber($options['phone_number']);
         $orderReturn->setCustomerIp($options['customer_ip']);
-        $orderReturn->setCustomerNumber($options['customer_number']);
+        $orderReturn->setCustomerNumber((string) $options['customer_number']);
 
         return $orderReturn;
     }
@@ -123,7 +125,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
             ->setAllowedTypes('phone_number', 'string')
 
             ->setRequired('customer_number')
-            ->setAllowedTypes('customer_number', 'integer')
+            ->setAllowedTypes('customer_number', ['integer', 'string'])
         ;
     }
 }
