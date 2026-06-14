@@ -17,9 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
-use Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface;
-use Sylius\Component\Core\Model\OrderInterface;
+use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,10 +29,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Admin action that approves a paid withdrawal request: cancels the underlying Sylius order and
- * resolves the return to "withdrawn" via the shared {@see OrderWithdrawalProcessor}. This is the
- * admin-approved counterpart of the customer's instant withdrawal - both go through the same
- * processor, so both always cancel the order.
+ * Admin action that approves a paid withdrawal request: resolves the return to "withdrawn" by
+ * applying the `withdraw` transition (which fires the resolution notifier - changelog + e-mail).
+ * Because a paid withdrawal may be partial, the underlying Sylius order is intentionally left
+ * untouched here; the refund and any order cancellation remain manual admin actions. Only the
+ * unpaid, instant customer path cancels the whole order (via {@see OrderWithdrawalProcessor}).
  */
 final readonly class AdminWithdrawalConfirmController
 {
@@ -43,8 +42,7 @@ final readonly class AdminWithdrawalConfirmController
      */
     public function __construct(
         private RepositoryInterface $orderReturnRepository,
-        private OrderByNumberProviderInterface $orderByNumberProvider,
-        private OrderWithdrawalProcessorInterface $orderWithdrawalProcessor,
+        private StateMachineFactoryInterface $stateMachineFactory,
         private RouterInterface $router,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
@@ -63,17 +61,12 @@ final readonly class AdminWithdrawalConfirmController
             return $this->flashRedirect($request, 'error', 'sylius.ui.invalid_csrf_token', $id);
         }
 
-        $order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber());
-        if (!$order instanceof OrderInterface) {
-            return $this->flashRedirect($request, 'error', 'madcoders_rma.ui.first_step.error.order_number_not_valid', $id);
-        }
-
-        try {
-            $this->orderWithdrawalProcessor->process($order, $orderReturn);
-        } catch (\RuntimeException) {
+        $stateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
+        if (!$stateMachine->can(OrderReturnInterface::TRANSITION_WITHDRAW)) {
             return $this->flashRedirect($request, 'error', 'madcoders_rma.ui.withdrawal.error.not_cancellable', $id);
         }
 
+        $stateMachine->apply(OrderReturnInterface::TRANSITION_WITHDRAW);
         $this->orderReturnRepository->add($orderReturn);
 
         return $this->flashRedirect($request, 'success', 'madcoders.admin.history.withdrawal_confirmed', $id);

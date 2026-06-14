@@ -117,9 +117,8 @@ stateDiagram-v2
 
 ### Withdrawal (pre-shipment) flow
 
-A withdrawal is a single process that always ends in the terminal `withdrawn` state with the
-underlying Sylius order cancelled. Whether it gets there instantly or via admin approval is the
-only difference, decided by two checkers:
+A withdrawal always ends in the terminal `withdrawn` state. Whether it gets there instantly (with
+the whole Sylius order cancelled) or via admin approval is decided by two checkers:
 
 - [`WithdrawalEligibilityChecker::isWithdrawable()`](src/Services/Withdrawal/WithdrawalEligibilityChecker.php)
   - is the withdrawal flow offered at all? (placed, not shipped, not a cart; unpaid only when the
@@ -127,20 +126,26 @@ only difference, decided by two checkers:
 - [`InstantCancellationEligibilityChecker::isEligible()`](src/Services/Withdrawal/InstantCancellationEligibilityChecker.php)
   - true when the order is **not paid**, so it can be withdrawn instantly with nothing to refund.
 
-When instant-eligible (unpaid), the form fast-forwards straight to `withdrawn` via the `withdraw`
-transition and the Sylius order is cancelled. Otherwise (paid/authorized) the `request_withdrawal`
-transition raises a `withdrawal_request` that an admin resolves, either confirming the withdrawal
-(`withdraw` -> `withdrawn`, cancelling the Sylius order) or handling it as a normal return
-(`fallback_to_return` -> `new`).
+When instant-eligible (unpaid), the customer confirms in one click and the form fast-forwards
+straight to `withdrawn` via the `withdraw` transition, cancelling the whole Sylius order.
+
+When paid/authorized, the customer instead sees the **same item-selection screen as a standard
+return** ([`WithdrawalReturnFormType`](src/Form/Type/WithdrawalReturnFormType.php) over
+`Return/view.html.twig`) and can choose which items/quantities to withdraw - a **partial withdrawal**
+is allowed. Submitting raises a `withdrawal_request` that an admin resolves: confirming it
+(`withdraw` -> `withdrawn`) records the withdrawal but **does not** cancel the Sylius order, because
+the request may be partial - the refund and any order cancellation stay manual admin actions; or
+handling it as a normal return (`fallback_to_return` -> `new`). Either way the withdrawn quantities
+are claimed and cannot be returned again (`MaxQtyCalculator` counts every non-`draft` return).
 
 ```mermaid
 stateDiagram-v2
     [*] --> draft: customer requests withdrawal
     state instant_eligible <<choice>>
     draft --> instant_eligible
-    instant_eligible --> withdrawn: withdraw\n(unpaid, order cancelled)
-    instant_eligible --> withdrawal_request: request_withdrawal\n(paid, needs approval)
-    withdrawal_request --> withdrawn: withdraw (admin confirm, order cancelled)
+    instant_eligible --> withdrawn: withdraw\n(unpaid, whole order cancelled)
+    instant_eligible --> withdrawal_request: request_withdrawal\n(paid, item selection, needs approval)
+    withdrawal_request --> withdrawn: withdraw (admin confirm, order NOT cancelled - manual refund)
     withdrawal_request --> new: fallback_to_return (admin, handle as return)
     withdrawn --> [*]
 ```

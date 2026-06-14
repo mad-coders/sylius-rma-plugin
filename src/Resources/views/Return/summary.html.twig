@@ -64,11 +64,11 @@
                 </div>
                 <div class="ui one column centered stackable grid">
                     <div class="column">
-                        {{ form_start(form, {'action': path('madcoders_rma_return_form_accept', { 'returnNumber': returnOrder.returnNumber }), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
+                        {{ form_start(form, {'action': formAction|default(path('madcoders_rma_return_form_accept', { 'returnNumber': returnOrder.returnNumber })), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
                         {{ form_row(form.consents, sylius_test_form_attribute('return-order_consents')) }}
                         {{ form_row(form._token) }}
                         <br/>
-                        <a href="{{ path('madcoders_rma_return_form', { 'orderNumber': returnOrder.orderNumber }) }}"
+                        <a href="{{ editAction|default(path('madcoders_rma_return_form', { 'orderNumber': returnOrder.orderNumber })) }}"
                            class="ui large floated button">{{ 'sylius.ui.edit'|trans }}
                         </a>
                         <button type="submit" class="ui large right primary submit button"

@@ -48,6 +48,8 @@ default:
                 - madcoders.rma.context.ui.shop.rma.customer_area
                 - madcoders.rma.context.ui.shop.rma.withdrawal
                 - madcoders.rma.context.ui.shop.rma.return_form
+                - madcoders.rma.context.ui.shop.rma.return_review
+                - madcoders.rma.context.ui.shop.rma.return_success
 
             filters:
                 tags: "@madcoders_rma_withdrawal && @ui"

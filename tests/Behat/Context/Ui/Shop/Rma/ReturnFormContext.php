@@ -115,6 +115,17 @@ class ReturnFormContext implements Context
     }
 
     /**
+     * @When /^I choose to return (\d+) units? of the first item$/
+     */
+    public function iChooseToReturnUnitsOfTheFirstItem(int $qty): void
+    {
+        try {
+            $this->returnFormPage->setItemReturnQty(0, $qty);
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
      * @When I click submit button for return form
      */
     public function iSubmitReturnForm(): void
@@ -123,6 +134,14 @@ class ReturnFormContext implements Context
             $this->returnFormPage->submitThisOrderReturnForm();
         } catch (ElementNotFoundException $e) {
         }
+    }
+
+    /**
+     * @Then /^I should still be on the order return form for (latest order)$/
+     */
+    public function iShouldStillBeOnTheOrderReturnForm(OrderInterface $order): void
+    {
+        $this->returnFormPage->verify(['orderNumber' => str_replace('#', '', $order->getNumber())]);
     }
 
     /**

@@ -15,15 +15,41 @@ Feature: Withdraw from an order before it ships
         And there is a customer "john.doe@madcoders.pl" that placed order with "Product A" product to "United States" based billing address with "Standard shipping" shipping method and "Offline" payment method
 
     @ui
-    Scenario: A paid not-yet-shipped order becomes a withdrawal request
-        Given I am on dashboard in customer area
+    Scenario: A paid not-yet-shipped order lets the customer choose items and becomes a withdrawal request
+        Given there are return reasons:
+            | code       | name       | deadline_to_return |
+            | reason_360 | Reason 360 | 360                |
+        And I am on dashboard in customer area
         When I browse my orders
         And I click return button at latest order
-        Then I should be on the order withdrawal page for latest order
-        When I confirm the withdrawal
+        Then I should be on the order withdrawal item-selection page for latest order
+        When I choose reason with code "reason_360"
+        And I fill in my bank account in IBAN format
+        And I click submit button for return form
+        And I approve return form
         Then order return for latest order should have status "withdrawal_request"
+        And latest order should not be cancelled
         And order return for latest order should have a "withdrawal_requested" change-log entry authored by a customer
         And a withdrawal "requested" email should be sent to "john.doe@madcoders.pl" for latest order
+
+    @ui
+    Scenario: A partial withdrawal records only the chosen quantity
+        Given there are return reasons:
+            | code       | name       | deadline_to_return |
+            | reason_360 | Reason 360 | 360                |
+        And the order contains 3 units of "Product A"
+        And I am on dashboard in customer area
+        When I browse my orders
+        And I click return button at latest order
+        Then I should be on the order withdrawal item-selection page for latest order
+        When I choose to return 1 unit of the first item
+        And I choose reason with code "reason_360"
+        And I fill in my bank account in IBAN format
+        And I click submit button for return form
+        And I approve return form
+        Then order return for latest order should have status "withdrawal_request"
+        And order return for latest order should record quantity 1 for "Product A"
+        And latest order should not be cancelled
 
     @ui
     Scenario: An unpaid not-yet-shipped order is cancelled upon withdrawal

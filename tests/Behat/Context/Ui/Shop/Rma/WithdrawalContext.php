@@ -53,11 +53,54 @@ final class WithdrawalContext implements Context
     }
 
     /**
+     * @Given /^I am on the order withdrawal page for (latest order)$/
+     */
+    public function iAmOnTheOrderWithdrawalPage(OrderInterface $order): void
+    {
+        $this->withdrawalPage->open(['orderNumber' => $this->plainNumber($order)]);
+    }
+
+    /**
+     * @Then /^I should be on the order withdrawal item-selection page for (latest order)$/
+     */
+    public function iShouldBeOnTheWithdrawalItemSelectionPage(OrderInterface $order): void
+    {
+        $this->withdrawalPage->verify(['orderNumber' => $this->plainNumber($order)]);
+        Assert::true($this->withdrawalPage->hasReturnForm());
+    }
+
+    /**
+     * @Then /^order return for (latest order) should record quantity (\d+) for "([^"]+)"$/
+     */
+    public function orderReturnForOrderShouldRecordQuantityForProduct(OrderInterface $order, int $qty, string $productName): void
+    {
+        foreach ($this->findReturnForOrder($order)->getItems() as $item) {
+            if ($item->getProductName() === $productName) {
+                Assert::same($item->getReturnQty(), $qty);
+
+                return;
+            }
+        }
+
+        throw new \RuntimeException(sprintf('No withdrawal item recorded for product "%s".', $productName));
+    }
+
+    /**
      * @When I confirm the withdrawal
      */
     public function iConfirmTheWithdrawal(): void
     {
         $this->withdrawalPage->confirm();
+    }
+
+    /**
+     * @Then /^(latest order) should not be cancelled$/
+     */
+    public function orderShouldNotBeCancelled(OrderInterface $order): void
+    {
+        // the request that handled the withdrawal may have left a stale managed entity
+        $this->orderManager->refresh($order);
+        Assert::notSame($order->getState(), OrderInterface::STATE_CANCELLED);
     }
 
     /**

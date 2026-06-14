@@ -32,7 +32,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-final class ReturnFormType extends AbstractType
+class ReturnFormType extends AbstractType
 {
     public function __construct(private readonly ChoiceProviderInterface $reasonChoiceProvider)
     {
