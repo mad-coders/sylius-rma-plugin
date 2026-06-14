@@ -64,7 +64,7 @@
         "sort-packages": true,
         "policy": {
             "advisories": {
-                "ignore": ["api-platform/core", "enshrined/svg-sanitize"]
+                "ignore": ["api-platform/core", "enshrined/svg-sanitize", "guzzlehttp/psr7"]
             }
         }
     },
