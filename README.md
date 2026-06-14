@@ -11,6 +11,9 @@ form and submit a return request from a delivered order.
 ## Features
 - return form for both guest and signed-in customers
 - customers select the items and quantities to return from a delivered order
+- pre-shipment withdrawal: a not-yet-shipped order can be withdrawn (cancelled) instead of returned -
+  instantly when unpaid, or via admin approval with item selection (partial withdrawals) when paid -
+  see [Returns state machine](#returns-state-machine)
 - customers choose a return reason for the request
 - customers are notified by e-mail at each step of the process
 - optional PDF return form (opt-in, off by default - see [below](#optional-enable-the-return-form-pdf))
@@ -65,6 +68,29 @@ madcoders_rma:
 ```
 
 See [ADR 0011](docs/adr-log/0011-return-form-pdf-feature-flag.md).
+
+### Optional: instant withdrawal of unpaid orders
+
+When a not-yet-shipped order is **unpaid**, it is withdrawn instantly (the Sylius order is cancelled
+and the return resolves straight to `withdrawn`, with no admin step). This is **on by default**.
+Paid orders are always withdrawable via admin approval regardless of this flag.
+
+Toggle it with the `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL` environment variable:
+
+```dotenv
+# .env
+MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL=false
+```
+
+or override the parameter directly:
+
+```yaml
+# config/packages/madcoders_rma.yaml
+madcoders_rma:
+    allow_unpaid_withdrawal: false
+```
+
+When disabled, an unpaid order is not offered the withdrawal flow at all.
 
 ## Returns state machine
 
