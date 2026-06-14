@@ -9,6 +9,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-06-14
+
+### Fixed
+
+- Make the bundled default fixtures suite loadable via `sylius:fixtures:load`. The
+  `madcoders_rma_order_return` fixture passed an integer `customer_number` to the string
+  `OrderReturn::setCustomerNumber()` setter, so the shipped fixture failed to load; it now accepts
+  an integer or string and casts to string before the setter
+  ([#9](https://github.com/mad-coders/sylius-rma-plugin/issues/9)).
+
+### Added
+
+- CI "fixtures runnable" gate that loads the default Sylius + RMA fixtures suite end-to-end, plus a
+  `make fixtures-test` target.
+
 ## [1.1.0] - 2026-06-07
 
 ### Changed
