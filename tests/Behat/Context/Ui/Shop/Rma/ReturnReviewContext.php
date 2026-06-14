@@ -23,6 +23,7 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\FlashNotificationContextTrait;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnReviewPageInterface;
+use Webmozart\Assert\Assert;
 
 class ReturnReviewContext implements Context
 {
@@ -60,6 +61,23 @@ class ReturnReviewContext implements Context
     public function iApproveReturnForm(): void
     {
         $this->returnReviewPage->approveThisOrderReturnForm();
+    }
+
+    /**
+     * @Then /^I should see an error message containing "([^"]+)"$/
+     */
+    public function iShouldSeeAnErrorMessageContaining(string $message): void
+    {
+        $found = false;
+        foreach ($this->getNotifications() as $notification) {
+            if (str_contains($notification, $message)) {
+                $found = true;
+
+                break;
+            }
+        }
+
+        Assert::true($found, sprintf('No flash message containing "%s" was found.', $message));
     }
 
     /**

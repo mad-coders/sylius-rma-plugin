@@ -18,6 +18,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
 use Doctrine\Persistence\ObjectManager;
+use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -58,6 +59,18 @@ final class WithdrawalContext implements Context
     public function iAmOnTheOrderWithdrawalPage(OrderInterface $order): void
     {
         $this->withdrawalPage->open(['orderNumber' => $this->plainNumber($order)]);
+    }
+
+    /**
+     * @When /^I try to withdraw (latest order)$/
+     */
+    public function iTryToWithdrawOrder(OrderInterface $order): void
+    {
+        try {
+            $this->withdrawalPage->open(['orderNumber' => $this->plainNumber($order)]);
+        } catch (UnexpectedPageException $e) {
+            // the order is not withdrawable: the controller redirects away from the withdrawal page
+        }
     }
 
     /**

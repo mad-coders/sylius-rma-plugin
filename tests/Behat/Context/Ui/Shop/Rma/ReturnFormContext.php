@@ -18,6 +18,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Exception\ElementNotFoundException;
+use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Sylius\Behat\Service\Setter\CookieSetterInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -122,6 +123,29 @@ class ReturnFormContext implements Context
         try {
             $this->returnFormPage->setItemReturnQty(0, $qty);
         } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
+     * @When /^I choose to return (\d+) units? of the second item$/
+     */
+    public function iChooseToReturnUnitsOfTheSecondItem(int $qty): void
+    {
+        try {
+            $this->returnFormPage->setItemReturnQty(1, $qty);
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
+     * @When /^I try to return (latest order)$/
+     */
+    public function iTryToReturnOrder(OrderInterface $order): void
+    {
+        try {
+            $this->returnFormPage->open(['orderNumber' => str_replace('#', '', $order->getNumber())]);
+        } catch (UnexpectedPageException $e) {
+            // the order is not returnable: the controller redirects away from the form
         }
     }
 
