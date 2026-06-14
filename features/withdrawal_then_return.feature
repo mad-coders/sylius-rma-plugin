@@ -5,7 +5,14 @@ Feature: Withdrawing part of an order then returning the rest after it ships
     I want quantities I already withdrew to count against what I can later return
 
     Background:
-        Given the store operates on a single channel in "United States"
+        Given the store operates on a single channel in the "United States" named "Channel 1"
+        And Store return address with data for channel "Channel 1":
+            | field    | type  | value         |
+            | company  | field | Company 1     |
+            | street   | field | 326 Avenue    |
+            | city     | field | New York      |
+            | postcode | field | 73110         |
+            | country  | field | United States |
         And the store ships everywhere for "Standard shipping"
         And the store allows paying Offline for all channels
         And the store has a product "Product A"
@@ -62,7 +69,7 @@ Feature: Withdrawing part of an order then returning the rest after it ships
         Then I should still be on the order return form for latest order
 
     @ui
-    Scenario: After withdrawing the whole order pre-shipment it can no longer be returned once shipped
+    Scenario: After withdrawing the whole order pre-shipment nothing is left to return once shipped
         Given I am on dashboard in customer area
         When I browse my orders
         And I click return button at latest order
@@ -75,5 +82,5 @@ Feature: Withdrawing part of an order then returning the rest after it ships
         And order return for latest order should record quantity 3 for "Product A"
         When this order has already been shipped
         And the order's state is "fulfilled"
-        And I try to return latest order
-        Then I should see an error message containing "has already been returned or cannot be returned"
+        And I am on order return page for latest order
+        Then the first item should show 0 returnable

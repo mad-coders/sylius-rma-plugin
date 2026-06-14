@@ -74,6 +74,13 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
         );
     }
 
+    public function getItemReturnQty(int $index): string
+    {
+        return (string) $this->getDocument()->findField(
+            sprintf('madcoders_rma_return_item_items_%d_returnQty', $index),
+        )?->getValue();
+    }
+
     /**
      * @throws ElementNotFoundException
      */
