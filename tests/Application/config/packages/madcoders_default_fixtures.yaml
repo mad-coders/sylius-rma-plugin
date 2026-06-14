@@ -2,15 +2,16 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
-#                madcoders_rma_order_return:
-#                    options:
-#                        custom:
-#                            draft_order_return:
-#                                order_number: "000000011"
-#                                return_number: "R00000011-1"
-#                                channel_code: "FASHION_WEB"
-#                                return_reason: "damaged"
-#
+                madcoders_rma_order_return:
+                    options:
+                        custom:
+                            draft_order_return:
+                                order_number: "000000011"
+                                return_number: "R00000011-1"
+                                channel_code: "FASHION_WEB"
+                                return_reason: "damaged"
+                                customer_number: 1
+
 #                madcoders_rma_order_return_item:
 #                    options:
 #                        custom:

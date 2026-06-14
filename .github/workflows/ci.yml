@@ -88,6 +88,54 @@ jobs:
             - name: PHPUnit
               run: make phpunit
 
+    fixtures:
+        name: Fixtures runnable (sylius:fixtures:load)
+        runs-on: ubuntu-latest
+        services:
+            # Same MySQL service as the Behat job (see docker-compose.yml): the test app's
+            # DATABASE_URL and the make targets work unchanged.
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: rma
+                ports:
+                    - "3307:3306"
+                options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -prma"
+                    --health-interval=5s
+                    --health-timeout=5s
+                    --health-retries=20
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "${{ env.PHP_VERSION }}"
+                  extensions: intl, pdo_mysql, zip, gd
+                  tools: composer:v2
+                  coverage: none
+
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
+                  restore-keys: composer-${{ env.PHP_VERSION }}-
+
+            - name: Install dependencies
+              run: composer update --no-interaction --no-progress --prefer-dist
+
+            - name: Create the test database
+              run: make backend-test
+
+            - name: Load the default fixtures suite
+              run: make fixtures-test
+
     behat:
         name: Behat (non-JavaScript)
         runs-on: ubuntu-latest

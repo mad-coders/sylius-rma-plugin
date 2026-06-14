@@ -45,7 +45,7 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
         Assert::string($options['code']);
         Assert::string($options['name']);
         Assert::string($options['slug']);
-        Assert::string($options['description']);
+        Assert::nullOrString($options['description']);
 
         $orderReturnConsent = new OrderReturnConsent();
         $orderReturnConsent->setCurrentLocale($options['current_locale']);
