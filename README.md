@@ -207,6 +207,46 @@ notifications:
 | `withdraw` | `withdrawal_request` | `withdrawn` | resolution (confirmed) e-mail (admin) |
 | `fallback_to_return` | `withdrawal_request` | `new` | resolution (fallback) e-mail |
 
+## Customizations
+
+Which RMA path an order is offered - return, withdrawal, or instant withdrawal - is decided by small
+single-method **eligibility checkers**. Each one is bound to an interface (with a default service
+alias) and is consumed everywhere through that interface (controllers, the
+[`rma_order_can_start_rma()`](#returns-state-machine) Twig function, the reason provider), so you can
+change a rule for the whole plugin by pointing the alias at your own implementation.
+
+| Interface (`Madcoders\SyliusRmaPlugin\Services\...`) | Method | Decides | Default service id (`madcoders.sylius_rma_plugin.services...`) |
+| :--- | :--- | :--- | :--- |
+| `ReturnEligibilityCheckerInterface` | `isReturnable(OrderInterface)` | whether a (post-shipment) order can be returned | `.return_eligibility_checker` |
+| `Withdrawal\WithdrawalEligibilityCheckerInterface` | `isWithdrawable(OrderInterface)` | whether a (pre-shipment) order is offered withdrawal at all | `.withdrawal.eligibility_checker` |
+| `Withdrawal\InstantCancellationEligibilityCheckerInterface` | `isEligible(OrderInterface)` | within withdrawal, instant (unpaid) vs admin approval (paid) | `.withdrawal.instant_cancellation_eligibility_checker` |
+| `Reason\ReturnReasonEligibilityCheckerInterface` | `isEligible(OrderInterface, OrderReturnReasonInterface)` | whether a given return reason is offered (deadline since shipment) | `.reason.return_reason_eligibility_checker` |
+
+To replace one, implement its interface and alias it in your application:
+
+```yaml
+# config/services.yaml
+services:
+    App\Rma\MyWithdrawalEligibilityChecker: ~
+
+    # take over the rule everywhere it is used
+    Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface:
+        alias: App\Rma\MyWithdrawalEligibilityChecker
+```
+
+Prefer to keep the default behaviour and only add to it? Decorate the default service instead:
+
+```yaml
+services:
+    App\Rma\MyWithdrawalEligibilityChecker:
+        decorates: madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker
+        arguments: ['@.inner']
+```
+
+Note that the default `WithdrawalEligibilityChecker` receives the
+[`allow_unpaid_withdrawal`](#configuration) flag as a constructor argument; a full replacement is
+responsible for honouring that flag itself if it still applies.
+
 ## Development
 
 Requires PHP 8.2, Composer, Docker (for the database) and Node/Yarn (for the test
