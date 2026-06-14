@@ -793,12 +793,6 @@ parameters:
 			path: src/Fixture/Factory/OrderReturnFixtureFactory.php
 
 		-
-			message: '#^Parameter \#1 \$customerNumber of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:setCustomerNumber\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Fixture/Factory/OrderReturnFixtureFactory.php
-
-		-
 			message: '#^Parameter \#1 \$orderNumber of method Madcoders\\SyliusRmaPlugin\\Entity\\OrderReturn\:\:setOrderNumber\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
