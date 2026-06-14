@@ -9,6 +9,24 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-06-14
+
+### Fixed
+
+- Make the bundled default fixtures suite loadable via `sylius:fixtures:load`. The
+  `madcoders_rma_order_return` fixture required an integer `customer_number` but asserted and stored
+  it as a string, so no value satisfied both gates and the shipped fixture could never load; it now
+  accepts an integer or string and casts to string before the setter
+  ([#9](https://github.com/mad-coders/sylius-rma-plugin/issues/9)).
+- Allow a null `description` in the return-reason and return-consent fixtures
+  (`Assert::nullOrString`), matching their option definitions (default null, `string|null`). Loading
+  either fixture without a description previously threw "Expected a string. Got: NULL".
+
+### Added
+
+- CI "fixtures runnable" gate that loads the default Sylius + RMA fixtures suite end-to-end, plus a
+  `make fixtures-test` target.
+
 ## [1.2.0] - 2026-06-09
 
 ### Changed
