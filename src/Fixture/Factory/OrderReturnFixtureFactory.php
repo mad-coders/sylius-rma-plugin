@@ -60,7 +60,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         Assert::string($options['street']);
         Assert::string($options['phone_number']);
         Assert::string($options['customer_ip']);
-        Assert::string($options['customer_number']);
+        Assert::scalar($options['customer_number']);
 
         $channelCode = $options['channel_code'];
 
@@ -81,7 +81,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
         $orderReturn->setStreet($options['street']);
         $orderReturn->setPhoneNumber($options['phone_number']);
         $orderReturn->setCustomerIp($options['customer_ip']);
-        $orderReturn->setCustomerNumber($options['customer_number']);
+        $orderReturn->setCustomerNumber((string) $options['customer_number']);
 
         return $orderReturn;
     }
@@ -123,7 +123,7 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
             ->setAllowedTypes('phone_number', 'string')
 
             ->setRequired('customer_number')
-            ->setAllowedTypes('customer_number', 'integer')
+            ->setAllowedTypes('customer_number', ['integer', 'string'])
         ;
     }
 }
