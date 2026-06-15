@@ -9,6 +9,52 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.1] - 2026-06-15
+
+First release candidate for the 1.3 line, headlined by EU "right of withdrawal" support for
+pre-shipment orders.
+
+### Added
+
+- **Pre-shipment withdrawal** (EU right of withdrawal): a not-yet-shipped order can be withdrawn
+  (cancelled) instead of returned. Unpaid orders are withdrawn **instantly** (cancelling the Sylius
+  order); paid orders raise a `withdrawal_request` that an admin resolves, with customer-side
+  **item selection for partial withdrawals** ([#7](https://github.com/mad-coders/sylius-rma-plugin/issues/7)).
+  The `return_status` state machine gains `withdrawal_request` and `withdrawn` states and the
+  `request_withdrawal`, `withdraw`, and `fallback_to_return` transitions, each wired to its own
+  customer/admin e-mail (requested, confirmed, fallback, cancelled). Ships the
+  `WithdrawalController`/`AdminWithdrawalConfirmController`, state-machine notifiers, and a Doctrine
+  migration (`Version20260612000000`).
+- `allow_unpaid_withdrawal` configuration, backed by the `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL`
+  environment variable (default `true`): when `false`, unpaid not-yet-shipped orders are not offered
+  the withdrawal flow.
+- Injectable RMA-path eligibility checkers that decide whether an order is offered a return,
+  withdrawal, or instant withdrawal, each behind an interface for overriding:
+  `ReturnEligibilityCheckerInterface`, `Withdrawal\WithdrawalEligibilityCheckerInterface`, and
+  `Withdrawal\InstantCancellationEligibilityCheckerInterface`. Orders still in checkout (cart) are
+  rejected by the eligibility checkers.
+- README documentation for the withdrawal flow, the returns state machine (with Mermaid diagrams),
+  a configuration reference table, and a Customizations chapter on overriding the eligibility
+  checkers.
+- CI "fixtures runnable" gate that loads the default Sylius + RMA fixtures suite end-to-end, plus a
+  `make fixtures-test` target.
+
+### Fixed
+
+- Make the bundled default fixtures suite loadable via `sylius:fixtures:load`. The
+  `madcoders_rma_order_return` fixture required an integer `customer_number` but asserted and stored
+  it as a string, so no value satisfied both gates and the shipped fixture could never load; it now
+  accepts an integer or string and casts to string before the setter
+  ([#9](https://github.com/mad-coders/sylius-rma-plugin/issues/9)).
+- Allow a null `description` in the return-reason and return-consent fixtures
+  (`Assert::nullOrString`), matching their option definitions (default null, `string|null`). Loading
+  either fixture without a description previously threw "Expected a string. Got: NULL".
+
+### Changed
+
+- Ignore the `guzzlehttp/psr7` security advisory in the Composer audit policy to unblock
+  `composer update` in CI.
+
 ## [1.2.0] - 2026-06-09
 
 ### Changed
@@ -74,7 +120,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...HEAD
+[1.3.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0-rc.1
 [1.2.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/mad-coders/sylius-rma-plugin/releases/tag/1.0.0
