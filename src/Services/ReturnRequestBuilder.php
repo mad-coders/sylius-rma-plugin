@@ -21,7 +21,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLogAuthor;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
-use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGenerator;
+use Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
@@ -34,7 +34,7 @@ class ReturnRequestBuilder
      */
     public function __construct(
         private readonly RepositoryInterface $orderReturnRepository,
-        private readonly ReturnNumberGenerator $orderReturnGenerator,
+        private readonly ReturnNumberGeneratorInterface $orderReturnGenerator,
         private readonly MaxQtyCalculator $maxQtyCalculator,
         private readonly OrderByNumberProviderInterface $orderByNumberProvider,
         private readonly RmaChangesLogger $changesLogger,
@@ -64,7 +64,7 @@ class ReturnRequestBuilder
         $orderReturn = new OrderReturn();
 
         // populate order data
-        $orderReturnNumber = $this->orderReturnGenerator->returnNumberGenerate($orderNumber);
+        $orderReturnNumber = $this->orderReturnGenerator->generate($order);
         $orderReturn->setReturnNumber($orderReturnNumber);
 
         $channel = $order->getChannel();
