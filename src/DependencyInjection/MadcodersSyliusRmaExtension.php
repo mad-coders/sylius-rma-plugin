@@ -49,6 +49,15 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
         Assert::scalar($allowUnpaidWithdrawal);
         $container->setParameter('madcoders_rma.allow_unpaid_withdrawal', $allowUnpaidWithdrawal);
 
+        // Default for the env var backing require_additional_information, so the "Additional
+        // information" section stays hidden and optional unless a merchant explicitly opts in.
+        $container->setParameter('env(MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION)', 'false');
+        // No (bool) cast here for the same reason as allow_unpaid_withdrawal above: the value may
+        // be an env placeholder resolved only at runtime, so it stays a scalar at compile time.
+        $requireAdditionalInformation = $config['require_additional_information'];
+        Assert::scalar($requireAdditionalInformation);
+        $container->setParameter('madcoders_rma.require_additional_information', $requireAdditionalInformation);
+
         $loader->load('services.xml');
     }
 

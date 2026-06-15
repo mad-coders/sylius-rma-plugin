@@ -71,6 +71,10 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
 
     private ?string $bankAccountNumber = null;
 
+    private ?string $accountHolderName = null;
+
+    private ?string $bankName = null;
+
     /** @var Collection<int, OrderReturnItem> */
     private Collection $items;
 
@@ -322,5 +326,25 @@ class OrderReturn implements OrderReturnInterface, TimestampableInterface
     public function setBankAccountNumber(?string $bankAccountNumber): void
     {
         $this->bankAccountNumber = $bankAccountNumber;
+    }
+
+    public function getAccountHolderName(): ?string
+    {
+        return $this->accountHolderName;
+    }
+
+    public function setAccountHolderName(?string $accountHolderName): void
+    {
+        $this->accountHolderName = $accountHolderName;
+    }
+
+    public function getBankName(): ?string
+    {
+        return $this->bankName;
+    }
+
+    public function setBankName(?string $bankName): void
+    {
+        $this->bankName = $bankName;
     }
 }

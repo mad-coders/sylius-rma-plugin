@@ -53,6 +53,42 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
     /**
      * @throws ElementNotFoundException
      */
+    public function fillBankAccountFieldWith(string $iban): void
+    {
+        $this->getDocument()->fillField('madcoders_rma_return_item_bankAccountNumber', $iban);
+    }
+
+    /**
+     * @throws ElementNotFoundException
+     */
+    public function fillAccountHolderName(string $name): void
+    {
+        $this->getDocument()->fillField('madcoders_rma_return_item_accountHolderName', $name);
+    }
+
+    /**
+     * @throws ElementNotFoundException
+     */
+    public function fillBankName(string $name): void
+    {
+        $this->getDocument()->fillField('madcoders_rma_return_item_bankName', $name);
+    }
+
+    public function hasAdditionalInformationSection(): bool
+    {
+        return $this->getDocument()->hasField('madcoders_rma_return_item_bankAccountNumber')
+            || $this->getDocument()->hasField('madcoders_rma_return_item_accountHolderName')
+            || $this->getDocument()->hasField('madcoders_rma_return_item_bankName');
+    }
+
+    public function hasValidationMessage(string $message): bool
+    {
+        return str_contains($this->getDocument()->getText(), $message);
+    }
+
+    /**
+     * @throws ElementNotFoundException
+     */
     public function fillNoteField(string $noteText): void
     {
         if ($this->returnFormHasNoteField()) {

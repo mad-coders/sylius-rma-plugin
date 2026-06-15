@@ -56,6 +56,7 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.form.type.return_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType">
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
             <tag name="form.type" />
         </service>
 

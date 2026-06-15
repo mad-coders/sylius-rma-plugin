@@ -90,6 +90,22 @@ Architects of this package:
             <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
         </service>
 
+        <!--
+            Overrides the production additional-information checker with a file-backed test double so
+            the flag can be flipped per scenario (the production checker is a compile-time parameter).
+            Both the return form type and the Twig visibility check resolve this same service id.
+        -->
+        <service id="madcoders.sylius_rma_plugin.services.additional_information_checker"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Service\TogglableAdditionalInformationChecker">
+            <argument>%kernel.cache_dir%/madcoders_rma_require_additional_information</argument>
+        </service>
+
+        <service id="madcoders.rma.context.ui.shop.rma.additional_information"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\AdditionalInformationContext">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
+            <argument type="service" id="madcoders.rma.page.shop.rma.return_form" />
+        </service>
+
         <service id="madcoders.rma.context.ui.shop.rma.return_success"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\ReturnSuccessContext">
             <argument type="service" id="madcoders.rma.page.shop.rma.return_success" />

@@ -57,6 +57,7 @@ Architects of this package:
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaConfigExtension">
             <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
             <argument>%madcoders_rma.allow_unpaid_withdrawal%</argument>
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
             <tag name="twig.extension"/>
         </service>
 

@@ -65,6 +65,7 @@ optional; the defaults below match the plugin's out-of-the-box behaviour.
 | :--- | :--- | :--- | :--- | :--- |
 | `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires wkhtmltopdf. See [below](#optional-enable-the-return-form-pdf). |
 | `allow_unpaid_withdrawal` | `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL` | bool | `true` | Offer instant withdrawal of unpaid, not-yet-shipped orders (cancels the Sylius order). When `false`, unpaid orders are not offered withdrawal. See [below](#optional-instant-withdrawal-of-unpaid-orders). |
+| `require_additional_information` | `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` | bool | `false` | Show and require the return form's "Additional information" section (bank account number, account holder name, bank name / BIC-SWIFT) for refund handling. When `false`, the section is hidden and not required. See [below](#optional-require-additional-information-on-the-return-form). |
 | `resources.*` | - | map | Sylius defaults | Standard Sylius ResourceBundle overrides (model / interface / controller / factory / repository / form) for the plugin's entities. |
 
 Store data managed in the **Sylius admin** rather than config files: the return address per channel,
@@ -105,6 +106,33 @@ madcoders_rma:
 ```
 
 When disabled, an unpaid order is not offered the withdrawal flow at all.
+
+### Optional: require additional information on the return form
+
+The return form can collect the bank details needed to handle a refund: **bank account number**
+(validated as an IBAN), **account holder name**, and **bank name / BIC-SWIFT**. This "Additional
+information" section is **off by default** - the section is hidden and none of its fields are
+required, so a customer can submit a return without bank details.
+
+Enable it with the `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` environment variable:
+
+```dotenv
+# .env
+MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true
+```
+
+or override the parameter directly:
+
+```yaml
+# config/packages/madcoders_rma.yaml
+madcoders_rma:
+    require_additional_information: true
+```
+
+When enabled, the section is rendered on the return form and all three fields are required. The
+values are persisted on the `OrderReturn` and shown (when present) in the admin and shop account
+return views. This flag does not affect the withdrawal flow, which always collects the bank account
+number regardless of the setting.
 
 ## Returns state machine
 

@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
+use Symfony\Component\Form\FormBuilderInterface;
+
 /**
  * The pre-shipment withdrawal reuses the standard return form (item selection, address, reason,
  * bank account, notes) so the customer sees the same screen. It is a distinct form type only so it
@@ -25,4 +27,13 @@ namespace Madcoders\SyliusRmaPlugin\Form\Type;
  */
 final class WithdrawalReturnFormType extends ReturnFormType
 {
+    /**
+     * The withdrawal flow always collects the refund bank account, independently of the return
+     * form's require_additional_information flag (changing the withdrawal flow is out of scope for
+     * that flag). It does not use the new account holder / bank name fields.
+     */
+    protected function addAdditionalInformationFields(FormBuilderInterface $builder): void
+    {
+        $this->addBankAccountField($builder);
+    }
 }

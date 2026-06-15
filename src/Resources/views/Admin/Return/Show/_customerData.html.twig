@@ -10,6 +10,14 @@
     {% if order_return.phoneNumber is defined  %}
         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ order_return.phoneNumber }}<br/>
     {% endif %}
-    <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ order_return.bankAccountNumber }}<br/>
+    {% if order_return.bankAccountNumber %}
+        <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ order_return.bankAccountNumber }}<br/>
+    {% endif %}
+    {% if order_return.accountHolderName %}
+        <strong>{{ 'madcoders_rma.ui.form.account_holder_name'|trans }}:</strong> {{ order_return.accountHolderName }}<br/>
+    {% endif %}
+    {% if order_return.bankName %}
+        <strong>{{ 'madcoders_rma.ui.form.bank_name'|trans }}:</strong> {{ order_return.bankName }}<br/>
+    {% endif %}
 
 </div>

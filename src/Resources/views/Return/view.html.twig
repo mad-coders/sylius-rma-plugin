@@ -53,16 +53,33 @@
                         {{ form_row(form.returnReason, sylius_test_form_attribute('rma-return-returnReason')) }}
                     </div>
                 </div>
+                {% if form.bankAccountNumber is defined %}
                 <br/>
                 <div>
                     <h3 class="ui dividing header">
-                        {{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_headline'|trans }}
-                        <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_subheader'|trans }}</div>
+                        {% if form.accountHolderName is defined %}
+                            {{ 'madcoders_rma.ui.fill_the_form_step.additional_information_headline'|trans }}
+                            <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.additional_information_subheader'|trans }}</div>
+                        {% else %}
+                            {{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_headline'|trans }}
+                            <div class="sub header">{{ 'madcoders_rma.ui.fill_the_form_step.bank_account_number_subheader'|trans }}</div>
+                        {% endif %}
                     </h3>
                     <div class="field">
-                        {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-returnReason')) }}
+                        {{ form_row(form.bankAccountNumber, sylius_test_form_attribute('return-bankAccountNumber')) }}
                     </div>
+                    {% if form.accountHolderName is defined %}
+                    <div class="field">
+                        {{ form_row(form.accountHolderName, sylius_test_form_attribute('return-accountHolderName')) }}
+                    </div>
+                    {% endif %}
+                    {% if form.bankName is defined %}
+                    <div class="field">
+                        {{ form_row(form.bankName, sylius_test_form_attribute('return-bankName')) }}
+                    </div>
+                    {% endif %}
                 </div>
+                {% endif %}
                 <br/>
                 <div class="ui">
                     <h3 class="ui dividing header">

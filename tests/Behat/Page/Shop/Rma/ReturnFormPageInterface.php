@@ -30,6 +30,16 @@ interface ReturnFormPageInterface extends SymfonyPageInterface
 
     public function fillBankAccountField(): void;
 
+    public function fillBankAccountFieldWith(string $iban): void;
+
+    public function fillAccountHolderName(string $name): void;
+
+    public function fillBankName(string $name): void;
+
+    public function hasAdditionalInformationSection(): bool;
+
+    public function hasValidationMessage(string $message): bool;
+
     public function fillNoteField(string $noteText): void;
 
     public function setItemReturnQty(int $index, int $qty): void;
