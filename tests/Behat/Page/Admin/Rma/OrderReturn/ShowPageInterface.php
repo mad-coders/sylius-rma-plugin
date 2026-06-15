@@ -27,6 +27,12 @@ interface ShowPageInterface extends SymfonyPageInterface
 
     public function cancelThisOrderReturn(): void;
 
+    public function isCancellationRequestPage(): bool;
+
+    public function confirmCancellation(): void;
+
+    public function fallbackToReturn(): void;
+
     public function getRouteName(): string;
 
     public function getStatus(): string;

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityChecker">
+            <argument>%madcoders_rma.allow_unpaid_withdrawal%</argument>
+        </service>
+        <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
+
+        <service id="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityChecker" />
+        <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker" />
+
+        <service id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor"
+                 class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessor">
+            <argument type="service" id="SM\Factory\FactoryInterface" />
+        </service>
+        <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface"
+                 alias="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
+
+        <service id="madcoders.sylius_rma_plugin.services.rma_customer_data"
+                 class="Madcoders\SyliusRmaPlugin\Services\RmaCustomerData" />
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalRequestNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_customer_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalCompletedNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_customer_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier"
+                 class="Madcoders\SyliusRmaPlugin\Services\Callbacks\WithdrawalResolutionNotifier" public="true">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_admin_user_data" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+        </service>
+    </services>
+</container>

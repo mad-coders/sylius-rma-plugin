@@ -18,6 +18,7 @@ madcoders_rma_start:
         _sylius:
             error_redirect: madcoders_rma_start
             redirect_to_order_return: madcoders_rma_return_form
+            redirect_to_withdrawal: madcoders_rma_withdrawal
             redirect: madcoders_rma_verification
 
 madcoders_rma_verification:
@@ -29,6 +30,7 @@ madcoders_rma_verification:
         _sylius:
             error_redirect: madcoders_rma_verification
             redirect: madcoders_rma_return_form
+            redirect_to_withdrawal: madcoders_rma_withdrawal
             repository:
                 method: findOneByCode
                 arguments:
@@ -43,6 +45,38 @@ madcoders_rma_return_form:
         _sylius:
             error_redirect: madcoders_rma_start
             redirect: sylius_shop_homepage
+
+madcoders_rma_withdrawal:
+    path: /rma-withdrawal/{orderNumber}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::withdrawIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Withdrawal/confirm.html.twig'
+        _sylius:
+            error_redirect: madcoders_rma_start
+            redirect: sylius_shop_homepage
+
+madcoders_rma_withdrawal_form_accept:
+    path: /rma-withdrawal-summary/{returnNumber}
+    methods: [ GET, POST ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::withdrawAcceptIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Return/summary.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
+
+madcoders_rma_withdrawal_success:
+    path: /rma-withdrawal-success/{returnNumber}
+    methods: [ GET ]
+    controller: madcoders.sylius_rma_plugin.controller.withdrawal_controller::successIndex
+    defaults:
+        template: '@MadcodersSyliusRmaPlugin/Withdrawal/success.html.twig'
+        _sylius:
+            repository:
+                arguments:
+                    - $returnNumber
 
 madcoders_rma_return_form_accept:
     path: /rma-summary/{returnNumber}

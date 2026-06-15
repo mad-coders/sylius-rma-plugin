@@ -28,11 +28,21 @@ interface OrderReturnInterface extends ResourceInterface
 
     public const STATUS_CANCELED = 'canceled';
 
+    public const STATUS_WITHDRAWAL_REQUEST = 'withdrawal_request';
+
+    public const STATUS_WITHDRAWN = 'withdrawn';
+
     public const TRANSITION_NEW = 'new';
 
     public const TRANSITION_COMPLETE = 'complete';
 
     public const TRANSITION_CANCEL = 'cancel';
+
+    public const TRANSITION_REQUEST_WITHDRAWAL = 'request_withdrawal';
+
+    public const TRANSITION_WITHDRAW = 'withdraw';
+
+    public const TRANSITION_FALLBACK_TO_RETURN = 'fallback_to_return';
 
     public const GRAPH = 'return_status';
 
@@ -41,6 +51,8 @@ interface OrderReturnInterface extends ResourceInterface
         self::STATUS_NEW,
         self::STATUS_COMPLETED,
         self::STATUS_CANCELED,
+        self::STATUS_WITHDRAWAL_REQUEST,
+        self::STATUS_WITHDRAWN,
     ];
 
     public function getId(): ?int;

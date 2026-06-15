@@ -39,6 +39,16 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
 
         $container->setParameter('madcoders_rma.return_form_pdf_enabled', (bool) $config['return_form_pdf_enabled']);
 
+        // Default for the env var backing allow_unpaid_withdrawal, so the behaviour is unchanged
+        // (auto-cancel enabled) when MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL is not defined.
+        $container->setParameter('env(MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL)', 'true');
+        // No (bool) cast here: the value may be an env placeholder (e.g. %env(bool:...)%) that is
+        // only resolved at runtime; casting it at compile time would collapse it to true. It is
+        // always a bool (plain config) or a string (env placeholder), i.e. a scalar.
+        $allowUnpaidWithdrawal = $config['allow_unpaid_withdrawal'];
+        Assert::scalar($allowUnpaidWithdrawal);
+        $container->setParameter('madcoders_rma.allow_unpaid_withdrawal', $allowUnpaidWithdrawal);
+
         $loader->load('services.xml');
     }
 

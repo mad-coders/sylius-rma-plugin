@@ -1,0 +1,11 @@
+{% block subject %}
+    {{ 'madcoders_rma.email.withdrawal_requested.subject'|trans({ '%returnNumber%': orderReturn.returnNumber }) }}
+{% endblock %}
+
+{% block body %}
+    {% autoescape %}
+        {{ 'madcoders_rma.email.withdrawal_requested.greeting'|trans }},<br>
+        <br>
+        {{ 'madcoders_rma.email.withdrawal_requested.info'|trans({ '%orderNumber%': orderReturn.orderNumber }) }}<br>
+    {% endautoescape %}
+{% endblock %}

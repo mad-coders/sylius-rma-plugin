@@ -66,6 +66,21 @@ madcoders_rma:
                 order_number_not_valid: 'Order number %orderNumber% is not valid'
                 order_not_fullfiled_yet: 'Order %orderNumber% is not fulfilled yet. Please contact customer support'
                 order_already_returned_or_cannot_be_returned: 'Order %orderNumber% has already been returned or cannot be returned'
+                withdrawal_not_available: 'Order %orderNumber% cannot be withdrawn'
+
+        withdrawal:
+            title: 'Withdraw from order'
+            headline: 'Withdraw from order'
+            secondary_headline: 'Withdraw from your order before it ships'
+            info_paid: 'You can withdraw from this order before it ships. We will register a withdrawal request and our team will confirm the withdrawal and any refund.'
+            info_unpaid: 'You can withdraw from this order before it ships. As it has not been paid, the order will be withdrawn immediately.'
+            confirm_button: 'Withdraw from order'
+            success_requested: 'Your withdrawal request has been registered'
+            success_withdrawn: 'Your order has been withdrawn'
+            confirm_withdrawal: 'Confirm withdrawal'
+            fallback_to_return: 'Handle as return'
+            error:
+                not_cancellable: 'This order can no longer be withdrawn'
 
         verification_step:
             secondary_headline: 'Verification step'
@@ -130,6 +145,10 @@ madcoders_rma:
             completed_return: 'completed return'
             cancelled_return: 'cancelled return'
             added_new_note: 'added new note'
+            withdrawal_requested: 'requested withdrawal'
+            withdrawal_confirmed: 'confirmed withdrawal'
+            withdrawal_fallback: 'redirected withdrawal to the return process'
+            withdrawn: 'withdrew the order'
         return_details_header: 'Return details'
 
         return_consent:
@@ -161,8 +180,30 @@ madcoders_rma:
             auth_code_info: 'to continue return process please enter %auth_code% code on'
             verification_page: 'verification page'
 
+        withdrawal_requested:
+            subject: 'Withdrawal request received #%returnNumber%'
+            greeting: 'Hello'
+            info: 'We have received your request to withdraw from order %orderNumber%. Our team will review it and confirm the withdrawal shortly.'
+
+        withdrawal_confirmed:
+            subject: 'Order withdrawal confirmed #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your withdrawal from order %orderNumber% has been confirmed and the order has been cancelled.'
+
+        withdrawal_fallback:
+            subject: 'Your withdrawal is being handled as a return #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your withdrawal request for order %orderNumber% will be handled through our standard return process. We will be in touch with the next steps.'
+
+        withdrawal_cancelled:
+            subject: 'Order withdrawn #%returnNumber%'
+            greeting: 'Hello'
+            info: 'Your order %orderNumber% has been withdrawn. As it was not paid, there is nothing further to do.'
+
     state:
         draft: 'Draft'
         new: 'New'
         completed: 'Completed'
         cancelled: "Cancelled"
+        withdrawal_request: 'Withdrawal requested'
+        withdrawn: 'Withdrawn'

@@ -28,6 +28,8 @@ Architects of this package:
             <argument type="service" id="madcoders.sylius_rma_plugin.auth_code.factory" />
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="madcoders_rma.repository.authcode" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.return_eligibility_checker" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.return_controller"
@@ -72,7 +74,36 @@ Architects of this package:
             <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="translator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.return_eligibility_checker" />
             <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.controller.withdrawal_controller"
+                 class="Madcoders\SyliusRmaPlugin\Controller\WithdrawalController">
+            <argument type="service" id="twig" />
+            <argument type="service" id="router" />
+            <argument type="service" id="security.authorization_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
+            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="security.csrf.token_manager" />
+            <argument type="service" id="translator" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine" />
+        </service>
+
+        <service id="madcoders.sylius_rma_plugin.controller.admin_withdrawal_confirm"
+                 class="Madcoders\SyliusRmaPlugin\Controller\AdminWithdrawalConfirmController" public="true">
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="router" />
+            <argument type="service" id="security.csrf.token_manager" />
+            <argument type="service" id="translator" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.rma_configuration_controller"

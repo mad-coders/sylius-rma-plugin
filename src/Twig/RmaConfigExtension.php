@@ -21,8 +21,10 @@ use Twig\TwigFunction;
 
 final class RmaConfigExtension extends AbstractExtension
 {
-    public function __construct(private readonly bool $returnFormPdfEnabled = false)
-    {
+    public function __construct(
+        private readonly bool $returnFormPdfEnabled = false,
+        private readonly bool $allowUnpaidWithdrawal = true,
+    ) {
     }
 
     /** @inheritdoc */
@@ -30,11 +32,17 @@ final class RmaConfigExtension extends AbstractExtension
     {
         return [
             new TwigFunction('madcoders_rma_return_form_pdf_enabled', $this->isReturnFormPdfEnabled(...)),
+            new TwigFunction('madcoders_rma_allow_unpaid_withdrawal', $this->isUnpaidWithdrawalAllowed(...)),
         ];
     }
 
     public function isReturnFormPdfEnabled(): bool
     {
         return $this->returnFormPdfEnabled;
+    }
+
+    public function isUnpaidWithdrawalAllowed(): bool
+    {
+        return $this->allowUnpaidWithdrawal;
     }
 }

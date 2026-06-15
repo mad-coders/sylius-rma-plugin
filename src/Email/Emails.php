@@ -22,6 +22,14 @@ final class Emails
 
     public const RETURN_GENERATED = 'return_generated';
 
+    public const WITHDRAWAL_REQUESTED = 'withdrawal_requested';
+
+    public const WITHDRAWAL_CONFIRMED = 'withdrawal_confirmed';
+
+    public const WITHDRAWAL_FALLBACK = 'withdrawal_fallback';
+
+    public const WITHDRAWAL_CANCELLED = 'withdrawal_cancelled';
+
     private function __construct()
     {
     }

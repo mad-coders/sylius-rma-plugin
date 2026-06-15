@@ -18,6 +18,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Exception\ElementNotFoundException;
+use FriendsOfBehat\PageObjectExtension\Page\UnexpectedPageException;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Sylius\Behat\Service\Setter\CookieSetterInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPageInterface;
+use Webmozart\Assert\Assert;
 
 class ReturnFormContext implements Context
 {
@@ -115,6 +117,48 @@ class ReturnFormContext implements Context
     }
 
     /**
+     * @When /^I choose to return (\d+) units? of the first item$/
+     */
+    public function iChooseToReturnUnitsOfTheFirstItem(int $qty): void
+    {
+        try {
+            $this->returnFormPage->setItemReturnQty(0, $qty);
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
+     * @When /^I choose to return (\d+) units? of the second item$/
+     */
+    public function iChooseToReturnUnitsOfTheSecondItem(int $qty): void
+    {
+        try {
+            $this->returnFormPage->setItemReturnQty(1, $qty);
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
+     * @When /^I try to return (latest order)$/
+     */
+    public function iTryToReturnOrder(OrderInterface $order): void
+    {
+        try {
+            $this->returnFormPage->open(['orderNumber' => str_replace('#', '', $order->getNumber())]);
+        } catch (UnexpectedPageException $e) {
+            // the order is not returnable: the controller redirects away from the form
+        }
+    }
+
+    /**
+     * @Then /^the first item should show (\d+) returnable$/
+     */
+    public function theFirstItemShouldShowReturnable(int $qty): void
+    {
+        Assert::same($this->returnFormPage->getItemReturnQty(0), (string) $qty);
+    }
+
+    /**
      * @When I click submit button for return form
      */
     public function iSubmitReturnForm(): void
@@ -123,6 +167,14 @@ class ReturnFormContext implements Context
             $this->returnFormPage->submitThisOrderReturnForm();
         } catch (ElementNotFoundException $e) {
         }
+    }
+
+    /**
+     * @Then /^I should still be on the order return form for (latest order)$/
+     */
+    public function iShouldStillBeOnTheOrderReturnForm(OrderInterface $order): void
+    {
+        $this->returnFormPage->verify(['orderNumber' => str_replace('#', '', $order->getNumber())]);
     }
 
     /**

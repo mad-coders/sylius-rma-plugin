@@ -35,5 +35,10 @@ Architects of this package:
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Email\ReturnFormEmailSenderInterface" alias="madcoders.sylius_rma_plugin.email.return_form_email_sender" />
 
+        <service id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" class="Madcoders\SyliusRmaPlugin\Email\WithdrawalEmailSender">
+            <argument type="service" id="sylius.email_sender" />
+        </service>
+        <service id="Madcoders\SyliusRmaPlugin\Email\WithdrawalEmailSenderInterface" alias="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
+
     </services>
 </container>

@@ -14,7 +14,15 @@
             {{ buttons.default(pathDone, 'sylius.ui.complete'|trans, order_return.id, 'check circle outline', 'complete-button green') }}
         {% endif %}
 
-       {% if order_return.orderReturnStatus != 'completed' and  order_return.orderReturnStatus != 'canceled' %}
+        {% if order_return.orderReturnStatus == 'withdrawal_request' %}
+            {% set pathConfirm = path('madcoders_rma_admin_order_return_show_confirm_withdrawal', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
+            {{ buttons.default(pathConfirm, 'madcoders_rma.ui.withdrawal.confirm_withdrawal'|trans, order_return.id, 'check circle outline', 'confirm-withdrawal-button green') }}
+
+            {% set pathFallback = path('madcoders_rma_admin_order_return_show_fallback_to_return', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
+            {{ buttons.default(pathFallback, 'madcoders_rma.ui.withdrawal.fallback_to_return'|trans, order_return.id, 'exchange', 'fallback-to-return-button blue') }}
+        {% endif %}
+
+       {% if order_return.orderReturnStatus not in ['completed', 'canceled', 'withdrawal_request', 'withdrawn'] %}
             {% set pathCancel = path('madcoders_rma_admin_order_return_show_cancel', {'id': order_return.id, '_csrf_token': csrf_token(order_return.id) }) %}
             {{ buttons.default(pathCancel, 'sylius.ui.cancel'|trans, order_return.id, 'cancel', 'cancel-button red') }}
         {% endif %}

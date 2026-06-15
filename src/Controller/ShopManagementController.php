@@ -19,7 +19,9 @@ namespace Madcoders\SyliusRmaPlugin\Controller;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Repository\OrderReturnRepository;
+use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
+use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderRepository;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -48,6 +50,8 @@ final class ShopManagementController extends AbstractController
         private readonly OrderRepository $orderRepository,
         private readonly TranslatorInterface $translator,
         private readonly RmaVerificationPossibilityOfReturn $verificationPossibilityOfReturn,
+        private readonly WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
+        private readonly ReturnEligibilityCheckerInterface $returnEligibilityChecker,
         private readonly bool $returnFormPdfEnabled = false,
     ) {
     }
@@ -77,7 +81,15 @@ final class ShopManagementController extends AbstractController
             return $this->createMissingPrivilegesResponse($request);
         }
 
-        if ($order->getState() !== OrderInterface::STATE_FULFILLED) {
+        // Pre-shipment withdrawal takes precedence over the post-shipment return flow: a
+        // not-yet-shipped order is dispatched to the withdrawal flow instead of the return form.
+        if ($this->withdrawalEligibilityChecker->isWithdrawable($order)) {
+            $this->requestStack->getSession()->set('madcoders_rma_allowed_order', $orderNumber);
+
+            return new RedirectResponse($this->router->generate('madcoders_rma_withdrawal', ['orderNumber' => str_replace('#', '', $orderNumber)]));
+        }
+
+        if (!$this->returnEligibilityChecker->isReturnable($order)) {
             return $this->errorRedirect(
                 $request,
                 'madcoders_rma.ui.first_step.error.order_not_fullfiled_yet',

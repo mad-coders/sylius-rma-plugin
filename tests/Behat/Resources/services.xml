@@ -25,6 +25,10 @@ Architects of this package:
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
             <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="sylius.factory.shipment" />
+            <argument type="service" id="sylius.order_item_quantity_modifier" />
+            <argument type="service" id="sylius.factory.order_item" />
+            <argument type="service" id="sylius.product_variant_resolver.default" />
+            <argument type="service" id="sylius.behat.shared_storage" />
         </service>
 
         <service id="madcoders.rma.context.setup.auth"
@@ -100,6 +104,16 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return" />
         </service>
 
+        <service id="madcoders.rma.context.ui.shop.rma.withdrawal"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Shop\Rma\WithdrawalContext">
+            <argument type="service" id="madcoders.rma.page.shop.rma.withdrawal" />
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
+            <argument type="service" id="sylius.behat.email_checker" />
+            <argument type="service" id="translator" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+
         <service id="madcoders.rma.context.ui.admin.rma.managing_return_reasons"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnReasonContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.return_reasons_index" />
@@ -124,6 +138,16 @@ Architects of this package:
             <argument type="service" id="madcoders.rma.page.admin.rma.order_return_show" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="sylius.behat.notification_checker" />
+        </service>
+
+        <service id="madcoders.rma.context.ui.admin.rma.withdrawal_resolution"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\WithdrawalResolutionContext">
+            <argument type="service" id="madcoders_rma.repository.order_return" />
+            <argument type="service" id="madcoders_rma.repository.order_return_change_log" />
+            <argument type="service" id="sylius.behat.email_checker" />
+            <argument type="service" id="translator" />
+            <argument type="service" id="sylius.repository.order" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
 
         <service id="madcoders.rma.context.ui.admin.rma.managing_return_notes"
@@ -158,6 +182,10 @@ Architects of this package:
 
         <service id="madcoders.rma.page.shop.rma.return_success"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnSuccessPage"
+                 parent="sylius.behat.symfony_page" public="false" />
+
+        <service id="madcoders.rma.page.shop.rma.withdrawal"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\WithdrawalPage"
                  parent="sylius.behat.symfony_page" public="false" />
 
         <service id="madcoders.rma.page.admin.rma.return_consents_index"

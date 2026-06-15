@@ -1,0 +1,33 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %} {{ 'madcoders_rma.ui.withdrawal.title'|trans }} {% endblock %}
+
+{% block content %}
+    <div class="ui hidden divider"></div>
+    <div class="ui one column centered stackable grid">
+        <div class="column">
+            <h1 class="ui header">
+                <i class="circular undo icon"></i>
+                <div class="content">
+                    {{ 'madcoders_rma.ui.withdrawal.headline'|trans }} #{{ orderNumber }}
+                    <div class="sub header">{{ 'madcoders_rma.ui.withdrawal.secondary_headline'|trans }}</div>
+                </div>
+            </h1>
+            <div class="ui segment">
+                <p>
+                    {% if isUnpaid %}
+                        {{ 'madcoders_rma.ui.withdrawal.info_unpaid'|trans }}
+                    {% else %}
+                        {{ 'madcoders_rma.ui.withdrawal.info_paid'|trans }}
+                    {% endif %}
+                </p>
+                <form action="{{ path('madcoders_rma_withdrawal', { 'orderNumber': orderNumber }) }}" method="post" class="ui large form">
+                    <input type="hidden" name="_token" value="{{ csrfToken }}">
+                    <button type="submit" class="ui primary button" {{ sylius_test_html_attribute('withdraw-confirm-button') }}>
+                        {{ 'madcoders_rma.ui.withdrawal.confirm_button'|trans }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

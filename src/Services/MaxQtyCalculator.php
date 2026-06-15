@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services;
 
 use Doctrine\ORM\EntityManager;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 
 class MaxQtyCalculator
@@ -33,11 +34,13 @@ class MaxQtyCalculator
         $qb->innerJoin('i.orderReturn', 'r');
 
         $qb->where('r.orderNumber = :orderNumber');
+        // Every non-draft return claims its items - including withdrawn and withdrawal-request
+        // returns - so withdrawn items are not offered for return again.
         $qb->andWhere('r.orderReturnStatus <> :orderReturnStatus');
         $qb->andWhere('i.productSku = :productSku');
 
         $qb->setParameter('orderNumber', $orderNumber);
-        $qb->setParameter('orderReturnStatus', 'draft');
+        $qb->setParameter('orderReturnStatus', OrderReturnInterface::STATUS_DRAFT);
         $qb->setParameter('productSku', $itemVariantCode);
         $query = $qb->getQuery();
 
