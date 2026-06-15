@@ -14,6 +14,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductInterface;
+use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductTrait;
 use Sylius\Component\Core\Model\Product as BaseProduct;
 
 /**
@@ -24,16 +25,5 @@ use Sylius\Component\Core\Model\Product as BaseProduct;
 #[ORM\Table(name: 'sylius_product')]
 class Product extends BaseProduct implements NonReturnableProductInterface
 {
-    #[ORM\Column(name: 'non_returnable', type: 'boolean', options: ['default' => false])]
-    protected bool $nonReturnable = false;
-
-    public function isNonReturnable(): bool
-    {
-        return $this->nonReturnable;
-    }
-
-    public function setNonReturnable(bool $nonReturnable): void
-    {
-        $this->nonReturnable = $nonReturnable;
-    }
+    use NonReturnableProductTrait;
 }

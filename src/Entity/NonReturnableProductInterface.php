@@ -19,8 +19,9 @@ namespace Madcoders\SyliusRmaPlugin\Entity;
 /**
  * Implemented by the application's Sylius Product to carry the per-product "non-returnable" flag.
  *
- * The application Product model implements this interface (backed by a `non_returnable` boolean
- * column; the plugin migration adds it to `sylius_product`). The default
+ * Apply {@see NonReturnableProductTrait} on the application Product model to satisfy this contract
+ * (it supplies the `non_returnable` column and accessors; the plugin migration adds the column to
+ * `sylius_product`). The default
  * {@see \Madcoders\SyliusRmaPlugin\Services\ProductReturnabilityChecker} reads the flag through this
  * interface; a product whose model does not implement it is always returnable.
  */

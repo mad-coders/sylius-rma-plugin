@@ -122,34 +122,28 @@ ticked:
 - the flag removes the line regardless of remaining quantity.
 
 Out of the box every product is returnable. To enable the flag, have your Sylius `Product` model
-implement [`NonReturnableProductInterface`](src/Entity/NonReturnableProductInterface.php), backed by
-a `non_returnable` boolean column (the plugin migration adds it to `sylius_product`):
+implement [`NonReturnableProductInterface`](src/Entity/NonReturnableProductInterface.php) and apply
+[`NonReturnableProductTrait`](src/Entity/NonReturnableProductTrait.php) (the trait supplies the
+`non_returnable` column and accessors):
 
 ```php
 // src/Entity/Product/Product.php
 use Doctrine\ORM\Mapping as ORM;
 use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductInterface;
+use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductTrait;
 use Sylius\Component\Core\Model\Product as BaseProduct;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_product')]
 class Product extends BaseProduct implements NonReturnableProductInterface
 {
-    #[ORM\Column(name: 'non_returnable', type: 'boolean', options: ['default' => false])]
-    protected bool $nonReturnable = false;
-
-    public function isNonReturnable(): bool
-    {
-        return $this->nonReturnable;
-    }
-
-    public function setNonReturnable(bool $nonReturnable): void
-    {
-        $this->nonReturnable = $nonReturnable;
-    }
+    use NonReturnableProductTrait;
 }
 ```
 
-The checkbox is added to the admin product form automatically (a form-type extension, rendered via
-the `sylius.admin.product.tab_details` template event) once the model implements the interface. To
+Then run the plugin migration (it adds the `non_returnable` column to `sylius_product`). The
+checkbox is added to the admin product form automatically (a form-type extension, rendered via the
+`sylius.admin.product.tab_details` template event) once the model implements the interface. To
 source the flag from somewhere other than the product entity, replace
 [`ProductReturnabilityCheckerInterface`](#customizations).
 

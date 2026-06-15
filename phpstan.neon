@@ -14,6 +14,11 @@ parameters:
         # Makes PHPStan crash
         - 'src/DependencyInjection/Configuration.php'
 
+        # Public extension-point trait for the application's Product model. It is consumed by the
+        # host app (and the test application), which live outside the analysed `src` scope, so
+        # PHPStan reports a false-positive `trait.unused` here.
+        - 'src/Entity/NonReturnableProductTrait.php'
+
         # Test dependencies
         - 'tests/Application/**'
 
