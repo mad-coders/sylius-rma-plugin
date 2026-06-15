@@ -38,6 +38,7 @@ class ReturnRequestBuilder
         private readonly MaxQtyCalculator $maxQtyCalculator,
         private readonly OrderByNumberProviderInterface $orderByNumberProvider,
         private readonly RmaChangesLogger $changesLogger,
+        private readonly ProductReturnabilityCheckerInterface $productReturnabilityChecker,
     ) {
     }
 
@@ -117,6 +118,12 @@ class ReturnRequestBuilder
             $itemVariantCode = $orderItemVariant->getCode();
             if (null === $itemVariantCode || '' === $itemVariantCode) {
                 throw new \Exception('Cannot create OrderItemReturnRequest for OrderItem without code.');
+            }
+
+            // Item-level eligibility: a non-returnable variant is never offered for return, so it is
+            // not added to the draft (and therefore never reaches the return form or is persisted).
+            if (!$this->productReturnabilityChecker->isReturnable($orderItemVariant)) {
+                continue;
             }
 
             // TODO: $maxQty should be calculated based on following pattern: $qtyOrdered(orShipped) - $qtyAlreadyReturned
