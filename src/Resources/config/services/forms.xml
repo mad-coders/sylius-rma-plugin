@@ -56,8 +56,19 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.form.type.return_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType">
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
-            <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
             <tag name="form.type" />
+        </service>
+
+        <!--
+            Adds the flag-gated "Additional information" section to the standard return form. Defined
+            explicitly (autoconfigure off) so the form.type_extension tag is registered exactly once;
+            the extended type comes from ReturnFormTypeExtension::getExtendedTypes().
+        -->
+        <service id="madcoders.sylius_rma_plugin.form.extension.return_form_type_extension"
+                 class="Madcoders\SyliusRmaPlugin\Form\Extension\ReturnFormTypeExtension"
+                 autoconfigure="false">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
+            <tag name="form.type_extension" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.form.type.withdrawal_return_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\WithdrawalReturnFormType">

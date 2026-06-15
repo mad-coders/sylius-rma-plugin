@@ -18,7 +18,6 @@ namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturn;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use Madcoders\SyliusRmaPlugin\Services\AdditionalInformation\AdditionalInformationCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProviderInterface;
 use Sylius\Bundle\AddressingBundle\Form\Type\CountryCodeChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -30,15 +29,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReturnFormType extends AbstractType
 {
-    public function __construct(
-        private readonly ChoiceProviderInterface $reasonChoiceProvider,
-        private readonly AdditionalInformationCheckerInterface $additionalInformationChecker,
-    ) {
+    public function __construct(private readonly ChoiceProviderInterface $reasonChoiceProvider)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -103,8 +99,6 @@ class ReturnFormType extends AbstractType
             ])
         ;
 
-        $this->addAdditionalInformationFields($builder);
-
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $orderReturn = $event->getData();
             $form = $event->getForm();
@@ -128,57 +122,6 @@ class ReturnFormType extends AbstractType
                 ],
             ]);
         });
-    }
-
-    /**
-     * Adds the "Additional information" section. On the standard return form the whole section is
-     * gated behind the require_additional_information flag. Subclasses (the withdrawal form) may
-     * override this to keep their own, flag-independent behaviour.
-     */
-    protected function addAdditionalInformationFields(FormBuilderInterface $builder): void
-    {
-        if (!$this->additionalInformationChecker->isRequired()) {
-            return;
-        }
-
-        $this->addBankAccountField($builder);
-
-        $builder
-            ->add('accountHolderName', TextType::class, [
-                'label' => 'madcoders_rma.ui.form.account_holder_name',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.account_holder_name.not_blank',
-                    ]),
-                ],
-            ])
-            ->add('bankName', TextType::class, [
-                'label' => 'madcoders_rma.ui.form.bank_name',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.bank_name.not_blank',
-                    ]),
-                ],
-            ])
-        ;
-    }
-
-    protected function addBankAccountField(FormBuilderInterface $builder): void
-    {
-        $builder->add('bankAccountNumber', TextType::class, [
-            'label' => 'madcoders_rma.ui.form.bank_account_number',
-            'required' => true,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'madcoders_rma.validator.bank_account_number.not_blank',
-                ]),
-                new Iban([
-                    'message' => 'madcoders_rma.validator.bank_account_number.not_a_valid',
-                ]),
-            ],
-        ]);
     }
 
     /**
