@@ -37,4 +37,6 @@ interface ReturnFormPageInterface extends SymfonyPageInterface
     public function getItemReturnQty(int $index): string;
 
     public function submitThisOrderReturnForm(): void;
+
+    public function hasItemWithProductName(string $productName): bool;
 }

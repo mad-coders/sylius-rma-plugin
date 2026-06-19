@@ -27,6 +27,7 @@ Architects of this package:
                  class="Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn">
             <argument type="service" id="madcoders.sylius_rma_plugin.services.max_qty_calculator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\ProductReturnabilityCheckerInterface" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.services.return_eligibility_checker"
@@ -34,12 +35,18 @@ Architects of this package:
         <service id="Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface"
                  alias="madcoders.sylius_rma_plugin.services.return_eligibility_checker" />
 
+        <service id="madcoders.sylius_rma_plugin.services.product_returnability_checker"
+                 class="Madcoders\SyliusRmaPlugin\Services\ProductReturnabilityChecker" />
+        <service id="Madcoders\SyliusRmaPlugin\Services\ProductReturnabilityCheckerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.product_returnability_checker" />
+
         <service id="madcoders.sylius_rma_plugin.return_request_builder" class="Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder">
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.return_number_generator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.max_qty_calculator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.provider.order_by_number" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\ProductReturnabilityCheckerInterface" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.services.rma_admin_user_data" class="Madcoders\SyliusRmaPlugin\Services\RmaAdminUserData">

@@ -18,3 +18,11 @@ sylius_shop:
 
 sylius_api:
     enabled: true
+
+# Override the Sylius product model so the plugin's per-product non-returnable flag can be
+# exercised end to end (admin checkbox + return flow + Behat).
+sylius_product:
+    resources:
+        product:
+            classes:
+                model: Tests\Madcoders\SyliusRmaPlugin\Application\Entity\Product

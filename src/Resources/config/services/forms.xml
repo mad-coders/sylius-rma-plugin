@@ -75,5 +75,10 @@ Architects of this package:
             <tag name="form.type" />
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.form.extension.product_type_extension"
+                 class="Madcoders\SyliusRmaPlugin\Form\Extension\ProductTypeExtension">
+            <tag name="form.type_extension" extended-type="Sylius\Bundle\ProductBundle\Form\Type\ProductType" />
+        </service>
+
     </services>
 </container>

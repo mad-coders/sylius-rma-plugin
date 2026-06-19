@@ -29,6 +29,7 @@ class RmaVerificationPossibilityOfReturn
     public function __construct(
         private readonly MaxQtyCalculator $maxQtyCalculator,
         private readonly ChoiceProvider $availableReasonsCreator,
+        private readonly ProductReturnabilityCheckerInterface $productReturnabilityChecker,
     ) {
     }
 
@@ -56,6 +57,12 @@ class RmaVerificationPossibilityOfReturn
             $itemVariantCode = $itemVariant->getCode();
             if (null === $itemVariantCode) {
                 throw new Exception('itemVariant code not find');
+            }
+
+            // A non-returnable variant contributes no returnable quantity, so an order made up only of
+            // non-returnable items reports "nothing to return" and the start-return button is hidden.
+            if (!$this->productReturnabilityChecker->isReturnable($itemVariant)) {
+                continue;
             }
 
             $orderQty = $orderQty + $this->maxQtyCalculator->calculation($orderNumber, $itemVariantCode, $originalQty);

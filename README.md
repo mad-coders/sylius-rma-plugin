@@ -106,6 +106,47 @@ madcoders_rma:
 
 When disabled, an unpaid order is not offered the withdrawal flow at all.
 
+### Optional: mark products as non-returnable
+
+Some products cannot be taken back (perishables, hygiene/sealed goods, made-to-order items, gift
+cards). Return eligibility is normally decided per order; this adds an **item-level** rule so such
+products are excluded from the return flow even on an otherwise returnable order.
+
+Once enabled (see below), the admin product form gains a **"Non-returnable"** checkbox. With it
+ticked:
+
+- a variant of that product is never offered for return and is never persisted onto an
+  `OrderReturn`;
+- an order whose items are **all** non-returnable shows "nothing to return" (the start-return button
+  is hidden), exactly like an ineligible order;
+- the flag removes the line regardless of remaining quantity.
+
+Out of the box every product is returnable. To enable the flag, have your Sylius `Product` model
+implement [`NonReturnableProductInterface`](src/Entity/NonReturnableProductInterface.php) and apply
+[`NonReturnableProductTrait`](src/Entity/NonReturnableProductTrait.php) (the trait supplies the
+`non_returnable` column and accessors):
+
+```php
+// src/Entity/Product/Product.php
+use Doctrine\ORM\Mapping as ORM;
+use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductInterface;
+use Madcoders\SyliusRmaPlugin\Entity\NonReturnableProductTrait;
+use Sylius\Component\Core\Model\Product as BaseProduct;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_product')]
+class Product extends BaseProduct implements NonReturnableProductInterface
+{
+    use NonReturnableProductTrait;
+}
+```
+
+Then run the plugin migration (it adds the `non_returnable` column to `sylius_product`). The
+checkbox is added to the admin product form automatically (a form-type extension, rendered via the
+`sylius.admin.product.tab_details` template event) once the model implements the interface. To
+source the flag from somewhere other than the product entity, replace
+[`ProductReturnabilityCheckerInterface`](#customizations).
+
 ## Returns state machine
 
 Every return form is an `OrderReturn` entity driven by a single
@@ -221,6 +262,7 @@ change a rule for the whole plugin by pointing the alias at your own implementat
 | `Withdrawal\WithdrawalEligibilityCheckerInterface` | `isWithdrawable(OrderInterface)` | whether a (pre-shipment) order is offered withdrawal at all | `.withdrawal.eligibility_checker` |
 | `Withdrawal\InstantCancellationEligibilityCheckerInterface` | `isEligible(OrderInterface)` | within withdrawal, instant (unpaid) vs admin approval (paid) | `.withdrawal.instant_cancellation_eligibility_checker` |
 | `Reason\ReturnReasonEligibilityCheckerInterface` | `isEligible(OrderInterface, OrderReturnReasonInterface)` | whether a given return reason is offered (deadline since shipment) | `.reason.return_reason_eligibility_checker` |
+| `ProductReturnabilityCheckerInterface` | `isReturnable(ProductVariantInterface)` | whether a single ordered variant may be added to a return (item-level) | `.product_returnability_checker` |
 
 To replace one, implement its interface and alias it in your application:
 
