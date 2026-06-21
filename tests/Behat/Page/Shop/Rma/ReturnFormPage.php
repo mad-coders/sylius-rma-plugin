@@ -76,9 +76,9 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
 
     public function hasAdditionalInformationSection(): bool
     {
-        return $this->getDocument()->hasField('madcoders_rma_return_item_bankAccountNumber')
-            || $this->getDocument()->hasField('madcoders_rma_return_item_accountHolderName')
-            || $this->getDocument()->hasField('madcoders_rma_return_item_bankName');
+        return $this->getDocument()->hasField('madcoders_rma_return_item_bankAccountNumber') ||
+            $this->getDocument()->hasField('madcoders_rma_return_item_accountHolderName') ||
+            $this->getDocument()->hasField('madcoders_rma_return_item_bankName');
     }
 
     public function hasValidationMessage(string $message): bool

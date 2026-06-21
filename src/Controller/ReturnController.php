@@ -32,7 +32,6 @@ use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -31,6 +31,7 @@ final class AdditionalInformationContext implements Context
 
     /**
      * @BeforeScenario
+     *
      * @AfterScenario
      */
     public function resetTheFlag(): void
