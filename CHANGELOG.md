@@ -9,6 +9,40 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.2] - 2026-06-21
+
+Second release candidate for the 1.3 line, adding item-level return control, configurable refund
+details, and a pluggable return-number format on top of rc.1.
+
+### Added
+
+- **Non-returnable products**: an item-level rule that excludes specific products (perishables,
+  hygiene/sealed goods, made-to-order items, gift cards) from the return flow even on an otherwise
+  returnable order. Opt in by having the Sylius `Product` implement `NonReturnableProductInterface`
+  and apply `NonReturnableProductTrait` (supplies the `non_returnable` column/accessors); the admin
+  product form then gains a "Non-returnable" checkbox. A flagged product is never offered for return
+  or persisted onto an `OrderReturn`, and an order whose items are all non-returnable shows "nothing
+  to return". The decision lives behind an injectable `ProductReturnabilityCheckerInterface`. Ships a
+  Doctrine migration adding `non_returnable` to `sylius_product`
+  ([#18](https://github.com/mad-coders/sylius-rma-plugin/issues/18)).
+- **Configurable "Additional information" on the return form**: an optional section collecting the
+  refund bank details (bank account number validated as an IBAN, account holder name, and bank name
+  / BIC-SWIFT), gated behind the `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` environment variable
+  (default `false`). When off the section is hidden and not required; when on the three fields are
+  rendered and required. Implemented as a `ReturnFormTypeExtension` with the flag behind
+  `AdditionalInformationCheckerInterface` (shared with the Twig visibility check); values persist on
+  `OrderReturn` and show in the admin and shop return views. The withdrawal flow always collects the
+  bank account number regardless of the flag. Ships a Doctrine migration (`Version20260621000000`).
+- **Pluggable return-number format** via `ReturnNumberGeneratorInterface`, with a default format of
+  `RMA-{orderNumber}-{n}` (the sequence increments until the number is unique). Override the
+  interface to customize how return numbers are generated.
+
+### Changed
+
+- Ignore the `guzzlehttp/guzzle` security advisories in the Composer audit policy to unblock
+  `composer update` in CI; every `^6.5` release required transitively by Sylius 1.12 is flagged and
+  there is no advisory-free version in range.
+
 ## [1.3.0-rc.1] - 2026-06-15
 
 First release candidate for the 1.3 line, headlined by EU "right of withdrawal" support for
@@ -120,7 +154,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...HEAD
+[1.3.0-rc.2]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...1.3.0-rc.2
 [1.3.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0-rc.1
 [1.2.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.0.0...1.1.0
