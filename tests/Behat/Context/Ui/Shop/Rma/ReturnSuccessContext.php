@@ -66,6 +66,27 @@ class ReturnSuccessContext implements Context
     }
 
     /**
+     * Asserts a return with the expected number exists. The "{orderNumber}" placeholder in the
+     * expected value is replaced with the latest order number, so the format can be checked
+     * without hard-coding the dynamic order number into the feature.
+     *
+     * @Then /^an order return numbered "([^"]+)" should exist for (latest order)$/
+     */
+    public function anOrderReturnNumberedShouldExist(string $expectedReturnNumber, OrderInterface $order): void
+    {
+        $orderNumber = str_replace('#', '', (string) $order->getNumber());
+        $expectedReturnNumber = str_replace('{orderNumber}', $orderNumber, $expectedReturnNumber);
+
+        $orderReturn = $this->orderReturnRepository->findOneBy(['returnNumber' => $expectedReturnNumber]);
+
+        Assert::isInstanceOf(
+            $orderReturn,
+            OrderReturnInterface::class,
+            sprintf('Expected an order return numbered "%s" to exist, but none was found.', $expectedReturnNumber),
+        );
+    }
+
+    /**
      * @Then /^email with order return confirmation should be sent to "([^"]+)" for (latest order)$/
      */
     public function iRecievedConfirmationEmail(string $recipient, OrderInterface $order, string $localeCode = 'en_US'): void

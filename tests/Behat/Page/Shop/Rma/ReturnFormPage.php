@@ -125,6 +125,11 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
         $this->getElement('rma_submit_return_form')->click();
     }
 
+    public function hasItemWithProductName(string $productName): bool
+    {
+        return str_contains($this->getElement('rma_return_items')->getText(), $productName);
+    }
+
     private function returnFormHasNoteField(): bool
     {
         return $this->getDocument()->hasField('madcoders_rma_return_item_customerNote');
@@ -144,6 +149,7 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
     {
         return array_merge(parent::getDefinedElements(), [
             'rma_submit_return_form' => '[data-test-madcoders-rma-submit-return-form-button]',
+            'rma_return_items' => '#madcoders-rm-return-items',
         ]);
     }
 

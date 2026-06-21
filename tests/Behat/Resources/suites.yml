@@ -15,6 +15,7 @@ imports:
     - suites/ui/shop/rma/submit_form.yml
     - suites/ui/shop/rma/customer_area.yml
     - suites/ui/shop/rma/withdrawal.yml
+    - suites/ui/shop/rma/non_returnable.yml
     - suites/ui/admin/rma/managing_return_reasons.yml
     - suites/ui/admin/rma/managing_return_consents.yml
     - suites/ui/admin/rma/managing_return_status.yml

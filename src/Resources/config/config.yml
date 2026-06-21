@@ -35,6 +35,15 @@ sylius_mailer:
 
 sylius_ui:
   events:
+    # Render the per-product "non-returnable" checkbox on the admin product form details tab.
+    # The field itself is added by Form\Extension\ProductTypeExtension when the Product model
+    # implements NonReturnableProductInterface.
+    sylius.admin.product.tab_details:
+      blocks:
+        madcoders_rma_non_returnable:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Product/_nonReturnable.html.twig"
+          priority: 10
+
     sylius.shop.layout.footer:
       blocks:
         madcoders_rma_return_link:

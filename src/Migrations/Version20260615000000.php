@@ -20,24 +20,37 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Adds the nullable account_holder_name and bank_name columns backing the "Additional information"
- * section of the return form. Both are nullable so existing returns (created before this change)
- * keep loading without data.
+ * Adds the per-product "non-returnable" flag (NonReturnableProductTrait) to the Sylius product table.
+ * Existing products default to returnable, so behaviour is unchanged until a product is flagged.
  */
 final class Version20260615000000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add account_holder_name and bank_name columns to madcoders_rma_order_return';
+        return 'Add non_returnable flag to sylius_product';
     }
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE madcoders_rma_order_return ADD account_holder_name VARCHAR(255) DEFAULT NULL, ADD bank_name VARCHAR(255) DEFAULT NULL');
+        $this->skipIf(
+            !$schema->hasTable('sylius_product'),
+            'sylius_product table not found; skipping non_returnable column.',
+        );
+        $this->skipIf(
+            $schema->getTable('sylius_product')->hasColumn('non_returnable'),
+            'sylius_product.non_returnable already exists.',
+        );
+
+        $this->addSql('ALTER TABLE sylius_product ADD non_returnable TINYINT(1) DEFAULT 0 NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE madcoders_rma_order_return DROP account_holder_name, DROP bank_name');
+        $this->skipIf(
+            !$schema->hasTable('sylius_product') || !$schema->getTable('sylius_product')->hasColumn('non_returnable'),
+            'sylius_product.non_returnable not present.',
+        );
+
+        $this->addSql('ALTER TABLE sylius_product DROP non_returnable');
     }
 }

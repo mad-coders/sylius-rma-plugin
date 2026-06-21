@@ -84,6 +84,48 @@ class ReturnFormContext implements Context
     }
 
     /**
+     * @Then /^I should not be able to open the return form for (latest order)$/
+     */
+    public function iShouldNotBeAbleToOpenTheReturnForm(OrderInterface $order): void
+    {
+        $parameters = ['orderNumber' => str_replace('#', '', $order->getNumber())];
+
+        try {
+            // tolerant open: when an order has nothing to return the controller redirects away
+            $this->returnFormPage->tryToOpen($parameters);
+        } catch (UnexpectedPageException) {
+            // redirected off the return form - that is the expected "nothing to return" outcome
+        }
+
+        Assert::false(
+            $this->returnFormPage->isOpen($parameters),
+            'Expected the return form not to open (nothing to return), but it did.',
+        );
+    }
+
+    /**
+     * @Then /^I should see product "([^"]+)" on the return form$/
+     */
+    public function iShouldSeeProductOnTheReturnForm(string $productName): void
+    {
+        Assert::true(
+            $this->returnFormPage->hasItemWithProductName($productName),
+            sprintf('Expected product "%s" to be listed on the return form, but it was not.', $productName),
+        );
+    }
+
+    /**
+     * @Then /^I should not see product "([^"]+)" on the return form$/
+     */
+    public function iShouldNotSeeProductOnTheReturnForm(string $productName): void
+    {
+        Assert::false(
+            $this->returnFormPage->hasItemWithProductName($productName),
+            sprintf('Expected product "%s" not to be listed on the return form, but it was.', $productName),
+        );
+    }
+
+    /**
      * @When I choose reason with code :reasonCode
      */
     public function iChooseReason(string $reasonCode): void

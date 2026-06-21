@@ -213,3 +213,7 @@ madcoders_rma:
         cancelled: "Cancelled"
         withdrawal_request: 'Withdrawal requested'
         withdrawn: 'Withdrawn'
+
+    form:
+        product:
+            non_returnable: 'Non-returnable'

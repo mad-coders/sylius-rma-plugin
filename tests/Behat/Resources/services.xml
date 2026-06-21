@@ -41,6 +41,11 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return_reason" />
         </service>
 
+        <service id="madcoders.rma.context.setup.non_returnable_product"
+                 class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\NonReturnableProductContext">
+            <argument type="service" id="sylius.repository.product" />
+        </service>
+
         <service id="madcoders.rma.context.setup.return_consent"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\ReturnConsentContext">
             <argument type="service" id="madcoders_rma.repository.order_return_consent" />

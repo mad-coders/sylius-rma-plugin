@@ -30,5 +30,8 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.order_return" />
         </service>
 
+        <!-- Alias the interface to the default generator so integrators can replace or decorate it. -->
+        <service id="Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGeneratorInterface" alias="madcoders.sylius_rma_plugin.generator.return_number_generator" />
+
      </services>
 </container>
