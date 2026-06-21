@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
-use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Repository\ProductVariantRepositoryInterface;
 use Twig\Extension\AbstractExtension;

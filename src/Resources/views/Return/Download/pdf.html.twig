@@ -82,7 +82,15 @@
                             {% if orderReturnFormData.phoneNumber is defined  %}
                                 <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ orderReturnFormData.phoneNumber }}<br/>
                             {% endif %}
-                            <strong>{{ 'madcoders_rma.pdf.bank_account_number'|trans }}:</strong> {{ orderReturnFormData.bankAccountNumber }}<br/>
+                            {% if orderReturnFormData.bankAccountNumber %}
+                                <strong>{{ 'madcoders_rma.pdf.bank_account_number'|trans }}:</strong> {{ orderReturnFormData.bankAccountNumber }}<br/>
+                            {% endif %}
+                            {% if orderReturnFormData.accountHolderName %}
+                                <strong>{{ 'madcoders_rma.pdf.account_holder_name'|trans }}:</strong> {{ orderReturnFormData.accountHolderName }}<br/>
+                            {% endif %}
+                            {% if orderReturnFormData.bankName %}
+                                <strong>{{ 'madcoders_rma.pdf.bank_name'|trans }}:</strong> {{ orderReturnFormData.bankName }}<br/>
+                            {% endif %}
                         </td>
                         <td>
                             {% import "@SyliusUi/Macro/flags.html.twig" as flags %}

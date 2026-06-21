@@ -7,6 +7,10 @@ madcoders_rma:
         bank_account_number:
             not_blank: 'Please enter bank account number'
             not_a_valid: 'This is not a valid International Bank Account Number (IBAN).'
+        account_holder_name:
+            not_blank: 'Please enter the account holder name'
+        bank_name:
+            not_blank: 'Please enter the bank name / BIC-SWIFT'
         notes:
             not_blank: 'This field cannot be empty'
         days_to_deadline_to_return:

@@ -27,7 +27,15 @@
                         {% if returnOrder.phoneNumber is defined  %}
                         <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}<br/>
                         {% endif %}
+                        {% if returnOrder.bankAccountNumber %}
                         <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}<br/>
+                        {% endif %}
+                        {% if returnOrder.accountHolderName %}
+                        <strong>{{ 'madcoders_rma.ui.form.account_holder_name'|trans }}:</strong> {{ returnOrder.accountHolderName }}<br/>
+                        {% endif %}
+                        {% if returnOrder.bankName %}
+                        <strong>{{ 'madcoders_rma.ui.form.bank_name'|trans }}:</strong> {{ returnOrder.bankName }}<br/>
+                        {% endif %}
 
                     </div>
                     <div class="column">

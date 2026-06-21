@@ -135,6 +135,18 @@ interface OrderReturnInterface extends ResourceInterface
 
     public function setCustomerIp(string $customerIp): void;
 
+    public function getBankAccountNumber(): ?string;
+
+    public function setBankAccountNumber(?string $bankAccountNumber): void;
+
+    public function getAccountHolderName(): ?string;
+
+    public function setAccountHolderName(?string $accountHolderName): void;
+
+    public function getBankName(): ?string;
+
+    public function setBankName(?string $bankName): void;
+
     /**
      * @return OrderReturnItemInterface[]
      */

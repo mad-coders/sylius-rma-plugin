@@ -51,6 +51,8 @@ madcoders_rma:
 
         form:
             bank_account_number: 'Bank account number (IBAN)'
+            account_holder_name: 'Account holder name'
+            bank_name: 'Bank name / BIC-SWIFT'
             enter_order_number: 'Please enter order number'
             return_reason: 'Reason of return'
             enabled: 'Enabled'
@@ -94,6 +96,8 @@ madcoders_rma:
             secondary_headline: 'Select items and check your details'
             bank_account_number_headline: 'Bank account number'
             bank_account_number_subheader: 'The money will be refunded to given account'
+            additional_information_headline: 'Additional information'
+            additional_information_subheader: 'Provide the bank details we will use to refund you'
             comment: 'Comment on the return'
             add_your_comments_here: 'Add your comments here'
             return_reason_headline: 'Reason'
@@ -168,6 +172,8 @@ madcoders_rma:
         return_qty: "QTY"
         place_for_signature: "Signature"
         bank_account_number: 'Bank account number (IBAN)'
+        account_holder_name: 'Account holder name'
+        bank_name: 'Bank name / BIC-SWIFT'
 
     email:
         order_return_form:

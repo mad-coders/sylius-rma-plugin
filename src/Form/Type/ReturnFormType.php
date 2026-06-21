@@ -29,7 +29,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReturnFormType extends AbstractType
@@ -97,18 +96,6 @@ class ReturnFormType extends AbstractType
                 'attr' => ['rows' => '2'],
                 'required' => false,
                 'label' => 'madcoders_rma.ui.add_notes',
-            ])
-            ->add('bankAccountNumber', TextType::class, [
-                'label' => 'madcoders_rma.ui.form.bank_account_number',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.bank_account_number.not_blank',
-                    ]),
-                    new Iban([
-                        'message' => 'madcoders_rma.validator.bank_account_number.not_a_valid',
-                    ]),
-                ],
             ])
         ;
 
