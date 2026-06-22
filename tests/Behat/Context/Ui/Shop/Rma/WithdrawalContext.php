@@ -152,6 +152,21 @@ final class WithdrawalContext implements Context
     }
 
     /**
+     * Asserts the withdrawal e-mail carries the self-contained summary: the return number, the order
+     * number and the withdrawn item (proving the items table renders).
+     *
+     * @Then /^the withdrawal email to "([^"]+)" should contain the return summary with item "([^"]+)" for (latest order)$/
+     */
+    public function theWithdrawalEmailShouldContainTheReturnSummary(string $recipient, string $productName, OrderInterface $order): void
+    {
+        $orderReturn = $this->findReturnForOrder($order);
+
+        Assert::true($this->emailChecker->hasMessageTo($orderReturn->getReturnNumber(), $recipient));
+        Assert::true($this->emailChecker->hasMessageTo($orderReturn->getOrderNumber(), $recipient));
+        Assert::true($this->emailChecker->hasMessageTo($productName, $recipient));
+    }
+
+    /**
      * @Then /^order return for (latest order) should have a "([^"]+)" change-log entry authored by a (customer|admin)$/
      */
     public function orderReturnForOrderShouldHaveChangeLogEntryAuthoredBy(OrderInterface $order, string $type, string $authorType): void

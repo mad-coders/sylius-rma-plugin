@@ -41,5 +41,6 @@ Feature: Submitting return form as guest
             And I am on order return review page for latest order
             When I approve return form
             Then email with order return confirmation should be sent to "john.doe@madcoders.pl" for latest order
+            And the order return confirmation email to "john.doe@madcoders.pl" should contain the return summary for latest order
             And I should be redirected to success page for latest order
             And I see single success message containing text "Return form has been created"

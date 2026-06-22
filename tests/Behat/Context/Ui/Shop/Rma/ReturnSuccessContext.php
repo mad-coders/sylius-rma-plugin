@@ -105,6 +105,43 @@ class ReturnSuccessContext implements Context
     }
 
     /**
+     * Asserts the confirmation e-mail carries the self-contained summary: the return number, the
+     * order number (rendered only by the summary block, not the greeting) and - since the PDF is off
+     * by default - the "no PDF, this e-mail is your confirmation" notice.
+     *
+     * @Then /^the order return confirmation email to "([^"]+)" should contain the return summary for (latest order)$/
+     */
+    public function theConfirmationEmailShouldContainTheReturnSummary(string $recipient, OrderInterface $order, string $localeCode = 'en_US'): void
+    {
+        $orderNumber = $order->getNumber() ?? '';
+        $returnNumber = $this->findNewReturnFormByOrderNumber($orderNumber);
+
+        Assert::true($this->emailChecker->hasMessageTo($returnNumber, $recipient));
+        Assert::true($this->emailChecker->hasMessageTo(str_replace('#', '', $orderNumber), $recipient));
+
+        $noPdfNotice = $this->translator->trans(
+            'madcoders_rma.email.order_return_form.info_no_pdf',
+            [],
+            null,
+            $localeCode,
+        );
+
+        Assert::true($this->emailChecker->hasMessageTo($noPdfNotice, $recipient));
+    }
+
+    /**
+     * Asserts the confirmation e-mail lists the returned item and renders the refund (bank) details.
+     *
+     * @Then /^the order return confirmation email to "([^"]+)" should list item "([^"]+)" and refund details "([^"]+)" and "([^"]+)"$/
+     */
+    public function theConfirmationEmailShouldListItemAndRefundDetails(string $recipient, string $itemName, string $accountHolder, string $bankName): void
+    {
+        Assert::true($this->emailChecker->hasMessageTo($itemName, $recipient));
+        Assert::true($this->emailChecker->hasMessageTo($accountHolder, $recipient));
+        Assert::true($this->emailChecker->hasMessageTo($bankName, $recipient));
+    }
+
+    /**
      * @throws \Exception
      */
     private function findNewReturnFormByOrderNumber(string $orderNumber): string

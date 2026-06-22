@@ -31,6 +31,7 @@ Feature: Withdraw from an order before it ships
         And latest order should not be cancelled
         And order return for latest order should have a "withdrawal_requested" change-log entry authored by a customer
         And a withdrawal "requested" email should be sent to "john.doe@madcoders.pl" for latest order
+        And the withdrawal email to "john.doe@madcoders.pl" should contain the return summary with item "Product A" for latest order
 
     @ui
     Scenario: A partial withdrawal records only the chosen quantity
