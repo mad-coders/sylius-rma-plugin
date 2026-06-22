@@ -3,9 +3,19 @@
 {% endblock %}
 
 {% block body %}
+    {% include '@MadcodersSyliusRmaPlugin/Email/_header.html.twig' %}
+
     {% autoescape %}
         {{ 'madcoders_rma.email.order_return_form.greeting'|trans({ '%name%': orderReturn.returnNumber }) }},<br>
         <br>
-        {{ 'madcoders_rma.email.order_return_form.info'|trans }},<br>
+        {% if madcoders_rma_return_form_pdf_enabled() %}
+            {{ 'madcoders_rma.email.order_return_form.info_pdf'|trans }}<br>
+        {% else %}
+            {{ 'madcoders_rma.email.order_return_form.info_no_pdf'|trans }}<br>
+        {% endif %}
     {% endautoescape %}
+
+    {% include '@MadcodersSyliusRmaPlugin/Email/_returnSummary.html.twig' %}
+
+    {% include '@MadcodersSyliusRmaPlugin/Email/_footer.html.twig' %}
 {% endblock %}

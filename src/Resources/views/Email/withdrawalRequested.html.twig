@@ -3,9 +3,15 @@
 {% endblock %}
 
 {% block body %}
+    {% include '@MadcodersSyliusRmaPlugin/Email/_header.html.twig' %}
+
     {% autoescape %}
         {{ 'madcoders_rma.email.withdrawal_requested.greeting'|trans }},<br>
         <br>
         {{ 'madcoders_rma.email.withdrawal_requested.info'|trans({ '%orderNumber%': orderReturn.orderNumber }) }}<br>
     {% endautoescape %}
+
+    {% include '@MadcodersSyliusRmaPlugin/Email/_returnSummary.html.twig' %}
+
+    {% include '@MadcodersSyliusRmaPlugin/Email/_footer.html.twig' %}
 {% endblock %}

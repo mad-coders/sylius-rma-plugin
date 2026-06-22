@@ -179,12 +179,35 @@ madcoders_rma:
         order_return_form:
             subject: 'Order return #%returnNumber%'
             greeting: 'Hi %name%'
-            info: 'Please print attached form and send to us'
+            info_pdf: 'Your return request has been registered. Please print the attached return form and send it back with your parcel.'
+            info_no_pdf: 'Your return request has been registered. Please keep this e-mail as your return confirmation - there is nothing to print or send. We will contact you with the next steps.'
 
         order_return_auth_email:
             subject: 'Order return verification code'
+            order_info: 'This verification code is for order %orderNumber%.'
             auth_code_info: 'to continue return process please enter %auth_code% code on'
             verification_page: 'verification page'
+
+        summary:
+            return_number: 'Return number'
+            order_number: 'Order number'
+            status: 'Status'
+            items: 'Items'
+            item: 'Item'
+            sku: 'SKU'
+            quantity: 'Quantity'
+            reason: 'Reason'
+            refund_details: 'Refund details'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Account holder'
+            bank_name: 'Bank'
+            state:
+                draft: 'Draft'
+                new: 'New'
+                completed: 'Completed'
+                canceled: 'Cancelled'
+                withdrawal_request: 'Withdrawal requested'
+                withdrawn: 'Withdrawn'
 
         withdrawal_requested:
             subject: 'Withdrawal request received #%returnNumber%'

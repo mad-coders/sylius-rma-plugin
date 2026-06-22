@@ -17,15 +17,16 @@ Architects of this package:
 {% block body %}
     {% set url = channel.hostname is not null ? 'https://' ~ channel.hostname ~ path('madcoders_rma_verification', { 'code': authCode.hash }) : url('madcoders_rma_verification', { 'code': authCode.hash }) %}
 
+    {% include '@MadcodersSyliusRmaPlugin/Email/_header.html.twig' %}
+
     {% autoescape %}
         Hello,<br>
         <br>
-
-        {# @todo add extension point: mail before content #}
-
+        {{ 'madcoders_rma.email.order_return_auth_email.order_info'|trans({ '%orderNumber%': authCode.orderNumber }) }}<br>
+        <br>
         {{ 'madcoders_rma.email.order_return_auth_email.auth_code_info'|trans({ '%auth_code%': authCode.authCode }) }}
         <a target="_blank" href="{{ url }}">{{ 'madcoders_rma.email.order_return_auth_email.verification_page'|trans }}</a>.
-
-        {# @todo add extension point: mail after content #}
     {% endautoescape %}
+
+    {% include '@MadcodersSyliusRmaPlugin/Email/_footer.html.twig' %}
 {% endblock %}

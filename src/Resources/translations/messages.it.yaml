@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Reso dell''ordine #%returnNumber%'
+            greeting: 'Ciao %name%'
+            info_pdf: 'La tua richiesta di reso è stata registrata. Stampa il modulo di reso allegato e rispediscilo insieme al pacco.'
+            info_no_pdf: 'La tua richiesta di reso è stata registrata. Conserva questa e-mail come conferma del reso - non c''è nulla da stampare o spedire. Ti contatteremo per i passaggi successivi.'
+
+        order_return_auth_email:
+            subject: 'Codice di verifica del reso'
+            order_info: 'Questo codice di verifica riguarda l''ordine %orderNumber%.'
+            auth_code_info: 'per continuare la procedura di reso, inserisci il codice %auth_code% su'
+            verification_page: 'la pagina di verifica'
+
+        summary:
+            return_number: 'Numero di reso'
+            order_number: 'Numero ordine'
+            status: 'Stato'
+            items: 'Articoli'
+            item: 'Articolo'
+            sku: 'SKU'
+            quantity: 'Quantità'
+            reason: 'Motivo'
+            refund_details: 'Dati per il rimborso'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Intestatario del conto'
+            bank_name: 'Banca'
+            state:
+                draft: 'Bozza'
+                new: 'Nuovo'
+                completed: 'Completato'
+                canceled: 'Annullato'
+                withdrawal_request: 'Recesso richiesto'
+                withdrawn: 'Recesso effettuato'
+
+        withdrawal_requested:
+            subject: 'Richiesta di recesso ricevuta #%returnNumber%'
+            greeting: 'Salve'
+            info: 'Abbiamo ricevuto la tua richiesta di recesso per l''ordine %orderNumber%. Il nostro team la esaminerà e confermerà il recesso a breve.'
+
+        withdrawal_confirmed:
+            subject: 'Recesso dall''ordine confermato #%returnNumber%'
+            greeting: 'Salve'
+            info: 'Il tuo recesso dall''ordine %orderNumber% è stato confermato e l''ordine è stato annullato.'
+
+        withdrawal_fallback:
+            subject: 'Il tuo recesso sarà gestito come un reso #%returnNumber%'
+            greeting: 'Salve'
+            info: 'La tua richiesta di recesso per l''ordine %orderNumber% sarà gestita tramite la nostra procedura di reso standard. Ti contatteremo per i passaggi successivi.'
+
+        withdrawal_cancelled:
+            subject: 'Recesso effettuato #%returnNumber%'
+            greeting: 'Salve'
+            info: 'Il tuo ordine %orderNumber% è stato revocato. Poiché non era stato pagato, non occorre fare altro.'

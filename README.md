@@ -317,6 +317,25 @@ Note that the default `WithdrawalEligibilityChecker` receives the
 [`allow_unpaid_withdrawal`](#configuration) flag as a constructor argument; a full replacement is
 responsible for honouring that flag itself if it still applies.
 
+### Customize the e-mails
+
+Every RMA e-mail is self-contained: it renders the return (RMA) number, the order number, the
+returned items, a state-appropriate message and - when provided - the refund (bank) details, so the
+customer gets a complete record even when the [return-form PDF](#optional-enable-the-return-form-pdf)
+is off. The copy lives under the `madcoders_rma.email.*` translation keys (English plus pl, de, fr,
+it, es, sv, da).
+
+Each e-mail is wrapped by an overridable **header** and **footer** partial - the integration point
+for your shop's branding. Override them in your application (they receive the `channel` in context):
+
+```
+templates/bundles/MadcodersSyliusRmaPlugin/Email/_header.html.twig
+templates/bundles/MadcodersSyliusRmaPlugin/Email/_footer.html.twig
+```
+
+The shared `_returnSummary.html.twig` partial renders the details block and can be overridden the
+same way.
+
 ## Development
 
 Requires PHP 8.2, Composer, Docker (for the database) and Node/Yarn (for the test

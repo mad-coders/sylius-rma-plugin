@@ -1,0 +1,78 @@
+{#
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Shared return summary for e-mails: return (RMA) number, order number, status, the related items,
+the reason and the refund (bank) details. Renders only from `orderReturn`; optional blocks are
+guarded so the e-mail still renders when items are empty or refund details are missing.
+#}
+{% set summaryItems = orderReturn.items|filter(item => item.returnQty > 0) %}
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;line-height:1.5;">
+    <tr>
+        <td><strong>{{ 'madcoders_rma.email.summary.return_number'|trans }}:</strong> {{ orderReturn.returnNumber }}</td>
+    </tr>
+    <tr>
+        <td><strong>{{ 'madcoders_rma.email.summary.order_number'|trans }}:</strong> {{ orderReturn.orderNumber }}</td>
+    </tr>
+    <tr>
+        <td><strong>{{ 'madcoders_rma.email.summary.status'|trans }}:</strong> {{ ('madcoders_rma.email.summary.state.' ~ orderReturn.orderReturnStatus)|trans }}</td>
+    </tr>
+</table>
+
+{% if summaryItems is not empty %}
+    <p style="margin:16px 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;">
+        <strong>{{ 'madcoders_rma.email.summary.items'|trans }}</strong>
+    </p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;">
+        <thead>
+            <tr>
+                <th align="left" style="padding:8px;border-bottom:2px solid #dddddd;">{{ 'madcoders_rma.email.summary.item'|trans }}</th>
+                <th align="left" style="padding:8px;border-bottom:2px solid #dddddd;">{{ 'madcoders_rma.email.summary.sku'|trans }}</th>
+                <th align="right" style="padding:8px;border-bottom:2px solid #dddddd;">{{ 'madcoders_rma.email.summary.quantity'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in summaryItems %}
+                <tr>
+                    <td style="padding:8px;border-bottom:1px solid #eeeeee;"><strong>{{ item.productName ?? item.productSku }}</strong></td>
+                    <td style="padding:8px;border-bottom:1px solid #eeeeee;">{{ item.productSku }}</td>
+                    <td align="right" style="padding:8px;border-bottom:1px solid #eeeeee;">{{ item.returnQty }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if orderReturn.returnReason %}
+    <p style="margin:16px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;">
+        <strong>{{ 'madcoders_rma.email.summary.reason'|trans }}:</strong> {{ orderReturn.returnReason }}
+    </p>
+{% endif %}
+
+{% if orderReturn.bankAccountNumber %}
+    <p style="margin:16px 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;">
+        <strong>{{ 'madcoders_rma.email.summary.refund_details'|trans }}</strong>
+    </p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#333333;line-height:1.5;">
+        <tr>
+            <td style="padding:0 16px 0 0;"><strong>{{ 'madcoders_rma.email.summary.bank_account_number'|trans }}:</strong></td>
+            <td>{{ orderReturn.bankAccountNumber }}</td>
+        </tr>
+        {% if orderReturn.accountHolderName %}
+            <tr>
+                <td style="padding:0 16px 0 0;"><strong>{{ 'madcoders_rma.email.summary.account_holder_name'|trans }}:</strong></td>
+                <td>{{ orderReturn.accountHolderName }}</td>
+            </tr>
+        {% endif %}
+        {% if orderReturn.bankName %}
+            <tr>
+                <td style="padding:0 16px 0 0;"><strong>{{ 'madcoders_rma.email.summary.bank_name'|trans }}:</strong></td>
+                <td>{{ orderReturn.bankName }}</td>
+            </tr>
+        {% endif %}
+    </table>
+{% endif %}

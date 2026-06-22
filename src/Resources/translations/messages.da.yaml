@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Returnering af ordre #%returnNumber%'
+            greeting: 'Hej %name%'
+            info_pdf: 'Din returanmodning er registreret. Print den vedhæftede returformular, og send den tilbage sammen med din pakke.'
+            info_no_pdf: 'Din returanmodning er registreret. Gem denne e-mail som din returbekræftelse - der er intet at printe eller sende. Vi kontakter dig med de næste skridt.'
+
+        order_return_auth_email:
+            subject: 'Bekræftelseskode til returnering'
+            order_info: 'Denne bekræftelseskode vedrører ordre %orderNumber%.'
+            auth_code_info: 'for at fortsætte returprocessen skal du indtaste koden %auth_code% på'
+            verification_page: 'bekræftelsessiden'
+
+        summary:
+            return_number: 'Returnummer'
+            order_number: 'Ordrenummer'
+            status: 'Status'
+            items: 'Varer'
+            item: 'Vare'
+            sku: 'SKU'
+            quantity: 'Antal'
+            reason: 'Årsag'
+            refund_details: 'Oplysninger til tilbagebetaling'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Kontohaver'
+            bank_name: 'Bank'
+            state:
+                draft: 'Kladde'
+                new: 'Ny'
+                completed: 'Afsluttet'
+                canceled: 'Annulleret'
+                withdrawal_request: 'Fortrydelse anmodet'
+                withdrawn: 'Fortrudt'
+
+        withdrawal_requested:
+            subject: 'Anmodning om fortrydelse modtaget #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Vi har modtaget din anmodning om at fortryde ordre %orderNumber%. Vores team gennemgår den og bekræfter fortrydelsen snarest.'
+
+        withdrawal_confirmed:
+            subject: 'Fortrydelse af ordre bekræftet #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din fortrydelse af ordre %orderNumber% er blevet bekræftet, og ordren er blevet annulleret.'
+
+        withdrawal_fallback:
+            subject: 'Din fortrydelse behandles som en returnering #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din anmodning om fortrydelse af ordre %orderNumber% behandles via vores almindelige returproces. Vi kontakter dig med de næste skridt.'
+
+        withdrawal_cancelled:
+            subject: 'Ordre fortrudt #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din ordre %orderNumber% er blevet fortrudt. Da den ikke var betalt, er der ikke mere at gøre.'

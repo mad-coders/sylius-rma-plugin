@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Retur av order #%returnNumber%'
+            greeting: 'Hej %name%'
+            info_pdf: 'Din returbegäran har registrerats. Skriv ut det bifogade returformuläret och skicka tillbaka det tillsammans med ditt paket.'
+            info_no_pdf: 'Din returbegäran har registrerats. Spara detta e-postmeddelande som din returbekräftelse - det finns inget att skriva ut eller skicka. Vi kontaktar dig med nästa steg.'
+
+        order_return_auth_email:
+            subject: 'Verifieringskod för retur'
+            order_info: 'Den här verifieringskoden gäller order %orderNumber%.'
+            auth_code_info: 'för att fortsätta returprocessen, ange koden %auth_code% på'
+            verification_page: 'verifieringssidan'
+
+        summary:
+            return_number: 'Returnummer'
+            order_number: 'Ordernummer'
+            status: 'Status'
+            items: 'Artiklar'
+            item: 'Artikel'
+            sku: 'SKU'
+            quantity: 'Antal'
+            reason: 'Anledning'
+            refund_details: 'Återbetalningsuppgifter'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Kontoinnehavare'
+            bank_name: 'Bank'
+            state:
+                draft: 'Utkast'
+                new: 'Ny'
+                completed: 'Slutförd'
+                canceled: 'Avbruten'
+                withdrawal_request: 'Ångerrätt begärd'
+                withdrawn: 'Ångrad'
+
+        withdrawal_requested:
+            subject: 'Begäran om ångerrätt mottagen #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Vi har tagit emot din begäran om att ångra order %orderNumber%. Vårt team granskar den och bekräftar ångerrätten inom kort.'
+
+        withdrawal_confirmed:
+            subject: 'Ångerrätt för order bekräftad #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din ångerrätt för order %orderNumber% har bekräftats och ordern har annullerats.'
+
+        withdrawal_fallback:
+            subject: 'Din ångerrätt hanteras som en retur #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din begäran om ångerrätt för order %orderNumber% hanteras via vår vanliga returprocess. Vi kontaktar dig med nästa steg.'
+
+        withdrawal_cancelled:
+            subject: 'Order ångrad #%returnNumber%'
+            greeting: 'Hej'
+            info: 'Din order %orderNumber% har ångrats. Eftersom den inte var betald finns det inget mer att göra.'
