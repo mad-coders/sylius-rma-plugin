@@ -9,6 +9,26 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.3] - 2026-06-23
+
+Third release candidate for the 1.3 line, making the RMA e-mails self-contained, branded and
+localized on top of rc.2.
+
+### Changed
+
+- **Self-contained, branded, localized RMA e-mails**: every customer e-mail (return confirmation,
+  withdrawal requested/confirmed/cancelled/fallback, and the verification code) now renders the
+  return (RMA) number, order number, the related items (name, SKU, quantity), a state-appropriate
+  message and - when present - the full refund/bank details, so the e-mail is a complete record even
+  when the return-form PDF is off (the default). The return-confirmation e-mail branches its
+  instructions on `return_form_pdf_enabled` (print the attached form vs. "this e-mail is your
+  confirmation"), and the verification e-mail now shows its order number. The shared `_returnSummary`
+  partial renders the details, and every e-mail is wrapped by overridable `_header`/`_footer`
+  partials (override at `templates/bundles/MadcodersSyliusRmaPlugin/Email/`) as the integration point
+  for shop branding; the withdrawal e-mails now also receive the channel. E-mail copy is provided in
+  8 locales (en, pl, de, fr, it, es, sv, da)
+  ([#23](https://github.com/mad-coders/sylius-rma-plugin/issues/23)).
+
 ## [1.3.0-rc.2] - 2026-06-21
 
 Second release candidate for the 1.3 line, adding item-level return control, configurable refund
@@ -154,7 +174,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...HEAD
+[1.3.0-rc.3]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...1.3.0-rc.3
 [1.3.0-rc.2]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...1.3.0-rc.2
 [1.3.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0-rc.1
 [1.2.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.1.0...1.2.0
