@@ -37,6 +37,7 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" class="Madcoders\SyliusRmaPlugin\Email\WithdrawalEmailSender">
             <argument type="service" id="sylius.email_sender" />
+            <argument type="service" id="sylius.repository.channel" />
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Email\WithdrawalEmailSenderInterface" alias="madcoders.sylius_rma_plugin.email.withdrawal_email_sender" />
 

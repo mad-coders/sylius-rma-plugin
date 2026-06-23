@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Devolución del pedido #%returnNumber%'
+            greeting: 'Hola %name%'
+            info_pdf: 'Tu solicitud de devolución ha sido registrada. Imprime el formulario de devolución adjunto y envíalo junto con tu paquete.'
+            info_no_pdf: 'Tu solicitud de devolución ha sido registrada. Conserva este correo como confirmación de la devolución - no hay nada que imprimir ni enviar. Nos pondremos en contacto contigo con los siguientes pasos.'
+
+        order_return_auth_email:
+            subject: 'Código de verificación de la devolución'
+            order_info: 'Este código de verificación corresponde al pedido %orderNumber%.'
+            auth_code_info: 'para continuar con el proceso de devolución, introduce el código %auth_code% en'
+            verification_page: 'la página de verificación'
+
+        summary:
+            return_number: 'Número de devolución'
+            order_number: 'Número de pedido'
+            status: 'Estado'
+            items: 'Artículos'
+            item: 'Artículo'
+            sku: 'SKU'
+            quantity: 'Cantidad'
+            reason: 'Motivo'
+            refund_details: 'Datos para el reembolso'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Titular de la cuenta'
+            bank_name: 'Banco'
+            state:
+                draft: 'Borrador'
+                new: 'Nuevo'
+                completed: 'Completado'
+                canceled: 'Cancelado'
+                withdrawal_request: 'Desistimiento solicitado'
+                withdrawn: 'Desistido'
+
+        withdrawal_requested:
+            subject: 'Solicitud de desistimiento recibida #%returnNumber%'
+            greeting: 'Hola'
+            info: 'Hemos recibido tu solicitud de desistimiento del pedido %orderNumber%. Nuestro equipo la revisará y confirmará el desistimiento en breve.'
+
+        withdrawal_confirmed:
+            subject: 'Desistimiento del pedido confirmado #%returnNumber%'
+            greeting: 'Hola'
+            info: 'Tu desistimiento del pedido %orderNumber% ha sido confirmado y el pedido ha sido cancelado.'
+
+        withdrawal_fallback:
+            subject: 'Tu desistimiento se gestionará como una devolución #%returnNumber%'
+            greeting: 'Hola'
+            info: 'Tu solicitud de desistimiento del pedido %orderNumber% se gestionará a través de nuestro proceso de devolución estándar. Nos pondremos en contacto contigo con los siguientes pasos.'
+
+        withdrawal_cancelled:
+            subject: 'Pedido desistido #%returnNumber%'
+            greeting: 'Hola'
+            info: 'Tu pedido %orderNumber% ha sido retirado. Como no se había pagado, no hay nada más que hacer.'

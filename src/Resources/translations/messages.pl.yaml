@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Zwrot zamówienia #%returnNumber%'
+            greeting: 'Dzień dobry %name%'
+            info_pdf: 'Twoje zgłoszenie zwrotu zostało zarejestrowane. Wydrukuj załączony formularz zwrotu i odeślij go wraz z paczką.'
+            info_no_pdf: 'Twoje zgłoszenie zwrotu zostało zarejestrowane. Zachowaj tę wiadomość jako potwierdzenie zwrotu - nie musisz niczego drukować ani wysyłać. Skontaktujemy się z Tobą w sprawie kolejnych kroków.'
+
+        order_return_auth_email:
+            subject: 'Kod weryfikacyjny zwrotu zamówienia'
+            order_info: 'Ten kod weryfikacyjny dotyczy zamówienia %orderNumber%.'
+            auth_code_info: 'aby kontynuować proces zwrotu, wprowadź kod %auth_code% na'
+            verification_page: 'stronie weryfikacji'
+
+        summary:
+            return_number: 'Numer zwrotu'
+            order_number: 'Numer zamówienia'
+            status: 'Status'
+            items: 'Produkty'
+            item: 'Produkt'
+            sku: 'SKU'
+            quantity: 'Ilość'
+            reason: 'Powód'
+            refund_details: 'Dane do zwrotu środków'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Właściciel rachunku'
+            bank_name: 'Bank'
+            state:
+                draft: 'Szkic'
+                new: 'Nowy'
+                completed: 'Zakończony'
+                canceled: 'Anulowany'
+                withdrawal_request: 'Żądanie odstąpienia'
+                withdrawn: 'Odstąpiono'
+
+        withdrawal_requested:
+            subject: 'Otrzymano żądanie odstąpienia #%returnNumber%'
+            greeting: 'Dzień dobry'
+            info: 'Otrzymaliśmy Twoje żądanie odstąpienia od zamówienia %orderNumber%. Nasz zespół wkrótce je rozpatrzy i potwierdzi odstąpienie.'
+
+        withdrawal_confirmed:
+            subject: 'Potwierdzono odstąpienie od zamówienia #%returnNumber%'
+            greeting: 'Dzień dobry'
+            info: 'Twoje odstąpienie od zamówienia %orderNumber% zostało potwierdzone, a zamówienie zostało anulowane.'
+
+        withdrawal_fallback:
+            subject: 'Twoje odstąpienie zostanie obsłużone jako zwrot #%returnNumber%'
+            greeting: 'Dzień dobry'
+            info: 'Twoje żądanie odstąpienia od zamówienia %orderNumber% zostanie obsłużone w ramach standardowego procesu zwrotu. Skontaktujemy się z Tobą w sprawie kolejnych kroków.'
+
+        withdrawal_cancelled:
+            subject: 'Odstąpiono od zamówienia #%returnNumber%'
+            greeting: 'Dzień dobry'
+            info: 'Twoje zamówienie %orderNumber% zostało wycofane. Ponieważ nie zostało opłacone, nie są wymagane żadne dalsze działania.'

@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Retour de la commande #%returnNumber%'
+            greeting: 'Bonjour %name%'
+            info_pdf: 'Votre demande de retour a été enregistrée. Veuillez imprimer le formulaire de retour joint et le renvoyer avec votre colis.'
+            info_no_pdf: 'Votre demande de retour a été enregistrée. Veuillez conserver cet e-mail comme confirmation de retour - il n''y a rien à imprimer ni à envoyer. Nous vous contacterons pour les prochaines étapes.'
+
+        order_return_auth_email:
+            subject: 'Code de vérification du retour'
+            order_info: 'Ce code de vérification concerne la commande %orderNumber%.'
+            auth_code_info: 'pour poursuivre le processus de retour, veuillez saisir le code %auth_code% sur'
+            verification_page: 'la page de vérification'
+
+        summary:
+            return_number: 'Numéro de retour'
+            order_number: 'Numéro de commande'
+            status: 'Statut'
+            items: 'Articles'
+            item: 'Article'
+            sku: 'SKU'
+            quantity: 'Quantité'
+            reason: 'Motif'
+            refund_details: 'Coordonnées de remboursement'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Titulaire du compte'
+            bank_name: 'Banque'
+            state:
+                draft: 'Brouillon'
+                new: 'Nouveau'
+                completed: 'Terminé'
+                canceled: 'Annulé'
+                withdrawal_request: 'Rétractation demandée'
+                withdrawn: 'Rétractée'
+
+        withdrawal_requested:
+            subject: 'Demande de rétractation reçue #%returnNumber%'
+            greeting: 'Bonjour'
+            info: 'Nous avons bien reçu votre demande de rétractation pour la commande %orderNumber%. Notre équipe va l''examiner et confirmer la rétractation sous peu.'
+
+        withdrawal_confirmed:
+            subject: 'Rétractation de la commande confirmée #%returnNumber%'
+            greeting: 'Bonjour'
+            info: 'Votre rétractation pour la commande %orderNumber% a été confirmée et la commande a été annulée.'
+
+        withdrawal_fallback:
+            subject: 'Votre rétractation sera traitée comme un retour #%returnNumber%'
+            greeting: 'Bonjour'
+            info: 'Votre demande de rétractation pour la commande %orderNumber% sera traitée via notre processus de retour standard. Nous vous contacterons pour les prochaines étapes.'
+
+        withdrawal_cancelled:
+            subject: 'Commande rétractée #%returnNumber%'
+            greeting: 'Bonjour'
+            info: 'Votre commande %orderNumber% a été rétractée. Comme elle n''a pas été payée, il n''y a rien de plus à faire.'

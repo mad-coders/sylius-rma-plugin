@@ -1,0 +1,54 @@
+madcoders_rma:
+    email:
+        order_return_form:
+            subject: 'Rücksendung der Bestellung #%returnNumber%'
+            greeting: 'Hallo %name%'
+            info_pdf: 'Deine Rücksendeanfrage wurde registriert. Bitte drucke das beigefügte Rücksendeformular aus und lege es deinem Paket bei.'
+            info_no_pdf: 'Deine Rücksendeanfrage wurde registriert. Bitte bewahre diese E-Mail als Rücksendebestätigung auf - es muss nichts gedruckt oder versendet werden. Wir melden uns mit den nächsten Schritten.'
+
+        order_return_auth_email:
+            subject: 'Bestätigungscode für die Rücksendung'
+            order_info: 'Dieser Bestätigungscode gilt für die Bestellung %orderNumber%.'
+            auth_code_info: 'um den Rücksendevorgang fortzusetzen, gib bitte den Code %auth_code% ein auf'
+            verification_page: 'der Bestätigungsseite'
+
+        summary:
+            return_number: 'Rücksendenummer'
+            order_number: 'Bestellnummer'
+            status: 'Status'
+            items: 'Artikel'
+            item: 'Artikel'
+            sku: 'SKU'
+            quantity: 'Menge'
+            reason: 'Grund'
+            refund_details: 'Erstattungsdaten'
+            bank_account_number: 'IBAN'
+            account_holder_name: 'Kontoinhaber'
+            bank_name: 'Bank'
+            state:
+                draft: 'Entwurf'
+                new: 'Neu'
+                completed: 'Abgeschlossen'
+                canceled: 'Storniert'
+                withdrawal_request: 'Widerruf angefragt'
+                withdrawn: 'Widerrufen'
+
+        withdrawal_requested:
+            subject: 'Widerrufsanfrage erhalten #%returnNumber%'
+            greeting: 'Hallo'
+            info: 'Wir haben deine Anfrage zum Widerruf der Bestellung %orderNumber% erhalten. Unser Team prüft sie und bestätigt den Widerruf in Kürze.'
+
+        withdrawal_confirmed:
+            subject: 'Widerruf der Bestellung bestätigt #%returnNumber%'
+            greeting: 'Hallo'
+            info: 'Dein Widerruf der Bestellung %orderNumber% wurde bestätigt und die Bestellung wurde storniert.'
+
+        withdrawal_fallback:
+            subject: 'Dein Widerruf wird als Rücksendung bearbeitet #%returnNumber%'
+            greeting: 'Hallo'
+            info: 'Deine Widerrufsanfrage für die Bestellung %orderNumber% wird über unseren regulären Rücksendeprozess bearbeitet. Wir melden uns mit den nächsten Schritten.'
+
+        withdrawal_cancelled:
+            subject: 'Bestellung widerrufen #%returnNumber%'
+            greeting: 'Hallo'
+            info: 'Deine Bestellung %orderNumber% wurde widerrufen. Da sie nicht bezahlt wurde, ist nichts weiter zu tun.'

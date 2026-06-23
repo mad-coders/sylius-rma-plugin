@@ -21,6 +21,8 @@ use Madcoders\SyliusRmaPlugin\Email\WithdrawalEmailSender;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
 
@@ -29,6 +31,8 @@ final class WithdrawalEmailSenderTest extends UnitTestCase
     use ProphecyTrait;
 
     private const RECIPIENT = 'john.doe@madcoders.pl';
+
+    private const CHANNEL_CODE = 'WEB';
 
     /**
      * @return array<string, array{0: string, 1: string}>
@@ -45,22 +49,31 @@ final class WithdrawalEmailSenderTest extends UnitTestCase
 
     /**
      * @test
+     *
      * @dataProvider emailMethods
      */
-    public function it_sends_the_matching_email_to_the_customer(string $method, string $expectedCode): void
+    public function it_sends_the_matching_email_with_the_return_and_channel(string $method, string $expectedCode): void
     {
+        $channel = $this->prophesize(ChannelInterface::class)->reveal();
+
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
         $orderReturn->getCustomerEmail()->willReturn(self::RECIPIENT);
+        $orderReturn->getChannelCode()->willReturn(self::CHANNEL_CODE);
+        $orderReturnRevealed = $orderReturn->reveal();
+
+        $channelRepository = $this->prophesize(ChannelRepositoryInterface::class);
+        $channelRepository->findOneByCode(self::CHANNEL_CODE)->willReturn($channel);
 
         $emailSender = $this->prophesize(SenderInterface::class);
         $emailSender->send(
             $expectedCode,
             [self::RECIPIENT],
-            Argument::that(static fn (array $data): bool => array_key_exists('orderReturn', $data)),
+            Argument::that(static fn (array $data): bool => ($data['orderReturn'] ?? null) === $orderReturnRevealed &&
+                ($data['channel'] ?? null) === $channel),
         )->shouldBeCalledOnce();
 
-        $sender = new WithdrawalEmailSender($emailSender->reveal());
-        $sender->{$method}($orderReturn->reveal());
+        $sender = new WithdrawalEmailSender($emailSender->reveal(), $channelRepository->reveal());
+        $sender->{$method}($orderReturnRevealed);
     }
 
     /** @test */
@@ -69,10 +82,13 @@ final class WithdrawalEmailSenderTest extends UnitTestCase
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
         $orderReturn->getCustomerEmail()->willReturn(null);
 
+        $channelRepository = $this->prophesize(ChannelRepositoryInterface::class);
+        $channelRepository->findOneByCode(Argument::any())->shouldNotBeCalled();
+
         $emailSender = $this->prophesize(SenderInterface::class);
         $emailSender->send(Argument::cetera())->shouldNotBeCalled();
 
-        $sender = new WithdrawalEmailSender($emailSender->reveal());
+        $sender = new WithdrawalEmailSender($emailSender->reveal(), $channelRepository->reveal());
         $sender->sendWithdrawalRequestedEmail($orderReturn->reveal());
     }
 }

@@ -17,12 +17,14 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Email;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
+use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 
 final readonly class WithdrawalEmailSender implements WithdrawalEmailSenderInterface
 {
     public function __construct(
         private SenderInterface $emailSender,
+        private ChannelRepositoryInterface $channelRepository,
     ) {
     }
 
@@ -53,6 +55,11 @@ final readonly class WithdrawalEmailSender implements WithdrawalEmailSenderInter
             return;
         }
 
-        $this->emailSender->send($email, [$customerEmail], ['orderReturn' => $orderReturn]);
+        $channel = $this->channelRepository->findOneByCode($orderReturn->getChannelCode());
+
+        $this->emailSender->send($email, [$customerEmail], [
+            'orderReturn' => $orderReturn,
+            'channel' => $channel,
+        ]);
     }
 }

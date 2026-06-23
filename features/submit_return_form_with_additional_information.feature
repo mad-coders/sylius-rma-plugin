@@ -68,3 +68,17 @@ Feature: Gating the additional information section behind the feature flag
             And I fill in the bank name as "ACME Bank"
             And I click submit button for return form
             Then I should be redirected to return review page for latest order
+
+        @ui
+        Scenario: The confirmation e-mail carries the items and refund details
+            Given the return form requires additional information
+            And I am on order return page for latest order
+            When I choose reason with code "reason_360"
+            And I fill in my bank account in IBAN format
+            And I fill in the account holder name as "John Doe"
+            And I fill in the bank name as "ACME Bank"
+            And I click submit button for return form
+            Then I should be redirected to return review page for latest order
+            When I approve return form
+            Then email with order return confirmation should be sent to "john.doe@madcoders.pl" for latest order
+            And the order return confirmation email to "john.doe@madcoders.pl" should list item "Product A" and refund details "John Doe" and "ACME Bank"
