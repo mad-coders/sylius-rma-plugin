@@ -9,6 +9,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Changed
+
+- **Sylius 2 line begins (2.0 branch)**: the plugin now targets `sylius/sylius ^2.2`
+  (Symfony ^6.4 || ^7.x, PHP ^8.2). The migration is phased and tracked in
+  [docs/upgrade-sylius-2/ROADMAP.md](docs/upgrade-sylius-2/ROADMAP.md); until it completes,
+  the 2.0 branch is not installable and CI runs a reduced pipeline. Sylius 1.12 support
+  continues on the 1.x branches.
+
 ## [1.3.0-rc.3] - 2026-06-23
 
 Third release candidate for the 1.3 line, making the RMA e-mails self-contained, branded and
