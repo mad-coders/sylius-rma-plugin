@@ -18,9 +18,9 @@ namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
 final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorInterface
 {
-    private const DEFAULT_MIN_CODE = 100000;
+    private const DEFAULT_MIN_CODE = 10000000;
 
-    private const DEFAULT_MAX_CODE = 999999;
+    private const DEFAULT_MAX_CODE = 99999999;
 
     public function __construct(
         private int $min = self::DEFAULT_MIN_CODE,
@@ -28,8 +28,15 @@ final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorI
     ) {
     }
 
+    /**
+     * Uses the cryptographically secure random_int() rather than mt_rand(): the emitted value is
+     * the only secret gating the return/withdrawal flow, so it must not be predictable. The default
+     * range is an 8-digit code to enlarge the keyspace (see security issue #26).
+     *
+     * @throws \Random\RandomException when no cryptographically secure source of randomness is available
+     */
     public function generate(): int
     {
-        return mt_rand($this->min, $this->max);
+        return random_int($this->min, $this->max);
     }
 }
