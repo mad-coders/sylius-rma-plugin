@@ -206,6 +206,18 @@ final readonly class WithdrawalController
             return $this->errorRedirect($request, 'madcoders_rma.ui.first_step.error.order_number_not_valid', ['%orderNumber%' => $returnNumber]);
         }
 
+        // Return numbers are predictable (RMA-{orderNumber}-{n}), so this page must not be readable
+        // by anyone who guesses the number: gate it on the same order-return authorization as the
+        // rest of the withdrawal flow (see security issue #27).
+        $order = $this->orderByNumberProvider->findOneByNumber($orderReturn->getOrderNumber());
+        if (!$order instanceof OrderInterface) {
+            return $this->errorRedirect($request, 'madcoders_rma.ui.first_step.error.order_number_not_valid', ['%orderNumber%' => $orderReturn->getOrderNumber()]);
+        }
+
+        if (!$this->authorizationChecker->isGranted(OrderReturnVoter::ATTRIBUTE_RETURN, $order)) {
+            return $this->errorRedirect($request, 'madcoders_rma.ui.return.user_not_privileges_to_this_order');
+        }
+
         return new Response($this->twig->render($template, [
             'orderReturn' => $orderReturn,
             'withdrawn' => OrderReturnInterface::STATUS_WITHDRAWN === $orderReturn->getOrderReturnStatus(),
