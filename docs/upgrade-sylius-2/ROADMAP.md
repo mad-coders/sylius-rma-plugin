@@ -67,9 +67,10 @@ removed per phase:
 
 - [x] Cut `2.0` from `1.3` tip and push (exact copy of `1c8525a`).
 - [x] Commit this roadmap.
-- [ ] CI: add `2.0` to push triggers; gate heavy jobs for the 2.0 line.
-- [ ] GitHub issues for phases 2 to 8 (label `sylius-2`, milestone `2.0.0`).
-- [ ] Phase 2 groundwork: rewritten `composer.json` targeting `sylius/sylius ^2.2`.
+- [x] CI: add `2.0` to push triggers; gate heavy jobs for the 2.0 line.
+- [x] GitHub issues for phases 2 to 8 (label `sylius-2`, milestone `2.0.0`): #35 to #41.
+- [x] Phase 2 groundwork: rewritten `composer.json` targeting `sylius/sylius ^2.2`
+      (verified to resolve to Sylius 2.2.6 on Symfony 7.4).
 
 Definition of done: `origin/2.0` exists at `1c8525a`; this PR merged; CI completes
 without red on the PR (gated jobs skipped); 7 phase issues open.
