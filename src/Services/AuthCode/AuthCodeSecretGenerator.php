@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Services\AuthCode;
 
+use Random\RandomException;
+
 final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorInterface
 {
     private const DEFAULT_MIN_CODE = 10000000;
@@ -33,7 +35,7 @@ final readonly class AuthCodeSecretGenerator implements AuthCodeSecretGeneratorI
      * the only secret gating the return/withdrawal flow, so it must not be predictable. The default
      * range is an 8-digit code to enlarge the keyspace (see security issue #26).
      *
-     * @throws \Random\RandomException when no cryptographically secure source of randomness is available
+     * @throws RandomException when no cryptographically secure source of randomness is available
      */
     public function generate(): int
     {

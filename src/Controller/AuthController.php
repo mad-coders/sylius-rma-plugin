@@ -110,7 +110,7 @@ final readonly class AuthController
             // Rate limit code requests per client IP + order so an attacker cannot mint an endless
             // stream of fresh codes (each also e-mails the real customer) to keep brute forcing the
             // verification step (security issue #26).
-            $retryAfter = $this->authThrottler->throttle('rma_start_' . ((string) $request->getClientIp()) . '_' . $orderNumber);
+            $retryAfter = $this->authThrottler->throttle('rma_start_' . ($request->getClientIp()) . '_' . $orderNumber);
             if (null !== $retryAfter) {
                 return $this->tooManyRequestsResponse($request, $template, ['form' => $form->createView()], $retryAfter);
             }
@@ -247,7 +247,7 @@ final readonly class AuthController
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $throttleKey = 'rma_verify_' . ((string) $request->getClientIp()) . '_' . $authData->getOrderNumber();
+            $throttleKey = 'rma_verify_' . ($request->getClientIp()) . '_' . $authData->getOrderNumber();
 
             // Rate limit verification attempts per client IP + order (security issue #26).
             $retryAfter = $this->authThrottler->throttle($throttleKey);
