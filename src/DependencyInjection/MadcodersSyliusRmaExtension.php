@@ -58,6 +58,15 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
         Assert::scalar($requireAdditionalInformation);
         $container->setParameter('madcoders_rma.require_additional_information', $requireAdditionalInformation);
 
+        // Default for the env var backing limit_auth_attempts, so the auth-code rate limiter is on
+        // unless a merchant explicitly opts out.
+        $container->setParameter('env(MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS)', 'true');
+        // No (bool) cast here for the same reason as the flags above: the value may be an env
+        // placeholder resolved only at runtime, so it stays a scalar at compile time.
+        $limitAuthAttempts = $config['limit_auth_attempts'];
+        Assert::scalar($limitAuthAttempts);
+        $container->setParameter('madcoders_rma.limit_auth_attempts', $limitAuthAttempts);
+
         $loader->load('services.xml');
     }
 

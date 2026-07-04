@@ -30,6 +30,7 @@ Architects of this package:
             <argument type="service" id="madcoders_rma.repository.authcode" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.return_eligibility_checker" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.auth_code.throttler" />
         </service>
 
         <service id="madcoders.sylius_rma_plugin.controller.return_controller"
