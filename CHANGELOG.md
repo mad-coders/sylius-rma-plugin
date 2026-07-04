@@ -17,6 +17,44 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   the 2.0 branch is not installable and CI runs a reduced pipeline. Sylius 1.12 support
   continues on the 1.x branches.
 
+### Security
+
+- Carried up from the 1.3 line (rc.4): the three return/withdrawal security fixes below
+  ([#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
+  [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
+  [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+
+## [1.3.0-rc.4] - 2026-07-05
+
+Fourth release candidate for the 1.3 line, a security hardening pass over the return and
+withdrawal flows on top of rc.3.
+
+### Security
+
+- **Harden the RMA auth-code against brute force**: the emailed code is the single secret gating
+  the return/withdrawal flow, and a successful guess can trigger an irreversible order cancellation
+  via the instant-withdrawal path. The attempt limit is now a real lockout (verification hard-stops
+  once attempts reach the maximum, before evaluating the guess), the code is invalidated on lockout,
+  expiry and successful one-time use (so its hash cannot be replayed), it is generated with
+  `random_int()` over an 8-digit keyspace and compared with `hash_equals()` (constant time). The
+  code-request and verification endpoints are rate limited per client IP and order number by an
+  in-plugin PSR-6 cache-backed throttler (no extra Composer dependency, only a cache pool),
+  returning HTTP 429 with a `Retry-After` header when exceeded; the limiter sits behind the
+  `madcoders_rma.limit_auth_attempts` feature flag (env `MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS`,
+  default on) ([#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26)).
+- **Send the return document to the order's customer, not a customer-supplied address**: the
+  editable `customerEmail` form field was used verbatim as the recipient of the return-form e-mail
+  and its attached PDF (which carries the customer's name, address and order lines), so a customer
+  could redirect their own return document to an arbitrary address. The recipient is now re-derived
+  from the order's customer and the submitted value is never read for the recipient; `NotBlank` and
+  `Email` constraints are added on the field for input hygiene
+  ([#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+- **Authorize the withdrawal success page**: `WithdrawalController::successIndex` rendered an
+  `OrderReturn` looked up by its predictable return number (`RMA-{orderNumber}-{n}`) with no
+  authorization check, an enumeration oracle for return existence and status. It is now gated on the
+  same `OrderReturnVoter` check as the sibling withdrawal actions
+  ([#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27)).
+
 ## [1.3.0-rc.3] - 2026-06-23
 
 Third release candidate for the 1.3 line, making the RMA e-mails self-contained, branded and

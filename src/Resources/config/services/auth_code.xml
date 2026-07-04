@@ -37,6 +37,13 @@ Architects of this package:
         <service id="madcoders.sylius_rma_plugin.auth_code.secret_generator"
                  class="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeSecretGenerator" />
 
+        <!-- brute-force rate limiter for the auth-code endpoints (feature-flagged, default on) -->
+        <service id="madcoders.sylius_rma_plugin.auth_code.throttler"
+                 class="Madcoders\SyliusRmaPlugin\Services\AuthCode\CacheAuthThrottler">
+            <argument type="service" id="cache.app" />
+            <argument>%madcoders_rma.limit_auth_attempts%</argument>
+        </service>
+
 
         <!-- aliases -->
         <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface"
@@ -50,5 +57,8 @@ Architects of this package:
 
         <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeExpiryDateCalculatorInterface"
                  alias="madcoders.sylius_rma_plugin.auth_code.expiry_date_calculator" />
+
+        <service id="Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthThrottlerInterface"
+                 alias="madcoders.sylius_rma_plugin.auth_code.throttler" />
     </services>
 </container>
