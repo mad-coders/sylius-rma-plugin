@@ -1,2 +1,4 @@
+# The plugin's own routing.yml already applies the shop (/{_locale}) and admin (/admin)
+# prefixes and the credits route, so the test app imports it as a single resource.
 madcoders_rma:
     resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing.yml"
