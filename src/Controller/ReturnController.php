@@ -32,6 +32,7 @@ use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
 use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -179,7 +180,12 @@ final class ReturnController extends AbstractController
                 $userLastName = 'no Last Name';
             }
 
-            $customerEmail = $orderReturn->getCustomerEmail();
+            // Re-derive the recipient from the order's customer rather than the customer-editable
+            // customerEmail submitted on the return form. The return document (and, when enabled,
+            // the attached PDF) carries the customer's name, address and order lines, so it must
+            // not be redirectable to an arbitrary address (see security issue #28).
+            $customer = $order->getCustomer();
+            $customerEmail = $customer instanceof CustomerInterface ? $customer->getEmail() : null;
             if (null === $customerEmail || '' === $customerEmail) {
                 $customerEmail = 'no email address';
             }

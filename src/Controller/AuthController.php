@@ -26,6 +26,7 @@ use Madcoders\SyliusRmaPlugin\Provider\OrderByNumberProviderInterface;
 use Madcoders\SyliusRmaPlugin\Security\OrderReturnAuthorizerInterface;
 use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthCodeFactoryInterface;
+use Madcoders\SyliusRmaPlugin\Services\AuthCode\AuthThrottlerInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -60,6 +61,7 @@ final readonly class AuthController
         private RepositoryInterface $authCodeRepository,
         private WithdrawalEligibilityCheckerInterface $withdrawalEligibilityChecker,
         private ReturnEligibilityCheckerInterface $returnEligibilityChecker,
+        private AuthThrottlerInterface $authThrottler,
     ) {
     }
 
@@ -105,6 +107,14 @@ final readonly class AuthController
                 return new RedirectResponse($this->router->generate($forwardRoute, ['orderNumber' => str_replace('#', '', (string) $order->getNumber())]));
             }
 
+            // Rate limit code requests per client IP + order so an attacker cannot mint an endless
+            // stream of fresh codes (each also e-mails the real customer) to keep brute forcing the
+            // verification step (security issue #26).
+            $retryAfter = $this->authThrottler->throttle('rma_start_' . ($request->getClientIp()) . '_' . $orderNumber);
+            if (null !== $retryAfter) {
+                return $this->tooManyRequestsResponse($request, $template, ['form' => $form->createView()], $retryAfter);
+            }
+
             $authCode = $this->authCodeFactory->createForOrder($order);
             $this->authCodeEmailSender->sendAuthCodeEmail($authCode, $order);
 
@@ -147,6 +157,40 @@ final readonly class AuthController
     }
 
     /**
+     * Flashes a translated error and sends the customer back to the start of the flow. Used for the
+     * terminal auth-code outcomes (expired code, lockout) after the code has been invalidated.
+     */
+    private function flashToStart(Request $request, string $messageKey): RedirectResponse
+    {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $this->translator->trans($messageKey));
+
+        return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+    }
+
+    /**
+     * Renders the current step with an HTTP 429 status and a Retry-After header when the request is
+     * rate limited, so both humans and clients get a proper "too many requests" response.
+     *
+     * @param array<string, mixed> $context
+     */
+    private function tooManyRequestsResponse(Request $request, string $template, array $context, int $retryAfter): Response
+    {
+        /** @var FlashBagInterface $flashBag */
+        $flashBag = $request->getSession()->getBag('flashes');
+        $flashBag->add('error', $this->translator->trans('madcoders_rma.ui.verification_step.error.too_many_requests'));
+
+        $templateWithAttribute = $this->getSyliusAttribute($request, 'template', $template);
+
+        return new Response(
+            $this->templatingEngine->render($templateWithAttribute, $context),
+            Response::HTTP_TOO_MANY_REQUESTS,
+            ['Retry-After' => (string) $retryAfter],
+        );
+    }
+
+    /**
      * @throws Exception
      */
     public function verification(Request $request, string $template, string $code): Response
@@ -167,19 +211,20 @@ final readonly class AuthController
             throw new NotFoundHttpException(sprintf('Auth code %s has not been found', $code));
         }
 
-        // TODO: needs to be shorten
+        // Expired code: invalidate it (so its hash cannot be replayed) and send the customer back.
         if ($authData->getExpiresAt() < (new \DateTime())) {
-            $errorMessage = $this->getSyliusAttribute(
-                $request,
-                'error_flash',
-                $this->translator->trans('madcoders_rma.ui.verification_step.error.code_expired'),
-            );
+            $this->authCodeRepository->remove($authData);
 
-            /** @var FlashBagInterface $flashBag */
-            $flashBag = $request->getSession()->getBag('flashes');
-            $flashBag->add('error', $errorMessage);
+            return $this->flashToStart($request, 'madcoders_rma.ui.verification_step.error.code_expired');
+        }
 
-            return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+        // Too many attempts already recorded: hard stop *before* evaluating any further guess and
+        // invalidate the code. This makes the attempts counter an actual lockout instead of a
+        // cosmetic message, and prevents the hash from being reused (security issue #26).
+        if ($authData->getAttempts() >= AuthCode::DEFAULT_MAX_ATTEMPTS) {
+            $this->authCodeRepository->remove($authData);
+
+            return $this->flashToStart($request, 'madcoders_rma.ui.verification_step.error.max_attempts_exceeded');
         }
 
         $order = $this->orderByNumberProvider->findOneByNumber($authData->getOrderNumber());
@@ -202,37 +247,43 @@ final readonly class AuthController
         $form = $this->formFactory->create($formType);
 
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $throttleKey = 'rma_verify_' . ($request->getClientIp()) . '_' . $authData->getOrderNumber();
+
+            // Rate limit verification attempts per client IP + order (security issue #26).
+            $retryAfter = $this->authThrottler->throttle($throttleKey);
+            if (null !== $retryAfter) {
+                return $this->tooManyRequestsResponse($request, $template, ['code' => $code, 'form' => $form->createView()], $retryAfter);
+            }
+
             /** @var array $data */
             $data = $form->getData();
             $authCode = $data['authCode'];
+            Assert::integer($authCode);
 
             $orderNumber = $authData->getOrderNumber();
             $authDataCode = $authData->getAuthCode();
 
-            if ($authDataCode === $authCode) {
-                // this is success path
+            // Constant-time comparison so the code cannot be recovered through response timing.
+            if (hash_equals((string) $authDataCode, (string) $authCode)) {
+                // Success path: authorize, consume the one-time code, and clear the throttle counter.
                 $this->orderReturnAuthorizer->authorize($order);
+                $this->authCodeRepository->remove($authData);
+                $this->authThrottler->reset($throttleKey);
 
                 return new RedirectResponse($this->router->generate($successRoute, ['orderNumber' => $orderNumber]));
             }
 
-            // this is error handling
+            // Wrong code: record the attempt.
             $authData->increaseNumberOfAttempts();
-            $this->authCodeRepository->add($authData);
 
+            // On reaching the limit, invalidate the code so it cannot be brute forced further.
             if ($authData->getAttempts() >= AuthCode::DEFAULT_MAX_ATTEMPTS) {
-                $errorMessage = $this->getSyliusAttribute(
-                    $request,
-                    'error_flash',
-                    $this->translator->trans('madcoders_rma.ui.verification_step.error.max_attempts_exceeded'),
-                );
+                $this->authCodeRepository->remove($authData);
 
-                /** @var FlashBagInterface $flashBag */
-                $flashBag = $request->getSession()->getBag('flashes');
-                $flashBag->add('error', $errorMessage);
-
-                return new RedirectResponse($this->router->generate('madcoders_rma_start'));
+                return $this->flashToStart($request, 'madcoders_rma.ui.verification_step.error.max_attempts_exceeded');
             }
+
+            $this->authCodeRepository->add($authData);
 
             $errorMessage = $this->getSyliusAttribute(
                 $request,

@@ -11,6 +11,8 @@ madcoders_rma:
             not_blank: 'Please enter the account holder name'
         bank_name:
             not_blank: 'Please enter the bank name / BIC-SWIFT'
+        email:
+            not_a_valid: 'Please enter a valid e-mail address'
         notes:
             not_blank: 'This field cannot be empty'
         days_to_deadline_to_return:

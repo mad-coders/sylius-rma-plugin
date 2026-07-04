@@ -24,9 +24,13 @@ milestone `2.0.0`).
 At the time `2.0` was cut, these fixes were NOT yet merged into `1.3` and must be
 forward-merged (or cherry-picked) into `2.0` once they land:
 
-- [ ] `fix/issue-26-authcode-hardening` (auth-code brute-force hardening, `a74a719`)
-- [ ] `fix/issue-27-withdrawal-success-authz`
-- [ ] `fix/issue-28-return-email-recipient`
+- [x] `fix/issue-26-authcode-hardening` (auth-code brute-force hardening, `a74a719`)
+- [x] `fix/issue-27-withdrawal-success-authz`
+- [x] `fix/issue-28-return-email-recipient`
+
+All three landed on `1.3` (released as `1.3.0-rc.4`) and were upmerged into `2.0` via the
+merge of `1.3` (see the merge that introduced this line). Re-validate the carried-up logic
+when the affected controllers/services are touched during phases 3, 4 and 7.
 
 Check this list before tagging `v2.0.0-rc.1`.
 

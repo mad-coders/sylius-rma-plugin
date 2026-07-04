@@ -22,6 +22,7 @@ use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProviderInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
@@ -64,6 +65,23 @@ class ReturnFormTypeTest extends UnitTestCase
             ->shouldHaveBeenCalled();
         $builder->add('accountHolderName', Argument::cetera())->shouldNotHaveBeenCalled();
         $builder->add('bankName', Argument::cetera())->shouldNotHaveBeenCalled();
+    }
+
+    /** @test */
+    function the_customer_email_field_must_be_a_valid_email(): void
+    {
+        // the customerEmail value must be a syntactically valid address; the return document
+        // recipient is re-derived from the order server-side (see security issue #28)
+        $builder = $this->prophesize(FormBuilderInterface::class);
+        $double = $builder->reveal();
+        $builder->add(Argument::cetera())->willReturn($double);
+        $builder->addEventListener(Argument::cetera())->willReturn($double);
+
+        $returnForm = new ReturnFormType($this->prophesize(ChoiceProviderInterface::class)->reveal());
+        $returnForm->buildForm($double, []);
+
+        $builder->add('customerEmail', Argument::any(), Argument::that($this->hasConstraints(NotBlank::class, Email::class)))
+            ->shouldHaveBeenCalled();
     }
 
     /**
