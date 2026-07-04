@@ -29,6 +29,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ReturnFormType extends AbstractType
@@ -71,6 +72,14 @@ class ReturnFormType extends AbstractType
             ->add('customerEmail', TextType::class, [
                 'required' => true,
                 'label' => 'sylius.ui.email',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.not_blank',
+                    ]),
+                    new Email([
+                        'message' => 'madcoders_rma.validator.email.not_a_valid',
+                    ]),
+                ],
             ])
             ->add('company', TextType::class, [
                 'required' => false,
