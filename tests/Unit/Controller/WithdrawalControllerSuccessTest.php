@@ -27,7 +27,7 @@ use Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterf
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -134,7 +134,7 @@ class WithdrawalControllerSuccessTest extends UnitTestCase
             $this->prophesize(InstantCancellationEligibilityCheckerInterface::class)->reveal(),
             $this->prophesize(ReturnRequestBuilder::class)->reveal(),
             $this->prophesize(OrderWithdrawalProcessorInterface::class)->reveal(),
-            $this->prophesize(StateMachineFactoryInterface::class)->reveal(),
+            $this->prophesize(StateMachineInterface::class)->reveal(),
             $orderReturnRepository,
             $this->prophesize(CsrfTokenManagerInterface::class)->reveal(),
             $translator->reveal(),

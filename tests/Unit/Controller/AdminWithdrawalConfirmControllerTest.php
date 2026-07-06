@@ -20,8 +20,7 @@ use Madcoders\SyliusRmaPlugin\Controller\AdminWithdrawalConfirmController;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
-use SM\StateMachine\StateMachineInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -41,17 +40,14 @@ class AdminWithdrawalConfirmControllerTest extends UnitTestCase
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
 
         $stateMachine = $this->prophesize(StateMachineInterface::class);
-        $stateMachine->can(OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(true);
-        $stateMachine->apply(OrderReturnInterface::TRANSITION_WITHDRAW)->shouldBeCalled();
-
-        $stateMachineFactory = $this->prophesize(StateMachineFactoryInterface::class);
-        $stateMachineFactory->get($orderReturn->reveal(), OrderReturnInterface::GRAPH)->willReturn($stateMachine->reveal());
+        $stateMachine->can($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(true);
+        $stateMachine->apply($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->shouldBeCalled();
 
         $repository = $this->prophesize(RepositoryInterface::class);
         $repository->findOneBy(['id' => 7])->willReturn($orderReturn->reveal());
         $repository->add($orderReturn->reveal())->shouldBeCalled();
 
-        $controller = $this->controller($stateMachineFactory->reveal(), $repository->reveal(), true);
+        $controller = $this->controller($stateMachine->reveal(), $repository->reveal(), true);
 
         $response = $controller->__invoke($this->request(), 7);
 
@@ -64,17 +60,14 @@ class AdminWithdrawalConfirmControllerTest extends UnitTestCase
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
 
         $stateMachine = $this->prophesize(StateMachineInterface::class);
-        $stateMachine->can(OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(false);
-        $stateMachine->apply(Argument::any())->shouldNotBeCalled();
-
-        $stateMachineFactory = $this->prophesize(StateMachineFactoryInterface::class);
-        $stateMachineFactory->get($orderReturn->reveal(), OrderReturnInterface::GRAPH)->willReturn($stateMachine->reveal());
+        $stateMachine->can($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(false);
+        $stateMachine->apply(Argument::cetera())->shouldNotBeCalled();
 
         $repository = $this->prophesize(RepositoryInterface::class);
         $repository->findOneBy(['id' => 7])->willReturn($orderReturn->reveal());
         $repository->add(Argument::any())->shouldNotBeCalled();
 
-        $controller = $this->controller($stateMachineFactory->reveal(), $repository->reveal(), true);
+        $controller = $this->controller($stateMachine->reveal(), $repository->reveal(), true);
 
         $response = $controller->__invoke($this->request(), 7);
 
@@ -86,14 +79,15 @@ class AdminWithdrawalConfirmControllerTest extends UnitTestCase
     {
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
 
-        $stateMachineFactory = $this->prophesize(StateMachineFactoryInterface::class);
-        $stateMachineFactory->get(Argument::cetera())->shouldNotBeCalled();
+        $stateMachine = $this->prophesize(StateMachineInterface::class);
+        $stateMachine->can(Argument::cetera())->shouldNotBeCalled();
+        $stateMachine->apply(Argument::cetera())->shouldNotBeCalled();
 
         $repository = $this->prophesize(RepositoryInterface::class);
         $repository->findOneBy(['id' => 7])->willReturn($orderReturn->reveal());
         $repository->add(Argument::any())->shouldNotBeCalled();
 
-        $controller = $this->controller($stateMachineFactory->reveal(), $repository->reveal(), false);
+        $controller = $this->controller($stateMachine->reveal(), $repository->reveal(), false);
 
         $response = $controller->__invoke($this->request(), 7);
 
@@ -110,7 +104,7 @@ class AdminWithdrawalConfirmControllerTest extends UnitTestCase
     }
 
     private function controller(
-        StateMachineFactoryInterface $stateMachineFactory,
+        StateMachineInterface $stateMachine,
         RepositoryInterface $repository,
         bool $csrfValid,
     ): AdminWithdrawalConfirmController {
@@ -125,7 +119,7 @@ class AdminWithdrawalConfirmControllerTest extends UnitTestCase
 
         return new AdminWithdrawalConfirmController(
             $repository,
-            $stateMachineFactory,
+            $stateMachine,
             $router->reveal(),
             $csrfTokenManager->reveal(),
             $translator->reveal(),

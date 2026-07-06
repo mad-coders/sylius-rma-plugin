@@ -19,8 +19,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Unit\Services\Withdrawal;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessor;
 use Prophecy\PhpUnit\ProphecyTrait;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
-use SM\StateMachine\StateMachineInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Order\OrderTransitions;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
@@ -35,17 +34,13 @@ class OrderWithdrawalProcessorTest extends UnitTestCase
         $order = $this->prophesize(OrderInterface::class);
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
 
-        $orderSm = $this->prophesize(StateMachineInterface::class);
-        $orderSm->can(OrderTransitions::TRANSITION_CANCEL)->willReturn(true);
-        $orderSm->apply(OrderTransitions::TRANSITION_CANCEL)->shouldBeCalledOnce()->willReturn(true);
+        $stateMachine = $this->prophesize(StateMachineInterface::class);
+        $stateMachine->can($order->reveal(), OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL)->willReturn(true);
+        $stateMachine->can($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(true);
+        $stateMachine->apply($order->reveal(), OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL)->shouldBeCalledOnce();
+        $stateMachine->apply($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->shouldBeCalledOnce();
 
-        $returnSm = $this->prophesize(StateMachineInterface::class);
-        $returnSm->can(OrderReturnInterface::TRANSITION_WITHDRAW)->willReturn(true);
-        $returnSm->apply(OrderReturnInterface::TRANSITION_WITHDRAW)->shouldBeCalledOnce()->willReturn(true);
-
-        $factory = $this->factory($order->reveal(), $orderSm->reveal(), $orderReturn->reveal(), $returnSm->reveal());
-
-        (new OrderWithdrawalProcessor($factory))->process($order->reveal(), $orderReturn->reveal());
+        (new OrderWithdrawalProcessor($stateMachine->reveal()))->process($order->reveal(), $orderReturn->reveal());
     }
 
     /** @test */
@@ -55,30 +50,13 @@ class OrderWithdrawalProcessorTest extends UnitTestCase
         $order->getNumber()->willReturn('000000011');
         $orderReturn = $this->prophesize(OrderReturnInterface::class);
 
-        $orderSm = $this->prophesize(StateMachineInterface::class);
-        $orderSm->can(OrderTransitions::TRANSITION_CANCEL)->willReturn(false);
-        $orderSm->apply(OrderTransitions::TRANSITION_CANCEL)->shouldNotBeCalled();
-
-        $returnSm = $this->prophesize(StateMachineInterface::class);
-        $returnSm->apply(OrderReturnInterface::TRANSITION_WITHDRAW)->shouldNotBeCalled();
-
-        $factory = $this->factory($order->reveal(), $orderSm->reveal(), $orderReturn->reveal(), $returnSm->reveal());
+        $stateMachine = $this->prophesize(StateMachineInterface::class);
+        $stateMachine->can($order->reveal(), OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL)->willReturn(false);
+        $stateMachine->apply($order->reveal(), OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL)->shouldNotBeCalled();
+        $stateMachine->apply($orderReturn->reveal(), OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)->shouldNotBeCalled();
 
         $this->expectException(\RuntimeException::class);
 
-        (new OrderWithdrawalProcessor($factory))->process($order->reveal(), $orderReturn->reveal());
-    }
-
-    private function factory(
-        OrderInterface $order,
-        StateMachineInterface $orderSm,
-        OrderReturnInterface $orderReturn,
-        StateMachineInterface $returnSm,
-    ): StateMachineFactoryInterface {
-        $factory = $this->prophesize(StateMachineFactoryInterface::class);
-        $factory->get($order, OrderTransitions::GRAPH)->willReturn($orderSm);
-        $factory->get($orderReturn, OrderReturnInterface::GRAPH)->willReturn($returnSm);
-
-        return $factory->reveal();
+        (new OrderWithdrawalProcessor($stateMachine->reveal()))->process($order->reveal(), $orderReturn->reveal());
     }
 }
