@@ -27,7 +27,7 @@ use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\InstantCancellationEligibilityCheckerInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface;
 use Madcoders\SyliusRmaPlugin\Services\Withdrawal\WithdrawalEligibilityCheckerInterface;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -58,7 +58,7 @@ final readonly class WithdrawalController
         private InstantCancellationEligibilityCheckerInterface $instantCancellationEligibilityChecker,
         private ReturnRequestBuilder $returnRequestBuilder,
         private OrderWithdrawalProcessorInterface $orderWithdrawalProcessor,
-        private StateMachineFactoryInterface $stateMachineFactory,
+        private StateMachineInterface $stateMachine,
         private RepositoryInterface $orderReturnRepository,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
@@ -176,14 +176,13 @@ final readonly class WithdrawalController
             $data = $form->getData();
             $orderReturn->setOrderReturnConsents((array) $data['consents']);
 
-            $stateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-            if (!$stateMachine->can(OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL)) {
+            if (!$this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL)) {
                 return $this->errorRedirect($request, 'madcoders_rma.ui.withdrawal.error.not_cancellable', ['%orderNumber%' => $orderReturn->getOrderNumber()]);
             }
 
             // Records the customer's item selection and fires the withdrawal-requested notifier
             // (changelog + e-mail). The Sylius order is left untouched; the admin resolves it.
-            $stateMachine->apply(OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL);
+            $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_REQUEST_WITHDRAWAL);
 
             $this->orderReturnRepository->add($orderReturn);
 

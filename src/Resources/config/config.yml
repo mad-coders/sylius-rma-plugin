@@ -43,10 +43,10 @@ sylius_mailer:
 # order return state machine
 #
 # Migrated from winzou/state-machine to symfony/workflow behind the Sylius state-machine
-# abstraction (phase 4 of docs/upgrade-sylius-2/ROADMAP.md). This block defines the graph only;
-# the callbacks that winzou ran on transitions (changelog updates and withdrawal notifiers) are
-# re-wired as workflow event listeners in phase 4, not here. The graph name, places and
-# transitions are unchanged from the winzou definition so OrderReturnInterface::GRAPH and the
+# abstraction (docs/upgrade-sylius-2/ROADMAP.md phase 4, ADR 0013). The callbacks that winzou ran
+# on transitions (changelog updates and withdrawal notifiers) are re-wired as Symfony Workflow
+# `completed` event listeners in Workflow\OrderReturnWorkflowSubscriber. The graph name, places
+# and transitions are unchanged from the winzou definition so OrderReturnInterface::GRAPH and the
 # `_sylius.state_machine` routes keep working.
 framework:
   workflows:

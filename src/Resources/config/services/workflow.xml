@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!--
+            Symfony Workflow event subscriber replacing the winzou "after" callbacks of the
+            return_status graph (changelog updates + withdrawal notifiers). Registered as a
+            standard kernel.event_subscriber; the subscribed workflow.return_status.completed.*
+            events are declared in the class.
+        -->
+        <service id="madcoders.sylius_rma_plugin.workflow.order_return_subscriber"
+                 class="Madcoders\SyliusRmaPlugin\Workflow\OrderReturnWorkflowSubscriber">
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier" />
+            <argument type="service" id="madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+    </services>
+</container>

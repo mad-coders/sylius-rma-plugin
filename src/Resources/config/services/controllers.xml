@@ -42,7 +42,7 @@ Architects of this package:
             <argument type="service" id="request_stack" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
-            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface" />
             <argument type="service" id="madcoders.sylius_rma_plugin.generator.order_return_form_pdf_file_generator" />
             <argument type="service" id="madcoders.sylius_rma_plugin.email.return_form_email_sender" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_changes_logger" />
@@ -90,7 +90,7 @@ Architects of this package:
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.instant_cancellation_eligibility_checker" />
             <argument type="service" id="madcoders.sylius_rma_plugin.return_request_builder" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />
-            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
             <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="translator" />
@@ -101,7 +101,7 @@ Architects of this package:
         <service id="madcoders.sylius_rma_plugin.controller.admin_withdrawal_confirm"
                  class="Madcoders\SyliusRmaPlugin\Controller\AdminWithdrawalConfirmController" public="true">
             <argument type="service" id="madcoders_rma.repository.order_return" />
-            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface" />
             <argument type="service" id="router" />
             <argument type="service" id="security.csrf.token_manager" />
             <argument type="service" id="translator" />

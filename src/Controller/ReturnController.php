@@ -29,7 +29,7 @@ use Madcoders\SyliusRmaPlugin\Security\Voter\OrderReturnVoter;
 use Madcoders\SyliusRmaPlugin\Services\ReturnRequestBuilder;
 use Madcoders\SyliusRmaPlugin\Services\RmaChangesLogger;
 use Madcoders\SyliusRmaPlugin\Services\RmaVerificationPossibilityOfReturn;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\CustomerInterface;
@@ -62,7 +62,7 @@ final class ReturnController extends AbstractController
         private readonly RequestStack $requestStack,
         private readonly ReturnRequestBuilder $returnRequestBuilder,
         private readonly RepositoryInterface $orderReturnRepository,
-        private readonly StateMachineFactoryInterface $stateMachineFactory,
+        private readonly StateMachineInterface $stateMachine,
         private readonly OrderReturnFormPdfFileGeneratorInterface $orderReturnFormPdfFileGenerator,
         private readonly ReturnFormEmailSenderInterface $orderReturnFormPdfEmailSender,
         private readonly RmaChangesLogger $changesLogger,
@@ -161,12 +161,11 @@ final class ReturnController extends AbstractController
             $data = $form->getData();
             $orderReturn->setOrderReturnConsents((array) $data['consents']);
 
-            $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-            if (!$orderReturnStateMachine->can(OrderReturnInterface::STATUS_NEW)) {
+            if (!$this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_NEW)) {
                 return $this->createInvalidStateResponse($request);
             }
 
-            $orderReturnStateMachine->apply(OrderReturnInterface::STATUS_NEW);
+            $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_NEW);
 
             // TODO align entity instead - either allow nullable fields or not and avoid workarounds
             // TODO: create change log service
