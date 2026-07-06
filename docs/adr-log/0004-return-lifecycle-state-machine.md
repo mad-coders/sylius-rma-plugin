@@ -1,6 +1,6 @@
 # 0004 - Return lifecycle via winzou state machine
 
-- **Status:** Accepted
+- **Status:** Superseded by [0013](0013-symfony-workflow-state-machine.md) (Sylius 2 uses Symfony Workflow)
 - **Date:** pre-upgrade
 
 ## Context
