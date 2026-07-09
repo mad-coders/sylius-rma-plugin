@@ -11,12 +11,11 @@ on:
     pull_request: ~
     workflow_dispatch: ~
 
-# While the Sylius 2 upgrade is in progress, the heavy jobs are gated off so the upgrade
-# line stays green with reduced checks (only composer validate runs). The gate covers the
-# 2.0 branch (push or PR base) and its stacked `feature/sylius-2-*` PRs, which are
-# pre-completion by design. Gates are removed per phase of
-# docs/upgrade-sylius-2/ROADMAP.md (static/unit in phase 3, fixtures in phase 5, behat in
-# phase 8).
+# While the Sylius 2 upgrade is in progress, the jobs that cannot pass yet are gated off so
+# the upgrade line stays green. The gate covers the 2.0 branch (push or PR base) and its
+# stacked `feature/sylius-2-*` PRs. Gates are removed per phase of
+# docs/upgrade-sylius-2/ROADMAP.md: static + unit are on as of phase 3; fixtures re-enable
+# in phase 5 and behat in phase 8.
 
 concurrency:
     group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -55,27 +54,20 @@ jobs:
             - name: Validate composer.json
               run: composer validate --no-check-lock
 
-            # TODO(sylius-2): re-enable the steps below for the 2.0 line in phase 3
             - name: Install dependencies
-              if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
               run: composer update --no-interaction --no-progress --prefer-dist --no-scripts
 
             - name: PHPStan
-              if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
               run: make phpstan
 
             - name: Rector (dry-run)
-              if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
               run: make rector
 
             - name: ECS
-              if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
               run: make ecs
 
     unit:
         name: Unit tests (PHPUnit)
-        # TODO(sylius-2): re-enable for the 2.0 line in phase 3
-        if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
