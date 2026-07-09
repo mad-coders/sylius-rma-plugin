@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Controller;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,7 +42,7 @@ final readonly class AdminWithdrawalConfirmController
      */
     public function __construct(
         private RepositoryInterface $orderReturnRepository,
-        private StateMachineFactoryInterface $stateMachineFactory,
+        private StateMachineInterface $stateMachine,
         private RouterInterface $router,
         private CsrfTokenManagerInterface $csrfTokenManager,
         private TranslatorInterface $translator,
@@ -61,12 +61,11 @@ final readonly class AdminWithdrawalConfirmController
             return $this->flashRedirect($request, 'error', 'sylius.ui.invalid_csrf_token', $id);
         }
 
-        $stateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-        if (!$stateMachine->can(OrderReturnInterface::TRANSITION_WITHDRAW)) {
+        if (!$this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)) {
             return $this->flashRedirect($request, 'error', 'madcoders_rma.ui.withdrawal.error.not_cancellable', $id);
         }
 
-        $stateMachine->apply(OrderReturnInterface::TRANSITION_WITHDRAW);
+        $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW);
         $this->orderReturnRepository->add($orderReturn);
 
         return $this->flashRedirect($request, 'success', 'madcoders.admin.history.withdrawal_confirmed', $id);

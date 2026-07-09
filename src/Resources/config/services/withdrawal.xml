@@ -28,7 +28,7 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor"
                  class="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessor">
-            <argument type="service" id="SM\Factory\FactoryInterface" />
+            <argument type="service" id="Sylius\Abstraction\StateMachine\StateMachineInterface" />
         </service>
         <service id="Madcoders\SyliusRmaPlugin\Services\Withdrawal\OrderWithdrawalProcessorInterface"
                  alias="madcoders.sylius_rma_plugin.services.withdrawal.order_withdrawal_processor" />

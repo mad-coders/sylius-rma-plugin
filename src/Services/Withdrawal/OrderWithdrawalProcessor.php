@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Services\Withdrawal;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
-use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Order\OrderTransitions;
 
@@ -31,24 +31,21 @@ use Sylius\Component\Order\OrderTransitions;
 final readonly class OrderWithdrawalProcessor implements OrderWithdrawalProcessorInterface
 {
     public function __construct(
-        private StateMachineFactoryInterface $stateMachineFactory,
+        private StateMachineInterface $stateMachine,
     ) {
     }
 
     public function process(OrderInterface $order, OrderReturnInterface $orderReturn): void
     {
-        $orderStateMachine = $this->stateMachineFactory->get($order, OrderTransitions::GRAPH);
-        $returnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-
-        if (!$orderStateMachine->can(OrderTransitions::TRANSITION_CANCEL)) {
+        if (!$this->stateMachine->can($order, OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL)) {
             throw new \RuntimeException(sprintf('Order "%s" cannot be cancelled.', (string) $order->getNumber()));
         }
 
-        if (!$returnStateMachine->can(OrderReturnInterface::TRANSITION_WITHDRAW)) {
+        if (!$this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW)) {
             throw new \RuntimeException(sprintf('Return "%s" cannot be withdrawn.', $orderReturn->getReturnNumber()));
         }
 
-        $orderStateMachine->apply(OrderTransitions::TRANSITION_CANCEL);
-        $returnStateMachine->apply(OrderReturnInterface::TRANSITION_WITHDRAW);
+        $this->stateMachine->apply($order, OrderTransitions::GRAPH, OrderTransitions::TRANSITION_CANCEL);
+        $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_WITHDRAW);
     }
 }
