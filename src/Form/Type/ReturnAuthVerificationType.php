@@ -30,9 +30,7 @@ final class ReturnAuthVerificationType extends AbstractType
                 'label' => 'madcoders_rma.ui.verification_step.enter_verification_code',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ]);
     }

@@ -30,17 +30,13 @@ final class ReturnReasonTranslationType extends AbstractResourceType
             ->add('name', TextType::class, [
                 'label' => 'madcoders_rma.admin.reason.form.name',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.name.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.name.not_blank'),
                 ],
             ])
             ->add('slug', TextType::class, [
                 'label' => 'madcoders_rma.admin.reason.form.slug', // TODO: consider changing to "code"
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.slug.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.slug.not_blank'),
                 ],
             ])
             ->add('description', TextareaType::class, [

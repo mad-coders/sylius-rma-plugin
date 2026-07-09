@@ -51,18 +51,14 @@ class ReturnFormType extends AbstractType
                 'label' => 'sylius.form.address.first_name',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'sylius.form.address.last_name',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
             ->add('phoneNumber', TextType::class, [
@@ -73,12 +69,8 @@ class ReturnFormType extends AbstractType
                 'required' => true,
                 'label' => 'sylius.ui.email',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
-                    new Email([
-                        'message' => 'madcoders_rma.validator.email.not_a_valid',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
+                    new Email(message: 'madcoders_rma.validator.email.not_a_valid'),
                 ],
             ])
             ->add('company', TextType::class, [
@@ -125,9 +117,7 @@ class ReturnFormType extends AbstractType
                 'empty_data' => '',
                 'choices' => array_flip($choices),
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ]);
         });

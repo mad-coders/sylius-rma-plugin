@@ -39,12 +39,8 @@ trait AdditionalInformationFieldsTrait
             'label' => 'madcoders_rma.ui.form.bank_account_number',
             'required' => true,
             'constraints' => [
-                new NotBlank([
-                    'message' => 'madcoders_rma.validator.bank_account_number.not_blank',
-                ]),
-                new Iban([
-                    'message' => 'madcoders_rma.validator.bank_account_number.not_a_valid',
-                ]),
+                new NotBlank(message: 'madcoders_rma.validator.bank_account_number.not_blank'),
+                new Iban(message: 'madcoders_rma.validator.bank_account_number.not_a_valid'),
             ],
         ]);
     }
@@ -55,9 +51,7 @@ trait AdditionalInformationFieldsTrait
             'label' => 'madcoders_rma.ui.form.account_holder_name',
             'required' => true,
             'constraints' => [
-                new NotBlank([
-                    'message' => 'madcoders_rma.validator.account_holder_name.not_blank',
-                ]),
+                new NotBlank(message: 'madcoders_rma.validator.account_holder_name.not_blank'),
             ],
         ]);
     }
@@ -68,9 +62,7 @@ trait AdditionalInformationFieldsTrait
             'label' => 'madcoders_rma.ui.form.bank_name',
             'required' => true,
             'constraints' => [
-                new NotBlank([
-                    'message' => 'madcoders_rma.validator.bank_name.not_blank',
-                ]),
+                new NotBlank(message: 'madcoders_rma.validator.bank_name.not_blank'),
             ],
         ]);
     }

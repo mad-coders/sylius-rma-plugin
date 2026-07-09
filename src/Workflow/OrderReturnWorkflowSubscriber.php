@@ -35,14 +35,14 @@ use Webmozart\Assert\Assert;
  * both dispatch the same `workflow.return_status.completed.withdraw` event, so onWithdraw()
  * branches on the completed transition's from-place to preserve the two winzou callbacks.
  */
-final class OrderReturnWorkflowSubscriber implements EventSubscriberInterface
+final readonly class OrderReturnWorkflowSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly UpdatedChangelogOnCancel $updatedChangelogOnCancel,
-        private readonly UpdatedChangelogOnComplete $updatedChangelogOnComplete,
-        private readonly WithdrawalRequestNotifier $withdrawalRequestNotifier,
-        private readonly WithdrawalCompletedNotifier $withdrawalCompletedNotifier,
-        private readonly WithdrawalResolutionNotifier $withdrawalResolutionNotifier,
+        private UpdatedChangelogOnCancel $updatedChangelogOnCancel,
+        private UpdatedChangelogOnComplete $updatedChangelogOnComplete,
+        private WithdrawalRequestNotifier $withdrawalRequestNotifier,
+        private WithdrawalCompletedNotifier $withdrawalCompletedNotifier,
+        private WithdrawalResolutionNotifier $withdrawalResolutionNotifier,
     ) {
     }
 

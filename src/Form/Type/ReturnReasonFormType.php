@@ -41,9 +41,7 @@ final class ReturnReasonFormType extends AbstractType
                 'required' => true,
                 'label' => 'madcoders_rma.admin.reason.form.days_to_deadline_to_return',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.days_to_deadline_to_return.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.days_to_deadline_to_return.not_blank'),
                 ],
             ])
             ->add('position', IntegerType::class, [
@@ -54,9 +52,7 @@ final class ReturnReasonFormType extends AbstractType
                 null,
                 [
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'vsf_navi.admin.vsf_navi_item.form.code.not_blank',
-                        ]),
+                        new NotBlank(message: 'vsf_navi.admin.vsf_navi_item.form.code.not_blank'),
                     ],
                 ],
             ))

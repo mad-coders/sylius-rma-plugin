@@ -16,19 +16,11 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class RmaTimeAgoExtension extends AbstractExtension
+class RmaTimeAgoExtension
 {
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('rma_time_ago_view', $this->createTimeAgo(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'rma_time_ago_view')]
     public function createTimeAgo(\DateTime $date): string
     {
         $nowDate = new \DateTime();

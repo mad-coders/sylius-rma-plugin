@@ -17,10 +17,9 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Madcoders\SyliusRmaPlugin\Services\AdditionalInformation\AdditionalInformationCheckerInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-final class RmaConfigExtension extends AbstractExtension
+final class RmaConfigExtension
 {
     public function __construct(
         private readonly bool $returnFormPdfEnabled = false,
@@ -29,26 +28,19 @@ final class RmaConfigExtension extends AbstractExtension
     ) {
     }
 
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('madcoders_rma_return_form_pdf_enabled', $this->isReturnFormPdfEnabled(...)),
-            new TwigFunction('madcoders_rma_allow_unpaid_withdrawal', $this->isUnpaidWithdrawalAllowed(...)),
-            new TwigFunction('madcoders_rma_require_additional_information', $this->isAdditionalInformationRequired(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'madcoders_rma_return_form_pdf_enabled')]
     public function isReturnFormPdfEnabled(): bool
     {
         return $this->returnFormPdfEnabled;
     }
 
+    #[AsTwigFunction(name: 'madcoders_rma_allow_unpaid_withdrawal')]
     public function isUnpaidWithdrawalAllowed(): bool
     {
         return $this->allowUnpaidWithdrawal;
     }
 
+    #[AsTwigFunction(name: 'madcoders_rma_require_additional_information')]
     public function isAdditionalInformationRequired(): bool
     {
         return $this->additionalInformationChecker?->isRequired() ?? false;
