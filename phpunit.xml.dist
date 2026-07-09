@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-         colors="true"
-         bootstrap="tests/Application/config/bootstrap.php">
-    <testsuites>
-        <testsuite name="MadcodersSyliusRmaPlugin Test Suite">
-            <directory>tests/Unit</directory>
-        </testsuite>
-    </testsuites>
-
-    <coverage>
-        <include>
-            <directory suffix=".php">src/</directory>
-        </include>
-    </coverage>
-
-    <php>
-        <ini name="error_reporting" value="-1" />
-
-        <server name="KERNEL_CLASS_PATH" value="/tests/Application/AppKernel.php" />
-        <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
-
-        <env name="APP_ENV" value="test"/>
-        <env name="SHELL_VERBOSITY" value="-1" />
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" colors="true" bootstrap="tests/Application/config/bootstrap.php">
+  <testsuites>
+    <testsuite name="MadcodersSyliusRmaPlugin Test Suite">
+      <directory>tests/Unit</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <server name="KERNEL_CLASS_PATH" value="/tests/Application/AppKernel.php"/>
+    <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true"/>
+    <env name="APP_ENV" value="test"/>
+    <env name="SHELL_VERBOSITY" value="-1"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+  </source>
 </phpunit>
