@@ -92,29 +92,36 @@ Goal: `composer update` resolves against `sylius/sylius ^2.2` and the regenerate
       TwigComponent, LiveComponent, StimulusBundle, TurboBundle, and
       `Sylius\TwigHooks\SyliusTwigHooksBundle`), `config/packages/`, `config/routes/`,
       `public/`, `bin/`, `assets/`, `package.json`, `webpack.config.js`, `.env` files.
-- [ ] Re-apply plugin-specific bits: plugin bundle registration, config import of
-      `@MadcodersSyliusRmaPlugin/Resources/config/config.yml`, routing imports
-      (admin under `/admin`, shop under `/{_locale}`), `tests/Application/Entity/`
-      resource overrides (including the `Product` with `NonReturnableProductInterface`),
-      `_sylius.yaml` resource model overrides.
-- [ ] Minimal plugin-config surgery so the container compiles (tracked in the
-      "temporarily disabled" ledger below): remove the `sylius_ui.events` section from
-      `src/Resources/config/config.yml` (real replacement in P6); replace the
-      `winzou_state_machine` block with a minimal `framework.workflows` placeholder
-      (real migration in P4).
-- [ ] Verify `PrependDoctrineMigrationsTrait` and `SyliusPluginTrait` against the
-      resolved Sylius 2.2 packages.
-- [ ] Verify `Sylius\Component\Mailer\Sender\SenderInterface` and the
-      `sylius_mailer.emails` config node still exist (expected: yes).
+- [x] Re-apply plugin-specific bits: plugin bundle registration (+ `KnpSnappyBundle`,
+      which the plugin needs for the PDF generator), config import of
+      `@MadcodersSyliusRmaPlugin/Resources/config/config.yml`, routing import of the
+      plugin `routing.yml` (which already applies the `/admin` and `/{_locale}` prefixes),
+      `tests/Application/Entity/Product.php` override + its doctrine ORM mapping,
+      `_sylius.yaml` product model override, the `madcoders_*_fixtures.yaml` suites and
+      `knp_snappy.yaml`.
+- [x] Minimal plugin-config surgery: removed the `sylius_ui.events` section from
+      `src/Resources/config/config.yml` (real twig-hooks replacement in P6); replaced the
+      `winzou_state_machine` block with the `framework.workflows.return_status` graph
+      (places + transitions, two same-named `withdraw` transitions). Callback listeners
+      are wired in P4.
+- [x] Verified `PrependDoctrineMigrationsTrait`, `SyliusPluginTrait`, and the
+      `sylius_mailer.emails` config node all still exist and load in Sylius 2.2.
+- [x] Dropped `symfony/flex`: with a classic-layout plugin (src/Resources), flex only
+      scaffolds an unwanted root app on `composer update`. The 1.x line never used it. Also
+      dropped `polishsymfonycommunity/symfony-mocker-container`; the 2.0 skeleton uses a
+      bare `MicroKernelTrait` and the standard test container (no MockerContainer).
 - [ ] Migrate `phpunit.xml.dist` to the PHPUnit 10 schema; align Makefile and
-      `behat.yml.dist` paths with the regenerated app.
-- [ ] Decide MockerContainer: keep `polishsymfonycommunity/symfony-mocker-container`
-      if compatible, otherwise adopt the PluginSkeleton 2.0 test-kernel pattern.
+      `behat.yml.dist` paths with the regenerated app. (Deferred: paired with P3/P8 when the
+      suites run.)
 
-Definition of done: `composer validate` and `composer update` succeed;
+Definition of done: `composer validate` and `composer update` succeed (done);
 `(cd tests/Application && bin/console cache:clear -e test)` succeeds with the plugin
-enabled; `bin/console debug:container madcoders` lists plugin services; lock file
-committed. UI is expected broken at this point.
+enabled. **Status:** the container now compiles through the entire Sylius 2 stack
+(framework, Sylius core, API Platform 4, Symfony UX, twig-hooks, workflow). The remaining
+boot blocker is plugin PHP code that still references the removed winzou
+`SM\Factory\FactoryInterface` (the four state-machine consumers) - this is P4. Full
+`cache:clear` success is therefore gated on P4 (and any P3 API fixes that surface after).
+Boot was over-scoped to P2 in the original plan; it completes at the end of P4.
 
 ### Phase 3: rector + PHP-level source fixes
 
@@ -333,7 +340,9 @@ must be EMPTY before `v2.0.0-rc.1`.
 
 | Item | Disabled in | Restored in | Status |
 |---|---|---|---|
-| (none yet) | | | |
+| Plugin Behat context/page services import (`tests/Application/config/services_test.yaml` -> `tests/Behat/Resources/services.xml`) | P2 | P8 | Deferred. Still references Sylius 1 ids (`sylius.order_item_quantity_modifier` -> `sylius.modifier.order_item_quantity`) and SemanticUI admin CRUD page parents; the P8 Behat rework re-enables and fixes it. |
+| `sylius_ui.events` block in `src/Resources/config/config.yml` (product checkbox, footer link, admin/shop show + configuration events, `_legacySonataEvent` bridges) | P2 | P6 | Removed. Replaced by sylius/twig-hooks in P6 (admin) and P7 (shop). |
+| winzou callback listeners (changelog updates + withdrawal notifiers) | P2 | P4 | The `framework.workflows.return_status` graph is defined, but the winzou `after` callbacks are not yet re-wired as workflow event listeners. Transitions will not fire notifiers/changelog until P4. |
 
 ## Risk register
 

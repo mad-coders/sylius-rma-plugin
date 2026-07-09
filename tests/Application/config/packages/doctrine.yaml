@@ -8,12 +8,14 @@ parameters:
 doctrine:
     dbal:
         driver: 'pdo_mysql'
-        server_version: '5.7'
+        server_version: '8.0'
         charset: UTF8
 
         url: '%env(resolve:DATABASE_URL)%'
     orm:
         mappings:
+            # Maps the test-application entities (the Product override that adds the plugin's
+            # non-returnable flag). Attribute-mapped, so no XML/YAML mapping files are needed.
             TestApplication:
                 is_bundle: false
                 type: attribute

@@ -1,6 +1,11 @@
 imports:
-    - { resource: "../../Behat/Resources/services.xml" }
     - { resource: "../../../vendor/sylius/sylius/src/Sylius/Behat/Resources/config/services.xml" }
+    # TODO(sylius-2, phase 8): re-enable the plugin's Behat context/page services. They still
+    # reference Sylius 1 service ids (e.g. sylius.order_item_quantity_modifier ->
+    # sylius.modifier.order_item_quantity) and SemanticUI-era admin CRUD page parents, which the
+    # phase 8 Behat rework addresses. Deferred so the test container compiles during phase 2.
+    # Tracked in docs/upgrade-sylius-2/ROADMAP.md (temporarily disabled ledger).
+    # - { resource: "../../Behat/Resources/services.xml" }
 
 # workaround needed for strange "test.client.history" problem
 # see https://github.com/FriendsOfBehat/SymfonyExtension/issues/88

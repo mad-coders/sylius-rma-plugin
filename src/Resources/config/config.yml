@@ -33,179 +33,73 @@ sylius_mailer:
       subject: madcoders_rma.email.withdrawal_cancelled.subject
       template: "@MadcodersSyliusRmaPlugin/Email/withdrawalCancelled.html.twig"
 
-sylius_ui:
-  events:
-    # Render the per-product "non-returnable" checkbox on the admin product form details tab.
-    # The field itself is added by Form\Extension\ProductTypeExtension when the Product model
-    # implements NonReturnableProductInterface.
-    sylius.admin.product.tab_details:
-      blocks:
-        madcoders_rma_non_returnable:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Product/_nonReturnable.html.twig"
-          priority: 10
-
-    sylius.shop.layout.footer:
-      blocks:
-        madcoders_rma_return_link:
-          template: "@MadcodersSyliusRmaPlugin/Shop/Footer/_returnLink.html.twig"
-          priority: 15
-
-    madcoders_rma.shop.account.order_return.show.subcontent:
-      blocks:
-        header:
-          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_header.html.twig"
-          priority: 20
-        after_content_header_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 15
-          context:
-            event: madcoders_rma.shop.account.order_return.show.after_content_header
-        summary:
-          template: "@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_summary.html.twig"
-          priority: 10
-        after_summary_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 5
-          context:
-            event: madcoders_rma.shop.account.order_return.show.after_summary
-
-    madcoders_rma.admin.order_return.show.content:
-      blocks:
-        before_header_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 35
-          context:
-            event: sylius.admin.order_return.show.before_header
-        header:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_headerWidget.html.twig"
-          priority: 30
-        after_header_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 25
-          context:
-            event: sylius.admin.order_return.show.after_header
-        breadcrumb:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_breadcrumb.html.twig"
-          priority: 20
-        after_breadcrumb_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 15
-          context:
-            event: sylius.admin.order_return.show.after_breadcrumb
-        content:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Return/Show/_content.html.twig"
-          priority: 10
-        after_content_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 5
-          context:
-            event: sylius.admin.order.show.after_content
-
-    madcoders_rma.admin.configuration.content:
-      blocks:
-        before_header_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 35
-          context:
-            event: sylius.admin.configuration.before_header
-        header:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_headerWidget.html.twig"
-          priority: 30
-        after_header_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 25
-          context:
-            event: sylius.admin.configuration.after_header
-        breadcrumb:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_breadcrumb.html.twig"
-          priority: 20
-        after_breadcrumb_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 15
-          context:
-            event: sylius.admin.configuration.after_breadcrumb
-        content:
-          template: "@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_content.html.twig"
-          priority: 10
-        after_content_legacy:
-          template: "@SyliusUi/Block/_legacySonataEvent.html.twig"
-          priority: 5
-          context:
-            event: sylius.admin.configuration.after_content
+# NOTE (Sylius 2 upgrade, phase 2): the Sylius 1 `sylius_ui.events` block that used to live
+# here (product non-returnable checkbox, shop footer return link, and the admin/shop order-return
+# and configuration content events, including the `_legacySonataEvent` bridges) has been removed.
+# The `sylius_ui.events` / template-event system does not exist in Sylius 2; its replacement is
+# sylius/twig-hooks, wired in phase 6 (admin) and phase 7 (shop). See the hook mapping table in
+# docs/upgrade-sylius-2/ROADMAP.md.
 
 # order return state machine
-
-winzou_state_machine:
-  order_return:
-    class: 'Madcoders\SyliusRmaPlugin\Entity\OrderReturn'
-    graph: return_status
-    property_path: orderReturnStatus
-    state_machine_class: "%sylius.state_machine.class%"
-    states:
-      draft: ~
-      new: ~
-      completed: ~
-      canceled: ~
-      withdrawal_request: ~
-      withdrawn: ~
-    callbacks:
-      after:
-        updated_changelog_on_cancel:
-          on: [ 'cancel' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_cancel', 'updatedChangelogOnCancel' ]
-          args: [ 'object' ]
-        updated_changelog_on_complete:
-          on: [ 'complete' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.updated_changelog_on_complete', 'UpdatedChangelogOnComplete' ]
-          args: [ 'object' ]
-        withdrawal_request_notifier:
-          on: [ 'request_withdrawal' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_request_notifier', 'onRequestWithdrawal' ]
-          args: [ 'object' ]
-        # withdraw FROM draft = instant/fast-forward withdrawal (customer-initiated)
-        withdrawal_instant_notifier:
-          on: [ 'withdraw' ]
-          from: [ 'draft' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_completed_notifier', 'onWithdraw' ]
-          args: [ 'object' ]
-        # withdraw FROM withdrawal_request = admin-approved withdrawal (admin-initiated)
-        withdrawal_approved_notifier:
-          on: [ 'withdraw' ]
-          from: [ 'withdrawal_request' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onConfirmWithdrawal' ]
-          args: [ 'object' ]
-        withdrawal_resolution_fallback:
-          on: [ 'fallback_to_return' ]
-          do: [ '@madcoders.sylius_rma_plugin.services.callbacks.withdrawal_resolution_notifier', 'onFallbackToReturn' ]
-          args: [ 'object' ]
-
-    transitions:
-      new:
-        from: ['draft']
-        to: new
-      complete:
-        from: ['new']
-        to: completed
-      cancel:
-        from: ['draft', 'new']
-        to: canceled
-      request_withdrawal:
-        from: ['draft']
-        to: withdrawal_request
-      withdraw:
-        from: ['draft', 'withdrawal_request']
-        to: withdrawn
-      fallback_to_return:
-        from: ['withdrawal_request']
-        to: new
-
-# HOW TO USE ORDER RETURN STATE MACHINE
-
-#  $orderReturnStateMachine = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
-#    if (!$orderReturnStateMachine->can(OrderReturnInterface::TRANSITION_ACCEPT)) {
-#       // just do nothign or throw exception depending on the situation
-#       return;
-#     }
 #
-#  $orderReturnStateMachine->apply(OrderReturnInterface::TRANSITION_ACCEPT));
-#  $this->orderReturnRepository->add($orderReturn);
+# Migrated from winzou/state-machine to symfony/workflow behind the Sylius state-machine
+# abstraction (phase 4 of docs/upgrade-sylius-2/ROADMAP.md). This block defines the graph only;
+# the callbacks that winzou ran on transitions (changelog updates and withdrawal notifiers) are
+# re-wired as workflow event listeners in phase 4, not here. The graph name, places and
+# transitions are unchanged from the winzou definition so OrderReturnInterface::GRAPH and the
+# `_sylius.state_machine` routes keep working.
+framework:
+  workflows:
+    return_status:
+      type: state_machine
+      marking_store:
+        type: method
+        property: orderReturnStatus
+      supports:
+        - Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface
+      initial_marking: draft
+      places:
+        - draft
+        - new
+        - completed
+        - canceled
+        - withdrawal_request
+        - withdrawn
+      transitions:
+        new:
+          from: [draft]
+          to: new
+        complete:
+          from: [new]
+          to: completed
+        cancel:
+          from: [draft, new]
+          to: canceled
+        request_withdrawal:
+          from: [draft]
+          to: withdrawal_request
+        # withdraw FROM draft = instant/fast-forward withdrawal (customer-initiated).
+        withdraw:
+          from: [draft]
+          to: withdrawn
+        # withdraw FROM withdrawal_request = admin-approved withdrawal. symfony/workflow allows two
+        # transitions to share the name `withdraw`; the completed-event listener (phase 4)
+        # distinguishes them by the transition's from-place, preserving the winzou from-scoped
+        # callbacks.
+        withdraw_from_request:
+          name: withdraw
+          from: [withdrawal_request]
+          to: withdrawn
+        fallback_to_return:
+          from: [withdrawal_request]
+          to: new
+
+# HOW TO USE ORDER RETURN STATE MACHINE (Sylius 2)
+#
+#  if ($this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_COMPLETE)) {
+#      $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_COMPLETE);
+#      $this->orderReturnRepository->add($orderReturn);
+#  }
+#
+# where $this->stateMachine is Sylius\Abstraction\StateMachine\StateMachineInterface (injected in
+# place of the old SM\Factory\FactoryInterface; consumer migration is part of phase 4).
