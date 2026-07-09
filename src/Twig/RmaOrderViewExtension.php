@@ -24,6 +24,8 @@ class RmaOrderViewExtension
 {
     /**
      * RmaOrderViewExtension constructor.
+     *
+     * @param OrderRepositoryInterface<OrderInterface> $orderRepository
      */
     public function __construct(private readonly OrderRepositoryInterface $orderRepository)
     {

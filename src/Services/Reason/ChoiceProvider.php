@@ -27,6 +27,7 @@ class ChoiceProvider implements ChoiceProviderInterface
 {
     /**
      * @param RepositoryInterface<OrderReturnReasonInterface> $orderReturnReasonRepository
+     * @param OrderRepositoryInterface<OrderInterface> $orderRepository
      */
     public function __construct(
         private readonly RepositoryInterface $orderReturnReasonRepository,

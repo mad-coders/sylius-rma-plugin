@@ -19,12 +19,12 @@ namespace Madcoders\SyliusRmaPlugin\Twig;
 use Madcoders\SyliusRmaPlugin\Services\AdditionalInformation\AdditionalInformationCheckerInterface;
 use Twig\Attribute\AsTwigFunction;
 
-final class RmaConfigExtension
+final readonly class RmaConfigExtension
 {
     public function __construct(
-        private readonly bool $returnFormPdfEnabled = false,
-        private readonly bool $allowUnpaidWithdrawal = true,
-        private readonly ?AdditionalInformationCheckerInterface $additionalInformationChecker = null,
+        private bool $returnFormPdfEnabled = false,
+        private bool $allowUnpaidWithdrawal = true,
+        private ?AdditionalInformationCheckerInterface $additionalInformationChecker = null,
     ) {
     }
 

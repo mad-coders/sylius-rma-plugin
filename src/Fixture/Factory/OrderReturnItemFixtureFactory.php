@@ -25,6 +25,9 @@ use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ExampleFactoryInterface<OrderReturnItemInterface>
+ */
 final class OrderReturnItemFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private readonly OptionsResolver $optionsResolver;

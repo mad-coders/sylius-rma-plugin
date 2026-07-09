@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -38,12 +37,11 @@ final class RmaConfigurationController extends AbstractController
     /**
      * RmaConfigurationController constructor.
      *
-     * @param EngineInterface|Environment                    $templatingEngine
      * @param RepositoryInterface<ChannelInterface>          $channelsRepository
      * @param RepositoryInterface<RmaConfigurationInterface> $configurationRepository
      */
     public function __construct(
-        private $templatingEngine,
+        private readonly Environment $templatingEngine,
         private readonly RouterInterface $router,
         private readonly RepositoryInterface $channelsRepository,
         private readonly RepositoryInterface $configurationRepository,

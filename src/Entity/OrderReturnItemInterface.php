@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Entity;
 
-interface OrderReturnItemInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+interface OrderReturnItemInterface extends ResourceInterface
 {
     public function getId(): ?int;
 

@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -40,13 +39,12 @@ final class AdminManagementController extends AbstractController
     /**
      * AdminManagementController constructor
      *
-     * @param EngineInterface|Environment              $templatingEngine
      * @param RepositoryInterface<OrderReturn>         $orderReturnRepository
      * @param RepositoryInterface<OrderReturnChangeLog> $changeLogRepository
      */
     public function __construct(
         private readonly FormFactoryInterface $formFactory,
-        private $templatingEngine,
+        private readonly Environment $templatingEngine,
         private readonly RouterInterface $router,
         private readonly RepositoryInterface $orderReturnRepository,
         private readonly RepositoryInterface $changeLogRepository,
