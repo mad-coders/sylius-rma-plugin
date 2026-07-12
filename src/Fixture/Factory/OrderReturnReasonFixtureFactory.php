@@ -23,6 +23,9 @@ use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ExampleFactoryInterface<OrderReturnReasonInterface>
+ */
 final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private readonly OptionsResolver $optionsResolver;
@@ -49,6 +52,9 @@ final class OrderReturnReasonFixtureFactory extends AbstractExampleFactory imple
 
         $orderReturnReason = new OrderReturnReason();
         $orderReturnReason->setCurrentLocale('en_US');
+        // Sylius 2 / doctrine-collections rejects a null fallback locale in getTranslation(),
+        // so the fallback must be set alongside the current locale.
+        $orderReturnReason->setFallbackLocale('en_US');
         $orderReturnReason->setEnabled($options['enabled']);
         $orderReturnReason->setCode($options['code']);
         $orderReturnReason->setDeadlineToReturn($options['deadline_to_return']);

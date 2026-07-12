@@ -18,26 +18,20 @@ namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Repository\OrderRepositoryInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class RmaOrderViewExtension extends AbstractExtension
+class RmaOrderViewExtension
 {
     /**
      * RmaOrderViewExtension constructor.
+     *
+     * @param OrderRepositoryInterface<OrderInterface> $orderRepository
      */
     public function __construct(private readonly OrderRepositoryInterface $orderRepository)
     {
     }
 
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('rma_order_number_view', $this->findOrderByOrderNumber(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'rma_order_number_view')]
     public function findOrderByOrderNumber(?string $orderNumber = null): ?OrderInterface
     {
         if (null === $orderNumber) {

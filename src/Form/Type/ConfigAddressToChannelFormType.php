@@ -36,36 +36,28 @@ final class ConfigAddressToChannelFormType extends AbstractType
                 'enabled' => true,
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
             ->add('street', TextType::class, [
                 'label' => 'sylius.form.address.street',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
             ->add('city', TextType::class, [
                 'label' => 'sylius.form.address.city',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
             ->add('postcode', TextType::class, [
                 'label' => 'sylius.form.address.postcode',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.not_blank'),
                 ],
             ])
         ;

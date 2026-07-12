@@ -23,6 +23,9 @@ use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ExampleFactoryInterface<OrderReturnConsentInterface>
+ */
 final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private readonly OptionsResolver $optionsResolver;
@@ -49,6 +52,9 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
 
         $orderReturnConsent = new OrderReturnConsent();
         $orderReturnConsent->setCurrentLocale($options['current_locale']);
+        // Sylius 2 / doctrine-collections rejects a null fallback locale in getTranslation(),
+        // so the fallback must be set alongside the current locale.
+        $orderReturnConsent->setFallbackLocale($options['current_locale']);
         $orderReturnConsent->setEnabled($options['enabled']);
         $orderReturnConsent->setCode($options['code']);
         $orderReturnConsent->setName($options['name']);

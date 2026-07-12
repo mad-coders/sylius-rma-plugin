@@ -49,9 +49,7 @@ final class ConfigChannelSelectFormType extends AbstractType
             'required' => true,
             'choices' => array_flip($choicesChannel),
             'constraints' => [
-                new NotBlank([
-                    'message' => 'madcoders_rma.validator.not_blank',
-                ]),
+                new NotBlank(message: 'madcoders_rma.validator.not_blank'),
             ],
         ]);
     }

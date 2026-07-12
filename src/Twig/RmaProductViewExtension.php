@@ -18,26 +18,20 @@ namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Repository\ProductVariantRepositoryInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class RmaProductViewExtension extends AbstractExtension
+class RmaProductViewExtension
 {
     /**
      * RmaProductViewExtension constructor.
+     *
+     * @param ProductVariantRepositoryInterface<ProductVariantInterface> $productVariantRepository
      */
     public function __construct(private readonly ProductVariantRepositoryInterface $productVariantRepository)
     {
     }
 
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('rma_product_view', $this->findProductByVariantCode(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'rma_product_view')]
     public function findProductByVariantCode(string $productSku = null): ?ProductVariantInterface
     {
         $productVariant = $this->productVariantRepository->findOneBy(['code' => $productSku]);

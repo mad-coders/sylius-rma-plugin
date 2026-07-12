@@ -37,7 +37,7 @@ final class WithdrawalEmailSenderTest extends UnitTestCase
     /**
      * @return array<string, array{0: string, 1: string}>
      */
-    public function emailMethods(): array
+    public static function emailMethods(): array
     {
         return [
             'requested' => ['sendWithdrawalRequestedEmail', Emails::WITHDRAWAL_REQUESTED],

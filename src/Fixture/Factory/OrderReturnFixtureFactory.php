@@ -29,6 +29,9 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ExampleFactoryInterface<OrderReturnInterface>
+ */
 final class OrderReturnFixtureFactory extends AbstractExampleFactory implements ExampleFactoryInterface
 {
     private readonly OptionsResolver $optionsResolver;
@@ -36,6 +39,9 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
     /** @var Generator */
     private $faker;
 
+    /**
+     * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     */
     public function __construct(private readonly ChannelRepositoryInterface $channelRepository)
     {
         $this->faker = Factory::create();

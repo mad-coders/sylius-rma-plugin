@@ -128,20 +128,27 @@ Boot was over-scoped to P2 in the original plan; it completes at the end of P4.
 Goal: plugin PHP code compiles against Sylius 2.2 APIs; phpstan, ecs, rector dry-run
 and phpunit green; `static` and `unit` CI gates removed.
 
-- [ ] Update `rector.php` with the sylius/sylius-rector Sylius 2 sets; apply in small
-      commits per set.
-- [ ] Manual API sweep hotspots: `src/Email/*` sender constructors, `src/Controller/*`
-      request-configuration APIs, `src/Form/Extension/*` against Sylius 2 form type
-      FQCNs, `src/Fixture/*` base classes and OptionsResolver signatures, `src/Twig/*`
-      against removed templating helpers.
-- [ ] `src/DependencyInjection/Configuration.php`: drop removed `options` nodes under
-      resources; re-verify the tree against the ResourceBundle shipped with 2.2.
-- [ ] Regenerate `phpstan-baseline.neon`; prefer fixing over baselining
-      (see docs/adr-log and the baseline honesty workflow).
-- [ ] PHPUnit 10 migration for `tests/Unit` (annotations to attributes, prophecy bump).
+- [x] Ran the sylius/sylius-rector Sylius 2 sets (rector.php already wires
+      `SyliusSetProvider`): validator constraints to named args, Twig extensions to
+      `#[AsTwigFunction]`, `OrderReturnVoter::voteOnAttribute` gains the Symfony 7.3 `$vote`
+      arg, readonly promotions. ECS re-applied for import ordering.
+- [x] Manual API sweep: replaced the removed `Symfony\Component\Templating\EngineInterface`
+      with `Twig\Environment` (controllers + PDF generator); added generic type params for
+      the Sylius 2 repository and `ExampleFactoryInterface` fixture factories;
+      `OrderReturnItemInterface` now extends `ResourceInterface`; reason/consent fixture
+      factories set the fallback locale (Sylius 2 / doctrine-collections rejects a null
+      fallback in `getTranslation()`).
+- [x] `Configuration.php` needed no `options`-node changes (the resource tree has none);
+      it stays PHPStan-excluded as before.
+- [x] Baseline stays at 2 pre-existing `doctrine.associationType` entries (verified still
+      live); no new masks added - all 28 upgrade errors were fixed, not baselined.
+- [x] Migrated `phpunit.xml.dist` to the PHPUnit 10.5 schema and made the one non-static
+      data provider static; `/** @test */` / `@dataProvider` annotations still work in 10.5,
+      so no full attribute migration was needed.
 
-Definition of done: `make phpstan`, `make ecs`, `make rector`, `make phpunit` green
-locally and in CI; gates removed for `static` steps and `unit`.
+Definition of done: `make phpstan` (level max), `make ecs`, `make rector`, `make phpunit`
+(88 tests, no deprecations) all green locally on PHP 8.2; the `static` steps and the `unit`
+job gates are removed so they run on the 2.0 line again.
 
 ### Phase 4: state machine migration (winzou -> symfony workflow)
 

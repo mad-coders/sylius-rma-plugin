@@ -32,9 +32,7 @@ final class ReturnNotesType extends AbstractType
                 'label' => 'madcoders_rma.ui.add_notes',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.notes.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.notes.not_blank'),
                 ],
             ])
         ;

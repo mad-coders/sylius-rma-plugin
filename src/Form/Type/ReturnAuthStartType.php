@@ -30,9 +30,7 @@ final class ReturnAuthStartType extends AbstractType
                 'label' => 'madcoders_rma.ui.form.enter_order_number',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'madcoders_rma.validator.order_number.not_blank',
-                    ]),
+                    new NotBlank(message: 'madcoders_rma.validator.order_number.not_blank'),
                 ],
             ]);
     }

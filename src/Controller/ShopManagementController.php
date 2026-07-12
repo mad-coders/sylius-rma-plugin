@@ -40,6 +40,8 @@ final class ShopManagementController extends AbstractController
 {
     /**
      * ShopManagementController constructor.
+     *
+     * @param OrderRepository<OrderInterface> $orderRepository
      */
     public function __construct(
         private readonly RouterInterface $router,
