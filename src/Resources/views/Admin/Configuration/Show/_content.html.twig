@@ -1,46 +1,50 @@
+{% set channel = hookable_metadata.context.channel %}
+{% set channel_form = hookable_metadata.context.channel_form %}
+{% set address_form = hookable_metadata.context.address_form %}
 
-{% form_theme addressFormToSelectedChannel '@SyliusShop/Form/theme.html.twig' %}
-
-<div class="ui stackable segment grid">
-    <div class="sixteen wide column">
-        <h3 class="ui dividing header">
-            {{ 'madcoders_rma.admin.configuration.select_channel'|trans }}
-        </h3>
-
-        {{ form_start(channelForm, {'action': path('madcoders_rma_admin_order_return_config_change_channel' ), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
-            <div class="ui attached segment">
-                {{ form_row(channelForm.channelChoice, sylius_test_form_attribute('rma-admin-channel-choice-field')) }}
-                {{ form_row(channelForm._token) }}
+<div class="row row-cards">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ 'madcoders_rma.admin.configuration.select_channel'|trans }}</h3>
             </div>
-            <br/>
-            <button type="submit" class="ui large primary submit button" id="sylius_change_channel_button"
-                    {{ sylius_test_html_attribute('rma-admin-config-change-channel-button') }}>
-                {{ 'madcoders_rma.ui.change_channel_button'|trans }}
-            </button>
-        {{ form_end(channelForm, {'render_rest': false}) }}
-
+            <div class="card-body">
+                {{ form_start(channel_form, {
+                    action: path('madcoders_rma_admin_order_return_config_change_channel'),
+                    attr: { novalidate: 'novalidate' }
+                }) }}
+                    {{ form_row(channel_form.channelChoice, sylius_test_form_attribute('rma-admin-channel-choice-field')) }}
+                    {{ form_row(channel_form._token) }}
+                    <button type="submit" class="btn btn-primary mt-2" id="sylius_change_channel_button"
+                            {{ sylius_test_html_attribute('rma-admin-config-change-channel-button') }}>
+                        {{ 'madcoders_rma.ui.change_channel_button'|trans }}
+                    </button>
+                {{ form_end(channel_form, { render_rest: false }) }}
+            </div>
+        </div>
     </div>
-</div>
 
-<div class="ui stackable segment grid">
-
-    <div class="sixteen wide column">
-        <h3 class="ui dividing header">
-            {{ 'madcoders_rma.admin.configuration.change_return_addresss_to_channel'|trans }}: {{ channel.name }}
-        </h3>
-
-        {{ form_start(addressFormToSelectedChannel, {'action': path('madcoders_rma_admin_order_return_config_add_address_to_selected_channel', { 'channelId': channel.id }), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
-            {{ form_errors(addressFormToSelectedChannel) }}
-            {% include '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/Form/_address.html.twig' with {'form': addressFormToSelectedChannel} %}
-        {{ form_errors(addressFormToSelectedChannel) }}
-
-            {{ form_row(addressFormToSelectedChannel._token) }}
-            <br/>
-            <button type="submit" id="sylius_save_changes_button" class="ui fluid large primary submit button" {{ sylius_test_html_attribute('rma-continue-button') }}>
-                {{ 'madcoders_rma.ui.continue_button'|trans }}
-            </button>
-
-        {{ form_end(addressFormToSelectedChannel, {'render_rest': false}) }}
-
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {{ 'madcoders_rma.admin.configuration.change_return_addresss_to_channel'|trans }}: {{ channel.name }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {{ form_start(address_form, {
+                    action: path('madcoders_rma_admin_order_return_config_add_address_to_selected_channel', { channelId: channel.id }),
+                    attr: { novalidate: 'novalidate' }
+                }) }}
+                    {{ form_errors(address_form) }}
+                    {% include '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/Form/_address.html.twig' with { form: address_form } %}
+                    {{ form_row(address_form._token) }}
+                    <button type="submit" id="sylius_save_changes_button" class="btn btn-primary w-100 mt-2"
+                            {{ sylius_test_html_attribute('rma-continue-button') }}>
+                        {{ 'madcoders_rma.ui.continue_button'|trans }}
+                    </button>
+                {{ form_end(address_form, { render_rest: false }) }}
+            </div>
+        </div>
     </div>
 </div>

@@ -1,7 +1,11 @@
-{% extends '@SyliusAdmin/layout.html.twig' %}
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
 
 {% block title %}{{ 'madcoders_rma.ui.configuration'|trans }} {{ parent() }}{% endblock %}
 
-{% block content %}
-    {{ sylius_template_event('madcoders_rma.admin.configuration.content', _context) }}
+{% block body %}
+    {% hook 'sylius_admin.madcoders_rma_configuration.show' with {
+        channel: channel,
+        channel_form: channelForm,
+        address_form: addressFormToSelectedChannel,
+    } %}
 {% endblock %}

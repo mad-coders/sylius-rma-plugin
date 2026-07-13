@@ -19,4 +19,7 @@
 /.idea/
 
 # Local Claude Code settings (personal, not shared)
-/.claude/settings.local.json/tests/Application/_devrouter.php
+/.claude/settings.local.json
+
+# Local dev-only static-file router for `php -S` (browser verification helper)
+/tests/Application/_devrouter.php
