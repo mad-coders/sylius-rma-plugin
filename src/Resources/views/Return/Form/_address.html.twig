@@ -1,35 +1,20 @@
-{% if type is defined %}
-    {% set type = type ~ '-' %}
-{% else %}
-    {% set type = null %}
-{% endif %}
-
-<div class="two fields">
-    {{ form_row(form.firstName, sylius_test_form_attribute(type ~ 'first-name')) }}
-    {{ form_row(form.lastName, sylius_test_form_attribute(type ~ 'last-name')) }}
+<div class="row">
+    <div class="col-md-6">{{ form_row(form.firstName, sylius_test_form_attribute('first-name')) }}</div>
+    <div class="col-md-6">{{ form_row(form.lastName, sylius_test_form_attribute('last-name')) }}</div>
 </div>
-<div class="two fields">
-    {{ form_row(form.phoneNumber) }}
-    {{ form_row(form.customerEmail) }}
+<div class="row">
+    <div class="col-md-6">{{ form_row(form.phoneNumber) }}</div>
+    <div class="col-md-6">{{ form_row(form.customerEmail) }}</div>
 </div>
-{{ form_row(form.company, sylius_test_form_attribute(type ~ 'company')) }}
-{{ form_row(form.street, sylius_test_form_attribute(type ~ 'street')) }}
-
-{% include '@SyliusShop/Common/Form/_countryCode.html.twig' with {'form': form.countryCode} %}
-
-<div class="province-container field" data-url="{{ path('sylius_shop_ajax_render_province_form') }}">
-    {% if form.provinceCode is defined %}
-        {{ form_row(form.provinceCode, sylius_test_form_attribute('province-code')|sylius_merge_recursive( {'attr': {'class': 'ui dropdown'}})) }}
-    {% elseif form.provinceName is defined %}
-        {{ form_row(form.provinceName, sylius_test_form_attribute('province-name')) }}
-    {% endif %}
-</div>
-
+{{ form_row(form.company, sylius_test_form_attribute('company')) }}
+{{ form_row(form.street, sylius_test_form_attribute('street')) }}
+{{ form_row(form.countryCode) }}
 {% if form.provinceCode is defined %}
-    {{ form_errors(form) }}
+    {{ form_row(form.provinceCode, sylius_test_form_attribute('province-code')) }}
+{% elseif form.provinceName is defined %}
+    {{ form_row(form.provinceName, sylius_test_form_attribute('province-name')) }}
 {% endif %}
-
-<div class="two fields">
-    {{ form_row(form.city, sylius_test_form_attribute(type ~ 'city')) }}
-    {{ form_row(form.postcode, sylius_test_form_attribute(type ~ 'postcode')) }}
+<div class="row">
+    <div class="col-md-6">{{ form_row(form.city, sylius_test_form_attribute('city')) }}</div>
+    <div class="col-md-6">{{ form_row(form.postcode, sylius_test_form_attribute('postcode')) }}</div>
 </div>

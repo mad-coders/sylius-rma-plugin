@@ -1,92 +1,66 @@
-{% extends '@SyliusShop/layout.html.twig' %}
-{% form_theme form '@SyliusShop/Form/theme.html.twig' %}
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
 
-{% block title %} {{ 'sylius.ui.return'|trans }} {% endblock %}
+{% form_theme form '@SyliusShop/form/theme.html.twig' %}
+
+{% block title %}{{ 'sylius.ui.return'|trans }} | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <div class="ui hidden divider"></div>
-    <div class="ui one column centered stackable grid">
-        <div class="column">
-            <h1 class="ui header">
-                <i class="circular truck icon"></i>
-                <div class="content">
-                    {{ 'madcoders_rma.ui.headline'|trans }} #{{ orderNumber }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.confirmation_step.subheader'|trans }}</div>
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-9">
+                <div class="mb-4 text-center">
+                    <h1 class="h2">{{ 'madcoders_rma.ui.headline'|trans }} #{{ orderNumber }}</h1>
+                    <p class="text-muted mb-0">{{ 'madcoders_rma.ui.confirmation_step.subheader'|trans }}</p>
                 </div>
-            </h1>
-            <div class="ui segment">
-                <h3 class="ui dividing header">
-                    {{ 'madcoders_rma.ui.confirmation_step.section.general'|trans }}
-                </h3>
-                <div class="ui two column centered stackable grid">
-                    <div class="column">
-                        <strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ returnOrder.returnNumber }}<br/>
-                        <strong>{{ 'sylius.ui.created_at'|trans }}:</strong>  {{ returnOrder.createdAt |date }}<br/>
-                        <strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ returnOrder.firstname }} {{ returnOrder.lastname }}<br/>
-                        <strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ returnOrder.customerEmail }} <br/>
-                        {% if returnOrder.phoneNumber is defined  %}
-                        <strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}<br/>
-                        {% endif %}
-                        {% if returnOrder.bankAccountNumber %}
-                        <strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}<br/>
-                        {% endif %}
-                        {% if returnOrder.accountHolderName %}
-                        <strong>{{ 'madcoders_rma.ui.form.account_holder_name'|trans }}:</strong> {{ returnOrder.accountHolderName }}<br/>
-                        {% endif %}
-                        {% if returnOrder.bankName %}
-                        <strong>{{ 'madcoders_rma.ui.form.bank_name'|trans }}:</strong> {{ returnOrder.bankName }}<br/>
-                        {% endif %}
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="h4 border-bottom pb-2">{{ 'madcoders_rma.ui.confirmation_step.section.general'|trans }}</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div><strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ returnOrder.returnNumber }}</div>
+                                <div><strong>{{ 'sylius.ui.created_at'|trans }}:</strong> {{ returnOrder.createdAt|date }}</div>
+                                <div><strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ returnOrder.firstname }} {{ returnOrder.lastname }}</div>
+                                <div><strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ returnOrder.customerEmail }}</div>
+                                {% if returnOrder.phoneNumber %}<div><strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ returnOrder.phoneNumber }}</div>{% endif %}
+                                {% if returnOrder.bankAccountNumber %}<div><strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ returnOrder.bankAccountNumber }}</div>{% endif %}
+                                {% if returnOrder.accountHolderName %}<div><strong>{{ 'madcoders_rma.ui.form.account_holder_name'|trans }}:</strong> {{ returnOrder.accountHolderName }}</div>{% endif %}
+                                {% if returnOrder.bankName %}<div><strong>{{ 'madcoders_rma.ui.form.bank_name'|trans }}:</strong> {{ returnOrder.bankName }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_address.html.twig' with { returnOrder: returnOrder } %}
+                            </div>
+                        </div>
 
-                    </div>
-                    <div class="column">
-                        {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_address.html.twig' with {'returnOrder': returnOrder} %}
-                    </div>
-                </div>
-                <div class="ui one column centered stackable grid">
-                    <div class="column">
-                        <h3 class="ui dividing header">
-                            {{ 'madcoders_rma.ui.confirmation_step.section.items'|trans }}
-                        </h3>
-                        <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }}
-                               class="ui very basic celled table">
-                            <thead>
-                            <tr>
-                                <th>{{ 'sylius.ui.item'|trans }}</th>
-                                <th>{{ 'sylius.ui.product_options'|trans }}</th>
-                                <th>{{ 'madcoders_rma.ui.confirmation_step.qty_to_return'|trans }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in returnOrder.items|filter(item => item.returnQty > 0) %}
-                                {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_item.html.twig' with {'item': item} %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="ui one column centered stackable grid">
-                    <div class="column">
-                        <strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong><br/>
-                        {{ rma_reason_name_view(returnOrder.returnReason) }}
-                    </div>
-                </div>
-                <div class="ui one column centered stackable grid">
-                    <div class="column">
-                        {{ form_start(form, {'action': formAction|default(path('madcoders_rma_return_form_accept', { 'returnNumber': returnOrder.returnNumber })), 'attr': {'class': 'ui large loadable form', 'novalidate': 'novalidate'}}) }}
-                        {{ form_row(form.consents, sylius_test_form_attribute('return-order_consents')) }}
-                        {{ form_row(form._token) }}
-                        <br/>
-                        <a href="{{ editAction|default(path('madcoders_rma_return_form', { 'orderNumber': returnOrder.orderNumber })) }}"
-                           class="ui large floated button">{{ 'sylius.ui.edit'|trans }}
-                        </a>
-                        <button type="submit" class="ui large right primary submit button"
-                                {{ sylius_test_html_attribute('madcoders-rma-approve-return-form-button') }}>
-                            {{ 'madcoders_rma.ui.action.submit_return_form'|trans }}
-                        </button>
-                        {{ form_end(form, {'render_rest': false}) }}
-                    </div>
-                </div>
+                        <h3 class="h4 border-bottom pb-2 mt-4">{{ 'madcoders_rma.ui.confirmation_step.section.items'|trans }}</h3>
+                        <div class="table-responsive">
+                            <table id="madcoders-rm-return-items" {{ sylius_test_html_attribute('madcoders-rm-return-items') }} class="table table-vcenter">
+                                <thead>
+                                    <tr>
+                                        <th>{{ 'sylius.ui.item'|trans }}</th>
+                                        <th>{{ 'sylius.ui.product_options'|trans }}</th>
+                                        <th class="text-end">{{ 'madcoders_rma.ui.confirmation_step.qty_to_return'|trans }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in returnOrder.items|filter(item => item.returnQty > 0) %}
+                                        {% include '@MadcodersSyliusRmaPlugin/Return/Summary/_item.html.twig' with { item: item } %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
 
+                        <div class="mt-3"><strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong> {{ rma_reason_name_view(returnOrder.returnReason) }}</div>
+
+                        {{ form_start(form, { action: formAction|default(path('madcoders_rma_return_form_accept', { returnNumber: returnOrder.returnNumber })), attr: { novalidate: 'novalidate' } }) }}
+                            <div class="mt-3">{{ form_row(form.consents, sylius_test_form_attribute('return-order_consents')) }}</div>
+                            {{ form_row(form._token) }}
+                            <div class="d-flex justify-content-between mt-3">
+                                <a href="{{ editAction|default(path('madcoders_rma_return_form', { orderNumber: returnOrder.orderNumber })) }}" class="btn btn-outline-secondary">{{ 'sylius.ui.edit'|trans }}</a>
+                                <button type="submit" class="btn btn-primary" {{ sylius_test_html_attribute('madcoders-rma-approve-return-form-button') }}>{{ 'madcoders_rma.ui.action.submit_return_form'|trans }}</button>
+                            </div>
+                        {{ form_end(form, { render_rest: false }) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
