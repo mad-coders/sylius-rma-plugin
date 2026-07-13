@@ -4,9 +4,15 @@
  #
  # @copyright MADCODERS Team (www.madcoders.co)
  # @licence For the full copyright and license information, please view the LICENSE
+ #
+ # Injected into the admin product form (General tab) via sylius/twig-hooks. The
+ # `nonReturnable` field is added to the product form by Form\Extension\ProductTypeExtension
+ # when the Product model implements NonReturnableProductInterface.
  #}
+{% set form = hookable_metadata.context.form %}
+
 {% if form.nonReturnable is defined %}
-    <div class="ui segment">
+    <div class="mb-3">
         {{ form_row(form.nonReturnable) }}
     </div>
 {% endif %}
