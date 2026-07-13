@@ -1,7 +1,9 @@
-<div class="ui breadcrumb">
-    <a href="{{ path('sylius_shop_homepage') }}" class="section">{{ 'sylius.ui.home'|trans }}</a>
-    <div class="divider"> / </div>
-    <a href="{{ path('sylius_shop_account_dashboard') }}" class="section">{{ 'sylius.ui.my_account'|trans }}</a>
-    <div class="divider"> / </div>
-    <div class="active section">{{ 'madcoders_rma.ui.return_history'|trans }}</div>
+{% from '@SyliusShop/shared/breadcrumbs.html.twig' import breadcrumbs as breadcrumbs %}
+
+<div class="col-12">
+    {{ breadcrumbs([
+        { label: 'sylius.ui.home'|trans, path: path('sylius_shop_homepage') },
+        { label: 'sylius.ui.my_account'|trans, path: path('sylius_shop_account_dashboard') },
+        { label: 'madcoders_rma.ui.return_history'|trans, active: true }
+    ]) }}
 </div>

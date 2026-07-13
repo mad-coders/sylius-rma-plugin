@@ -32,6 +32,6 @@ final class AccountMenuListener
     {
         $menu->addChild('return_history', ['route' => 'madcoders_rma_shop_account_index'])
             ->setLabel('madcoders_rma.ui.return_history')
-            ->setLabelAttribute('icon', 'undo alternate');
+            ->setLabelAttribute('icon', 'tabler:arrow-back-up');
     }
 }

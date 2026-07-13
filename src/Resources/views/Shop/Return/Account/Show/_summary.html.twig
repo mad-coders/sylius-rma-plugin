@@ -1,30 +1,98 @@
-<div class="ui stackable segment grid">
-    <div class="eight wide column">
-        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerData.html.twig' %}
+{% set order_return = hookable_metadata.context.order_return %}
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h3 class="card-title h5 mb-0">{{ 'sylius.ui.customer'|trans }}</h3></div>
+            <div class="card-body" id="customer-data">
+                <div><strong>{{ 'madcoders_rma.ui.return_number'|trans }}:</strong> {{ order_return.returnNumber }}</div>
+                <div><strong>{{ 'sylius.ui.created_at'|trans }}:</strong> {{ order_return.createdAt|date }}</div>
+                <div><strong>{{ 'sylius.ui.name'|trans }}:</strong> {{ order_return.firstname }} {{ order_return.lastname }}</div>
+                <div><strong>{{ 'sylius.ui.email'|trans }}:</strong> {{ order_return.customerEmail }}</div>
+                {% if order_return.phoneNumber %}<div><strong>{{ 'sylius.ui.phone_number'|trans }}:</strong> {{ order_return.phoneNumber }}</div>{% endif %}
+                {% if order_return.bankAccountNumber %}<div><strong>{{ 'madcoders_rma.ui.form.bank_account_number'|trans }}:</strong> {{ order_return.bankAccountNumber }}</div>{% endif %}
+                {% if order_return.accountHolderName %}<div><strong>{{ 'madcoders_rma.ui.form.account_holder_name'|trans }}:</strong> {{ order_return.accountHolderName }}</div>{% endif %}
+                {% if order_return.bankName %}<div><strong>{{ 'madcoders_rma.ui.form.bank_name'|trans }}:</strong> {{ order_return.bankName }}</div>{% endif %}
+            </div>
+        </div>
     </div>
-    <div class="eight wide column">
-        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_addressCustomerData.html.twig' %}
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h3 class="card-title h5 mb-0">{{ 'sylius.ui.address'|trans }}</h3></div>
+            <div class="card-body" id="customer-address-data">
+                <address class="mb-0">
+                    {% if order_return.company is not null %}{{ order_return.company }}<br>{% endif %}
+                    {{ order_return.street }}<br>
+                    {{ order_return.city }}, {{ order_return.postcode }}<br>
+                    {{ order_return.countryCode|sylius_country_name|upper }}
+                </address>
+            </div>
+        </div>
     </div>
-    <div class="sixteen wide column">
-        <table class="ui celled compact small table fixed">
-            <thead>
-            <tr>
-                <th class="nine wide">{{ 'sylius.ui.item'|trans }}</th>
-                <th class="four wide">{{ 'sylius.ui.product_options'|trans }}</th>
-                <th class="three wide">{{ 'madcoders_rma.ui.qty'|trans }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for item in order_return.items|filter(item => item.returnQty > 0) %}
-                {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_item.html.twig' with {'item': item} %}
-            {% endfor %}
-            </tbody>
-        </table>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table card-table table-vcenter">
+                    <thead>
+                        <tr>
+                            <th>{{ 'sylius.ui.item'|trans }}</th>
+                            <th>{{ 'sylius.ui.product_options'|trans }}</th>
+                            <th class="text-end">{{ 'madcoders_rma.ui.qty'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_return.items|filter(item => item.returnQty > 0) %}
+                            {% set variant = rma_product_view(item.productSku) %}
+                            <tr>
+                                <td>
+                                    <div><strong>{{ variant is not null ? variant.product.name : item.productName }}</strong></div>
+                                    <div class="text-muted small">{{ 'sylius.ui.sku'|trans }}: {{ item.productSku }}</div>
+                                </td>
+                                <td>
+                                    {% if variant is not null and variant.product.hasOptions() %}
+                                        <div class="d-flex flex-wrap gap-3">
+                                            {% for optionValue in variant.optionValues %}<span><strong>{{ optionValue.name }}:</strong> {{ optionValue.value }}</span>{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">{{ item.returnQty }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="eight wide column">
-        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerNote.html.twig' %}
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h3 class="card-title h5 mb-0">{{ 'madcoders_rma.ui.customer_note'|trans }}</h3></div>
+            <div class="card-body" id="customer-note-data">
+                <div><strong>{{ 'madcoders_rma.ui.return_reason'|trans }}:</strong> {{ rma_reason_name_view(order_return.returnReason) }}</div>
+                {% if order_return.customerNote is not empty %}
+                    <div class="mt-2"><strong>{{ 'sylius.ui.notes'|trans }}:</strong> {{ order_return.customerNote }}</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="eight wide column">
-        {% include '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_customerConsent.html.twig' %}
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header"><h3 class="card-title h5 mb-0">{{ 'madcoders_rma.ui.customer_consent_header'|trans }}</h3></div>
+            <div class="card-body" id="customer-consent-data">
+                {% for consent in order_return.orderReturnConsents %}
+                    <div>
+                        {% if consent.checked %}
+                            {{ ux_icon('tabler:square-check-filled', { class: 'text-success' }) }}
+                        {% else %}
+                            {{ ux_icon('tabler:square-x', { class: 'text-danger' }) }}
+                        {% endif %}
+                        {{ consent.label }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>

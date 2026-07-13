@@ -1,9 +1,7 @@
-{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+{% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 
 {% set path = options.link.url|default(path(options.link.route, options.link.parameters|default({}))) %}
 
 {% if madcoders_rma_return_form_pdf_enabled() and data.orderReturnStatus == 'new' %}
-
-    {{ buttons.default(path, action.label, true, 'print', 'primary') }}
-
+    {{ buttons.default(path, action.label, null, 'tabler:printer', 'btn-sm btn-outline-primary') }}
 {% endif %}

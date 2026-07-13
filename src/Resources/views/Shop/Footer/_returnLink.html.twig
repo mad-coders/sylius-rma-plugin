@@ -4,9 +4,12 @@
  #
  # @copyright MADCODERS Team (www.madcoders.co)
  # @licence For the full copyright and license information, please view the LICENSE
+ #
+ # Injected into the shop footer via sylius/twig-hooks (sylius_shop.base.footer.content),
+ # replacing the Sylius 1 sylius.shop.layout.footer block.
  #}
-<div class="ui center aligned basic inverted segment">
-    <a href="{{ path('madcoders_rma_start') }}" class="ui inverted basic button">
-        <i class="undo icon"></i>{{ 'madcoders_rma.ui.footer.start_return'|trans }}
+<div class="col-12 text-center py-2">
+    <a href="{{ path('madcoders_rma_start') }}" class="link-light text-decoration-none">
+        {{ ux_icon('tabler:arrow-back-up', { class: 'icon me-1' }) }}{{ 'madcoders_rma.ui.footer.start_return'|trans }}
     </a>
 </div>
