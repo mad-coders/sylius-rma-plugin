@@ -1,0 +1,17 @@
+{% set order_return = hookable_metadata.context.order_return %}
+
+<div class="col">
+    <h2 class="page-title">
+        {{ ux_icon('tabler:receipt-refund', {'class': 'icon me-1'}) }}
+        {{ 'madcoders_rma.ui.return_number'|trans }} #{{ order_return.returnNumber }}
+    </h2>
+    <div class="text-muted mt-1 d-flex gap-2 align-items-center flex-wrap">
+        <span>{{ order_return.createdAt|format_datetime }}</span>
+        <span id="sylius-order-state" {{ sylius_test_html_attribute('order-return-state') }}>
+            {% include [
+                '@MadcodersSyliusRmaPlugin/Admin/Return/Label/State/' ~ order_return.orderReturnStatus ~ '.html.twig',
+                '@SyliusUi/label/default.html.twig'
+            ] with { value: 'sylius.ui.' ~ order_return.orderReturnStatus } %}
+        </span>
+    </div>
+</div>

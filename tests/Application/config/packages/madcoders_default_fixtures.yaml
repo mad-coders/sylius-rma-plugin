@@ -9,7 +9,7 @@ sylius_fixtures:
                                 order_number: "000000011"
                                 return_number: "R00000011-1"
                                 channel_code: "FASHION_WEB"
-                                return_reason: "damaged"
+                                return_reason: "reason_1"
                                 customer_number: 1
 
 #                madcoders_rma_order_return_item:

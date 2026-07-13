@@ -1,13 +1,22 @@
 {% set variant = rma_product_view(item.productSku) %}
 
 <tr>
-    <td class="single line">
-        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Item/_info.html.twig' with {'variant': variant} %}
+    <td>
+        <div><strong>{{ variant is not null ? variant.product.name : item.productName }}</strong></div>
+        <div class="text-muted small" {{ sylius_test_html_attribute('product-variant-code') }}>
+            {{ 'sylius.ui.sku'|trans }}: {{ item.productSku }}
+        </div>
     </td>
-    <td class="left aligned">
-        {% include '@MadcodersSyliusRmaPlugin/Admin/Return/Show/Item/_options.html.twig' with {'variant': variant} %}
+    <td>
+        {% if variant is not null and variant.product.hasOptions() %}
+            <div class="d-flex flex-wrap gap-3" {{ sylius_test_html_attribute('product-options') }}>
+                {% for optionValue in variant.optionValues %}
+                    <span {{ sylius_test_html_attribute('option-name', optionValue.name) }}>
+                        <strong>{{ optionValue.name }}:</strong> {{ optionValue.value }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
     </td>
-    <td class="center line">
-        {{ item.returnQty }}
-    </td>
+    <td class="text-end">{{ item.returnQty }}</td>
 </tr>
