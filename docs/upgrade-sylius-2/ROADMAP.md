@@ -314,7 +314,7 @@ Partials read context via `hookable_metadata.context.*`.
       `always_open` on the parent.
 - [x] Reason/consent CRUD forms already render on the default Tabler crud form; removed the
       no-op `vars.templates.form` override and the dead SemanticUI `_form` partials.
-- [ ] ADR `docs/adr-log/0014-twig-hooks-presentation.md` superseding the sylius_ui parts of
+- [x] ADR `docs/adr-log/0014-twig-hooks-presentation.md` recorded, superseding the sylius_ui parts of
       0006 (to write).
 - [ ] Behat selector coupling and `tests/Application/templates/bundles/` overrides are
       deferred to P8 (the Behat rework).
