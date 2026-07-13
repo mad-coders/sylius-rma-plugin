@@ -93,7 +93,6 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% import "@SyliusUi/Macro/flags.html.twig" as flags %}
                             <strong>{{ 'sylius.ui.address'|trans }}:</strong>
                             <address>
                                 {% if orderReturnFormData.company is not null %}
@@ -101,7 +100,6 @@
                                 {% endif %}
                                 {{ orderReturnFormData.street }}<br/>
                                 {{ orderReturnFormData.city }}, {{ orderReturnFormData.postcode }}<br/>
-                                {{ flags.fromCountryCode(orderReturnFormData.countryCode) }}
                                 {{ orderReturnFormData.countryCode|sylius_country_name|upper }}
                             </address>
                         </td>
