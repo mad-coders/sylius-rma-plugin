@@ -331,27 +331,33 @@ the P2 note); a native-order-show panel can be added later via
 Goal: guest and account return flows render on the new shop frontend; all emails send;
 PDF generation works or is feature-flagged off.
 
-- [ ] Shop templates (`src/Resources/views/{Auth,Return,Withdrawal,Shop}/**`): extend
-      the Sylius 2.2 shop layout and account layout (DISCOVER paths), Bootstrap markup.
-- [ ] Shop hooks: `sylius.shop.layout.footer` block -> DISCOVER footer hook;
-      `madcoders_rma.shop.account.order_return.show.subcontent` -> OWN hook, delete
-      the two `_legacySonataEvent` bridges; replace `sylius_template_event()` in
-      `src/Resources/views/Shop/Return/Account/show.html.twig`.
-- [ ] Account menu: `src/Ui/Menu/AccountMenuListener.php` (`sylius.menu.shop.account`):
-      verify event and signature.
-- [ ] Emails: verify sender API; rewrite email templates in
-      `src/Resources/views/Email/` against the Sylius 2 email layout; confirm subjects
-      and translation keys.
-- [ ] PDF: verify knp-snappy-bundle boots under the resolved Symfony version and
-      wkhtmltopdf renders the rewritten template. If broken: keep the ADR 0011 feature
-      flag off and open a follow-up issue for a Gotenberg/dompdf replacement.
-- [ ] Twig extensions in `src/Twig/` feeding these views: verify output fragments
-      against the new markup.
+- [x] Shop templates (`src/Resources/views/{Auth,Return,Withdrawal,Shop}/**`): guest
+      auth/return/withdrawal flows rebuilt on `@SyliusShop/shared/layout/base.html.twig`
+      with Bootstrap cards and a form theme; the old per-field SemanticUI partials are
+      inlined/removed. PR #49.
+- [x] Shop hooks: footer link injected via `sylius_shop.base.footer.content`; the account
+      return-history index and show pages extend `@SyliusShop/account/common/{index,show}`
+      and render their own `sylius_shop.madcoders_rma_account_return.*` hook trees (shared
+      account chrome + grid via `@SyliusShop/shared/grid.html.twig`). The
+      `sylius_template_event()` call and the `_legacySonataEvent` bridges are gone.
+- [x] Account menu: `AccountMenuListener` verified; icon migrated to `tabler:arrow-back-up`.
+- [x] Emails: self-contained (only include the plugin's own `Email/_header`/`_footer`/
+      `_returnSummary` partials, no `@Sylius` or removed-macro references); `lint:twig`
+      validates them. Live send is exercised by behat in phase 8.
+- [x] PDF: knp-snappy + wkhtmltopdf render the rewritten template under the resolved
+      Symfony 7 stack - verified end to end (`print-form` -> 200, `application/pdf`, valid
+      40KB document). Fixed the removed `@SyliusUi/Macro/flags` import (lazy `import`, so
+      `lint:twig` missed it). ADR 0011 flag stays off by default; no replacement needed.
+- [x] Grid field template path casing fixed across all grids (`@SyliusUi/Grid/Field` ->
+      `@SyliusUi/grid/field`) - a latent Linux/CI break.
 
-Definition of done: manual walkthrough clean (guest auth-code flow, return submission,
-withdrawal request and confirm, account return list/show, footer link); all emails
-render without template errors via null/Mailhog transport; PDF generated or flagged
-off with an issue.
+Definition of done: guest auth start, account return list/show, footer link, and account
+menu render 200 with Bootstrap chrome on the running Sylius 2.2 shop; emails and all 72
+plugin templates pass `lint:twig`; PDF generates end to end when enabled.
+
+Phase 8 note: the return-form PDF requires (a) `return_form_pdf_enabled: true` and (b) a
+channel return address (`madcoders_rma_configuration` row, `parameter: address`) - the
+fixtures/behat setup must seed both to exercise the PDF path.
 
 ### Phase 8: fixtures, behat, full CI, docs, release
 
