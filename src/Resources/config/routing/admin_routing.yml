@@ -21,7 +21,7 @@ madcoders_rma_admin_order_return:
             all:
                 subheader: madcoders_rma.ui.return_list
             index:
-                icon: 'file dolly outline'
+                icon: 'tabler:truck-return'
     type: sylius.resource
 
 madcoders_rma_admin_order_return_reason:
@@ -34,10 +34,8 @@ madcoders_rma_admin_order_return_reason:
     vars:
         all:
             subheader: madcoders_rma.ui.return_reason_list
-            templates:
-                form: "@MadcodersSyliusRmaPlugin/Admin/Reason/_form.html.twig"
         index:
-            icon: 'edit outline'
+            icon: 'tabler:edit'
   type: sylius.resource
 
 madcoders_rma_admin_order_return_consent:
@@ -50,10 +48,8 @@ madcoders_rma_admin_order_return_consent:
     vars:
         all:
             subheader: madcoders_rma.ui.order_return_consent_subheader
-            templates:
-                form: "@MadcodersSyliusRmaPlugin/Admin/Consent/_form.html.twig"
         index:
-            icon: 'briefcase'
+            icon: 'tabler:briefcase'
   type: sylius.resource
 
 madcoders_rma_admin_order_return_config_edit:
