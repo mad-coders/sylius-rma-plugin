@@ -243,25 +243,32 @@ related; the unit CI gate stays off until phase 3.
 Goal: all plugin routes register, grids load, doctrine schema and migrations valid.
 No template work yet.
 
-- [ ] Resource routing (`src/Resources/config/routing/{admin,shop}_routing.yml`):
-      verify `type: sylius.resource` YAML routing is still loaded (expected: yes);
-      update `templates: "@SyliusAdmin\Crud"` to the Sylius 2 crud template value
-      (DISCOVER from vendor SyliusAdminBundle routing).
-- [ ] Grids (`src/Resources/config/grids/*.yml`, 5 files): audit for the removed
-      `entities` filter (replace with `entity` + `options.fields`); audit action and
-      field types against the Sylius 2 grid bundle.
-- [ ] DI (`src/Resources/config/services/*.xml`): services are private by default in
-      Sylius 2; ensure controllers are public or tagged `controller.service_arguments`;
-      replace any injection of now-private Sylius services with official aliases.
-- [ ] Doctrine: XML mapped superclasses stay (ORM 2.x); verify `gedmo:timestampable`
-      against the resolved gedmo version; run `doctrine:migrations:migrate` and
-      `doctrine:schema:validate`; add a new migration only if diffs appear.
-- [ ] Security (`src/Security/`): verify voter registration and the guest auth-code
-      flow against the regenerated test app `security.yaml` (firewall names changed).
+Outcome: the resource layer needed **no source changes** - phases 3 and 4 already made it
+functional, and the Sylius 1 resource config is Sylius-2 compatible. Phase 5 is verification
+plus re-enabling the `fixtures` CI gate.
 
-Definition of done: `bin/console debug:router | grep madcoders` lists all routes; all
-five grids load without exception; migrations plus schema validate clean; `fixtures`
-CI gate removed if fixtures already load.
+- [x] Resource routing: `type: sylius.resource` YAML routing still loads; all 38 madcoders
+      routes register (`debug:router`).
+- [x] Grids (5 files): all load via `sylius:debug:grid`; no `entities` filter is used, so
+      nothing to migrate. `sylius_shop_account_order` (the shop account-order grid override)
+      loads too.
+- [x] DI: controller services are already declared `public="true"`; the container compiles.
+      No now-private Sylius service references break.
+- [x] Doctrine: XML mapped superclasses (with `gedmo:timestampable`) validate clean on ORM
+      3.6 / MySQL 8 - `doctrine:schema:validate` reports mappings correct and schema in sync;
+      `doctrine:migrations:migrate` runs all 4 plugin migrations (Postgres-only Sylius core
+      migrations skip on MySQL). No new migration needed.
+- [x] Fixtures: `sylius:fixtures:load default` completes via both the migrate path and the
+      CI `schema:create` path; the plugin fixtures load (1 return, 4 reasons, 2 consents).
+- [x] `fixtures` CI gate removed.
+- [ ] Deferred to phase 6: `templates: "@SyliusAdmin\Crud"` in the admin routing still points
+      at the Sylius 1 crud template dir. It does not affect routing/grids/fixtures (only
+      rendering), so it is updated with the admin template rewrite when it can be render-tested.
+- [ ] Deferred to phase 8: the guest auth-code security flow is covered end to end by the
+      Behat shop suites; a firewall-level review lands with the Behat rework.
+
+Definition of done: all routes register; all five grids load; migrations plus schema
+validate clean; fixtures load; `fixtures` CI gate removed. **All met.**
 
 ### Phase 6: admin UI: twig hooks + Tabler rewrite
 
