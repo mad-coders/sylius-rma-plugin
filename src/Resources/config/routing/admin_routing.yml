@@ -14,7 +14,7 @@ madcoders_rma_admin_order_return:
         alias: madcoders_rma.order_return
         section: admin
         only: [index, update, delete, bulkDelete]
-        templates: "@SyliusAdmin\\Crud"
+        templates: "@SyliusAdmin\\shared\\crud"
         redirect: index
         grid: madcoders_rma_admin_return_orders
         vars:
@@ -28,7 +28,7 @@ madcoders_rma_admin_order_return_reason:
   resource: |
     alias: madcoders_rma.order_return_reason
     section: admin
-    templates: "@SyliusAdmin\\Crud"
+    templates: "@SyliusAdmin\\shared\\crud"
     redirect: update
     grid: madcoders_rma_admin_return_reason
     vars:
@@ -44,7 +44,7 @@ madcoders_rma_admin_order_return_consent:
   resource: |
     alias: madcoders_rma.order_return_consent
     section: admin
-    templates: "@SyliusAdmin\\Crud"
+    templates: "@SyliusAdmin\\shared\\crud"
     redirect: update
     grid: madcoders_rma_admin_return_consent
     vars:
