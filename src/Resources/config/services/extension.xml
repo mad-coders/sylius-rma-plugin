@@ -21,36 +21,42 @@ Architects of this package:
         <service id="madcoders.sylius_rma_plugin.rma_product_view_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaProductViewExtension">
             <argument type="service" id="sylius.repository.product_variant" />
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_order_view_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaOrderViewExtension">
             <argument type="service" id="sylius.repository.order" />
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_reason_choice_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaReasonChoiceExtension">
             <argument type="service" id="madcoders.sylius_rma_plugin.form.choice_provider.reason" />
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_time_line_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeLineExtension">
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_time_ago_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaTimeAgoExtension">
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_verification_possibility_of_return_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaVerificationPossibilityOfReturnExtension">
             <argument type="service" id="madcoders.sylius_rma_plugin.services.rma_verification_possibility_of_return" />
             <argument type="service" id="madcoders.sylius_rma_plugin.services.withdrawal.eligibility_checker" />
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
         <service id="madcoders.sylius_rma_plugin.twig.rma_config_extension"
@@ -58,7 +64,8 @@ Architects of this package:
             <argument>%madcoders_rma.return_form_pdf_enabled%</argument>
             <argument>%madcoders_rma.allow_unpaid_withdrawal%</argument>
             <argument type="service" id="madcoders.sylius_rma_plugin.services.additional_information_checker" />
-            <tag name="twig.extension"/>
+            <tag name="twig.attribute_extension"/>
+            <tag name="twig.runtime"/>
         </service>
 
     </services>

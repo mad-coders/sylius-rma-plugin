@@ -27,30 +27,32 @@ class AdminMenuListener
         $newRmaSubmenu = $menu
             ->addChild('return-manager')
             ->setLabel('Return Manager')
+            ->setLabelAttribute('icon', 'tabler:package')
+            ->setExtra('always_open', true)
         ;
 
         $newRmaSubmenu
             ->addChild('return-manager-list', ['route' => 'madcoders_rma_admin_order_return_index'])
             ->setLabel('Returns')
-            ->setLabelAttribute('icon', 'dolly')
+            ->setLabelAttribute('icon', 'tabler:truck-return')
         ;
 
         $newRmaSubmenu
             ->addChild('return-reasons', ['route' => 'madcoders_rma_admin_order_return_reason_index'])
             ->setLabel('Return Reasons')
-            ->setLabelAttribute('icon', 'edit outline')
+            ->setLabelAttribute('icon', 'tabler:edit')
         ;
 
         $newRmaSubmenu
             ->addChild('return-consents', ['route' => 'madcoders_rma_admin_order_return_consent_index'])
             ->setLabel('Return Consents')
-            ->setLabelAttribute('icon', 'briefcase')
+            ->setLabelAttribute('icon', 'tabler:briefcase')
         ;
 
         $newRmaSubmenu
             ->addChild('return-config', ['route' => 'madcoders_rma_admin_order_return_config_edit'])
             ->setLabel('Return Configuration')
-            ->setLabelAttribute('icon', 'sliders horizontal')
+            ->setLabelAttribute('icon', 'tabler:adjustments')
         ;
     }
 }

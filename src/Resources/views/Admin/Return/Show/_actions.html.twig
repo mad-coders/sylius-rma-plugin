@@ -1,0 +1,35 @@
+{% set order_return = hookable_metadata.context.order_return %}
+{% set id = order_return.id %}
+
+<div class="col-auto ms-auto d-print-none">
+    <div class="btn-list">
+        <a href="{{ path('madcoders_rma_admin_order_return_index') }}" class="btn">
+            {{ ux_icon('tabler:arrow-left', {'class': 'icon'}) }} {{ 'sylius.ui.back'|trans }}
+        </a>
+
+        {% if order_return.orderReturnStatus == 'new' %}
+            <a href="{{ path('madcoders_rma_admin_order_return_show_complete', { id: id, _csrf_token: csrf_token(id) }) }}"
+               class="btn btn-success" {{ sylius_test_html_attribute('complete-button') }}>
+                {{ ux_icon('tabler:circle-check', {'class': 'icon'}) }} {{ 'sylius.ui.complete'|trans }}
+            </a>
+        {% endif %}
+
+        {% if order_return.orderReturnStatus == 'withdrawal_request' %}
+            <a href="{{ path('madcoders_rma_admin_order_return_show_confirm_withdrawal', { id: id, _csrf_token: csrf_token(id) }) }}"
+               class="btn btn-success" {{ sylius_test_html_attribute('confirm-withdrawal-button') }}>
+                {{ ux_icon('tabler:circle-check', {'class': 'icon'}) }} {{ 'madcoders_rma.ui.withdrawal.confirm_withdrawal'|trans }}
+            </a>
+            <a href="{{ path('madcoders_rma_admin_order_return_show_fallback_to_return', { id: id, _csrf_token: csrf_token(id) }) }}"
+               class="btn btn-primary" {{ sylius_test_html_attribute('fallback-to-return-button') }}>
+                {{ ux_icon('tabler:arrows-exchange', {'class': 'icon'}) }} {{ 'madcoders_rma.ui.withdrawal.fallback_to_return'|trans }}
+            </a>
+        {% endif %}
+
+        {% if order_return.orderReturnStatus not in ['completed', 'canceled', 'withdrawal_request', 'withdrawn'] %}
+            <a href="{{ path('madcoders_rma_admin_order_return_show_cancel', { id: id, _csrf_token: csrf_token(id) }) }}"
+               class="btn btn-danger" {{ sylius_test_html_attribute('cancel-button') }}>
+                {{ ux_icon('tabler:ban', {'class': 'icon'}) }} {{ 'sylius.ui.cancel'|trans }}
+            </a>
+        {% endif %}
+    </div>
+</div>

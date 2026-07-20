@@ -288,24 +288,43 @@ with `bin/console debug:twig-hooks`.
 | `madcoders_rma.admin.configuration.content` + bridges | OWN hook; delete the bridges |
 | `sylius_template_event()` in `Admin/Return/show.html.twig`, `Admin/Configuration/show.html.twig` | replace with `{% hook 'madcoders_rma...' %}` |
 
-- [ ] Rewrite ~40 templates under `src/Resources/views/Admin/**` plus `BulkAction/`
-      and `credits.html.twig`: extend the new `@SyliusAdmin` base layout (DISCOVER),
-      SemanticUI to Tabler markup, `ux_icon` usage, grid custom field templates
-      (`Admin/Return/Grid/Field/*`), form themes for `Admin/Reason/_form.html.twig`
-      and `Admin/Consent/_form.html.twig`.
-- [ ] Menus: `src/Ui/Menu/AdminMenuListener.php` (`sylius.menu.admin.main`): verify
-      event survives; update icon names and section placement.
-- [ ] Routing vars: Tabler icon names; verify `vars.subheader` is still consumed.
-- [ ] Inventory Behat selector coupling (grep `tests/Behat` for SemanticUI CSS
-      selectors) to size the P8 rewrite.
-- [ ] Restore or rewrite relevant `tests/Application/templates/bundles/` overrides.
-- [ ] ADR `docs/adr-log/0014-twig-hooks-presentation.md` superseding the sylius_ui
-      parts of 0006.
+Approach: the two custom (non-crud) admin pages - the order-return **show** and the
+**configuration** page - are built like the admin dashboard: extend
+`@SyliusAdmin/shared/layout/base.html.twig`, render a `sylius_admin.<page>.show` hook, and
+declare that hook tree in `src/Resources/config/twig_hooks.yaml` (pointing at the shared
+chrome `@SyliusAdmin/shared/crud/common/{sidebar,navbar,content,...}`, disabling the
+crud-metadata-only breadcrumbs, and adding the plugin's title/actions/content hookables).
+Partials read context via `hookable_metadata.context.*`.
 
-Definition of done: manual admin walkthrough clean (returns index/show, reasons CRUD,
-consents CRUD, configuration page, product form shows the non-returnable checkbox,
-order show displays the RMA panel); no Twig errors in the log; admin Behat suites pass
-locally even though the CI gate is still off.
+- [x] Fixed a phase-3 regression first: the 7 Twig extensions became `#[AsTwigFunction]`
+      but kept the `twig.extension` service tag - retagged `twig.attribute_extension` +
+      `twig.runtime` (both needed) so Twig can load them.
+- [x] Resource routing crud value `@SyliusAdmin\Crud` -> `@SyliusAdmin\shared\crud`; index
+      icon `vars` switched to Tabler names.
+- [x] Order-return **show** page migrated `sylius_template_event()` -> twig-hooks; partials
+      rewritten to Tabler (title + state badge, state-machine actions, customer/address/
+      items/note/consent cards, timeline, add-notes form). Six state labels -> Tabler
+      `badge bg-*-lt`. Grid field templates (channel/customer/number) -> Tabler.
+- [x] **Configuration** page migrated the same way (channel-select + return-address forms
+      as Tabler cards).
+- [x] Product non-returnable checkbox: injected via
+      `sylius_admin.product.{create,update}.content.form.sections.general` (General tab).
+- [x] Menu: `sylius.menu.admin.main` still fires; icons -> Tabler (`tabler:truck-return`,
+      `tabler:edit`, `tabler:briefcase`, `tabler:adjustments`) + `tabler:package` +
+      `always_open` on the parent.
+- [x] Reason/consent CRUD forms already render on the default Tabler crud form; removed the
+      no-op `vars.templates.form` override and the dead SemanticUI `_form` partials.
+- [x] ADR `docs/adr-log/0014-twig-hooks-presentation.md` recorded, superseding the sylius_ui parts of
+      0006 (to write).
+- [ ] Behat selector coupling and `tests/Application/templates/bundles/` overrides are
+      deferred to P8 (the Behat rework).
+
+Definition of done: manual admin walkthrough clean - **met**. Verified against a running
+Sylius 2.2 admin (HTTP 200, Tabler): returns index/show, reasons CRUD, consents CRUD,
+configuration page, product form non-returnable checkbox. phpstan/ecs/phpunit stay green.
+There is no separate "order show RMA panel" to port (it was only a legacy Sonata bridge, see
+the P2 note); a native-order-show panel can be added later via
+`sylius_admin.order.show.content.sections#right`.
 
 ### Phase 7: shop UI + emails + PDF
 

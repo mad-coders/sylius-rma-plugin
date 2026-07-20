@@ -1,6 +1,6 @@
 # 0006 - Presentation conventions (YAML routing/grids, form idioms, translation keys)
 
-- **Status:** Accepted
+- **Status:** Accepted; the `sylius_ui.events` / template-event presentation parts are superseded by [0014](0014-twig-hooks-presentation.md) (Sylius 2 twig-hooks + Tabler)
 - **Date:** pre-upgrade
 
 ## Context

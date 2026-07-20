@@ -1,2 +1,6 @@
-{% set order = rma_order_number_view(data)  %}
-<a href="{{ path('sylius_admin_order_show', {'id' : order.id })|raw }}">#{{ order.number }}</a>
+{% set order = rma_order_number_view(data) %}
+{% if order is not null %}
+    <a href="{{ path('sylius_admin_order_show', { id: order.id }) }}">#{{ order.number }}</a>
+{% else %}
+    #{{ data }}
+{% endif %}

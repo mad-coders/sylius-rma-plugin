@@ -11,6 +11,7 @@
 #
 imports:
   - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/grids.yaml" }
+  - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/twig_hooks.yaml" }
 
 sylius_mailer:
   emails:

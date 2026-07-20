@@ -1,7 +1,12 @@
-{% extends '@SyliusAdmin/layout.html.twig' %}
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
 
-{% block title %}{{ 'madcoders_rma.ui.return_number'|trans ~' #'~ order_return.returnNumber }} {{ parent() }}{% endblock %}
+{% block title %}{{ 'madcoders_rma.ui.return_number'|trans }} #{{ order_return.returnNumber }} {{ parent() }}{% endblock %}
 
-{% block content %}
-    {{ sylius_template_event('madcoders_rma.admin.order_return.show.content', _context) }}
+{% block body %}
+    {% hook 'sylius_admin.madcoders_rma_order_return.show' with {
+        resource: order_return,
+        order_return: order_return,
+        form: form,
+        change_log: changeLog|default([]),
+    } %}
 {% endblock %}

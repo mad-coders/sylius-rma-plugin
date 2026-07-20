@@ -1,0 +1,100 @@
+#
+# This file is part of package:
+# Sylius RMA Plugin
+#
+# @copyright MADCODERS Team (www.madcoders.co)
+# @licence For the full copyright and license information, please view the LICENSE
+#
+# Sylius 2 sylius/twig-hooks configuration. Replaces the Sylius 1 sylius_ui.events blocks
+# that used to inject the plugin's admin content (docs/upgrade-sylius-2/ROADMAP.md phase 6).
+#
+sylius_twig_hooks:
+    hooks:
+        # Per-product "non-returnable" checkbox, appended to the General tab of the admin
+        # product create and update forms (the field is added by ProductTypeExtension).
+        'sylius_admin.product.create.content.form.sections.general':
+            madcoders_rma_non_returnable:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Product/_nonReturnable.html.twig'
+                priority: -100
+        'sylius_admin.product.update.content.form.sections.general':
+            madcoders_rma_non_returnable:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Product/_nonReturnable.html.twig'
+                priority: -100
+
+        # Admin order-return show page. It is a custom controller route (not a crud resource),
+        # so - like the dashboard - it declares its own hook tree pointing at the shared admin
+        # chrome (sidebar, navbar, content wrapper) and disables the crud-metadata-only hookables.
+        'sylius_admin.madcoders_rma_order_return.show':
+            sidebar:
+                template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'
+                priority: 200
+            navbar:
+                template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/shared/crud/common/content.html.twig'
+                priority: 0
+
+        'sylius_admin.madcoders_rma_order_return.show.content':
+            flashes:
+                template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+                priority: 300
+            header:
+                template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+                priority: 200
+            details:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_content.html.twig'
+                priority: 100
+
+        'sylius_admin.madcoders_rma_order_return.show.content.header':
+            breadcrumbs:
+                enabled: false
+            title_block:
+                template: '@SyliusAdmin/shared/crud/common/content/header/title_block.html.twig'
+                priority: 0
+
+        'sylius_admin.madcoders_rma_order_return.show.content.header.title_block':
+            title:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_title.html.twig'
+                priority: 100
+            actions:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Return/Show/_actions.html.twig'
+                priority: 0
+
+        # Admin RMA configuration page (also a custom controller route).
+        'sylius_admin.madcoders_rma_configuration.show':
+            sidebar:
+                template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'
+                priority: 200
+            navbar:
+                template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
+                priority: 100
+            content:
+                template: '@SyliusAdmin/shared/crud/common/content.html.twig'
+                priority: 0
+
+        'sylius_admin.madcoders_rma_configuration.show.content':
+            flashes:
+                template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+                priority: 300
+            header:
+                template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+                priority: 200
+            details:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_content.html.twig'
+                priority: 100
+
+        'sylius_admin.madcoders_rma_configuration.show.content.header':
+            breadcrumbs:
+                enabled: false
+            title_block:
+                template: '@SyliusAdmin/shared/crud/common/content/header/title_block.html.twig'
+                priority: 0
+
+        'sylius_admin.madcoders_rma_configuration.show.content.header.title_block':
+            title:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_title.html.twig'
+                priority: 100
+            actions:
+                template: '@MadcodersSyliusRmaPlugin/Admin/Configuration/Show/_actions.html.twig'
+                priority: 0

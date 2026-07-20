@@ -1,24 +1,13 @@
-<h4 class="ui top attached styled header" >
-    {{ 'madcoders_rma.ui.timeline'|trans }}
-</h4>
-<div class="ui attached segment" {{ sylius_test_html_attribute('madcoders-rma-timeline') }}>
-    <div class="ui feed">
-    {% for logItem in changeLog %}
-
-        <div class="event">
-            <div class="label">
-                <img src="//placehold.it/50x50">
-            </div>
-            <div class="content">
-                <div class="date">
-                    {{ rma_time_ago_view(logItem.createdAt) }}
-                </div>
-
-                {% include(rma_time_line_item_view(logItem) ) with {'logItem': logItem, 'data': order_return} %}
-
-            </div>
-        </div>
-
-    {% endfor %}
+<div class="card">
+    <div class="card-header"><h3 class="card-title">{{ 'madcoders_rma.ui.timeline'|trans }}</h3></div>
+    <div class="card-body" {{ sylius_test_html_attribute('madcoders-rma-timeline') }}>
+        <ul class="list-unstyled mb-0">
+            {% for logItem in change_log %}
+                <li class="mb-3">
+                    <div class="text-muted small">{{ rma_time_ago_view(logItem.createdAt) }}</div>
+                    {% include rma_time_line_item_view(logItem) with { logItem: logItem, data: order_return } %}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
