@@ -23,13 +23,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Shared "Additional information" field definitions so the field names, labels and validation stay
- * identical wherever they are used. Two callers add them on different terms:
- *  - {@see \Madcoders\SyliusRmaPlugin\Form\Extension\ReturnFormTypeExtension} adds the whole section
- *    (all three fields) to the standard return form, gated behind the require_additional_information
- *    flag.
- *  - {@see WithdrawalReturnFormType} always adds only the bank account field, independently of that
- *    flag, because the type extension targets {@see ReturnFormType} alone and does not reach the
- *    withdrawal subtype.
+ * identical wherever they are used. The only caller is
+ * {@see \Madcoders\SyliusRmaPlugin\Form\Extension\ReturnFormTypeExtension}, which adds the whole
+ * section (all three fields) behind the require_additional_information flag to both the return form
+ * and the withdrawal form.
  */
 trait AdditionalInformationFieldsTrait
 {

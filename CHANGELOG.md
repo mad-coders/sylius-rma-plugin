@@ -9,6 +9,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Changed
+
+- **`require_additional_information` now governs the withdrawal form too**: the flag had no effect
+  there in either direction - the pre-shipment withdrawal form always collected the bank account
+  number and never offered the account holder name or bank name, because Symfony resolves form type
+  extensions by exact type name and `ReturnFormTypeExtension` listed only `ReturnFormType`
+  (`WithdrawalReturnFormType` extends it in PHP, but its *form* parent is the plain form type). The
+  extension now lists both types and `WithdrawalReturnFormType` no longer adds the bank account
+  field itself, so the withdrawal form collects exactly what the return form collects: nothing when
+  the flag is off (the default), all three refund fields when it is on. **Behavior change:** a shop
+  relying on every withdrawal carrying a bank account number must now set
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true`.
+
 ### Fixed
 
 - **A return reason can be created in the admin again**: the code field on the create form was
