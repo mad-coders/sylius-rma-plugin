@@ -9,7 +9,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
-## [1.3.0-rc.5] - 2026-07-22
+## [1.3.0-rc.5] - 2026-07-23
 
 Fifth release candidate for the 1.3 line, a bug-fix pass over the customer return form and the
 admin return reasons on top of rc.4, plus one deliberate behaviour change to the withdrawal form.
