@@ -2,6 +2,8 @@ madcoders_rma:
     ui:
         order_return_reasons: 'Order return reasons'
         return_reason_list: 'Order return reasons'
+        new_order_return_reason: 'New order return reason'
+        edit_order_return_reason: 'Edit order return reason'
         return:
             session_not_valid: 'Your session has expired'
             pdf_disabled: 'Return form PDF download is currently disabled.'
@@ -138,7 +140,7 @@ madcoders_rma:
                 name: 'Name'
                 days_to_deadline_to_return: 'Reason validity period in days'
                 position: 'Position'
-                descriptin: 'Descriptin'
+                description: 'Description'
                 slug: 'Code'
 
         history:

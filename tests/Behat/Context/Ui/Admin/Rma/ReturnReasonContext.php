@@ -150,6 +150,17 @@ class ReturnReasonContext implements Context
         $this->returnReasonCreatePage->create();
     }
 
+    /**
+     * @Then /^a return reason with code "([^"]+)" should exist$/
+     */
+    public function aReturnReasonWithCodeShouldExist(string $code): void
+    {
+        Assert::notNull(
+            $this->orderReturnReasonRepository->findOneBy(['code' => $code]),
+            sprintf('Expected a return reason with code "%s" to exist, but none was found.', $code),
+        );
+    }
+
     private function findReturnReasonIdByCode(string $code): ?int
     {
         $returnReason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);

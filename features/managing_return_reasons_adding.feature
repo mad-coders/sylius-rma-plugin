@@ -25,4 +25,5 @@ Feature: Adding new return reason
         | deadlineToReturn    | field             | 16                                  |
       And I click submit button
       Then I should be notified that it has been successfully created
+      And a return reason with code "code-abc" should exist
 
