@@ -9,6 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.5] - 2026-07-23
+
+Fifth release candidate for the 1.3 line, a bug-fix pass over the customer return form and the
+admin return reasons on top of rc.4, plus one deliberate behaviour change to the withdrawal form.
+
 ### Changed
 
 - **`require_additional_information` now governs the withdrawal form too**: the flag had no effect
@@ -20,7 +25,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   field itself, so the withdrawal form collects exactly what the return form collects: nothing when
   the flag is off (the default), all three refund fields when it is on. **Behavior change:** a shop
   relying on every withdrawal carrying a bank account number must now set
-  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true`.
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true`
+  ([#52](https://github.com/mad-coders/sylius-rma-plugin/pull/52)).
 
 ### Fixed
 
@@ -34,14 +40,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   `IntegerType` (matching the `int` property and `integer` column, so a decimal input cannot reach
   the setter either) with `empty_data` of `0`, so a blank or missing quantity means "nothing
   returned for this item", consistent with how the summary, e-mail and PDF views already filter on
-  `returnQty > 0`. A `GreaterThanOrEqual(0)` constraint rejects negative quantities.
+  `returnQty > 0`. A `GreaterThanOrEqual(0)` constraint rejects negative quantities
+  ([#50](https://github.com/mad-coders/sylius-rma-plugin/pull/50)).
 - **A return reason can be created in the admin again**: the code field on the create form was
   rendered disabled and required at the same time, so the form could not be completed. Sylius's
   `AddCodeFormSubscriber` locks the field whenever `getCode()` is not null, but `OrderReturnReason`
   initialises its code to an empty string, so the lock also applied to a brand new reason. The field
   is now added by the form type itself and only locked once the reason actually has a code, keeping
   the code immutable on the update form. Submitting the create form previously produced a reason
-  with an empty code.
+  with an empty code ([#51](https://github.com/mad-coders/sylius-rma-plugin/pull/51)).
 - **Admin return reason form labels and messages are translated**: the form type asked for
   `madcoders_rma.admin.reason.form.*` while the catalogue defines `madcoders_rma.admin.reasons.form.*`,
   so every field label on the create/edit page rendered as a raw translation key. The code field's
@@ -49,7 +56,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   (`vsf_navi.admin.vsf_navi_item.form.code.not_blank`) and is now
   `madcoders_rma.validator.code.not_blank`. Adds the missing page headers
   (`madcoders_rma.ui.new_order_return_reason`, `madcoders_rma.ui.edit_order_return_reason`) and
-  fixes the misspelled `descriptin` key.
+  fixes the misspelled `descriptin` key ([#51](https://github.com/mad-coders/sylius-rma-plugin/pull/51)).
 
 ## [1.3.0-rc.4] - 2026-07-05
 
@@ -247,7 +254,9 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...HEAD
+[1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5
+[1.3.0-rc.4]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...1.3.0-rc.4
 [1.3.0-rc.3]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...1.3.0-rc.3
 [1.3.0-rc.2]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...1.3.0-rc.2
 [1.3.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0-rc.1
