@@ -1,26 +1,23 @@
-{% extends '@SyliusShop/layout.html.twig' %}
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
 
-{% block title %} {{ 'madcoders_rma.ui.withdrawal.title'|trans }} {% endblock %}
+{% block title %}{{ 'madcoders_rma.ui.withdrawal.title'|trans }} | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <div class="ui hidden divider"></div>
-    <div class="ui grid">
-        <div class="center aligned sixteen wide column">
-            <h1 class="ui icon header">
-                <i class="circular check icon"></i>
-                <div class="content" id="sylius-thank-you" {{ sylius_test_html_attribute('thank-you') }}>
-                    {{ 'madcoders_rma.ui.success.thank_you'|trans }}
-                    <div class="sub header">
-                        {% if withdrawn %}
-                            {{ 'madcoders_rma.ui.withdrawal.success_withdrawn'|trans }}
-                        {% else %}
-                            {{ 'madcoders_rma.ui.withdrawal.success_requested'|trans }}
-                        {% endif %}
+    <div class="container my-auto">
+        <div class="row justify-content-center mt-4 mb-5">
+            <div class="col-12 col-md-6 text-center">
+                <div class="mb-4" id="sylius-thank-you" {{ sylius_test_html_attribute('thank-you') }}>
+                    {{ ux_icon('tabler:circle-check', { class: 'text-success mb-2', width: '3rem', height: '3rem' }) }}
+                    <h1 class="h2">{{ 'madcoders_rma.ui.success.thank_you'|trans }}</h1>
+                    <p class="text-muted mb-0">
+                        {{ (withdrawn ? 'madcoders_rma.ui.withdrawal.success_withdrawn' : 'madcoders_rma.ui.withdrawal.success_requested')|trans }}
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <strong>{{ 'madcoders_rma.ui.return_number'|trans }}: {{ orderReturn.returnNumber }}</strong>
                     </div>
                 </div>
-            </h1>
-            <div class="ui segment">
-                <strong>{{ 'madcoders_rma.ui.return_number'|trans }}: {{ orderReturn.returnNumber }}</strong>
             </div>
         </div>
     </div>

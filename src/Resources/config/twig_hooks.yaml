@@ -10,6 +10,54 @@
 #
 sylius_twig_hooks:
     hooks:
+        # Shop footer: "start a return" link (replaces the sylius.shop.layout.footer block).
+        'sylius_shop.base.footer.content':
+            madcoders_rma_return_link:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Footer/_returnLink.html.twig'
+                priority: 150
+
+        # Customer account: RMA return-history index (a grid page). Modelled on the vendor
+        # account order-history page: shared account chrome (breadcrumbs/menu/main) with the
+        # grid rendered through @SyliusShop/shared/grid.html.twig from the `resources` context.
+        'sylius_shop.madcoders_rma_account_return.index.content':
+            breadcrumbs:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Index/_breadcrumb.html.twig'
+                priority: 200
+            menu:
+                template: '@SyliusShop/account/common/content/menu.html.twig'
+                priority: 100
+            main:
+                template: '@SyliusShop/account/common/content/main.html.twig'
+                priority: 0
+
+        'sylius_shop.madcoders_rma_account_return.index.content.main':
+            header:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Index/_header.html.twig'
+                priority: 100
+            grid:
+                template: '@SyliusShop/shared/grid.html.twig'
+                priority: 0
+
+        # Customer account: single RMA return show page.
+        'sylius_shop.madcoders_rma_account_return.show.content':
+            breadcrumbs:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_breadcrumb.html.twig'
+                priority: 200
+            menu:
+                template: '@SyliusShop/account/common/content/menu.html.twig'
+                priority: 100
+            main:
+                template: '@SyliusShop/account/common/content/main.html.twig'
+                priority: 0
+
+        'sylius_shop.madcoders_rma_account_return.show.content.main':
+            header:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_header.html.twig'
+                priority: 100
+            details:
+                template: '@MadcodersSyliusRmaPlugin/Shop/Return/Account/Show/_summary.html.twig'
+                priority: 0
+
         # Per-product "non-returnable" checkbox, appended to the General tab of the admin
         # product create and update forms (the field is added by ProductTypeExtension).
         'sylius_admin.product.create.content.form.sections.general':

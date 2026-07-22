@@ -1,12 +1,7 @@
-{% import "@SyliusUi/Macro/flags.html.twig" as flags %}
-
 <strong>{{ 'sylius.ui.address'|trans }}:</strong>
-<address>
-    {% if returnOrder.company is not null %}
-        {{ returnOrder.company }}<br>
-    {% endif %}
-    {{ returnOrder.street }}<br/>
-    {{ returnOrder.city }}, {{ returnOrder.postcode }}<br/>
-    {{ flags.fromCountryCode(returnOrder.countryCode) }}
+<address class="mb-0">
+    {% if returnOrder.company is not null %}{{ returnOrder.company }}<br>{% endif %}
+    {{ returnOrder.street }}<br>
+    {{ returnOrder.city }}, {{ returnOrder.postcode }}<br>
     {{ returnOrder.countryCode|sylius_country_name|upper }}
 </address>

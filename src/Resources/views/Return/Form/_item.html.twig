@@ -1,17 +1,25 @@
 {% block madcoders_rma_return_item_widget %}
     {% apply spaceless %}
         {% set variant = rma_product_view(form.vars.value.productSku) %}
-        <tr{% if form.vars.value.maxQty == 0 %} style="display: none;"{% endif %}>
-            <td class="single line">
-                {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_info.html.twig' with {'variant': variant} %}
+        <tr{% if form.vars.value.maxQty == 0 %} class="d-none"{% endif %}>
+            <td>
+                <div><strong>{{ variant is not null ? variant.product.name : form.vars.value.productName|default(form.vars.value.productSku) }}</strong></div>
+                <div class="text-muted small" {{ sylius_test_html_attribute('product-variant-code') }}>{{ 'sylius.ui.sku'|trans }}: {{ form.vars.value.productSku }}</div>
             </td>
-            <td class="left aligned">
-                {% include '@MadcodersSyliusRmaPlugin/Return/Form/Item/_options.html.twig' with {'variant': variant} %}
+            <td>
+                {% if variant is not null and variant.product.hasOptions() %}
+                    <div class="d-flex flex-wrap gap-3" {{ sylius_test_html_attribute('product-options') }}>
+                        {% for optionValue in variant.optionValues %}
+                            <span {{ sylius_test_html_attribute('option-name', optionValue.name) }}><strong>{{ optionValue.name }}:</strong> {{ optionValue.value }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </td>
-            <td class="center line">
-                {# @TODO: Add select functionality #}
-                <span class="sylius-quantity" style="display: inline-block" >{{ form_row(form.returnQty) }}</span>
-                <span style="vertical-align: top"> / {{ form.vars.value.maxQty }}</span>
+            <td class="text-end">
+                <div class="d-flex align-items-center justify-content-end gap-1">
+                    <span class="sylius-quantity">{{ form_row(form.returnQty) }}</span>
+                    <span class="text-muted">/ {{ form.vars.value.maxQty }}</span>
+                </div>
             </td>
         </tr>
     {% endapply %}

@@ -1,10 +1,7 @@
-{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+{% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 
 {% set path = options.link.url|default(path(options.link.route, options.link.parameters|default({}))) %}
 
 {% if rma_order_can_start_rma(data) %}
-
-    {{ buttons.default(path, action.label, null, 'undo alternate', 'primary') }}
-
+    {{ buttons.default(path, action.label, null, 'tabler:arrow-back-up', 'btn-sm btn-outline-primary') }}
 {% endif %}
-

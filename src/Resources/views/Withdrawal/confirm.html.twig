@@ -1,32 +1,28 @@
-{% extends '@SyliusShop/layout.html.twig' %}
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
 
-{% block title %} {{ 'madcoders_rma.ui.withdrawal.title'|trans }} {% endblock %}
+{% block title %}{{ 'madcoders_rma.ui.withdrawal.title'|trans }} | {{ parent() }}{% endblock %}
 
 {% block content %}
-    <div class="ui hidden divider"></div>
-    <div class="ui one column centered stackable grid">
-        <div class="column">
-            <h1 class="ui header">
-                <i class="circular undo icon"></i>
-                <div class="content">
-                    {{ 'madcoders_rma.ui.withdrawal.headline'|trans }} #{{ orderNumber }}
-                    <div class="sub header">{{ 'madcoders_rma.ui.withdrawal.secondary_headline'|trans }}</div>
+    <div class="container my-auto">
+        <div class="row justify-content-center mt-4 mb-5">
+            <div class="col-12 col-md-6">
+                <div class="mb-4 text-center">
+                    <h1 class="h2">{{ 'madcoders_rma.ui.withdrawal.headline'|trans }} #{{ orderNumber }}</h1>
+                    <p class="text-muted mb-0">{{ 'madcoders_rma.ui.withdrawal.secondary_headline'|trans }}</p>
                 </div>
-            </h1>
-            <div class="ui segment">
-                <p>
-                    {% if isUnpaid %}
-                        {{ 'madcoders_rma.ui.withdrawal.info_unpaid'|trans }}
-                    {% else %}
-                        {{ 'madcoders_rma.ui.withdrawal.info_paid'|trans }}
-                    {% endif %}
-                </p>
-                <form action="{{ path('madcoders_rma_withdrawal', { 'orderNumber': orderNumber }) }}" method="post" class="ui large form">
-                    <input type="hidden" name="_token" value="{{ csrfToken }}">
-                    <button type="submit" class="ui primary button" {{ sylius_test_html_attribute('withdraw-confirm-button') }}>
-                        {{ 'madcoders_rma.ui.withdrawal.confirm_button'|trans }}
-                    </button>
-                </form>
+                <div class="card">
+                    <div class="card-body">
+                        <p>{{ (isUnpaid ? 'madcoders_rma.ui.withdrawal.info_unpaid' : 'madcoders_rma.ui.withdrawal.info_paid')|trans }}</p>
+                        <form action="{{ path('madcoders_rma_withdrawal', { orderNumber: orderNumber }) }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrfToken }}">
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary" {{ sylius_test_html_attribute('withdraw-confirm-button') }}>
+                                    {{ 'madcoders_rma.ui.withdrawal.confirm_button'|trans }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
