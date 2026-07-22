@@ -16,12 +16,15 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
-use Sylius\Bundle\ResourceBundle\Form\EventSubscriber\AddCodeFormSubscriber;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 final class ReturnReasonFormType extends AbstractType
@@ -31,15 +34,15 @@ final class ReturnReasonFormType extends AbstractType
         $builder
             ->add('enabled', CheckboxType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.admin.reason.form.enabled',
+                'label' => 'madcoders_rma.admin.reasons.form.enabled',
             ])
             ->add('translations', ResourceTranslationsType::class, [
                 'entry_type' => ReturnReasonTranslationType::class,
-                'label' => 'madcoders_rma.admin.reason.form.name',
+                'label' => 'madcoders_rma.admin.reasons.form.name',
             ])
             ->add('deadlineToReturn', IntegerType::class, [
                 'required' => true,
-                'label' => 'madcoders_rma.admin.reason.form.days_to_deadline_to_return',
+                'label' => 'madcoders_rma.admin.reasons.form.days_to_deadline_to_return',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'madcoders_rma.validator.days_to_deadline_to_return.not_blank',
@@ -48,19 +51,28 @@ final class ReturnReasonFormType extends AbstractType
             ])
             ->add('position', IntegerType::class, [
                 'required' => false,
-                'label' => 'madcoders_rma.admin.reason.form.position',
+                'label' => 'madcoders_rma.admin.reasons.form.position',
             ])
-            ->addEventSubscriber(new AddCodeFormSubscriber(
-                null,
-                [
-                    'constraints' => [
-                        new NotBlank([
-                            'message' => 'vsf_navi.admin.vsf_navi_item.form.code.not_blank',
-                        ]),
-                    ],
-                ],
-            ))
         ;
+
+        // The code is immutable once the reason exists, so the field is only locked on the update
+        // form. Sylius's AddCodeFormSubscriber cannot be used here: it locks the field whenever
+        // getCode() is not null, and the entity initialises its code to an empty string, so the
+        // field came out disabled and required at the same time on the create form.
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
+            $reason = $event->getData();
+
+            $event->getForm()->add('code', TextType::class, [
+                'label' => 'sylius.ui.code',
+                'required' => true,
+                'disabled' => $reason instanceof OrderReturnReasonInterface && '' !== (string) $reason->getCode(),
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'madcoders_rma.validator.code.not_blank',
+                    ]),
+                ],
+            ]);
+        });
     }
 
     public function getBlockPrefix(): string
