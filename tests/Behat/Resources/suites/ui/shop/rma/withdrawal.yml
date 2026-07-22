@@ -48,6 +48,7 @@ default:
                 - sylius.behat.context.ui.shop.account
                 - madcoders.rma.context.ui.shop.rma.customer_area
                 - madcoders.rma.context.ui.shop.rma.withdrawal
+                - madcoders.rma.context.ui.shop.rma.additional_information
                 - madcoders.rma.context.ui.shop.rma.return_form
                 - madcoders.rma.context.ui.shop.rma.return_review
                 - madcoders.rma.context.ui.shop.rma.return_success

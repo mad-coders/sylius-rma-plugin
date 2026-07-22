@@ -18,6 +18,7 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Unit\Form\Extension;
 
 use Madcoders\SyliusRmaPlugin\Form\Extension\ReturnFormTypeExtension;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
+use Madcoders\SyliusRmaPlugin\Form\Type\WithdrawalReturnFormType;
 use Madcoders\SyliusRmaPlugin\Services\AdditionalInformation\AdditionalInformationChecker;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -31,10 +32,11 @@ class ReturnFormTypeExtensionTest extends UnitTestCase
     use ProphecyTrait;
 
     /** @test */
-    function it_extends_the_return_form_type()
+    function it_extends_both_the_return_and_the_withdrawal_form_type()
     {
-        // the gated section attaches to the standard return form only, not to its subtypes
-        $this->assertSame([ReturnFormType::class], iterator_to_array((function () {
+        // Symfony resolves type extensions by exact type name, and WithdrawalReturnFormType only
+        // extends ReturnFormType in PHP, so it has to be listed for the flag to govern it too
+        $this->assertSame([ReturnFormType::class, WithdrawalReturnFormType::class], iterator_to_array((function () {
             yield from ReturnFormTypeExtension::getExtendedTypes();
         })()));
     }
