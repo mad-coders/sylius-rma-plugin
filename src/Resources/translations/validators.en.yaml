@@ -2,6 +2,7 @@ madcoders_rma:
     validator:
         not_blank: 'Field cannot be empty'
         return_qty_less_or_equal: 'Max return qty is {{ compared_value }}.'
+        return_qty_greater_or_equal: 'Return qty cannot be negative.'
         order_number:
             not_blank: 'Please provide valid order number'
         bank_account_number:
