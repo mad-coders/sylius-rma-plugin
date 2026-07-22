@@ -181,6 +181,17 @@ class ReturnFormContext implements Context
     }
 
     /**
+     * @When /^I clear the return quantity of the first item$/
+     */
+    public function iClearTheReturnQuantityOfTheFirstItem(): void
+    {
+        try {
+            $this->returnFormPage->clearItemReturnQty(0);
+        } catch (ElementNotFoundException $e) {
+        }
+    }
+
+    /**
      * @When /^I try to return (latest order)$/
      */
     public function iTryToReturnOrder(OrderInterface $order): void
