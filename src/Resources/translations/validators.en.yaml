@@ -22,3 +22,5 @@ madcoders_rma:
             not_blank: 'Not blank'
         slug:
             not_blank: 'Not blank'
+        code:
+            not_blank: 'Please enter the code'

@@ -22,6 +22,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   the setter either) with `empty_data` of `0`, so a blank or missing quantity means "nothing
   returned for this item", consistent with how the summary, e-mail and PDF views already filter on
   `returnQty > 0`. A `GreaterThanOrEqual(0)` constraint rejects negative quantities.
+- **A return reason can be created in the admin again**: the code field on the create form was
+  rendered disabled and required at the same time, so the form could not be completed. Sylius's
+  `AddCodeFormSubscriber` locks the field whenever `getCode()` is not null, but `OrderReturnReason`
+  initialises its code to an empty string, so the lock also applied to a brand new reason. The field
+  is now added by the form type itself and only locked once the reason actually has a code, keeping
+  the code immutable on the update form. Submitting the create form previously produced a reason
+  with an empty code.
+- **Admin return reason form labels and messages are translated**: the form type asked for
+  `madcoders_rma.admin.reason.form.*` while the catalogue defines `madcoders_rma.admin.reasons.form.*`,
+  so every field label on the create/edit page rendered as a raw translation key. The code field's
+  `NotBlank` message also pointed at a key copied from another project
+  (`vsf_navi.admin.vsf_navi_item.form.code.not_blank`) and is now
+  `madcoders_rma.validator.code.not_blank`. Adds the missing page headers
+  (`madcoders_rma.ui.new_order_return_reason`, `madcoders_rma.ui.edit_order_return_reason`) and
+  fixes the misspelled `descriptin` key.
 
 ## [1.3.0-rc.4] - 2026-07-05
 
