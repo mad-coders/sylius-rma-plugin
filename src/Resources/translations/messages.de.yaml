@@ -1,4 +1,21 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: 'Rücksendegründe'
+        return_reason_list: 'Rücksendegründe'
+        new_order_return_reason: 'Neuer Rücksendegrund'
+        edit_order_return_reason: 'Rücksendegrund bearbeiten'
+
+    admin:
+        reasons:
+            form:
+                header: 'Rücksendegründe'
+                name: 'Name'
+                slug: 'Slug'
+                description: 'Beschreibung'
+                days_to_deadline_to_return: 'Gültigkeitsdauer des Grundes in Tagen'
+                position: 'Position'
+                enabled: 'Aktiviert'
+
     email:
         order_return_form:
             subject: 'Rücksendung der Bestellung #%returnNumber%'

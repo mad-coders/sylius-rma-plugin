@@ -161,6 +161,38 @@ class ReturnReasonContext implements Context
         );
     }
 
+    /**
+     * @Then /^a return reason with code "([^"]+)" should not exist$/
+     */
+    public function aReturnReasonWithCodeShouldNotExist(string $code): void
+    {
+        Assert::null(
+            $this->orderReturnReasonRepository->findOneBy(['code' => $code]),
+            sprintf('Expected no return reason with code "%s", but one was found.', $code),
+        );
+    }
+
+    /**
+     * @Then /^the return reason with code "([^"]+)" should be named "([^"]+)"$/
+     */
+    public function theReturnReasonWithCodeShouldBeNamed(string $code, string $name): void
+    {
+        $returnReason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);
+        Assert::notNull($returnReason, sprintf('No return reason with code "%s".', $code));
+        Assert::same($returnReason->getName(), $name);
+    }
+
+    /**
+     * @Then the code field should be editable
+     */
+    public function theCodeFieldShouldBeEditable(): void
+    {
+        Assert::true(
+            $this->returnReasonCreatePage->isCodeFieldEditable(),
+            'Expected the code field to be editable while creating a reason, but it was not.',
+        );
+    }
+
     private function findReturnReasonIdByCode(string $code): ?int
     {
         $returnReason = $this->orderReturnReasonRepository->findOneBy(['code' => $code]);

@@ -1,4 +1,21 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: 'Returorsaker'
+        return_reason_list: 'Returorsaker'
+        new_order_return_reason: 'Ny returorsak'
+        edit_order_return_reason: 'Redigera returorsak'
+
+    admin:
+        reasons:
+            form:
+                header: 'Returorsaker'
+                name: 'Namn'
+                slug: 'Slug'
+                description: 'Beskrivning'
+                days_to_deadline_to_return: 'Orsakens giltighetstid i dagar'
+                position: 'Position'
+                enabled: 'Aktiverad'
+
     email:
         order_return_form:
             subject: 'Retur av order #%returnNumber%'
