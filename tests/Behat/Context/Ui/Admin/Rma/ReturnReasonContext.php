@@ -183,6 +183,17 @@ class ReturnReasonContext implements Context
     }
 
     /**
+     * @Then the code field should not be editable
+     */
+    public function theCodeFieldShouldNotBeEditable(): void
+    {
+        Assert::false(
+            $this->returnReasonUpdatePage->isCodeFieldEditable(),
+            'Expected the code field to be locked while editing a reason, but it was editable.',
+        );
+    }
+
+    /**
      * @Then the code field should be editable
      */
     public function theCodeFieldShouldBeEditable(): void
