@@ -29,6 +29,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   initialises its code to an empty string. The field is now added by the form type itself and only
   locked once the consent has a code, so a consent is no longer silently created with an empty code
   ([#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+- **A return reason no longer requires every locale to be filled in**: `ReturnReasonTranslationType`
+  attached `NotBlank` to `name` and `slug` on every translation entry, while Sylius's
+  `ResourceTranslationsType` marks only the default locale as required in the rendered form. In a
+  store with more than one defined locale the form therefore looked optional for the extra languages
+  but was rejected server-side, and the reason was never created. Only the default locale is
+  required now; the other locales stay optional and fall back to it
+  ([#54](https://github.com/mad-coders/sylius-rma-plugin/issues/54)).
+- **The return reason admin screens are translated**: the `madcoders_rma.admin.*` and admin-facing
+  `madcoders_rma.ui.*` keys used by the return reason index/new/edit pages, and their validator
+  messages, existed only in `en`, so every other locale fell back to English (or rendered raw keys
+  where the host application defines no `en` fallback). They are now provided in all eight locales
+  the plugin ships (en, pl, de, fr, it, es, sv, da). The translated `slug` field is also relabelled
+  from "Code" so it no longer collides with the resource's own code field, and the `"Not blank"`
+  placeholder validator messages are replaced with real sentences
+  ([#54](https://github.com/mad-coders/sylius-rma-plugin/issues/54)).
 
 ## [1.3.0-rc.5] - 2026-07-23
 

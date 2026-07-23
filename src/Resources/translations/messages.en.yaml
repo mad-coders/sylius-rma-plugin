@@ -141,7 +141,7 @@ madcoders_rma:
                 days_to_deadline_to_return: 'Reason validity period in days'
                 position: 'Position'
                 description: 'Description'
-                slug: 'Code'
+                slug: 'Slug'
 
         history:
             status_changed_to: 'Status changed to'

@@ -1,0 +1,10 @@
+madcoders_rma:
+    validator:
+        days_to_deadline_to_return:
+            not_blank: 'Ange antal dagar'
+        name:
+            not_blank: 'Ange namnet'
+        slug:
+            not_blank: 'Ange slug'
+        code:
+            not_blank: 'Ange koden'

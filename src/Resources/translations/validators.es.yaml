@@ -1,0 +1,10 @@
+madcoders_rma:
+    validator:
+        days_to_deadline_to_return:
+            not_blank: 'Introduce el número de días'
+        name:
+            not_blank: 'Introduce el nombre'
+        slug:
+            not_blank: 'Introduce el slug'
+        code:
+            not_blank: 'Introduce el código'

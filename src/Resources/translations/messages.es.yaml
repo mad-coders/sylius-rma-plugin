@@ -1,4 +1,21 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: 'Motivos de devolución'
+        return_reason_list: 'Motivos de devolución'
+        new_order_return_reason: 'Nuevo motivo de devolución'
+        edit_order_return_reason: 'Editar motivo de devolución'
+
+    admin:
+        reasons:
+            form:
+                header: 'Motivos de devolución'
+                name: 'Nombre'
+                slug: 'Slug'
+                description: 'Descripción'
+                days_to_deadline_to_return: 'Periodo de validez del motivo en días'
+                position: 'Posición'
+                enabled: 'Activado'
+
     email:
         order_return_form:
             subject: 'Devolución del pedido #%returnNumber%'

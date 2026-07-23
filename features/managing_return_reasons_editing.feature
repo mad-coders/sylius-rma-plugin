@@ -20,3 +20,11 @@ Feature: Editing a return reason
             | deadlineToReturn    | field               | 30             |
         And I click Save changes button
         Then I should be notified that it has been successfully edited
+
+    @ui
+    Scenario: The code cannot be edited once the reason exists
+        Given there are return reasons:
+          | code         | name                     | deadline_to_return |
+          | reason_360   | Reason 360               | 360                |
+        And I am on return reason edit page for reason code "reason_360"
+        Then the code field should not be editable
