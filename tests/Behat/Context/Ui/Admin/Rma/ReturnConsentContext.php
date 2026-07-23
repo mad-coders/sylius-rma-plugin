@@ -111,6 +111,46 @@ class ReturnConsentContext implements Context
     }
 
     /**
+     * @When I select :fieldType as the field type
+     */
+    public function iSelectAsTheFieldType(string $fieldType): void
+    {
+        $this->returnConsentCreatePage->selectFieldType($fieldType);
+    }
+
+    /**
+     * @Then /^a return consent with code "([^"]+)" should exist$/
+     */
+    public function aReturnConsentWithCodeShouldExist(string $code): void
+    {
+        Assert::notNull(
+            $this->orderReturnConsentRepository->findOneBy(['code' => $code]),
+            sprintf('Expected a return consent with code "%s" to exist, but none was found.', $code),
+        );
+    }
+
+    /**
+     * @Then /^a return consent with code "([^"]+)" should not exist$/
+     */
+    public function aReturnConsentWithCodeShouldNotExist(string $code): void
+    {
+        Assert::null(
+            $this->orderReturnConsentRepository->findOneBy(['code' => $code]),
+            sprintf('Expected no return consent with code "%s", but one was found.', $code),
+        );
+    }
+
+    /**
+     * @Then /^the return consent with code "([^"]+)" should have the "([^"]+)" field type$/
+     */
+    public function theReturnConsentWithCodeShouldHaveTheFieldType(string $code, string $fieldType): void
+    {
+        $consent = $this->orderReturnConsentRepository->findOneBy(['code' => $code]);
+        Assert::notNull($consent, sprintf('No return consent with code "%s".', $code));
+        Assert::same($consent->getFieldType(), $fieldType);
+    }
+
+    /**
      * @When I click submit button
      */
     public function iClickSubmitButton()

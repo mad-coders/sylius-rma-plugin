@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Madcoders\SyliusRmaPlugin\Form\Type;
 
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -31,7 +32,9 @@ class ConsentFormType extends AbstractType
         $builder
             ->add('label', HiddenType::class)
             ->add('code', HiddenType::class)
-            ->add('consentRequire', HiddenType::class);
+            ->add('consentRequire', HiddenType::class)
+            ->add('fieldType', HiddenType::class)
+            ->add('inlineHtml', HiddenType::class);
 
         $callback = function (FormEvent $event): void {
             $form = $event->getForm();
@@ -41,26 +44,16 @@ class ConsentFormType extends AbstractType
                 throw new \RuntimeException('Consent data must be an array');
             }
 
-            $consentRequire = (bool) ($data['consentRequire'] ?? false);
+            /** @var array<string, mixed> $normalized */
+            $normalized = $data;
+            $consentRequire = (bool) ($normalized['consentRequire'] ?? false);
 
             $constraints = [];
             if ($consentRequire) {
                 $constraints[] = new IsTrue();
             }
 
-            $label = $data['label'] ?? null;
-            $labelText = (is_scalar($label) && '' !== (string) $label) ? (string) $label : '-- missing --';
-
-            $form->add(
-                'checked',
-                CheckboxType::class,
-                [
-                    'label_attr' => ['style' => 'margin-top: 7px'],
-                    'label' => $labelText,
-                    'required' => $consentRequire,
-                    'constraints' => $constraints,
-                ],
-            );
+            $form->add('checked', CheckboxType::class, $this->checkboxOptions($normalized, $consentRequire, $constraints));
         };
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, $callback);
@@ -70,5 +63,41 @@ class ConsentFormType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'consent';
+    }
+
+    /**
+     * An inline consent renders its (admin-authored, trusted) description as HTML in the checkbox
+     * label; every other consent keeps the plain-text name label. label_html is only enabled for
+     * the inline case so the plain-text labels stay escaped as before.
+     *
+     * @param array<string, mixed> $data
+     * @param object[] $constraints
+     *
+     * @return array<string, mixed>
+     */
+    private function checkboxOptions(array $data, bool $consentRequire, array $constraints): array
+    {
+        $isInline = OrderReturnConsentInterface::FIELD_TYPE_INLINE === ($data['fieldType'] ?? null);
+        $inlineHtml = $data['inlineHtml'] ?? null;
+
+        if ($isInline && is_scalar($inlineHtml) && '' !== (string) $inlineHtml) {
+            return [
+                'label_attr' => ['style' => 'margin-top: 7px'],
+                'label' => (string) $inlineHtml,
+                'label_html' => true,
+                'required' => $consentRequire,
+                'constraints' => $constraints,
+            ];
+        }
+
+        $label = $data['label'] ?? null;
+        $labelText = (is_scalar($label) && '' !== (string) $label) ? (string) $label : '-- missing --';
+
+        return [
+            'label_attr' => ['style' => 'margin-top: 7px'],
+            'label' => $labelText,
+            'required' => $consentRequire,
+            'constraints' => $constraints,
+        ];
     }
 }

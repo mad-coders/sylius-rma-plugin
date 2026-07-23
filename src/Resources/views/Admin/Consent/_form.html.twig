@@ -12,9 +12,19 @@
         {{ translationForm(form.translations) }}
     </div>
     <div class="eight wide column">
+        <div class="ui info message">
+            <div class="header">{{ 'madcoders_rma.admin.return_consent.form.field_type.instruction_header'|trans }}</div>
+            <ul class="list">
+                <li>{{ 'madcoders_rma.admin.return_consent.form.field_type.instruction_external_page'|trans|raw }}</li>
+                <li>{{ 'madcoders_rma.admin.return_consent.form.field_type.instruction_inline'|trans|raw }}</li>
+            </ul>
+        </div>
         <div class="ui segment">
             <div class="field">
                 {{ form_row(form.code) }}
+            </div>
+            <div class="field">
+                {{ form_row(form.fieldType) }}
             </div>
             <div class="field">
                 {{ form_row(form.position) }}

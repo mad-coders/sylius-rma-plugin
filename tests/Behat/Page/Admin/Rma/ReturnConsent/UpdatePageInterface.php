@@ -25,4 +25,8 @@ interface UpdatePageInterface extends BaseUpdatePageInterface
      * @throws ElementNotFoundException
      */
     public function choosesFormElement(string $name, string $element): void;
+
+    public function selectFieldType(string $value): void;
+
+    public function isSlugFieldMarkedRequired(string $localeCode): bool;
 }

@@ -147,6 +147,10 @@ final class ReturnController extends AbstractController
                 'code' => $consent->getCode(),
                 'label' => $consent->getTranslation()->getName(),
                 'consentRequire' => $consent->isConsentRequire(),
+                'fieldType' => $consent->getFieldType(),
+                // Only inline consents render their description as the checkbox label; an external
+                // page consent keeps the plain name label, so its description is not carried here.
+                'inlineHtml' => $consent->isInline() ? (string) $consent->getTranslation()->getDescription() : '',
             ];
         }
 
