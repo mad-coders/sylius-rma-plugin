@@ -27,3 +27,34 @@ Feature: Adding new return reason
       Then I should be notified that it has been successfully created
       And a return reason with code "code-abc" should exist
 
+
+    @ui
+    Scenario: Adding a reason in a multi-language store only requires the default locale
+      Given the store has locale "pl_PL"
+      And I want to create a new return reason
+      When I fill create form with following data:
+        | field               | type              | value                               |
+        | code                | field             | code-def                            |
+        | slug                | translations      | slug-def                            |
+        | name                | translations      | Reason DEF                          |
+        | deadlineToReturn    | field             | 16                                  |
+      And I click submit button
+      Then I should be notified that it has been successfully created
+      And a return reason with code "code-def" should exist
+      And the return reason with code "code-def" should be named "Reason DEF"
+
+    @ui
+    Scenario: The default locale name is still required
+      Given the store has locale "pl_PL"
+      And I want to create a new return reason
+      When I fill create form with following data:
+        | field               | type              | value                               |
+        | code                | field             | code-ghi                            |
+        | deadlineToReturn    | field             | 16                                  |
+      And I click submit button
+      Then a return reason with code "code-ghi" should not exist
+
+    @ui
+    Scenario: The code is editable while creating a reason
+      Given I want to create a new return reason
+      Then the code field should be editable

@@ -1,4 +1,21 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: 'Powody zwrotu zamówień'
+        return_reason_list: 'Powody zwrotu zamówień'
+        new_order_return_reason: 'Nowy powód zwrotu'
+        edit_order_return_reason: 'Edytuj powód zwrotu'
+
+    admin:
+        reasons:
+            form:
+                header: 'Powody zwrotu'
+                name: 'Nazwa'
+                slug: 'Slug'
+                description: 'Opis'
+                days_to_deadline_to_return: 'Okres ważności powodu w dniach'
+                position: 'Pozycja'
+                enabled: 'Włączony'
+
     email:
         order_return_form:
             subject: 'Zwrot zamówienia #%returnNumber%'
