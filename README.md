@@ -107,6 +107,22 @@ madcoders_rma:
 
 When disabled, an unpaid order is not offered the withdrawal flow at all.
 
+### Return consents: external page vs inline HTML
+
+Each return consent (managed in the Sylius admin) has a **field type** that controls how it is shown
+next to its checkbox on the return form:
+
+- **External page** (default): the checkbox shows the consent **name**, and the **slug** identifies a
+  separate page holding the full consent text (the **description**). The slug is required. This is the
+  behaviour every existing consent keeps - the field type is added with a migration that defaults to
+  `external_page`, so nothing changes until you opt a consent into `inline`.
+- **Inline HTML**: the **slug** is not required, and the **description** is rendered as HTML directly in
+  the checkbox label - use it for a short consent with a link, e.g.
+  `I accept the <a href="...">terms</a>`. The description is rendered as-is (the admin is trusted), so
+  only enter HTML you control.
+
+The admin create/edit consent form carries a short instruction describing both options.
+
 ### Optional: require additional information on the return form
 
 The return form can collect the bank details needed to handle a refund: **bank account number**

@@ -9,8 +9,26 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Added
+
+- **Return consent field type (external page or inline HTML)**: each return consent now has a field
+  type that controls how it is presented next to its checkbox. `external_page` (the default) keeps
+  the current behaviour - the checkbox shows the consent name and the required `slug` identifies a
+  separate page with the full text. `inline` drops the slug requirement and renders the consent's
+  `description` as HTML directly in the checkbox label, for a short consent with a link. The admin
+  form gains a field-type selector with a short instruction, and the field type shows on the consent
+  grid. Ships a Doctrine migration adding `field_type` with a default of `external_page`, so existing
+  consents are unchanged. The inline description is rendered as trusted admin-authored HTML (no
+  sanitizer) ([#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+
 ### Fixed
 
+- **A return consent can be created in the admin with its code**: the consent code field was rendered
+  disabled on the create form for the same reason return reasons were (see #51) -
+  `AddCodeFormSubscriber` locks the field whenever `getCode()` is not null, and `OrderReturnConsent`
+  initialises its code to an empty string. The field is now added by the form type itself and only
+  locked once the consent has a code, so a consent is no longer silently created with an empty code
+  ([#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
 - **A return reason no longer requires every locale to be filled in**: `ReturnReasonTranslationType`
   attached `NotBlank` to `name` and `slug` on every translation entry, while Sylius's
   `ResourceTranslationsType` marks only the default locale as required in the rendered form. In a

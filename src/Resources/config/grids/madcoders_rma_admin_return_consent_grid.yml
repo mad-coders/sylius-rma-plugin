@@ -27,6 +27,10 @@ sylius_grid:
                     type: string
                     label: sylius.ui.code
                     sortable: ~
+                fieldType:
+                    type: string
+                    label: madcoders_rma.admin.return_consent.form.field_type.label
+                    sortable: ~
                 position:
                     type: string
                     label: sylius.ui.position

@@ -20,6 +20,11 @@ Architects of this package:
             <tag name="form.type"/>
         </service>
 
+        <service id="madcoders.sylius_rma_plugin.form.type.order_return_consent_form_type" class="Madcoders\SyliusRmaPlugin\Form\Type\OrderReturnConsentFormType">
+            <argument type="service" id="sylius.translation_locale_provider" />
+            <tag name="form.type"/>
+        </service>
+
         <service id="madcoders.sylius_rma_plugin.form.type.return_reason_translation_type" class="Madcoders\SyliusRmaPlugin\Form\Type\ReturnReasonTranslationType">
             <argument type="string">Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation</argument>
             <argument type="service" id="sylius.translation_locale_provider" />
