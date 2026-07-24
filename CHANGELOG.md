@@ -9,6 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.6] - 2026-07-24
+
+Sixth release candidate for the 1.3 line, adding a consent field type and finishing the admin
+return-reason fixes on top of rc.5.
+
 ### Added
 
 - **Return consent field type (external page or inline HTML)**: each return consent now has a field
@@ -290,7 +295,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...HEAD
+[1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
 [1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5
 [1.3.0-rc.4]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...1.3.0-rc.4
 [1.3.0-rc.3]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...1.3.0-rc.3
