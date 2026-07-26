@@ -1,71 +1,222 @@
 madcoders_rma:
     ui:
-        order_return_reasons: 'Returårsager'
-        return_reason_list: 'Returårsager'
+        order_return_reasons: Returårsager
+        return_reason_list: Returårsager
         new_order_return_reason: 'Ny returårsag'
         edit_order_return_reason: 'Rediger returårsag'
-
+        return:
+            session_not_valid: 'Din session er udløbet'
+            pdf_disabled: 'Download af returformularen som PDF er i øjeblikket deaktiveret.'
+        footer:
+            start_return: 'Returnér en ordre'
+        action:
+            create_new_return: Retur
+            submit_return_form: 'Send returformularen'
+        order_number: Ordrenummer
+        return_number: Returnummer
+        return_list: Returer
+        customer_note: 'Kundens note'
+        customer_consent: 'Jeg accepterer servicevilkårene og privatlivspolitikken'
+        return_management: 'Administration af retur'
+        timeline: Tidslinje
+        add_notes: 'Tilføj noter'
+        order_returns: Returer
+        configuration: RMA-konfiguration
+        configuration_edit: 'Rediger konfiguration'
+        edit_form: 'Rediger formular'
+        comments: Kommentarer
+        customer_consent_header: 'Kundens samtykker'
+        return_history: 'Dine ordrereturer'
+        qty: ANTAL
+        headline: Returformular
+        continue_button: Fortsæt
+        change_button: Skift
+        change_channel_button: 'Skift kanal'
+        session_not_valid: 'Din session er udløbet'
+        return_reason: Returårsag
+        return_consent_text: 'Jeg accepterer vilkårene'
+        edit_order_return_consent: 'Rediger retursamtykke'
+        new_order_return_consent: 'Nyt retursamtykke'
+        order_return_consents: Retursamtykker
+        order_return_consent_subheader: 'Retursamtykker (valgfri eller påkrævet)'
+        order_return_consent_form: Generelt
+        form:
+            bank_account_number: 'Bankkontonummer (IBAN)'
+            account_holder_name: Kontohaver
+            bank_name: 'Bankens navn / BIC-SWIFT'
+            enter_order_number: 'Indtast ordrenummeret'
+            return_reason: Returårsag
+            enabled: Aktiveret
+            deadline_to_return: 'Frist for returanmodninger'
+            placeholder:
+                reason: 'Vælg årsag'
+        first_step:
+            success:
+                message: 'Vi har sendt en verifikationskode til e-mailen tilknyttet ordre %orderNumber%. Udfyld formularen nedenfor for at fortsætte.'
+                please_check_your_form: 'Returformularen er gemt som "Kladde", bekræft og godkend den'
+            error:
+                order_number_not_valid: 'Ordrenummeret %orderNumber% er ugyldigt'
+                order_not_fullfiled_yet: 'Ordre %orderNumber% er endnu ikke opfyldt. Kontakt kundeservice'
+                order_already_returned_or_cannot_be_returned: 'Ordre %orderNumber% er allerede returneret eller kan ikke returneres'
+                withdrawal_not_available: 'Ordre %orderNumber% kan ikke fortrydes'
+        withdrawal:
+            title: 'Fortryd ordre'
+            headline: 'Fortryd ordre'
+            secondary_headline: 'Fortryd din ordre, før den afsendes'
+            info_paid: 'Du kan fortryde denne ordre, før den afsendes. Vi registrerer en fortrydelsesanmodning, og vores team bekræfter fortrydelsen og en eventuel refusion.'
+            info_unpaid: 'Du kan fortryde denne ordre, før den afsendes. Da den ikke er betalt, annulleres ordren med det samme.'
+            confirm_button: 'Fortryd ordre'
+            success_requested: 'Din fortrydelsesanmodning er registreret'
+            success_withdrawn: 'Din ordre er blevet fortrudt'
+            confirm_withdrawal: 'Bekræft fortrydelse'
+            fallback_to_return: 'Behandl som retur'
+            error:
+                not_cancellable: 'Denne ordre kan ikke længere fortrydes'
+        verification_step:
+            secondary_headline: Verifikationstrin
+            enter_verification_code: 'Tjek din e-mail og indtast verifikationskoden'
+            error:
+                code_not_valid: 'Verifikationskoden er ugyldig. Forsøg %attempts% af %max% mislykkedes. Prøv igen.'
+                code_expired: 'Verifikationskoden er udløbet. Prøv igen.'
+                max_attempts_exceeded: 'Det maksimale antal forsøg er overskredet. Godkendelseskoden er ikke længere gyldig. Start forfra.'
+                too_many_requests: 'For mange forsøg. Vent et øjeblik, og prøv igen.'
+        fill_the_form_step:
+            secondary_headline: 'Vælg varer og tjek dine oplysninger'
+            bank_account_number_headline: Bankkontonummer
+            bank_account_number_subheader: 'Pengene refunderes til den angivne konto'
+            additional_information_headline: 'Yderligere oplysninger'
+            additional_information_subheader: 'Angiv de bankoplysninger, vi bruger til refusionen'
+            comment: 'Kommentar til returen'
+            add_your_comments_here: 'Tilføj dine kommentarer her'
+            return_reason_headline: Årsag
+            return_reason_subheader: 'Vælg blot fra listen'
+            selecte_items_to_return_form: 'Vælg varer og mængder, der skal returneres'
+            verify_address: 'Bekræft dine adresseoplysninger'
+        confirmation_step:
+            subheader: 'Bekræft returoplysningerne og send formularen'
+            qty_to_return: 'Antal til retur'
+            section:
+                general: 'Generelle oplysninger'
+                items: 'Varer til retur'
+        success:
+            thank_you: Tak
+            return_form_created: 'Returformularen er oprettet'
+            print_order_return_form: 'Udskriv returformularen'
+            order_return_instruction: 'Udskriv og underskriv den genererede formular. Formularen skal vedlægges returpakken'
+            configuration_updated: 'Konfigurationen er opdateret'
     admin:
+        flashes:
+            success_added_note: 'Noten er tilføjet'
+        configuration:
+            select_channel: 'Vælg kanal'
+            change_return_addresss_to_channel: 'Skift adresse for kanal'
+            form:
+                error:
+                    channel_not_exist: 'Kanalen findes ikke'
+                    form_not_save: 'Formularen blev ikke gemt'
         reasons:
             form:
-                header: 'Returårsager'
-                name: 'Navn'
-                slug: 'Slug'
-                description: 'Beskrivelse'
+                header: Returårsager
+                enabled: Aktiveret
+                name: Navn
                 days_to_deadline_to_return: 'Årsagens gyldighedsperiode i dage'
-                position: 'Position'
-                enabled: 'Aktiveret'
-
+                position: Position
+                description: Beskrivelse
+                slug: Slug
+        history:
+            status_changed_to: 'Status ændret til'
+            status_changed_from: 'Status ændret fra'
+            to: til
+            accepted_return_form: 'accepterede returformularen'
+            created_draft_order: 'oprettede en returkladde'
+            completed_return: 'afsluttede returen'
+            cancelled_return: 'annullerede returen'
+            added_new_note: 'tilføjede en ny note'
+            withdrawal_requested: 'anmodede om fortrydelse'
+            withdrawal_confirmed: 'bekræftede fortrydelsen'
+            withdrawal_fallback: 'omdirigerede fortrydelsen til returprocessen'
+            withdrawn: 'fortrød ordren'
+        return_details_header: Returoplysninger
+        return_consent:
+            form:
+                enabled: Aktiveret
+                name: Navn
+                position: Position
+                slug: Slug
+                description: Beskrivelse
+                require: Påkrævet
+                field_type:
+                    label: Felttype
+                    help: 'Vælg, hvordan dette samtykke vises ved siden af sit afkrydsningsfelt.'
+                    external_page: 'Ekstern side'
+                    inline: Inline-HTML
+                    instruction_header: 'Sådan fungerer felttypen'
+                    instruction_external_page: '<strong>Ekstern side</strong>: afkrydsningsfeltet viser <em>navnet</em>. <em>Slug</em> er påkrævet og identificerer den separate side med den fulde samtykketekst (<em>beskrivelsen</em>).'
+                    instruction_inline: '<strong>Inline-HTML</strong>: <em>slug</em> er ikke nødvendig. <em>Beskrivelsen</em> gengives som HTML direkte i afkrydsningsfeltets etiket - brug den til et kort samtykke med et link, f.eks. <code>Jeg accepterer &lt;a href="..."&gt;vilkårene&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Returnér til'
+        header: Returformular
+        customer_information: Kundeoplysninger
+        items_list: Varer
+        return_qty: ANTAL
+        place_for_signature: Underskrift
+        bank_account_number: 'Bankkontonummer (IBAN)'
+        account_holder_name: Kontohaver
+        bank_name: 'Bankens navn / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Returnering af ordre #%returnNumber%'
             greeting: 'Hej %name%'
             info_pdf: 'Din returanmodning er registreret. Print den vedhæftede returformular, og send den tilbage sammen med din pakke.'
             info_no_pdf: 'Din returanmodning er registreret. Gem denne e-mail som din returbekræftelse - der er intet at printe eller sende. Vi kontakter dig med de næste skridt.'
-
         order_return_auth_email:
             subject: 'Bekræftelseskode til returnering'
             order_info: 'Denne bekræftelseskode vedrører ordre %orderNumber%.'
             auth_code_info: 'for at fortsætte returprocessen skal du indtaste koden %auth_code% på'
-            verification_page: 'bekræftelsessiden'
-
+            verification_page: bekræftelsessiden
         summary:
-            return_number: 'Returnummer'
-            order_number: 'Ordrenummer'
-            status: 'Status'
-            items: 'Varer'
-            item: 'Vare'
-            sku: 'SKU'
-            quantity: 'Antal'
-            reason: 'Årsag'
+            return_number: Returnummer
+            order_number: Ordrenummer
+            status: Status
+            items: Varer
+            item: Vare
+            sku: SKU
+            quantity: Antal
+            reason: Årsag
             refund_details: 'Oplysninger til tilbagebetaling'
-            bank_account_number: 'IBAN'
-            account_holder_name: 'Kontohaver'
-            bank_name: 'Bank'
+            bank_account_number: IBAN
+            account_holder_name: Kontohaver
+            bank_name: Bank
             state:
-                draft: 'Kladde'
-                new: 'Ny'
-                completed: 'Afsluttet'
-                canceled: 'Annulleret'
+                draft: Kladde
+                new: Ny
+                completed: Afsluttet
+                canceled: Annulleret
                 withdrawal_request: 'Fortrydelse anmodet'
-                withdrawn: 'Fortrudt'
-
+                withdrawn: Fortrudt
         withdrawal_requested:
             subject: 'Anmodning om fortrydelse modtaget #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Vi har modtaget din anmodning om at fortryde ordre %orderNumber%. Vores team gennemgår den og bekræfter fortrydelsen snarest.'
-
         withdrawal_confirmed:
             subject: 'Fortrydelse af ordre bekræftet #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din fortrydelse af ordre %orderNumber% er blevet bekræftet, og ordren er blevet annulleret.'
-
         withdrawal_fallback:
             subject: 'Din fortrydelse behandles som en returnering #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din anmodning om fortrydelse af ordre %orderNumber% behandles via vores almindelige returproces. Vi kontakter dig med de næste skridt.'
-
         withdrawal_cancelled:
             subject: 'Ordre fortrudt #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din ordre %orderNumber% er blevet fortrudt. Da den ikke var betalt, er der ikke mere at gøre.'
+    state:
+        draft: Kladde
+        new: Ny
+        completed: Afsluttet
+        cancelled: Annulleret
+        withdrawal_request: 'Fortrydelse anmodet'
+        withdrawn: Fortrudt
+    form:
+        product:
+            non_returnable: 'Kan ikke returneres'

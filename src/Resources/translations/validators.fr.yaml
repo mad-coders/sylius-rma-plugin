@@ -1,5 +1,21 @@
 madcoders_rma:
     validator:
+        not_blank: 'Le champ ne peut pas être vide'
+        return_qty_less_or_equal: 'La quantité maximale de retour est {{ compared_value }}.'
+        return_qty_greater_or_equal: 'La quantité de retour ne peut pas être négative.'
+        order_number:
+            not_blank: 'Veuillez fournir un numéro de commande valide'
+        bank_account_number:
+            not_blank: 'Veuillez saisir le numéro de compte bancaire'
+            not_a_valid: "Ceci n'est pas un numéro de compte bancaire international (IBAN) valide."
+        account_holder_name:
+            not_blank: 'Veuillez saisir le titulaire du compte'
+        bank_name:
+            not_blank: 'Veuillez saisir le nom de la banque / BIC-SWIFT'
+        email:
+            not_a_valid: 'Veuillez saisir une adresse e-mail valide'
+        notes:
+            not_blank: 'Ce champ ne peut pas être vide'
         days_to_deadline_to_return:
             not_blank: 'Veuillez saisir le nombre de jours'
         name:

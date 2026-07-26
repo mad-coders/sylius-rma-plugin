@@ -1,71 +1,222 @@
 madcoders_rma:
     ui:
-        order_return_reasons: 'Returorsaker'
-        return_reason_list: 'Returorsaker'
+        order_return_reasons: Returorsaker
+        return_reason_list: Returorsaker
         new_order_return_reason: 'Ny returorsak'
         edit_order_return_reason: 'Redigera returorsak'
-
+        return:
+            session_not_valid: 'Din session har gått ut'
+            pdf_disabled: 'Nedladdning av returformuläret som PDF är för närvarande inaktiverad.'
+        footer:
+            start_return: 'Returnera en beställning'
+        action:
+            create_new_return: Retur
+            submit_return_form: 'Skicka returformuläret'
+        order_number: Ordernummer
+        return_number: Returnummer
+        return_list: Returer
+        customer_note: 'Kundens anmärkning'
+        customer_consent: 'Jag godkänner användarvillkoren och integritetspolicyn'
+        return_management: 'Hantering av retur'
+        timeline: Tidslinje
+        add_notes: 'Lägg till anteckningar'
+        order_returns: Returer
+        configuration: RMA-konfiguration
+        configuration_edit: 'Redigera konfiguration'
+        edit_form: 'Redigera formulär'
+        comments: Kommentarer
+        customer_consent_header: 'Kundens samtycken'
+        return_history: 'Dina orderreturer'
+        qty: ANTAL
+        headline: Returformulär
+        continue_button: Fortsätt
+        change_button: Ändra
+        change_channel_button: 'Byt kanal'
+        session_not_valid: 'Din session har gått ut'
+        return_reason: Returorsak
+        return_consent_text: 'Jag godkänner villkoren'
+        edit_order_return_consent: 'Redigera returmedgivande'
+        new_order_return_consent: 'Nytt returmedgivande'
+        order_return_consents: Returmedgivanden
+        order_return_consent_subheader: 'Returmedgivanden (valfria eller obligatoriska)'
+        order_return_consent_form: Allmänt
+        form:
+            bank_account_number: 'Bankkontonummer (IBAN)'
+            account_holder_name: Kontoinnehavare
+            bank_name: 'Bankens namn / BIC-SWIFT'
+            enter_order_number: 'Ange ordernumret'
+            return_reason: Returorsak
+            enabled: Aktiverad
+            deadline_to_return: 'Tidsfrist för returansökningar'
+            placeholder:
+                reason: 'Välj orsak'
+        first_step:
+            success:
+                message: 'Vi har skickat en verifieringskod till e-postadressen kopplad till beställning %orderNumber%. Fyll i formuläret nedan för att fortsätta.'
+                please_check_your_form: 'Returformuläret har sparats som "Utkast", verifiera och godkänn det'
+            error:
+                order_number_not_valid: 'Ordernumret %orderNumber% är ogiltigt'
+                order_not_fullfiled_yet: 'Beställning %orderNumber% har ännu inte levererats. Kontakta kundtjänst'
+                order_already_returned_or_cannot_be_returned: 'Beställning %orderNumber% har redan returnerats eller kan inte returneras'
+                withdrawal_not_available: 'Det går inte att ångra beställning %orderNumber%'
+        withdrawal:
+            title: 'Ångra beställning'
+            headline: 'Ångra beställning'
+            secondary_headline: 'Ångra din beställning innan den skickas'
+            info_paid: 'Du kan ångra denna beställning innan den skickas. Vi registrerar en ångerbegäran och vårt team bekräftar ångandet och eventuell återbetalning.'
+            info_unpaid: 'Du kan ångra denna beställning innan den skickas. Eftersom den inte har betalats återkallas beställningen omedelbart.'
+            confirm_button: 'Ångra beställning'
+            success_requested: 'Din ångerbegäran har registrerats'
+            success_withdrawn: 'Din beställning har återkallats'
+            confirm_withdrawal: 'Bekräfta ångande'
+            fallback_to_return: 'Hantera som retur'
+            error:
+                not_cancellable: 'Denna beställning kan inte längre ångras'
+        verification_step:
+            secondary_headline: Verifieringssteg
+            enter_verification_code: 'Kontrollera din e-post och ange verifieringskoden'
+            error:
+                code_not_valid: 'Verifieringskoden är ogiltig. Försök %attempts% av %max% misslyckades. Försök igen.'
+                code_expired: 'Verifieringskoden har gått ut. Försök igen.'
+                max_attempts_exceeded: 'Det maximala antalet försök har överskridits. Autentiseringskoden är inte längre giltig. Börja om.'
+                too_many_requests: 'För många försök. Vänta en stund och försök igen.'
+        fill_the_form_step:
+            secondary_headline: 'Välj artiklar och kontrollera dina uppgifter'
+            bank_account_number_headline: Bankkontonummer
+            bank_account_number_subheader: 'Pengarna återbetalas till angivet konto'
+            additional_information_headline: 'Ytterligare information'
+            additional_information_subheader: 'Ange bankuppgifterna vi använder för återbetalningen'
+            comment: 'Kommentar om returen'
+            add_your_comments_here: 'Lägg till dina kommentarer här'
+            return_reason_headline: Orsak
+            return_reason_subheader: 'Välj bara från listan'
+            selecte_items_to_return_form: 'Välj artiklar och kvantiteter att returnera'
+            verify_address: 'Kontrollera dina adressuppgifter'
+        confirmation_step:
+            subheader: 'Kontrollera returuppgifterna och skicka formuläret'
+            qty_to_return: 'Antal att returnera'
+            section:
+                general: 'Allmän information'
+                items: 'Artiklar att returnera'
+        success:
+            thank_you: Tack
+            return_form_created: 'Returformuläret har skapats'
+            print_order_return_form: 'Skriv ut returformuläret'
+            order_return_instruction: 'Skriv ut och skriv under det genererade formuläret. Formuläret måste bifogas returpaketet'
+            configuration_updated: 'Konfigurationen har uppdaterats'
     admin:
+        flashes:
+            success_added_note: 'Anteckningen har lagts till'
+        configuration:
+            select_channel: 'Välj kanal'
+            change_return_addresss_to_channel: 'Ändra adress för kanal'
+            form:
+                error:
+                    channel_not_exist: 'Kanalen finns inte'
+                    form_not_save: 'Formuläret sparades inte'
         reasons:
             form:
-                header: 'Returorsaker'
-                name: 'Namn'
-                slug: 'Slug'
-                description: 'Beskrivning'
+                header: Returorsaker
+                enabled: Aktiverad
+                name: Namn
                 days_to_deadline_to_return: 'Orsakens giltighetstid i dagar'
-                position: 'Position'
-                enabled: 'Aktiverad'
-
+                position: Position
+                description: Beskrivning
+                slug: Slug
+        history:
+            status_changed_to: 'Status ändrad till'
+            status_changed_from: 'Status ändrad från'
+            to: till
+            accepted_return_form: 'godkände returformuläret'
+            created_draft_order: 'skapade ett returutkast'
+            completed_return: 'slutförde returen'
+            cancelled_return: 'avbröt returen'
+            added_new_note: 'lade till en ny anteckning'
+            withdrawal_requested: 'begärde ångerrätt'
+            withdrawal_confirmed: 'bekräftade ångandet'
+            withdrawal_fallback: 'omdirigerade ångandet till returprocessen'
+            withdrawn: 'ångrade beställningen'
+        return_details_header: Returuppgifter
+        return_consent:
+            form:
+                enabled: Aktiverad
+                name: Namn
+                position: Position
+                slug: Slug
+                description: Beskrivning
+                require: Obligatorisk
+                field_type:
+                    label: Fälttyp
+                    help: 'Välj hur detta medgivande visas bredvid sin kryssruta.'
+                    external_page: 'Extern sida'
+                    inline: Inline-HTML
+                    instruction_header: 'Så fungerar fälttypen'
+                    instruction_external_page: '<strong>Extern sida</strong>: kryssrutan visar <em>namnet</em>. <em>Slug</em> krävs och identifierar den separata sidan med hela medgivandetexten (<em>beskrivningen</em>).'
+                    instruction_inline: '<strong>Inline-HTML</strong>: <em>slug</em> behövs inte. <em>Beskrivningen</em> renderas som HTML direkt i kryssrutans etikett - använd den för ett kort medgivande med en länk, t.ex. <code>Jag godkänner &lt;a href="..."&gt;villkoren&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Returnera till'
+        header: Returformulär
+        customer_information: Kundinformation
+        items_list: Artiklar
+        return_qty: ANTAL
+        place_for_signature: Underskrift
+        bank_account_number: 'Bankkontonummer (IBAN)'
+        account_holder_name: Kontoinnehavare
+        bank_name: 'Bankens namn / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Retur av order #%returnNumber%'
             greeting: 'Hej %name%'
             info_pdf: 'Din returbegäran har registrerats. Skriv ut det bifogade returformuläret och skicka tillbaka det tillsammans med ditt paket.'
             info_no_pdf: 'Din returbegäran har registrerats. Spara detta e-postmeddelande som din returbekräftelse - det finns inget att skriva ut eller skicka. Vi kontaktar dig med nästa steg.'
-
         order_return_auth_email:
             subject: 'Verifieringskod för retur'
             order_info: 'Den här verifieringskoden gäller order %orderNumber%.'
             auth_code_info: 'för att fortsätta returprocessen, ange koden %auth_code% på'
-            verification_page: 'verifieringssidan'
-
+            verification_page: verifieringssidan
         summary:
-            return_number: 'Returnummer'
-            order_number: 'Ordernummer'
-            status: 'Status'
-            items: 'Artiklar'
-            item: 'Artikel'
-            sku: 'SKU'
-            quantity: 'Antal'
-            reason: 'Anledning'
-            refund_details: 'Återbetalningsuppgifter'
-            bank_account_number: 'IBAN'
-            account_holder_name: 'Kontoinnehavare'
-            bank_name: 'Bank'
+            return_number: Returnummer
+            order_number: Ordernummer
+            status: Status
+            items: Artiklar
+            item: Artikel
+            sku: SKU
+            quantity: Antal
+            reason: Anledning
+            refund_details: Återbetalningsuppgifter
+            bank_account_number: IBAN
+            account_holder_name: Kontoinnehavare
+            bank_name: Bank
             state:
-                draft: 'Utkast'
-                new: 'Ny'
-                completed: 'Slutförd'
-                canceled: 'Avbruten'
+                draft: Utkast
+                new: Ny
+                completed: Slutförd
+                canceled: Avbruten
                 withdrawal_request: 'Ångerrätt begärd'
-                withdrawn: 'Ångrad'
-
+                withdrawn: Ångrad
         withdrawal_requested:
             subject: 'Begäran om ångerrätt mottagen #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Vi har tagit emot din begäran om att ångra order %orderNumber%. Vårt team granskar den och bekräftar ångerrätten inom kort.'
-
         withdrawal_confirmed:
             subject: 'Ångerrätt för order bekräftad #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din ångerrätt för order %orderNumber% har bekräftats och ordern har annullerats.'
-
         withdrawal_fallback:
             subject: 'Din ångerrätt hanteras som en retur #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din begäran om ångerrätt för order %orderNumber% hanteras via vår vanliga returprocess. Vi kontaktar dig med nästa steg.'
-
         withdrawal_cancelled:
             subject: 'Order ångrad #%returnNumber%'
-            greeting: 'Hej'
+            greeting: Hej
             info: 'Din order %orderNumber% har ångrats. Eftersom den inte var betald finns det inget mer att göra.'
+    state:
+        draft: Utkast
+        new: Ny
+        completed: Slutförd
+        cancelled: Avbruten
+        withdrawal_request: 'Ångerrätt begärd'
+        withdrawn: Ångrad
+    form:
+        product:
+            non_returnable: 'Kan ej returneras'

@@ -4,68 +4,219 @@ madcoders_rma:
         return_reason_list: 'Motivi di reso'
         new_order_return_reason: 'Nuovo motivo di reso'
         edit_order_return_reason: 'Modifica motivo di reso'
-
+        return:
+            session_not_valid: 'La tua sessione è scaduta'
+            pdf_disabled: 'Il download del modulo di reso in PDF è attualmente disabilitato.'
+        footer:
+            start_return: 'Restituisci un ordine'
+        action:
+            create_new_return: Reso
+            submit_return_form: 'Invia il modulo di reso'
+        order_number: "Numero d'ordine"
+        return_number: 'Numero di reso'
+        return_list: Resi
+        customer_note: 'Nota del cliente'
+        customer_consent: "Accetto i termini di servizio e l'informativa sulla privacy"
+        return_management: 'Gestione del reso'
+        timeline: Cronologia
+        add_notes: 'Aggiungi note'
+        order_returns: Resi
+        configuration: 'Configurazione RMA'
+        configuration_edit: 'Modifica configurazione'
+        edit_form: 'Modifica modulo'
+        comments: Commenti
+        customer_consent_header: 'Consensi del cliente'
+        return_history: 'I tuoi resi degli ordini'
+        qty: Q.TÀ
+        headline: 'Modulo di reso'
+        continue_button: Continua
+        change_button: Modifica
+        change_channel_button: 'Cambia canale'
+        session_not_valid: 'La tua sessione è scaduta'
+        return_reason: 'Motivo del reso'
+        return_consent_text: 'Accetto i termini e le condizioni'
+        edit_order_return_consent: 'Modifica consenso di reso'
+        new_order_return_consent: 'Nuovo consenso di reso'
+        order_return_consents: 'Consensi di reso'
+        order_return_consent_subheader: 'Consensi di reso (facoltativi o obbligatori)'
+        order_return_consent_form: Generale
+        form:
+            bank_account_number: 'Numero di conto bancario (IBAN)'
+            account_holder_name: 'Intestatario del conto'
+            bank_name: 'Nome della banca / BIC-SWIFT'
+            enter_order_number: "Inserisci il numero d'ordine"
+            return_reason: 'Motivo del reso'
+            enabled: Attivo
+            deadline_to_return: 'Termine per le richieste di reso'
+            placeholder:
+                reason: 'Scegli un motivo'
+        first_step:
+            success:
+                message: "Abbiamo inviato un codice di verifica all'e-mail associata all'ordine %orderNumber%. Compila il modulo qui sotto per continuare."
+                please_check_your_form: 'Il modulo di reso è stato salvato come "Bozza", verificalo e confermalo'
+            error:
+                order_number_not_valid: "Il numero d'ordine %orderNumber% non è valido"
+                order_not_fullfiled_yet: "L'ordine %orderNumber% non è ancora stato evaso. Contatta l'assistenza clienti"
+                order_already_returned_or_cannot_be_returned: "L'ordine %orderNumber% è già stato reso o non può essere reso"
+                withdrawal_not_available: "Non è possibile recedere dall'ordine %orderNumber%"
+        withdrawal:
+            title: "Recesso dall'ordine"
+            headline: "Recesso dall'ordine"
+            secondary_headline: "Recedi dall'ordine prima della spedizione"
+            info_paid: 'Puoi recedere da questo ordine prima della spedizione. Registreremo una richiesta di recesso e il nostro team confermerà il recesso ed eventuali rimborsi.'
+            info_unpaid: "Puoi recedere da questo ordine prima della spedizione. Poiché non è stato pagato, l'ordine verrà annullato immediatamente."
+            confirm_button: "Recedi dall'ordine"
+            success_requested: 'La tua richiesta di recesso è stata registrata'
+            success_withdrawn: 'Il tuo ordine è stato annullato'
+            confirm_withdrawal: 'Conferma il recesso'
+            fallback_to_return: 'Gestisci come reso'
+            error:
+                not_cancellable: 'Non è più possibile recedere da questo ordine'
+        verification_step:
+            secondary_headline: 'Passaggio di verifica'
+            enter_verification_code: 'Controlla la tua e-mail e inserisci il codice di verifica'
+            error:
+                code_not_valid: 'Il codice di verifica non è valido. Il tentativo %attempts% di %max% non è riuscito. Riprova.'
+                code_expired: 'Il codice di verifica è scaduto. Riprova.'
+                max_attempts_exceeded: 'È stato superato il numero massimo di tentativi. Il codice di autenticazione non è più valido. Ricomincia.'
+                too_many_requests: 'Troppi tentativi. Attendi un momento e riprova.'
+        fill_the_form_step:
+            secondary_headline: 'Seleziona gli articoli e controlla i tuoi dati'
+            bank_account_number_headline: 'Numero di conto bancario'
+            bank_account_number_subheader: 'Il rimborso sarà effettuato sul conto indicato'
+            additional_information_headline: 'Informazioni aggiuntive'
+            additional_information_subheader: 'Fornisci i dati bancari che useremo per il rimborso'
+            comment: 'Commento sul reso'
+            add_your_comments_here: 'Aggiungi qui i tuoi commenti'
+            return_reason_headline: Motivo
+            return_reason_subheader: "Scegli semplicemente dall'elenco"
+            selecte_items_to_return_form: 'Seleziona gli articoli e le quantità da restituire'
+            verify_address: 'Verifica i dati del tuo indirizzo'
+        confirmation_step:
+            subheader: 'Verifica i dettagli del reso e invia il modulo'
+            qty_to_return: 'Q.tà da restituire'
+            section:
+                general: 'Informazioni generali'
+                items: 'Articoli da restituire'
+        success:
+            thank_you: Grazie
+            return_form_created: 'Il modulo di reso è stato creato'
+            print_order_return_form: 'Stampa il modulo di reso'
+            order_return_instruction: 'Stampa e firma il modulo generato. Il modulo deve essere allegato al pacco di reso'
+            configuration_updated: 'Configurazione aggiornata'
     admin:
+        flashes:
+            success_added_note: 'La nota è stata aggiunta'
+        configuration:
+            select_channel: 'Seleziona canale'
+            change_return_addresss_to_channel: 'Cambia indirizzo per il canale'
+            form:
+                error:
+                    channel_not_exist: 'Il canale non esiste'
+                    form_not_save: 'Modulo non salvato'
         reasons:
             form:
                 header: 'Motivi di reso'
-                name: 'Nome'
-                slug: 'Slug'
-                description: 'Descrizione'
+                enabled: Attivo
+                name: Nome
                 days_to_deadline_to_return: 'Periodo di validità del motivo in giorni'
-                position: 'Posizione'
-                enabled: 'Attivo'
-
+                position: Posizione
+                description: Descrizione
+                slug: Slug
+        history:
+            status_changed_to: 'Stato cambiato in'
+            status_changed_from: 'Stato cambiato da'
+            to: a
+            accepted_return_form: 'ha accettato il modulo di reso'
+            created_draft_order: 'ha creato una bozza di reso'
+            completed_return: 'ha completato il reso'
+            cancelled_return: 'ha annullato il reso'
+            added_new_note: 'ha aggiunto una nuova nota'
+            withdrawal_requested: 'ha richiesto il recesso'
+            withdrawal_confirmed: 'ha confermato il recesso'
+            withdrawal_fallback: 'ha reindirizzato il recesso al processo di reso'
+            withdrawn: "ha receduto dall'ordine"
+        return_details_header: 'Dettagli del reso'
+        return_consent:
+            form:
+                enabled: Attivo
+                name: Nome
+                position: Posizione
+                slug: Slug
+                description: Descrizione
+                require: Obbligatorio
+                field_type:
+                    label: 'Tipo di campo'
+                    help: 'Scegli come questo consenso viene mostrato accanto alla sua casella.'
+                    external_page: 'Pagina esterna'
+                    inline: 'HTML inline'
+                    instruction_header: 'Come funziona il tipo di campo'
+                    instruction_external_page: '<strong>Pagina esterna</strong>: la casella mostra il <em>nome</em>. Lo <em>slug</em> è obbligatorio e identifica la pagina separata con il testo completo del consenso (la <em>descrizione</em>).'
+                    instruction_inline: '<strong>HTML inline</strong>: lo <em>slug</em> non è necessario. La <em>descrizione</em> viene renderizzata come HTML direttamente nell''etichetta della casella - usala per un breve consenso con un link, ad es. <code>Accetto i &lt;a href="..."&gt;termini&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Restituisci a'
+        header: 'Modulo di reso'
+        customer_information: 'Informazioni sul cliente'
+        items_list: Articoli
+        return_qty: Q.TÀ
+        place_for_signature: Firma
+        bank_account_number: 'Numero di conto bancario (IBAN)'
+        account_holder_name: 'Intestatario del conto'
+        bank_name: 'Nome della banca / BIC-SWIFT'
     email:
         order_return_form:
-            subject: 'Reso dell''ordine #%returnNumber%'
+            subject: "Reso dell'ordine #%returnNumber%"
             greeting: 'Ciao %name%'
             info_pdf: 'La tua richiesta di reso è stata registrata. Stampa il modulo di reso allegato e rispediscilo insieme al pacco.'
-            info_no_pdf: 'La tua richiesta di reso è stata registrata. Conserva questa e-mail come conferma del reso - non c''è nulla da stampare o spedire. Ti contatteremo per i passaggi successivi.'
-
+            info_no_pdf: "La tua richiesta di reso è stata registrata. Conserva questa e-mail come conferma del reso - non c'è nulla da stampare o spedire. Ti contatteremo per i passaggi successivi."
         order_return_auth_email:
             subject: 'Codice di verifica del reso'
-            order_info: 'Questo codice di verifica riguarda l''ordine %orderNumber%.'
+            order_info: "Questo codice di verifica riguarda l'ordine %orderNumber%."
             auth_code_info: 'per continuare la procedura di reso, inserisci il codice %auth_code% su'
             verification_page: 'la pagina di verifica'
-
         summary:
             return_number: 'Numero di reso'
             order_number: 'Numero ordine'
-            status: 'Stato'
-            items: 'Articoli'
-            item: 'Articolo'
-            sku: 'SKU'
-            quantity: 'Quantità'
-            reason: 'Motivo'
+            status: Stato
+            items: Articoli
+            item: Articolo
+            sku: SKU
+            quantity: Quantità
+            reason: Motivo
             refund_details: 'Dati per il rimborso'
-            bank_account_number: 'IBAN'
+            bank_account_number: IBAN
             account_holder_name: 'Intestatario del conto'
-            bank_name: 'Banca'
+            bank_name: Banca
             state:
-                draft: 'Bozza'
-                new: 'Nuovo'
-                completed: 'Completato'
-                canceled: 'Annullato'
+                draft: Bozza
+                new: Nuovo
+                completed: Completato
+                canceled: Annullato
                 withdrawal_request: 'Recesso richiesto'
                 withdrawn: 'Recesso effettuato'
-
         withdrawal_requested:
             subject: 'Richiesta di recesso ricevuta #%returnNumber%'
-            greeting: 'Salve'
-            info: 'Abbiamo ricevuto la tua richiesta di recesso per l''ordine %orderNumber%. Il nostro team la esaminerà e confermerà il recesso a breve.'
-
+            greeting: Salve
+            info: "Abbiamo ricevuto la tua richiesta di recesso per l'ordine %orderNumber%. Il nostro team la esaminerà e confermerà il recesso a breve."
         withdrawal_confirmed:
-            subject: 'Recesso dall''ordine confermato #%returnNumber%'
-            greeting: 'Salve'
-            info: 'Il tuo recesso dall''ordine %orderNumber% è stato confermato e l''ordine è stato annullato.'
-
+            subject: "Recesso dall'ordine confermato #%returnNumber%"
+            greeting: Salve
+            info: "Il tuo recesso dall'ordine %orderNumber% è stato confermato e l'ordine è stato annullato."
         withdrawal_fallback:
             subject: 'Il tuo recesso sarà gestito come un reso #%returnNumber%'
-            greeting: 'Salve'
-            info: 'La tua richiesta di recesso per l''ordine %orderNumber% sarà gestita tramite la nostra procedura di reso standard. Ti contatteremo per i passaggi successivi.'
-
+            greeting: Salve
+            info: "La tua richiesta di recesso per l'ordine %orderNumber% sarà gestita tramite la nostra procedura di reso standard. Ti contatteremo per i passaggi successivi."
         withdrawal_cancelled:
             subject: 'Recesso effettuato #%returnNumber%'
-            greeting: 'Salve'
+            greeting: Salve
             info: 'Il tuo ordine %orderNumber% è stato revocato. Poiché non era stato pagato, non occorre fare altro.'
+    state:
+        draft: Bozza
+        new: Nuovo
+        completed: Completato
+        cancelled: Annullato
+        withdrawal_request: 'Recesso richiesto'
+        withdrawn: 'Recesso effettuato'
+    form:
+        product:
+            non_returnable: 'Non restituibile'
