@@ -4,68 +4,219 @@ madcoders_rma:
         return_reason_list: 'Motivos de devolución'
         new_order_return_reason: 'Nuevo motivo de devolución'
         edit_order_return_reason: 'Editar motivo de devolución'
-
+        return:
+            session_not_valid: 'Tu sesión ha caducado'
+            pdf_disabled: 'La descarga del formulario de devolución en PDF está deshabilitada actualmente.'
+        footer:
+            start_return: 'Devolver un pedido'
+        action:
+            create_new_return: Devolución
+            submit_return_form: 'Enviar el formulario de devolución'
+        order_number: 'Número de pedido'
+        return_number: 'Número de devolución'
+        return_list: Devoluciones
+        customer_note: 'Nota del cliente'
+        customer_consent: 'Acepto las condiciones del servicio y la política de privacidad'
+        return_management: 'Gestión de la devolución'
+        timeline: Cronología
+        add_notes: 'Añadir notas'
+        order_returns: Devoluciones
+        configuration: 'Configuración de RMA'
+        configuration_edit: 'Editar configuración'
+        edit_form: 'Editar formulario'
+        comments: Comentarios
+        customer_consent_header: 'Consentimientos del cliente'
+        return_history: 'Tus devoluciones de pedidos'
+        qty: CANT.
+        headline: 'Formulario de devolución'
+        continue_button: Continuar
+        change_button: Cambiar
+        change_channel_button: 'Cambiar canal'
+        session_not_valid: 'Tu sesión ha caducado'
+        return_reason: 'Motivo de la devolución'
+        return_consent_text: 'Acepto los términos y condiciones'
+        edit_order_return_consent: 'Editar consentimiento de devolución'
+        new_order_return_consent: 'Nuevo consentimiento de devolución'
+        order_return_consents: 'Consentimientos de devolución'
+        order_return_consent_subheader: 'Consentimientos de devolución (opcionales u obligatorios)'
+        order_return_consent_form: General
+        form:
+            bank_account_number: 'Número de cuenta bancaria (IBAN)'
+            account_holder_name: 'Titular de la cuenta'
+            bank_name: 'Nombre del banco / BIC-SWIFT'
+            enter_order_number: 'Introduce el número de pedido'
+            return_reason: 'Motivo de la devolución'
+            enabled: Activado
+            deadline_to_return: 'Plazo para las solicitudes de devolución'
+            placeholder:
+                reason: 'Elige un motivo'
+        first_step:
+            success:
+                message: 'Hemos enviado un código de verificación al correo asociado al pedido %orderNumber%. Rellena el formulario a continuación para continuar.'
+                please_check_your_form: 'El formulario de devolución se ha guardado como «Borrador», verifícalo y confírmalo'
+            error:
+                order_number_not_valid: 'El número de pedido %orderNumber% no es válido'
+                order_not_fullfiled_yet: 'El pedido %orderNumber% aún no se ha completado. Ponte en contacto con atención al cliente'
+                order_already_returned_or_cannot_be_returned: 'El pedido %orderNumber% ya se ha devuelto o no se puede devolver'
+                withdrawal_not_available: 'No se puede desistir del pedido %orderNumber%'
+        withdrawal:
+            title: 'Desistir del pedido'
+            headline: 'Desistir del pedido'
+            secondary_headline: 'Desiste de tu pedido antes de que se envíe'
+            info_paid: 'Puedes desistir de este pedido antes de que se envíe. Registraremos una solicitud de desistimiento y nuestro equipo confirmará el desistimiento y cualquier reembolso.'
+            info_unpaid: 'Puedes desistir de este pedido antes de que se envíe. Como no se ha pagado, el pedido se retirará de inmediato.'
+            confirm_button: 'Desistir del pedido'
+            success_requested: 'Tu solicitud de desistimiento ha sido registrada'
+            success_withdrawn: 'Tu pedido ha sido retirado'
+            confirm_withdrawal: 'Confirmar el desistimiento'
+            fallback_to_return: 'Gestionar como devolución'
+            error:
+                not_cancellable: 'Este pedido ya no se puede retirar'
+        verification_step:
+            secondary_headline: 'Paso de verificación'
+            enter_verification_code: 'Revisa tu correo e introduce el código de verificación'
+            error:
+                code_not_valid: 'El código de verificación no es válido. El intento %attempts% de %max% ha fallado. Inténtalo de nuevo.'
+                code_expired: 'El código de verificación ha caducado. Inténtalo de nuevo.'
+                max_attempts_exceeded: 'Se ha superado el número máximo de intentos. El código de autenticación ya no es válido. Empieza de nuevo.'
+                too_many_requests: 'Demasiados intentos. Espera un momento e inténtalo de nuevo.'
+        fill_the_form_step:
+            secondary_headline: 'Selecciona los artículos y comprueba tus datos'
+            bank_account_number_headline: 'Número de cuenta bancaria'
+            bank_account_number_subheader: 'El dinero se reembolsará a la cuenta indicada'
+            additional_information_headline: 'Información adicional'
+            additional_information_subheader: 'Facilita los datos bancarios que usaremos para el reembolso'
+            comment: 'Comentario sobre la devolución'
+            add_your_comments_here: 'Añade aquí tus comentarios'
+            return_reason_headline: Motivo
+            return_reason_subheader: 'Simplemente elige de la lista'
+            selecte_items_to_return_form: 'Selecciona los artículos y las cantidades a devolver'
+            verify_address: 'Verifica los datos de tu dirección'
+        confirmation_step:
+            subheader: 'Verifica los detalles de la devolución y envía el formulario'
+            qty_to_return: 'Cant. a devolver'
+            section:
+                general: 'Información general'
+                items: 'Artículos a devolver'
+        success:
+            thank_you: Gracias
+            return_form_created: 'El formulario de devolución se ha creado'
+            print_order_return_form: 'Imprimir el formulario de devolución'
+            order_return_instruction: 'Imprime y firma el formulario generado. El formulario debe adjuntarse al paquete de devolución'
+            configuration_updated: 'Configuración actualizada'
     admin:
+        flashes:
+            success_added_note: 'La nota se ha añadido'
+        configuration:
+            select_channel: 'Seleccionar canal'
+            change_return_addresss_to_channel: 'Cambiar la dirección del canal'
+            form:
+                error:
+                    channel_not_exist: 'El canal no existe'
+                    form_not_save: 'Formulario no guardado'
         reasons:
             form:
                 header: 'Motivos de devolución'
-                name: 'Nombre'
-                slug: 'Slug'
-                description: 'Descripción'
+                enabled: Activado
+                name: Nombre
                 days_to_deadline_to_return: 'Periodo de validez del motivo en días'
-                position: 'Posición'
-                enabled: 'Activado'
-
+                position: Posición
+                description: Descripción
+                slug: Slug
+        history:
+            status_changed_to: 'Estado cambiado a'
+            status_changed_from: 'Estado cambiado de'
+            to: a
+            accepted_return_form: 'aceptó el formulario de devolución'
+            created_draft_order: 'creó un borrador de devolución'
+            completed_return: 'completó la devolución'
+            cancelled_return: 'canceló la devolución'
+            added_new_note: 'añadió una nueva nota'
+            withdrawal_requested: 'solicitó el desistimiento'
+            withdrawal_confirmed: 'confirmó el desistimiento'
+            withdrawal_fallback: 'redirigió el desistimiento al proceso de devolución'
+            withdrawn: 'desistió del pedido'
+        return_details_header: 'Detalles de la devolución'
+        return_consent:
+            form:
+                enabled: Activado
+                name: Nombre
+                position: Posición
+                slug: Slug
+                description: Descripción
+                require: Obligatorio
+                field_type:
+                    label: 'Tipo de campo'
+                    help: 'Elige cómo se muestra este consentimiento junto a su casilla.'
+                    external_page: 'Página externa'
+                    inline: 'HTML en línea'
+                    instruction_header: 'Cómo funciona el tipo de campo'
+                    instruction_external_page: '<strong>Página externa</strong>: la casilla muestra el <em>nombre</em>. El <em>slug</em> es obligatorio e identifica la página independiente con el texto completo del consentimiento (la <em>descripción</em>).'
+                    instruction_inline: '<strong>HTML en línea</strong>: el <em>slug</em> no es necesario. La <em>descripción</em> se representa como HTML directamente en la etiqueta de la casilla - úsala para un consentimiento breve con un enlace, p. ej. <code>Acepto los &lt;a href="..."&gt;términos&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Devolver a'
+        header: 'Formulario de devolución'
+        customer_information: 'Información del cliente'
+        items_list: Artículos
+        return_qty: CANT.
+        place_for_signature: Firma
+        bank_account_number: 'Número de cuenta bancaria (IBAN)'
+        account_holder_name: 'Titular de la cuenta'
+        bank_name: 'Nombre del banco / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Devolución del pedido #%returnNumber%'
             greeting: 'Hola %name%'
             info_pdf: 'Tu solicitud de devolución ha sido registrada. Imprime el formulario de devolución adjunto y envíalo junto con tu paquete.'
             info_no_pdf: 'Tu solicitud de devolución ha sido registrada. Conserva este correo como confirmación de la devolución - no hay nada que imprimir ni enviar. Nos pondremos en contacto contigo con los siguientes pasos.'
-
         order_return_auth_email:
             subject: 'Código de verificación de la devolución'
             order_info: 'Este código de verificación corresponde al pedido %orderNumber%.'
             auth_code_info: 'para continuar con el proceso de devolución, introduce el código %auth_code% en'
             verification_page: 'la página de verificación'
-
         summary:
             return_number: 'Número de devolución'
             order_number: 'Número de pedido'
-            status: 'Estado'
-            items: 'Artículos'
-            item: 'Artículo'
-            sku: 'SKU'
-            quantity: 'Cantidad'
-            reason: 'Motivo'
+            status: Estado
+            items: Artículos
+            item: Artículo
+            sku: SKU
+            quantity: Cantidad
+            reason: Motivo
             refund_details: 'Datos para el reembolso'
-            bank_account_number: 'IBAN'
+            bank_account_number: IBAN
             account_holder_name: 'Titular de la cuenta'
-            bank_name: 'Banco'
+            bank_name: Banco
             state:
-                draft: 'Borrador'
-                new: 'Nuevo'
-                completed: 'Completado'
-                canceled: 'Cancelado'
+                draft: Borrador
+                new: Nuevo
+                completed: Completado
+                canceled: Cancelado
                 withdrawal_request: 'Desistimiento solicitado'
-                withdrawn: 'Desistido'
-
+                withdrawn: Desistido
         withdrawal_requested:
             subject: 'Solicitud de desistimiento recibida #%returnNumber%'
-            greeting: 'Hola'
+            greeting: Hola
             info: 'Hemos recibido tu solicitud de desistimiento del pedido %orderNumber%. Nuestro equipo la revisará y confirmará el desistimiento en breve.'
-
         withdrawal_confirmed:
             subject: 'Desistimiento del pedido confirmado #%returnNumber%'
-            greeting: 'Hola'
+            greeting: Hola
             info: 'Tu desistimiento del pedido %orderNumber% ha sido confirmado y el pedido ha sido cancelado.'
-
         withdrawal_fallback:
             subject: 'Tu desistimiento se gestionará como una devolución #%returnNumber%'
-            greeting: 'Hola'
+            greeting: Hola
             info: 'Tu solicitud de desistimiento del pedido %orderNumber% se gestionará a través de nuestro proceso de devolución estándar. Nos pondremos en contacto contigo con los siguientes pasos.'
-
         withdrawal_cancelled:
             subject: 'Pedido desistido #%returnNumber%'
-            greeting: 'Hola'
+            greeting: Hola
             info: 'Tu pedido %orderNumber% ha sido retirado. Como no se había pagado, no hay nada más que hacer.'
+    state:
+        draft: Borrador
+        new: Nuevo
+        completed: Completado
+        cancelled: Cancelado
+        withdrawal_request: 'Desistimiento solicitado'
+        withdrawn: Desistido
+    form:
+        product:
+            non_returnable: 'No retornable'

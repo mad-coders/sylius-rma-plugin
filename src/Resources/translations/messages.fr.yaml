@@ -4,68 +4,219 @@ madcoders_rma:
         return_reason_list: 'Motifs de retour'
         new_order_return_reason: 'Nouveau motif de retour'
         edit_order_return_reason: 'Modifier le motif de retour'
-
+        return:
+            session_not_valid: 'Votre session a expiré'
+            pdf_disabled: 'Le téléchargement du formulaire de retour en PDF est actuellement désactivé.'
+        footer:
+            start_return: 'Retourner une commande'
+        action:
+            create_new_return: Retour
+            submit_return_form: 'Envoyer le formulaire de retour'
+        order_number: 'Numéro de commande'
+        return_number: 'Numéro de retour'
+        return_list: Retours
+        customer_note: 'Note du client'
+        customer_consent: "J'accepte les conditions d'utilisation et la politique de confidentialité"
+        return_management: 'Gestion du retour'
+        timeline: Chronologie
+        add_notes: 'Ajouter des notes'
+        order_returns: Retours
+        configuration: 'Configuration RMA'
+        configuration_edit: 'Modifier la configuration'
+        edit_form: 'Modifier le formulaire'
+        comments: Commentaires
+        customer_consent_header: 'Consentements du client'
+        return_history: 'Vos retours de commande'
+        qty: QTÉ
+        headline: 'Formulaire de retour'
+        continue_button: Continuer
+        change_button: Modifier
+        change_channel_button: 'Changer de canal'
+        session_not_valid: 'Votre session a expiré'
+        return_reason: 'Motif du retour'
+        return_consent_text: "J'accepte les conditions générales"
+        edit_order_return_consent: 'Modifier le consentement de retour'
+        new_order_return_consent: 'Nouveau consentement de retour'
+        order_return_consents: 'Consentements de retour'
+        order_return_consent_subheader: 'Consentements de retour (optionnels ou obligatoires)'
+        order_return_consent_form: Général
+        form:
+            bank_account_number: 'Numéro de compte bancaire (IBAN)'
+            account_holder_name: 'Titulaire du compte'
+            bank_name: 'Nom de la banque / BIC-SWIFT'
+            enter_order_number: 'Veuillez saisir le numéro de commande'
+            return_reason: 'Motif du retour'
+            enabled: Activé
+            deadline_to_return: 'Délai pour les demandes de retour'
+            placeholder:
+                reason: 'Choisir un motif'
+        first_step:
+            success:
+                message: "Nous avons envoyé un code de vérification à l'e-mail associé à la commande %orderNumber%. Veuillez remplir le formulaire ci-dessous pour continuer."
+                please_check_your_form: 'Le formulaire de retour a été enregistré comme « Brouillon », veuillez le vérifier et le valider'
+            error:
+                order_number_not_valid: "Le numéro de commande %orderNumber% n'est pas valide"
+                order_not_fullfiled_yet: "La commande %orderNumber% n'a pas encore été honorée. Veuillez contacter le service client"
+                order_already_returned_or_cannot_be_returned: 'La commande %orderNumber% a déjà été retournée ou ne peut pas être retournée'
+                withdrawal_not_available: 'Impossible de se rétracter de la commande %orderNumber%'
+        withdrawal:
+            title: 'Se rétracter de la commande'
+            headline: 'Se rétracter de la commande'
+            secondary_headline: 'Rétractez-vous de votre commande avant son expédition'
+            info_paid: 'Vous pouvez vous rétracter de cette commande avant son expédition. Nous enregistrerons une demande de rétractation et notre équipe confirmera la rétractation et tout remboursement éventuel.'
+            info_unpaid: "Vous pouvez vous rétracter de cette commande avant son expédition. Comme elle n'a pas été payée, la commande sera annulée immédiatement."
+            confirm_button: 'Se rétracter de la commande'
+            success_requested: 'Votre demande de rétractation a été enregistrée'
+            success_withdrawn: 'Votre commande a été annulée'
+            confirm_withdrawal: 'Confirmer la rétractation'
+            fallback_to_return: 'Traiter comme un retour'
+            error:
+                not_cancellable: 'Cette commande ne peut plus être annulée'
+        verification_step:
+            secondary_headline: 'Étape de vérification'
+            enter_verification_code: 'Vérifiez votre e-mail et saisissez le code de vérification'
+            error:
+                code_not_valid: "Le code de vérification n'est pas valide. La tentative %attempts% sur %max% a échoué. Veuillez réessayer."
+                code_expired: 'Le code de vérification a expiré. Veuillez réessayer.'
+                max_attempts_exceeded: "Le nombre maximal de tentatives a été dépassé. Le code d'authentification n'est plus valide. Veuillez recommencer."
+                too_many_requests: 'Trop de tentatives. Veuillez patienter un instant et réessayer.'
+        fill_the_form_step:
+            secondary_headline: 'Sélectionnez les articles et vérifiez vos informations'
+            bank_account_number_headline: 'Numéro de compte bancaire'
+            bank_account_number_subheader: 'Le montant sera remboursé sur le compte indiqué'
+            additional_information_headline: 'Informations complémentaires'
+            additional_information_subheader: 'Indiquez les coordonnées bancaires que nous utiliserons pour le remboursement'
+            comment: 'Commentaire sur le retour'
+            add_your_comments_here: 'Ajoutez vos commentaires ici'
+            return_reason_headline: Motif
+            return_reason_subheader: 'Choisissez simplement dans la liste'
+            selecte_items_to_return_form: 'Veuillez sélectionner les articles et les quantités à retourner'
+            verify_address: 'Vérifiez les détails de votre adresse'
+        confirmation_step:
+            subheader: 'Vérifiez les détails du retour et soumettez le formulaire'
+            qty_to_return: 'Qté à retourner'
+            section:
+                general: 'Informations générales'
+                items: 'Articles à retourner'
+        success:
+            thank_you: Merci
+            return_form_created: 'Le formulaire de retour a été créé'
+            print_order_return_form: 'Imprimer le formulaire de retour'
+            order_return_instruction: 'Veuillez imprimer et signer le formulaire généré. Le formulaire doit être joint au colis de retour'
+            configuration_updated: 'Configuration mise à jour'
     admin:
+        flashes:
+            success_added_note: 'La note a été ajoutée'
+        configuration:
+            select_channel: 'Sélectionner un canal'
+            change_return_addresss_to_channel: "Modifier l'adresse pour le canal"
+            form:
+                error:
+                    channel_not_exist: "Le canal n'existe pas"
+                    form_not_save: 'Formulaire non enregistré'
         reasons:
             form:
                 header: 'Motifs de retour'
-                name: 'Nom'
-                slug: 'Slug'
-                description: 'Description'
+                enabled: Activé
+                name: Nom
                 days_to_deadline_to_return: 'Durée de validité du motif en jours'
-                position: 'Position'
-                enabled: 'Activé'
-
+                position: Position
+                description: Description
+                slug: Slug
+        history:
+            status_changed_to: 'Statut changé en'
+            status_changed_from: 'Statut changé de'
+            to: à
+            accepted_return_form: 'a accepté le formulaire de retour'
+            created_draft_order: 'a créé un brouillon de retour'
+            completed_return: 'a finalisé le retour'
+            cancelled_return: 'a annulé le retour'
+            added_new_note: 'a ajouté une nouvelle note'
+            withdrawal_requested: 'a demandé une rétractation'
+            withdrawal_confirmed: 'a confirmé la rétractation'
+            withdrawal_fallback: 'a redirigé la rétractation vers le processus de retour'
+            withdrawn: "s'est rétracté de la commande"
+        return_details_header: 'Détails du retour'
+        return_consent:
+            form:
+                enabled: Activé
+                name: Nom
+                position: Position
+                slug: Slug
+                description: Description
+                require: Obligatoire
+                field_type:
+                    label: 'Type de champ'
+                    help: "Choisissez comment ce consentement s'affiche à côté de sa case à cocher."
+                    external_page: 'Page externe'
+                    inline: 'HTML en ligne'
+                    instruction_header: 'Comment fonctionne le type de champ'
+                    instruction_external_page: '<strong>Page externe</strong> : la case à cocher affiche le <em>nom</em>. Le <em>slug</em> est obligatoire et identifie la page distincte contenant le texte complet du consentement (la <em>description</em>).'
+                    instruction_inline: '<strong>HTML en ligne</strong> : le <em>slug</em> n''est pas nécessaire. La <em>description</em> est rendue en HTML directement dans le libellé de la case - utilisez-la pour un court consentement avec un lien, par ex. <code>J''accepte les &lt;a href="..."&gt;conditions&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Retourner à'
+        header: 'Formulaire de retour'
+        customer_information: 'Informations client'
+        items_list: Articles
+        return_qty: QTÉ
+        place_for_signature: Signature
+        bank_account_number: 'Numéro de compte bancaire (IBAN)'
+        account_holder_name: 'Titulaire du compte'
+        bank_name: 'Nom de la banque / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Retour de la commande #%returnNumber%'
             greeting: 'Bonjour %name%'
             info_pdf: 'Votre demande de retour a été enregistrée. Veuillez imprimer le formulaire de retour joint et le renvoyer avec votre colis.'
-            info_no_pdf: 'Votre demande de retour a été enregistrée. Veuillez conserver cet e-mail comme confirmation de retour - il n''y a rien à imprimer ni à envoyer. Nous vous contacterons pour les prochaines étapes.'
-
+            info_no_pdf: "Votre demande de retour a été enregistrée. Veuillez conserver cet e-mail comme confirmation de retour - il n'y a rien à imprimer ni à envoyer. Nous vous contacterons pour les prochaines étapes."
         order_return_auth_email:
             subject: 'Code de vérification du retour'
             order_info: 'Ce code de vérification concerne la commande %orderNumber%.'
             auth_code_info: 'pour poursuivre le processus de retour, veuillez saisir le code %auth_code% sur'
             verification_page: 'la page de vérification'
-
         summary:
             return_number: 'Numéro de retour'
             order_number: 'Numéro de commande'
-            status: 'Statut'
-            items: 'Articles'
-            item: 'Article'
-            sku: 'SKU'
-            quantity: 'Quantité'
-            reason: 'Motif'
+            status: Statut
+            items: Articles
+            item: Article
+            sku: SKU
+            quantity: Quantité
+            reason: Motif
             refund_details: 'Coordonnées de remboursement'
-            bank_account_number: 'IBAN'
+            bank_account_number: IBAN
             account_holder_name: 'Titulaire du compte'
-            bank_name: 'Banque'
+            bank_name: Banque
             state:
-                draft: 'Brouillon'
-                new: 'Nouveau'
-                completed: 'Terminé'
-                canceled: 'Annulé'
+                draft: Brouillon
+                new: Nouveau
+                completed: Terminé
+                canceled: Annulé
                 withdrawal_request: 'Rétractation demandée'
-                withdrawn: 'Rétractée'
-
+                withdrawn: Rétractée
         withdrawal_requested:
             subject: 'Demande de rétractation reçue #%returnNumber%'
-            greeting: 'Bonjour'
-            info: 'Nous avons bien reçu votre demande de rétractation pour la commande %orderNumber%. Notre équipe va l''examiner et confirmer la rétractation sous peu.'
-
+            greeting: Bonjour
+            info: "Nous avons bien reçu votre demande de rétractation pour la commande %orderNumber%. Notre équipe va l'examiner et confirmer la rétractation sous peu."
         withdrawal_confirmed:
             subject: 'Rétractation de la commande confirmée #%returnNumber%'
-            greeting: 'Bonjour'
+            greeting: Bonjour
             info: 'Votre rétractation pour la commande %orderNumber% a été confirmée et la commande a été annulée.'
-
         withdrawal_fallback:
             subject: 'Votre rétractation sera traitée comme un retour #%returnNumber%'
-            greeting: 'Bonjour'
+            greeting: Bonjour
             info: 'Votre demande de rétractation pour la commande %orderNumber% sera traitée via notre processus de retour standard. Nous vous contacterons pour les prochaines étapes.'
-
         withdrawal_cancelled:
             subject: 'Commande rétractée #%returnNumber%'
-            greeting: 'Bonjour'
-            info: 'Votre commande %orderNumber% a été rétractée. Comme elle n''a pas été payée, il n''y a rien de plus à faire.'
+            greeting: Bonjour
+            info: "Votre commande %orderNumber% a été rétractée. Comme elle n'a pas été payée, il n'y a rien de plus à faire."
+    state:
+        draft: Brouillon
+        new: Nouveau
+        completed: Terminé
+        cancelled: Annulé
+        withdrawal_request: 'Rétractation demandée'
+        withdrawn: Rétractée
+    form:
+        product:
+            non_returnable: 'Non retournable'

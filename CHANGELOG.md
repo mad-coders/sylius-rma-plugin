@@ -9,6 +9,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Fixed
+
+- **The plugin UI is no longer English-only in the other locales**: only the e-mail content (#23)
+  and the return-reason admin screens (#54) existed outside English, so the seven non-English
+  locales (pl, de, fr, it, es, sv, da) fell back to English across almost the entire customer
+  return/withdrawal flow, the PDF, the order-return state labels and the admin RMA screens - 131 of
+  180 message keys and 10 of 14 validator keys were missing per locale. Every catalogue is now at
+  full parity with `en`, and a `TranslationParityTest` guards against future drift. The new
+  non-English strings are machine-generated and should be reviewed by native speakers before the
+  1.3.0 stable release ([#59](https://github.com/mad-coders/sylius-rma-plugin/issues/59)).
+
 ## [1.3.0-rc.6] - 2026-07-24
 
 Sixth release candidate for the 1.3 line, adding a consent field type and finishing the admin
