@@ -18,10 +18,14 @@ namespace Madcoders\SyliusRmaPlugin\Email;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Mailer\Sender\SenderInterface;
 
 final readonly class WithdrawalEmailSender implements WithdrawalEmailSenderInterface
 {
+    /**
+     * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     */
     public function __construct(
         private SenderInterface $emailSender,
         private ChannelRepositoryInterface $channelRepository,

@@ -25,6 +25,8 @@ class RmaProductViewExtension extends AbstractExtension
 {
     /**
      * RmaProductViewExtension constructor.
+     *
+     * @param ProductVariantRepositoryInterface<ProductVariantInterface> $productVariantRepository
      */
     public function __construct(private readonly ProductVariantRepositoryInterface $productVariantRepository)
     {

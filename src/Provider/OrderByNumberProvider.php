@@ -23,6 +23,9 @@ final readonly class OrderByNumberProvider implements OrderByNumberProviderInter
 {
     private const ORDER_PREFIX_SIGN = '#';
 
+    /**
+     * @param OrderRepositoryInterface<OrderInterface> $orderRepository
+     */
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private string $prefixSign = self::ORDER_PREFIX_SIGN,

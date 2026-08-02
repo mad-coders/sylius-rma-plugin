@@ -25,7 +25,7 @@ form and submit a return request from a delivered order.
 | | Version |
 | :--- | :--- |
 | PHP  | 8.2 |
-| Sylius | 1.12 |
+| Sylius | 1.12 - 1.13 |
 | Symfony | 6.4 |
 
 ## Installation
