@@ -3,6 +3,9 @@ name: CI
 # Continuous integration for the Sylius RMA plugin.
 # Mirrors the local quality gates (see Makefile / ai/coding-rules.md) on GitHub-hosted
 # runners: static analysis + code style, unit tests, and the non-JavaScript Behat suite.
+# Every job runs once per supported Sylius line (see the `sylius` matrix below), because the
+# plugin supports `>=1.12,<1.14` and the two lines differ (generic repository interfaces,
+# the state-machine abstraction bundle).
 # Decision recorded in docs/adr-log/0010-github-actions-ci.md.
 
 on:
@@ -21,32 +24,20 @@ env:
 
 jobs:
     static:
-        name: Static analysis & code style
+        name: Static analysis & code style (Sylius ${{ matrix.sylius }})
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                sylius: ["1.12", "1.13"]
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - uses: ./.github/actions/setup
               with:
                   php-version: "${{ env.PHP_VERSION }}"
-                  extensions: intl, pdo_mysql, zip, gd
-                  tools: composer:v2
-                  coverage: none
-
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
-                  restore-keys: composer-${{ env.PHP_VERSION }}-
-
-            - name: Install dependencies
-              run: composer update --no-interaction --no-progress --prefer-dist --no-scripts
+                  sylius-version: "${{ matrix.sylius }}"
+                  composer-options: "--no-scripts"
 
             - name: PHPStan
               run: make phpstan
@@ -58,39 +49,31 @@ jobs:
               run: make ecs
 
     unit:
-        name: Unit tests (PHPUnit)
+        name: Unit tests (PHPUnit, Sylius ${{ matrix.sylius }})
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                sylius: ["1.12", "1.13"]
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - uses: ./.github/actions/setup
               with:
                   php-version: "${{ env.PHP_VERSION }}"
-                  extensions: intl, pdo_mysql, zip, gd
-                  tools: composer:v2
-                  coverage: none
-
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
-                  restore-keys: composer-${{ env.PHP_VERSION }}-
-
-            - name: Install dependencies
-              run: composer update --no-interaction --no-progress --prefer-dist --no-scripts
+                  sylius-version: "${{ matrix.sylius }}"
+                  composer-options: "--no-scripts"
 
             - name: PHPUnit
               run: make phpunit
 
     fixtures:
-        name: Fixtures runnable (sylius:fixtures:load)
+        name: Fixtures runnable (sylius:fixtures:load, Sylius ${{ matrix.sylius }})
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                sylius: ["1.12", "1.13"]
         services:
             # Same MySQL service as the Behat job (see docker-compose.yml): the test app's
             # DATABASE_URL and the make targets work unchanged.
@@ -108,27 +91,10 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - uses: ./.github/actions/setup
               with:
                   php-version: "${{ env.PHP_VERSION }}"
-                  extensions: intl, pdo_mysql, zip, gd
-                  tools: composer:v2
-                  coverage: none
-
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
-                  restore-keys: composer-${{ env.PHP_VERSION }}-
-
-            - name: Install dependencies
-              run: composer update --no-interaction --no-progress --prefer-dist
+                  sylius-version: "${{ matrix.sylius }}"
 
             - name: Create the test database
               run: make backend-test
@@ -137,8 +103,12 @@ jobs:
               run: make fixtures-test
 
     behat:
-        name: Behat (non-JavaScript)
+        name: Behat (non-JavaScript, Sylius ${{ matrix.sylius }})
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                sylius: ["1.12", "1.13"]
         services:
             # Mirrors docker-compose.yml: MySQL 8 on host port 3307 with root password "rma",
             # so the test app's DATABASE_URL (tests/Application/.env) and the make targets work
@@ -157,32 +127,15 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - uses: ./.github/actions/setup
               with:
                   php-version: "${{ env.PHP_VERSION }}"
-                  extensions: intl, pdo_mysql, zip, gd
-                  tools: composer:v2
-                  coverage: none
+                  sylius-version: "${{ matrix.sylius }}"
 
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
                   node-version: "${{ env.NODE_VERSION }}"
-
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v4
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: composer-${{ env.PHP_VERSION }}-${{ hashFiles('composer.json') }}
-                  restore-keys: composer-${{ env.PHP_VERSION }}-
-
-            - name: Install dependencies
-              run: composer update --no-interaction --no-progress --prefer-dist
 
             - name: Build test application assets
               run: make frontend
@@ -197,6 +150,6 @@ jobs:
               if: failure()
               uses: actions/upload-artifact@v4
               with:
-                  name: behat-logs
+                  name: behat-logs-sylius-${{ matrix.sylius }}
                   path: etc/build/
                   if-no-files-found: ignore

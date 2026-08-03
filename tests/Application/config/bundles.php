@@ -1,6 +1,6 @@
 <?php
 
-return [
+$bundles = [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
@@ -60,3 +60,12 @@ return [
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
 ];
+
+// Sylius 1.13 requires the state-machine abstraction bundle unconditionally (`sylius.fixture.order`
+// depends on the `sylius_abstraction.state_machine` service); the bundle does not exist on 1.12.
+// The plugin itself keeps using `winzou_state_machine` directly, so this only affects the sandbox app.
+if (class_exists(Sylius\Abstraction\StateMachine\SyliusStateMachineAbstractionBundle::class)) {
+    $bundles[Sylius\Abstraction\StateMachine\SyliusStateMachineAbstractionBundle::class] = ['all' => true];
+}
+
+return $bundles;

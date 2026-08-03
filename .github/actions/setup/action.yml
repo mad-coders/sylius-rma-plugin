@@ -1,0 +1,53 @@
+name: "Set up PHP and dependencies"
+description: "Installs PHP with the plugin's extensions and resolves Composer dependencies against a given Sylius line."
+
+# Shared by every CI job so that the Sylius version under test is decided in exactly one place.
+# The plugin ships no composer.lock (library convention), so each job resolves dependencies with
+# `composer update` after pinning `sylius/sylius` to the requested minor line.
+
+inputs:
+    php-version:
+        description: "PHP version passed to shivammathur/setup-php"
+        required: true
+    sylius-version:
+        description: "Sylius minor line to resolve against, e.g. 1.12"
+        required: true
+    composer-options:
+        description: "Extra flags for the composer update call, e.g. --no-scripts"
+        required: false
+        default: ""
+
+runs:
+    using: composite
+    steps:
+        - name: Setup PHP
+          uses: shivammathur/setup-php@v2
+          with:
+              php-version: "${{ inputs.php-version }}"
+              extensions: intl, pdo_mysql, zip, gd
+              tools: composer:v2
+              coverage: none
+
+        - name: Pin Sylius to the ${{ inputs.sylius-version }} line
+          shell: bash
+          run: composer require --no-update --no-scripts --no-interaction "sylius/sylius:${{ inputs.sylius-version }}.*"
+
+        - name: Get Composer cache directory
+          id: composer-cache
+          shell: bash
+          run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+        - name: Cache Composer dependencies
+          uses: actions/cache@v4
+          with:
+              path: ${{ steps.composer-cache.outputs.dir }}
+              key: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-${{ hashFiles('composer.json') }}
+              restore-keys: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-
+
+        - name: Install dependencies
+          shell: bash
+          run: composer update --no-interaction --no-progress --prefer-dist ${{ inputs.composer-options }}
+
+        - name: Show the resolved Sylius version
+          shell: bash
+          run: composer show sylius/sylius | head -n 5

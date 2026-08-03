@@ -36,6 +36,9 @@ final class OrderReturnFixtureFactory extends AbstractExampleFactory implements 
     /** @var Generator */
     private $faker;
 
+    /**
+     * @param ChannelRepositoryInterface<ChannelInterface> $channelRepository
+     */
     public function __construct(private readonly ChannelRepositoryInterface $channelRepository)
     {
         $this->faker = Factory::create();

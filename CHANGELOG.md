@@ -9,6 +9,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-08-03
+
+### Added
+
+- **Sylius 1.13 support**: widened the `sylius/sylius` constraint from `~1.12.0` to
+  `>=1.12,<1.14`, so the plugin can now be installed against Sylius 1.13 as well as 1.12.
+  Verified against a real `sylius/sylius v1.13.16` install: full suite green (105 PHPUnit
+  tests, 60 Behat scenarios, ECS, PHPStan). The plugin still uses `winzou_state_machine`
+  directly (unaffected by 1.13's state-machine changes) and none of the 1.13 deprecations
+  (promotion/shipping rule validation groups, order repository query builder renames,
+  `ProductOptionChoiceType`) touch code this plugin depends on. Added type parameters to six
+  `@param` annotations (`OrderRepositoryInterface<OrderInterface>`,
+  `ChannelRepositoryInterface<ChannelInterface>`,
+  `ProductVariantRepositoryInterface<ProductVariantInterface>`) since 1.13 made these Sylius
+  repository interfaces generic and PHPStan (`missingType.generics`, strict rules) now
+  requires them specified.
+- **CI runs against both supported Sylius lines**: every job (static analysis, PHPUnit,
+  fixtures, Behat) now runs in a `sylius: [1.12, 1.13]` matrix, so the widened constraint is
+  actually exercised on both ends instead of only on whatever the solver happens to pick. The
+  per-job setup (PHP, Sylius pinning, Composer cache, install) moved into a reusable composite
+  action, `.github/actions/setup`.
+
 ### Fixed
 
 - **The plugin UI is no longer English-only in the other locales**: only the e-mail content (#23)
