@@ -25,6 +25,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   `ProductVariantRepositoryInterface<ProductVariantInterface>`) since 1.13 made these Sylius
   repository interfaces generic and PHPStan (`missingType.generics`, strict rules) now
   requires them specified.
+- **CI runs against both supported Sylius lines**: every job (static analysis, PHPUnit,
+  fixtures, Behat) now runs in a `sylius: [1.12, 1.13]` matrix, so the widened constraint is
+  actually exercised on both ends instead of only on whatever the solver happens to pick. The
+  per-job setup (PHP, Sylius pinning, Composer cache, install) moved into a reusable composite
+  action, `.github/actions/setup`.
 
 ### Fixed
 

@@ -11,7 +11,7 @@ grounded in the real structure. Paths are relative to the repository root.
 | :--- | :--- |
 | PHP | `^8.2` |
 | Symfony | `^6.4` |
-| Sylius | `~1.12.0` |
+| Sylius | `>=1.12,<1.14` (CI exercises both lines) |
 
 (Pre-upgrade the plugin targeted PHP `^7.3`, Symfony `^4.4 || ^5.2`, Sylius `~1.8 || ~1.9`.)
 
