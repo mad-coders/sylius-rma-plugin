@@ -25,7 +25,9 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionFactoryInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\ReturnFormPageInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma\StartPageInterface;
 use Webmozart\Assert\Assert;
 
 class ReturnFormContext implements Context
@@ -51,6 +53,8 @@ class ReturnFormContext implements Context
         CookieSetterInterface $cookieSetter,
         ReturnFormPageInterface $returnFormPage,
         OrderReturnAuthorizerInterface $authorizer,
+        private readonly StartPageInterface $startPage,
+        private readonly TranslatorInterface $translator,
     ) {
         $this->requestStack = $requestStack;
         $this->sessionFactory = $sessionFactory;
@@ -100,6 +104,34 @@ class ReturnFormContext implements Context
         Assert::false(
             $this->returnFormPage->isOpen($parameters),
             'Expected the return form not to open (nothing to return), but it did.',
+        );
+    }
+
+    /**
+     * @Then /^I should be redirected to the return start page$/
+     */
+    public function iShouldBeRedirectedToTheReturnStartPage(): void
+    {
+        Assert::true(
+            $this->startPage->isOpen(),
+            'Expected to be redirected to the RMA start page, but was not.',
+        );
+    }
+
+    /**
+     * @Then /^I should be notified that (latest order) cannot be returned$/
+     */
+    public function iShouldBeNotifiedThatOrderCannotBeReturned(OrderInterface $order): void
+    {
+        $expected = $this->translator->trans(
+            'madcoders_rma.ui.first_step.error.order_already_returned_or_cannot_be_returned',
+            ['%orderNumber%' => (string) $order->getNumber()],
+        );
+
+        Assert::contains(
+            implode(' ', $this->startPage->getNotifications()),
+            $expected,
+            sprintf('Expected the "%s" error on the start page, but it was not shown.', $expected),
         );
     }
 

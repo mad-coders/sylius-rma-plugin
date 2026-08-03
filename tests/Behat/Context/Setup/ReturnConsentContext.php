@@ -59,6 +59,9 @@ class ReturnConsentContext implements Context
         $localeCode = $this->getAdminLocaleCode();
         $consent = new OrderReturnConsent();
         $consent->setCurrentLocale($localeCode);
+        // Sylius 2 / doctrine-collections rejects a null fallback locale in getTranslation(),
+        // so the fallback must be set alongside the current locale.
+        $consent->setFallbackLocale($localeCode);
         $consent->setSlug(StringInflector::nameToSlug($name));
         $consent->setCode($code);
         $consent->setName($name);

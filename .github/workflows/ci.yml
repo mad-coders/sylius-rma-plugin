@@ -147,8 +147,6 @@ jobs:
 
     behat:
         name: Behat (non-JavaScript)
-        # TODO(sylius-2): re-enable for the 2.0 line in phase 8
-        if: ${{ !(github.ref_name == '2.0' || github.base_ref == '2.0' || startsWith(github.head_ref, 'feature/sylius-2')) }}
         runs-on: ubuntu-latest
         services:
             # Mirrors docker-compose.yml: MySQL 8 on host port 3307 with root password "rma",

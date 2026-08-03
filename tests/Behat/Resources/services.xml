@@ -25,9 +25,9 @@ Architects of this package:
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Setup\OrderContext">
             <argument type="service" id="sylius.repository.order" />
             <argument type="service" id="sylius.factory.shipment" />
-            <argument type="service" id="sylius.order_item_quantity_modifier" />
+            <argument type="service" id="sylius.modifier.order_item_quantity" />
             <argument type="service" id="sylius.factory.order_item" />
-            <argument type="service" id="sylius.product_variant_resolver.default" />
+            <argument type="service" id="sylius.resolver.product_variant.default" />
             <argument type="service" id="sylius.behat.shared_storage" />
         </service>
 
@@ -93,6 +93,8 @@ Architects of this package:
             <argument type="service" id="sylius.behat.cookie_setter" />
             <argument type="service" id="madcoders.rma.page.shop.rma.return_form" />
             <argument type="service" id="madcoders.sylius_rma_plugin.voter.order_return_authorizer" />
+            <argument type="service" id="madcoders.rma.page.shop.rma.start" />
+            <argument type="service" id="translator" />
         </service>
 
         <!--
@@ -158,7 +160,7 @@ Architects of this package:
             <argument type="service" id="madcoders.rma.page.admin.rma.order_return_index" />
             <argument type="service" id="madcoders.rma.page.admin.rma.order_return_show" />
             <argument type="service" id="madcoders_rma.repository.order_return" />
-            <argument type="service" id="sylius.behat.notification_checker" />
+            <argument type="service" id="sylius.behat.notification_checker.admin" />
         </service>
 
         <service id="madcoders.rma.context.ui.admin.rma.withdrawal_resolution"
@@ -174,14 +176,14 @@ Architects of this package:
         <service id="madcoders.rma.context.ui.admin.rma.managing_return_notes"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\ReturnNotesContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.order_return_show" />
-            <argument type="service" id="sylius.behat.notification_checker" />
+            <argument type="service" id="sylius.behat.notification_checker.admin" />
         </service>
 
         <service id="madcoders.rma.context.ui.admin.rma.managing_address_configuration"
                  class="Tests\Madcoders\SyliusRmaPlugin\Behat\Context\Ui\Admin\Rma\AddressConfigurationContext">
             <argument type="service" id="madcoders.rma.page.admin.rma.address_configuration" />
             <argument type="service" id="sylius.repository.channel" />
-            <argument type="service" id="sylius.behat.notification_checker" />
+            <argument type="service" id="sylius.behat.notification_checker.admin" />
         </service>
 
         <!-- pages -->

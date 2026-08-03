@@ -361,13 +361,21 @@ fixtures/behat setup must seed both to exercise the PDF path.
 
 ### Phase 8: fixtures, behat, full CI, docs, release
 
-- [ ] Fixtures: `make fixtures-test` green against the Sylius 2.2 default suite plus
-      plugin fixtures.
-- [ ] Behat: update `behat.yml.dist`, contexts and page objects (SemanticUI selectors
-      to Tabler/Bootstrap); verify MockerContainer usage in the test kernel; all
-      feature files pass non-JS.
-- [ ] CI: remove all 2.0 gating; push triggers list `1.0, 1.1, 1.2, 1.3, 2.0, master,
-      main`; consider a PHP 8.3 / Symfony 7 matrix axis.
+- [x] Fixtures: `make fixtures-test` green against the Sylius 2.2 default suite plus
+      plugin fixtures. Done in P5 (#38): the fixtures job is ungated and green on `2.0`.
+- [x] Behat: all 47 non-JS scenarios (733 steps) pass on Sylius 2.2. The service import
+      is restored (see the ledger); `behat.yml.dist` needed no change. MockerContainer is
+      not needed - P2 dropped `polishsymfonycommunity/symfony-mocker-container` and no
+      context mocks services. Page-object work was narrower than feared: the admin action
+      buttons moved from SemanticUI CSS classes to Sylius 2's `data-test-*` attributes
+      (`sylius_test_html_attribute()`), and the custom RMA configuration page needed its
+      own `saveChanges()` because the crud parent clicks `[data-test-update-changes-button]`.
+      Two setup contexts needed `setFallbackLocale()` next to `setCurrentLocale()`, the same
+      Sylius 2 `TranslatableTrait` requirement P3 hit in the fixture factories. Two scenarios
+      were rewritten against real behaviour - see "Return-quantity guard" below.
+- [ ] CI: remove all 2.0 gating (the Behat gate is gone; push triggers still need
+      `1.2`, `1.3`); consider porting the `.github/actions/setup` composite action from the
+      1.3 line and a PHP 8.3 / Symfony 7 matrix axis.
 - [ ] README: requirements table (PHP ^8.2, Sylius ^2.2, Symfony ^6.4 || ^7),
       install instructions per the new skeleton.
 - [ ] UPGRADE.md: "Upgrading from 1.x to 2.0" section: workflow migration guide for
@@ -379,6 +387,30 @@ fixtures/behat setup must seed both to exercise the PDF path.
 
 Definition of done: all four CI jobs green on `2.0` with no gating; docs merged;
 rc tag published.
+
+### Return-quantity guard: behaviour unmasked by Sylius 2 (P8 finding)
+
+`MaxQtyCalculator` subtracts the quantities claimed by every non-draft return of an order,
+and `RmaVerificationPossibilityOfReturn` refuses a new return when nothing is left. On the
+1.x line **the Behat suite never exercised that guard**: Sylius 1.12's own fixture creates
+orders numbered `#00000N` (`OrderContext::placeOrder()` -> `createOrder($customer, '#00000' . $number)`),
+while the plugin stores RMA rows under the `#`-stripped number taken from the route, so
+`WHERE r.orderNumber = :orderNumber` never matched and previously returned units were never
+subtracted. Sylius 2.2 dropped the `#` from that fixture, the comparison started matching,
+and two scenarios that depended on the broken guard began to fail:
+
+- `rma_number_format.feature` created two sequential returns for a **one-unit** order. It now
+  orders 3 units and the first return claims 1, so a second return is legitimately possible
+  and the scenario still tests the `RMA-{orderNumber}-{n}` numbering it was written for.
+- `withdrawal_then_return.feature` expected the return form to render "0 returnable" after the
+  whole order had been withdrawn. The form now refuses to open and redirects to the RMA start
+  page with `madcoders_rma.ui.first_step.error.order_already_returned_or_cannot_be_returned`,
+  which is what that message exists for; the scenario asserts the redirect and the error.
+
+This is a **test-coverage gap on 1.x, not a production bug**: real 1.12/1.13 installs number
+orders through `SequentialOrderNumberGenerator` (`str_pad()`, no `#`), so the guard always
+worked there. No source change was needed on either line. Worth a sentence in UPGRADE.md so
+integrators who built on the untested behaviour are not surprised.
 
 ## What stays as-is
 
@@ -401,7 +433,7 @@ must be EMPTY before `v2.0.0-rc.1`.
 
 | Item | Disabled in | Restored in | Status |
 |---|---|---|---|
-| Plugin Behat context/page services import (`tests/Application/config/services_test.yaml` -> `tests/Behat/Resources/services.xml`) | P2 | P8 | Deferred. Still references Sylius 1 ids (`sylius.order_item_quantity_modifier` -> `sylius.modifier.order_item_quantity`) and SemanticUI admin CRUD page parents; the P8 Behat rework re-enables and fixes it. |
+| ~~Plugin Behat context/page services import (`tests/Application/config/services_test.yaml` -> `tests/Behat/Resources/services.xml`)~~ | P2 | P8 | RESTORED in P8: import re-enabled after retargeting three Sylius 1 ids (`sylius.order_item_quantity_modifier` -> `sylius.modifier.order_item_quantity`, `sylius.product_variant_resolver.default` -> `sylius.resolver.product_variant.default`, `sylius.behat.notification_checker` -> `sylius.behat.notification_checker.admin`). The crud page parents survived unchanged. |
 | `sylius_ui.events` block in `src/Resources/config/config.yml` (product checkbox, footer link, admin/shop show + configuration events, `_legacySonataEvent` bridges) | P2 | P6 | Removed. Replaced by sylius/twig-hooks in P6 (admin) and P7 (shop). |
 | ~~winzou callback listeners (changelog updates + withdrawal notifiers)~~ | P2 | P4 | RESTORED in P4: re-wired as `workflow.return_status.completed.*` listeners in `Workflow\OrderReturnWorkflowSubscriber`. |
 

@@ -18,9 +18,13 @@ namespace Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\Rma;
 
 use Behat\Mink\Element\NodeElement;
 use FriendsOfBehat\PageObjectExtension\Page\SymfonyPage;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationInterface;
+use Tests\Madcoders\SyliusRmaPlugin\Behat\Page\Shop\FlashNotificationTrait;
 
-class StartPage extends SymfonyPage implements StartPageInterface
+class StartPage extends SymfonyPage implements StartPageInterface, FlashNotificationInterface
 {
+    use FlashNotificationTrait;
+
     public function getRouteName(): string
     {
         return 'madcoders_rma_start';

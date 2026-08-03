@@ -55,6 +55,18 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
         $this->getDocument()->pressButton('sylius_change_channel_button');
     }
 
+    /**
+     * The RMA configuration screen is a custom controller page, not a crud resource, so it renders
+     * its own submit button. Sylius 2's crud UpdatePage::saveChanges() clicks
+     * [data-test-update-changes-button], which does not exist here.
+     *
+     * @throws ElementNotFoundException
+     */
+    public function saveChanges(): void
+    {
+        $this->getElement('rma-continue-button')->click();
+    }
+
     public function hasReturnAddress(
         string $company,
         string $street,
@@ -94,6 +106,7 @@ class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
     {
         return array_merge(parent::getDefinedElements(), [
             'rma-configuration-channel-field' => '#madcoders_rma_admin_choice_channel_channelChoice',
+            'rma-continue-button' => '[data-test-rma-continue-button]',
             'country' => '#madcoders_rma_config_address_to_channel_countryCode',
             'company' => '#madcoders_rma_config_address_to_channel_company',
             'street' => '#madcoders_rma_config_address_to_channel_street',

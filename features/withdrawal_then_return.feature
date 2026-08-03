@@ -82,5 +82,8 @@ Feature: Withdrawing part of an order then returning the rest after it ships
         And order return for latest order should record quantity 3 for "Product A"
         When this order has already been shipped
         And the order's state is "fulfilled"
-        And I am on order return page for latest order
-        Then the first item should show 0 returnable
+        # The withdrawal claimed every unit, so the return form refuses to open at all instead of
+        # rendering a form with nothing returnable on it.
+        Then I should not be able to open the return form for latest order
+        And I should be redirected to the return start page
+        And I should be notified that latest order cannot be returned

@@ -93,10 +93,12 @@ class ShowPage extends SymfonyPage implements ShowPageInterface
     protected function getDefinedElements(): array
     {
         return array_merge(parent::getDefinedElements(), [
-            'rma-complete-button' => '.complete-button',
-            'rma-cancel-button' => '.cancel-button',
-            'rma-confirm-cancellation-button' => '.confirm-withdrawal-button',
-            'rma-fallback-to-return-button' => '.fallback-to-return-button',
+            // Sylius 2 marks test hooks with sylius_test_html_attribute(), which renders
+            // data-test-<name>; the SemanticUI-era CSS classes are gone from the Tabler rewrite.
+            'rma-complete-button' => '[data-test-complete-button]',
+            'rma-cancel-button' => '[data-test-cancel-button]',
+            'rma-confirm-cancellation-button' => '[data-test-confirm-withdrawal-button]',
+            'rma-fallback-to-return-button' => '[data-test-fallback-to-return-button]',
             'sylius-order-state' => '#sylius-order-state',
             'rma-add-note-to-timeline' => '[data-test-madcoders-rma-add-note-to-timeline]',
             'rma_return_notes_note' => '#madcoders_rma_return_notes_note',
