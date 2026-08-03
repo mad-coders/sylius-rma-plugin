@@ -24,7 +24,6 @@ use Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 
 final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGeneratorInterface
@@ -34,7 +33,7 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
     /**
      * OrderReturnFormPdfFileGenerator constructor.
      *
-     * @param EngineInterface|Environment            $templatingEngine
+     * @param Environment            $templatingEngine
      * @param RepositoryInterface<ChannelInterface> $channelsRepository
      */
     public function __construct(
