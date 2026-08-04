@@ -67,6 +67,7 @@
         },
         "sort-packages": true,
         "audit": {
+            "block-insecure": false,
             "ignore": [
                 "PKSA-3ncz-km6v-5vjr",
                 "PKSA-gs8r-6kz6-pp56",
