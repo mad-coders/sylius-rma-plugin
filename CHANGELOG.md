@@ -17,8 +17,32 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
   New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
   `docker-compose.yml` gained a `gotenberg` service for local development. The
-  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. See
+  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. The
+  return-form logo is now inlined as a base64 `data:` URI instead of an absolute host filesystem
+  path, since Gotenberg renders in its own container and cannot resolve (or is denied) that path.
+  The Gotenberg request now carries an explicit timeout/max-duration and the response is checked
+  for a valid PDF header; failures raise the new `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`
+  rather than leaking Symfony HttpClient's exception types. See
   [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
+- **BC break: seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension` or implement `getFunctions()`**; they are now plain services
+  exposing their functions via the `#[Twig\Attribute\AsTwigFunction]` PHP attribute, wired through
+  `Twig\Extension\AttributeExtension` (see `src/Resources/config/services/extension.xml`). All 12
+  Twig function names are unchanged, and neither registration path sets `is_safe`, so escaping is
+  unaffected. This is a BC break for anyone who directly extended, decorated, or type-hinted
+  against `AbstractExtension`/`ExtensionInterface` for one of these classes. It also raises the
+  plugin's effective `twig/twig` floor: `composer.json` now requires `twig/twig: ^3.21` explicitly,
+  since `Twig\Attribute\AsTwigFunction` and `Twig\Extension\AttributeExtension` were both added in
+  that release; an app with an existing lock on an older Twig, previously satisfying
+  `sylius/sylius`'s transitive `^2.12 || ^3.3` floor, would otherwise fatal
+  (`Class "Twig\Extension\AttributeExtension" not found`) building the `twig` service.
+- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): replaced
+  `composer.json`'s blanket `audit.block-insecure: false` with specific advisory IDs added to the
+  existing `audit.ignore` list, covering `guzzlehttp/guzzle` 6.5.x and `guzzlehttp/psr7` 1.x
+  (both required transitively by `sylius/sylius` on the 1.12 line, EOL upstream with no fixed
+  release on that line, already an accepted risk per the pre-existing `audit.ignore` /
+  `policy.advisories.ignore` entries). A future advisory in any other dependency now still stops
+  CI, rather than resolving silently.
 
 ## [1.3.0-rc.7] - 2026-08-03
 

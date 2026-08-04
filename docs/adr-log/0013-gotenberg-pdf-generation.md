@@ -28,7 +28,21 @@ built on headless Chromium, instead of a local binary:
   `Symfony\Contracts\HttpClient\HttpClientInterface` (via `symfony/http-client`) and
   `symfony/mime`'s `DataPart`/`FormDataPart` to build the request body, and returns the response
   body (the PDF bytes) directly. Both packages are now explicit `require` dependencies (they were
-  already present transitively).
+  already present transitively). The request carries explicit `timeout` (15s) / `max_duration`
+  (30s) options - PDF generation runs synchronously inside the return-submission request, so a
+  hung Gotenberg must fail bounded rather than stall a customer-facing request the way a local
+  binary never could. The response body is checked for the `%PDF-` magic bytes before being
+  returned, since Gotenberg (or a misconfigured `GOTENBERG_URL` answered by something else
+  entirely) can return HTTP 200 with a non-PDF body. Any HTTP-client failure (transport error,
+  non-2xx response, or the magic-bytes check) is wrapped in
+  `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`, so `PdfGeneratorInterface`'s
+  contract is "rendering failed" rather than a leak of Symfony HttpClient's exception hierarchy.
+- The rendered HTML never references the logo by filesystem path. `OrderReturnFormPdfFileGenerator`
+  inlines it as a base64 `data:` URI at render time (`Symfony\Component\Mime\MimeTypes` for the
+  MIME type). Gotenberg renders the template in its own container: an absolute host path (what
+  worked under wkhtmltopdf's local `enable-local-file-access`) does not resolve there and is
+  additionally blocked by Gotenberg's default file-access deny list - Gotenberg still returns
+  HTTP 200 with a structurally valid PDF in that case, silently dropping the logo.
 - A **direct HTTP call** was chosen over the official `gotenberg/gotenberg-php` client library:
   that library requires a PSR-18 HTTP client plus PSR-17 message factories as production
   dependencies for every consumer of this plugin, whereas `symfony/http-client` +
@@ -44,6 +58,14 @@ built on headless Chromium, instead of a local binary:
 - `knplabs/knp-snappy-bundle` is removed from `composer.json`, along with its bundle
   registration, package config, and `WKHTMLTOPDF_PATH`/`WKHTMLTOIMAGE_PATH` env vars in the test
   sandbox app.
+- `composer.json` now requires `twig/twig: ^3.21` explicitly. The unrelated Twig-extension
+  modernization that landed alongside this change (`#[AsTwigFunction]`, see the "modernize RMA
+  Twig extensions" commit) needs `Twig\Attribute\AsTwigFunction` / `Twig\Extension\AttributeExtension`,
+  both added in Twig 3.21.0; the transitive floor via `sylius/sylius >=1.12` is only
+  `twig/twig: ^2.12 || ^3.3`, which fatals (`Class "Twig\Extension\AttributeExtension" not
+  found`) building the `twig` service - taking down every page, not just RMA ones - on an
+  existing lock below 3.21. CI cannot see a floor problem like this because every leg runs
+  `composer update` (highest available).
 
 This supersedes the rendering-engine choice in [0007](0007-pdf-and-schema-migrations.md); 0007's
 Doctrine-migrations decision is unaffected and still stands.
@@ -55,11 +77,16 @@ Doctrine-migrations decision is unaffected and still stands.
   Gotenberg instance instead of installing a binary.
 - `GotenbergPdfGenerator` is covered by
   `tests/Unit/Services/Pdf/GotenbergPdfGeneratorTest.php`, using `Symfony\Component\HttpClient\MockHttpClient`
-  - no real Gotenberg instance is needed to test the HTTP contract (method, URL, response
-    passthrough).
+  - no real Gotenberg instance is needed to test the HTTP contract (method, URL, timeout/
+    max_duration options, response passthrough, transport/HTTP-error/non-PDF-body wrapping into
+    `PdfGenerationException`).
+- `tests/Unit/Generator/OrderReturnFormPdfFileGeneratorTest.php` asserts the template context
+  handed to Twig carries the logo as a `data:` URI and never a raw filesystem path or a `file://`
+  value - a regression test for the silently-dropped logo that needs no container.
 - `tests/Unit/Email/ReturnFormEmailSenderTest.php` needed no changes: it mocks
   `OrderReturnFormPdfFileGeneratorInterface` directly and is unaffected by what generates the PDF
   underneath.
-- Rendering now depends on network reachability to Gotenberg rather than a local binary; timeouts
-  or connection errors surface as the same kind of exception `OrderReturnFormPdfFileGenerator::generate()`
-  already declared it could throw.
+- Rendering now depends on network reachability to Gotenberg rather than a local binary; failures
+  (bounded by the timeout/max_duration options above) surface as `PdfGenerationException`, which
+  `OrderReturnFormPdfFileGenerator::generate()` already declared it could throw (`@throws
+  Exception`).
