@@ -17,10 +17,10 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Generator;
 
 use Exception;
-use Knp\Snappy\GeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Model\OrderReturnFormPdf;
 use Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator;
+use Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGeneratorInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -38,7 +38,7 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
      */
     public function __construct(
         private $templatingEngine,
-        private readonly GeneratorInterface $pdfGenerator,
+        private readonly PdfGeneratorInterface $pdfGenerator,
         private readonly FileLocatorInterface $fileLocator,
         private readonly string $template,
         private readonly string $orderReturnFormLogoPath,
@@ -61,7 +61,7 @@ final class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGen
 
         $filename = str_replace('/', '_', $orderReturnForm->getReturnNumber()) . self::FILE_EXTENSION;
 
-        $pdf = $this->pdfGenerator->getOutputFromHtml(
+        $pdf = $this->pdfGenerator->generateFromHtml(
             $this->templatingEngine->render($this->template, [
                 'orderReturnForm' => $orderReturnForm,
                 'channel' => $orderReturnForm->getChannelCode(),

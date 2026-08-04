@@ -9,6 +9,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Changed
+
+- **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
+  is removed (archived upstream, unpatched CVEs including SSRF/local-file-disclosure). PDF
+  generation now POSTs the rendered HTML to a [Gotenberg](https://gotenberg.dev/) instance over
+  HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
+  New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
+  `docker-compose.yml` gained a `gotenberg` service for local development. The
+  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. See
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
+
 ## [1.3.0-rc.7] - 2026-08-03
 
 Seventh release candidate for the 1.3 line, adding Sylius 1.13 support and bringing every shipped

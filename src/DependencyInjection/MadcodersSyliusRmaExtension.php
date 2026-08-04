@@ -39,6 +39,15 @@ final class MadcodersSyliusRmaExtension extends AbstractResourceExtension implem
 
         $container->setParameter('madcoders_rma.return_form_pdf_enabled', (bool) $config['return_form_pdf_enabled']);
 
+        // Default for the env var backing gotenberg_url, so the plugin works out of the box
+        // against a Gotenberg instance started via docker-compose.yml (default port 3000).
+        $container->setParameter('env(GOTENBERG_URL)', 'http://127.0.0.1:3000');
+        // No (string) cast here for the same reason as the flags below: the value may be an env
+        // placeholder resolved only at runtime, so it stays a scalar at compile time.
+        $gotenbergUrl = $config['gotenberg_url'];
+        Assert::scalar($gotenbergUrl);
+        $container->setParameter('madcoders_rma.gotenberg_url', $gotenbergUrl);
+
         // Default for the env var backing allow_unpaid_withdrawal, so the behaviour is unchanged
         // (auto-cancel enabled) when MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL is not defined.
         $container->setParameter('env(MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL)', 'true');

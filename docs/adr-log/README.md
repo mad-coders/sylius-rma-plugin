@@ -42,9 +42,10 @@ flip the old one's status.
 | [0004](0004-return-lifecycle-state-machine.md) | Return lifecycle via winzou state machine | Accepted |
 | [0005](0005-guest-auth-code-and-voter-authorization.md) | Guest auth-code flow + voter-based authorization | Accepted |
 | [0006](0006-presentation-conventions.md) | Presentation conventions (YAML routing/grids, form idioms, translation keys) | Accepted |
-| [0007](0007-pdf-and-schema-migrations.md) | PDFs via knp_snappy; schema via Doctrine migrations | Accepted |
+| [0007](0007-pdf-and-schema-migrations.md) | PDFs via knp_snappy; schema via Doctrine migrations | Superseded by [0013](0013-gotenberg-pdf-generation.md) |
 | [0008](0008-quality-tooling.md) | Quality tooling: PHPStan + ECS + PHPUnit + Behat via Make | Accepted |
 | [0009](0009-conventional-commits.md) | Adopt Conventional Commits | Accepted |
 | [0010](0010-github-actions-ci.md) | CI on GitHub Actions (replacing Bitbucket Pipelines) | Accepted |
 | [0011](0011-return-form-pdf-feature-flag.md) | Return-form PDF generation is opt-in (feature flag, default off) | Accepted |
 | [0012](0012-rector-and-php82-modernization.md) | Rector for PHP 8.2 modernization and a baseline-free PHPStan target | Accepted |
+| [0013](0013-gotenberg-pdf-generation.md) | Return-form PDF rendering moves from wkhtmltopdf to Gotenberg | Accepted |
