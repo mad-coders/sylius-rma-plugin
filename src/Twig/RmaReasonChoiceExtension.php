@@ -17,23 +17,15 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProviderInterface;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class RmaReasonChoiceExtension extends AbstractExtension
+class RmaReasonChoiceExtension
 {
     public function __construct(private readonly ChoiceProviderInterface $reasonChoiceProvider)
     {
     }
 
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('rma_reason_name_view', $this->findReasonNameByCode(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'rma_reason_name_view')]
     public function findReasonNameByCode(?string $code): ?string
     {
         if (!is_string($code)) {
