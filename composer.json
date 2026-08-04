@@ -76,12 +76,7 @@
         "platform": {
             "php": "8.2.0"
         },
-        "sort-packages": true,
-        "policy": {
-            "advisories": {
-                "ignore": ["enshrined/svg-sanitize", "guzzlehttp/guzzle", "guzzlehttp/psr7"]
-            }
-        }
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {

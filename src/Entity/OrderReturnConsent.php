@@ -44,6 +44,8 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
 
     private bool $consentRequire = false;
 
+    private string $fieldType = OrderReturnConsentInterface::FIELD_TYPE_EXTERNAL_PAGE;
+
     public function __construct()
     {
         $this->initializeTranslationsCollection();
@@ -131,6 +133,21 @@ class OrderReturnConsent implements Comparable, OrderReturnConsentInterface, \St
     public function setConsentRequire(bool $consentRequire): void
     {
         $this->consentRequire = $consentRequire;
+    }
+
+    public function getFieldType(): string
+    {
+        return $this->fieldType;
+    }
+
+    public function setFieldType(string $fieldType): void
+    {
+        $this->fieldType = $fieldType;
+    }
+
+    public function isInline(): bool
+    {
+        return self::FIELD_TYPE_INLINE === $this->fieldType;
     }
 
     /**

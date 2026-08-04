@@ -32,6 +32,24 @@ interface OrderReturnConsentInterface extends
     SlugAwareInterface,
     ToggleableInterface
 {
+    /** The consent links to a separate page; the slug identifies that page and is required. */
+    public const FIELD_TYPE_EXTERNAL_PAGE = 'external_page';
+
+    /** The consent renders its description as inline HTML in the checkbox label; the slug is optional. */
+    public const FIELD_TYPE_INLINE = 'inline';
+
+    /** @var string[] */
+    public const FIELD_TYPES = [
+        self::FIELD_TYPE_EXTERNAL_PAGE,
+        self::FIELD_TYPE_INLINE,
+    ];
+
+    public function getFieldType(): string;
+
+    public function setFieldType(string $fieldType): void;
+
+    public function isInline(): bool;
+
     public function getName(): ?string;
 
     public function setName(?string $name): void;

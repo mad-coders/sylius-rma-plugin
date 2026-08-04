@@ -1,54 +1,222 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: Rücksendegründe
+        return_reason_list: Rücksendegründe
+        new_order_return_reason: 'Neuer Rücksendegrund'
+        edit_order_return_reason: 'Rücksendegrund bearbeiten'
+        return:
+            session_not_valid: 'Ihre Sitzung ist abgelaufen'
+            pdf_disabled: 'Der PDF-Download des Rücksendeformulars ist derzeit deaktiviert.'
+        footer:
+            start_return: 'Bestellung zurücksenden'
+        action:
+            create_new_return: Rücksendung
+            submit_return_form: 'Rücksendeformular absenden'
+        order_number: Bestellnummer
+        return_number: Rücksendenummer
+        return_list: Rücksendungen
+        customer_note: Kundenhinweis
+        customer_consent: 'Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung'
+        return_management: Rücksendungsverwaltung
+        timeline: Verlauf
+        add_notes: 'Notizen hinzufügen'
+        order_returns: Rücksendungen
+        configuration: RMA-Konfiguration
+        configuration_edit: 'Konfiguration bearbeiten'
+        edit_form: 'Formular bearbeiten'
+        comments: Kommentare
+        customer_consent_header: Kundeneinwilligungen
+        return_history: 'Ihre Bestellrücksendungen'
+        qty: MENGE
+        headline: Rücksendeformular
+        continue_button: Weiter
+        change_button: Ändern
+        change_channel_button: 'Kanal ändern'
+        session_not_valid: 'Ihre Sitzung ist abgelaufen'
+        return_reason: Rücksendegrund
+        return_consent_text: 'Ich akzeptiere die Allgemeinen Geschäftsbedingungen'
+        edit_order_return_consent: 'Rücksendeeinwilligung bearbeiten'
+        new_order_return_consent: 'Neue Rücksendeeinwilligung'
+        order_return_consents: Rücksendeeinwilligungen
+        order_return_consent_subheader: 'Rücksendeeinwilligungen (optional oder erforderlich)'
+        order_return_consent_form: Allgemein
+        form:
+            bank_account_number: 'Bankkontonummer (IBAN)'
+            account_holder_name: Kontoinhaber
+            bank_name: 'Name der Bank / BIC-SWIFT'
+            enter_order_number: 'Bitte Bestellnummer eingeben'
+            return_reason: Rücksendegrund
+            enabled: Aktiviert
+            deadline_to_return: 'Frist für Rücksendeanträge'
+            placeholder:
+                reason: 'Grund auswählen'
+        first_step:
+            success:
+                message: 'Wir haben einen Verifizierungscode an die mit der Bestellung %orderNumber% verknüpfte E-Mail-Adresse gesendet. Bitte füllen Sie das folgende Formular aus, um fortzufahren.'
+                please_check_your_form: 'Das Rücksendeformular wurde als „Entwurf" gespeichert. Bitte prüfen und bestätigen Sie es'
+            error:
+                order_number_not_valid: 'Die Bestellnummer %orderNumber% ist ungültig'
+                order_not_fullfiled_yet: 'Bestellung %orderNumber% wurde noch nicht ausgeführt. Bitte wenden Sie sich an den Kundenservice'
+                order_already_returned_or_cannot_be_returned: 'Bestellung %orderNumber% wurde bereits zurückgesendet oder kann nicht zurückgesendet werden'
+                withdrawal_not_available: 'Von Bestellung %orderNumber% kann nicht widerrufen werden'
+        withdrawal:
+            title: 'Vom Kauf zurücktreten'
+            headline: 'Vom Kauf zurücktreten'
+            secondary_headline: 'Treten Sie vom Kauf zurück, bevor die Bestellung versandt wird'
+            info_paid: 'Sie können vor dem Versand von dieser Bestellung zurücktreten. Wir registrieren eine Widerrufsanfrage und unser Team bestätigt den Widerruf und eine etwaige Rückerstattung.'
+            info_unpaid: 'Sie können vor dem Versand von dieser Bestellung zurücktreten. Da sie noch nicht bezahlt wurde, wird die Bestellung sofort widerrufen.'
+            confirm_button: 'Von Bestellung zurücktreten'
+            success_requested: 'Ihre Widerrufsanfrage wurde registriert'
+            success_withdrawn: 'Ihre Bestellung wurde widerrufen'
+            confirm_withdrawal: 'Widerruf bestätigen'
+            fallback_to_return: 'Als Rücksendung behandeln'
+            error:
+                not_cancellable: 'Von dieser Bestellung kann nicht mehr zurückgetreten werden'
+        verification_step:
+            secondary_headline: Verifizierungsschritt
+            enter_verification_code: 'Prüfen Sie Ihre E-Mails und geben Sie den Verifizierungscode ein'
+            error:
+                code_not_valid: 'Der Verifizierungscode ist ungültig. Versuch %attempts% von %max% ist fehlgeschlagen. Bitte versuchen Sie es erneut.'
+                code_expired: 'Der Verifizierungscode ist abgelaufen. Bitte versuchen Sie es erneut.'
+                max_attempts_exceeded: 'Die maximale Anzahl an Versuchen wurde überschritten. Der Authentifizierungscode ist nicht mehr gültig. Bitte beginnen Sie erneut.'
+                too_many_requests: 'Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.'
+        fill_the_form_step:
+            secondary_headline: 'Wählen Sie die Artikel aus und prüfen Sie Ihre Angaben'
+            bank_account_number_headline: Bankkontonummer
+            bank_account_number_subheader: 'Das Geld wird auf das angegebene Konto zurückerstattet'
+            additional_information_headline: 'Zusätzliche Informationen'
+            additional_information_subheader: 'Geben Sie die Bankdaten an, die wir für die Rückerstattung verwenden'
+            comment: 'Kommentar zur Rücksendung'
+            add_your_comments_here: 'Fügen Sie hier Ihre Kommentare hinzu'
+            return_reason_headline: Grund
+            return_reason_subheader: 'Wählen Sie einfach aus der Liste'
+            selecte_items_to_return_form: 'Bitte wählen Sie die zurückzusendenden Artikel und Mengen aus'
+            verify_address: 'Überprüfen Sie Ihre Adressdaten'
+        confirmation_step:
+            subheader: 'Überprüfen Sie die Rücksendedetails und senden Sie das Formular ab'
+            qty_to_return: 'Zurückzusendende Menge'
+            section:
+                general: 'Allgemeine Informationen'
+                items: 'Zurückzusendende Artikel'
+        success:
+            thank_you: 'Vielen Dank'
+            return_form_created: 'Das Rücksendeformular wurde erstellt'
+            print_order_return_form: 'Rücksendeformular drucken'
+            order_return_instruction: 'Bitte drucken und unterschreiben Sie das erstellte Formular. Das Formular muss der Rücksendung beigelegt werden'
+            configuration_updated: 'Konfiguration aktualisiert'
+    admin:
+        flashes:
+            success_added_note: 'Die Notiz wurde hinzugefügt'
+        configuration:
+            select_channel: 'Kanal auswählen'
+            change_return_addresss_to_channel: 'Adresse für Kanal ändern'
+            form:
+                error:
+                    channel_not_exist: 'Kanal existiert nicht'
+                    form_not_save: 'Formular nicht gespeichert'
+        reasons:
+            form:
+                header: Rücksendegründe
+                enabled: Aktiviert
+                name: Name
+                days_to_deadline_to_return: 'Gültigkeitsdauer des Grundes in Tagen'
+                position: Position
+                description: Beschreibung
+                slug: Slug
+        history:
+            status_changed_to: 'Status geändert zu'
+            status_changed_from: 'Status geändert von'
+            to: zu
+            accepted_return_form: 'hat das Rücksendeformular akzeptiert'
+            created_draft_order: 'hat einen Rücksende-Entwurf erstellt'
+            completed_return: 'hat die Rücksendung abgeschlossen'
+            cancelled_return: 'hat die Rücksendung storniert'
+            added_new_note: 'hat eine neue Notiz hinzugefügt'
+            withdrawal_requested: 'hat einen Widerruf angefragt'
+            withdrawal_confirmed: 'hat den Widerruf bestätigt'
+            withdrawal_fallback: 'hat den Widerruf in den Rücksendeprozess umgeleitet'
+            withdrawn: 'hat die Bestellung widerrufen'
+        return_details_header: Rücksendedetails
+        return_consent:
+            form:
+                enabled: Aktiviert
+                name: Name
+                position: Position
+                slug: Slug
+                description: Beschreibung
+                require: Erforderlich
+                field_type:
+                    label: Feldtyp
+                    help: 'Wählen Sie, wie diese Einwilligung neben ihrem Kontrollkästchen angezeigt wird.'
+                    external_page: 'Externe Seite'
+                    inline: Inline-HTML
+                    instruction_header: 'So funktioniert der Feldtyp'
+                    instruction_external_page: '<strong>Externe Seite</strong>: Das Kontrollkästchen zeigt den <em>Namen</em>. Der <em>Slug</em> ist erforderlich und verweist auf die separate Seite mit dem vollständigen Einwilligungstext (die <em>Beschreibung</em>).'
+                    instruction_inline: '<strong>Inline-HTML</strong>: Der <em>Slug</em> wird nicht benötigt. Die <em>Beschreibung</em> wird als HTML direkt in der Beschriftung des Kontrollkästchens gerendert - verwenden Sie sie für eine kurze Einwilligung mit einem Link, z. B. <code>Ich akzeptiere die &lt;a href="..."&gt;Bedingungen&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Rücksenden an'
+        header: Rücksendeformular
+        customer_information: Kundeninformationen
+        items_list: Artikel
+        return_qty: MENGE
+        place_for_signature: Unterschrift
+        bank_account_number: 'Bankkontonummer (IBAN)'
+        account_holder_name: Kontoinhaber
+        bank_name: 'Name der Bank / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Rücksendung der Bestellung #%returnNumber%'
             greeting: 'Hallo %name%'
             info_pdf: 'Deine Rücksendeanfrage wurde registriert. Bitte drucke das beigefügte Rücksendeformular aus und lege es deinem Paket bei.'
             info_no_pdf: 'Deine Rücksendeanfrage wurde registriert. Bitte bewahre diese E-Mail als Rücksendebestätigung auf - es muss nichts gedruckt oder versendet werden. Wir melden uns mit den nächsten Schritten.'
-
         order_return_auth_email:
             subject: 'Bestätigungscode für die Rücksendung'
             order_info: 'Dieser Bestätigungscode gilt für die Bestellung %orderNumber%.'
             auth_code_info: 'um den Rücksendevorgang fortzusetzen, gib bitte den Code %auth_code% ein auf'
             verification_page: 'der Bestätigungsseite'
-
         summary:
-            return_number: 'Rücksendenummer'
-            order_number: 'Bestellnummer'
-            status: 'Status'
-            items: 'Artikel'
-            item: 'Artikel'
-            sku: 'SKU'
-            quantity: 'Menge'
-            reason: 'Grund'
-            refund_details: 'Erstattungsdaten'
-            bank_account_number: 'IBAN'
-            account_holder_name: 'Kontoinhaber'
-            bank_name: 'Bank'
+            return_number: Rücksendenummer
+            order_number: Bestellnummer
+            status: Status
+            items: Artikel
+            item: Artikel
+            sku: SKU
+            quantity: Menge
+            reason: Grund
+            refund_details: Erstattungsdaten
+            bank_account_number: IBAN
+            account_holder_name: Kontoinhaber
+            bank_name: Bank
             state:
-                draft: 'Entwurf'
-                new: 'Neu'
-                completed: 'Abgeschlossen'
-                canceled: 'Storniert'
+                draft: Entwurf
+                new: Neu
+                completed: Abgeschlossen
+                canceled: Storniert
                 withdrawal_request: 'Widerruf angefragt'
-                withdrawn: 'Widerrufen'
-
+                withdrawn: Widerrufen
         withdrawal_requested:
             subject: 'Widerrufsanfrage erhalten #%returnNumber%'
-            greeting: 'Hallo'
+            greeting: Hallo
             info: 'Wir haben deine Anfrage zum Widerruf der Bestellung %orderNumber% erhalten. Unser Team prüft sie und bestätigt den Widerruf in Kürze.'
-
         withdrawal_confirmed:
             subject: 'Widerruf der Bestellung bestätigt #%returnNumber%'
-            greeting: 'Hallo'
+            greeting: Hallo
             info: 'Dein Widerruf der Bestellung %orderNumber% wurde bestätigt und die Bestellung wurde storniert.'
-
         withdrawal_fallback:
             subject: 'Dein Widerruf wird als Rücksendung bearbeitet #%returnNumber%'
-            greeting: 'Hallo'
+            greeting: Hallo
             info: 'Deine Widerrufsanfrage für die Bestellung %orderNumber% wird über unseren regulären Rücksendeprozess bearbeitet. Wir melden uns mit den nächsten Schritten.'
-
         withdrawal_cancelled:
             subject: 'Bestellung widerrufen #%returnNumber%'
-            greeting: 'Hallo'
+            greeting: Hallo
             info: 'Deine Bestellung %orderNumber% wurde widerrufen. Da sie nicht bezahlt wurde, ist nichts weiter zu tun.'
+    state:
+        draft: Entwurf
+        new: Neu
+        completed: Abgeschlossen
+        cancelled: Storniert
+        withdrawal_request: 'Widerruf angefragt'
+        withdrawn: Widerrufen
+    form:
+        product:
+            non_returnable: 'Nicht rücksendbar'

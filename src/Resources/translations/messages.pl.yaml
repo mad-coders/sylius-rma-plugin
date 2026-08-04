@@ -1,54 +1,222 @@
 madcoders_rma:
+    ui:
+        order_return_reasons: 'Powody zwrotu zamówień'
+        return_reason_list: 'Powody zwrotu zamówień'
+        new_order_return_reason: 'Nowy powód zwrotu'
+        edit_order_return_reason: 'Edytuj powód zwrotu'
+        return:
+            session_not_valid: 'Twoja sesja wygasła'
+            pdf_disabled: 'Pobieranie formularza zwrotu w PDF jest obecnie wyłączone.'
+        footer:
+            start_return: 'Zwróć zamówienie'
+        action:
+            create_new_return: Zwrot
+            submit_return_form: 'Wyślij formularz zwrotu'
+        order_number: 'Numer zamówienia'
+        return_number: 'Numer zwrotu'
+        return_list: Zwroty
+        customer_note: 'Uwaga klienta'
+        customer_consent: 'Akceptuję regulamin oraz politykę prywatności'
+        return_management: 'Zarządzanie zwrotem'
+        timeline: 'Oś czasu'
+        add_notes: 'Dodaj uwagi'
+        order_returns: Zwroty
+        configuration: 'Konfiguracja RMA'
+        configuration_edit: 'Edytuj konfigurację'
+        edit_form: 'Edytuj formularz'
+        comments: Komentarze
+        customer_consent_header: 'Zgody klienta'
+        return_history: 'Twoje zwroty zamówień'
+        qty: SZT.
+        headline: 'Formularz zwrotu'
+        continue_button: Kontynuuj
+        change_button: Zmień
+        change_channel_button: 'Zmień kanał'
+        session_not_valid: 'Twoja sesja wygasła'
+        return_reason: 'Powód zwrotu'
+        return_consent_text: 'Akceptuję regulamin'
+        edit_order_return_consent: 'Edytuj zgodę zwrotu'
+        new_order_return_consent: 'Nowa zgoda zwrotu'
+        order_return_consents: 'Zgody zwrotu zamówień'
+        order_return_consent_subheader: 'Zgody zwrotu zamówień (opcjonalne lub wymagane)'
+        order_return_consent_form: Ogólne
+        form:
+            bank_account_number: 'Numer rachunku bankowego (IBAN)'
+            account_holder_name: 'Właściciel rachunku'
+            bank_name: 'Nazwa banku / BIC-SWIFT'
+            enter_order_number: 'Podaj numer zamówienia'
+            return_reason: 'Powód zwrotu'
+            enabled: Włączony
+            deadline_to_return: 'Termin na złożenie zwrotu'
+            placeholder:
+                reason: 'Wybierz powód'
+        first_step:
+            success:
+                message: 'Wysłaliśmy kod weryfikacyjny na adres e-mail powiązany z zamówieniem %orderNumber%. Wypełnij poniższy formularz, aby kontynuować.'
+                please_check_your_form: 'Formularz zwrotu został zapisany jako „Szkic", zweryfikuj go i zatwierdź'
+            error:
+                order_number_not_valid: 'Numer zamówienia %orderNumber% jest nieprawidłowy'
+                order_not_fullfiled_yet: 'Zamówienie %orderNumber% nie zostało jeszcze zrealizowane. Skontaktuj się z obsługą klienta'
+                order_already_returned_or_cannot_be_returned: 'Zamówienie %orderNumber% zostało już zwrócone lub nie może zostać zwrócone'
+                withdrawal_not_available: 'Nie można odstąpić od zamówienia %orderNumber%'
+        withdrawal:
+            title: 'Odstąpienie od zamówienia'
+            headline: 'Odstąpienie od zamówienia'
+            secondary_headline: 'Odstąp od zamówienia, zanim zostanie wysłane'
+            info_paid: 'Możesz odstąpić od tego zamówienia, zanim zostanie wysłane. Zarejestrujemy żądanie odstąpienia, a nasz zespół potwierdzi odstąpienie i ewentualny zwrot środków.'
+            info_unpaid: 'Możesz odstąpić od tego zamówienia, zanim zostanie wysłane. Ponieważ nie zostało opłacone, zamówienie zostanie od razu wycofane.'
+            confirm_button: 'Odstąp od zamówienia'
+            success_requested: 'Twoje żądanie odstąpienia zostało zarejestrowane'
+            success_withdrawn: 'Twoje zamówienie zostało wycofane'
+            confirm_withdrawal: 'Potwierdź odstąpienie'
+            fallback_to_return: 'Obsłuż jako zwrot'
+            error:
+                not_cancellable: 'Nie można już odstąpić od tego zamówienia'
+        verification_step:
+            secondary_headline: 'Krok weryfikacji'
+            enter_verification_code: 'Sprawdź swój e-mail i wprowadź kod weryfikacyjny'
+            error:
+                code_not_valid: 'Kod weryfikacyjny jest nieprawidłowy. Próba %attempts% z %max% nie powiodła się. Spróbuj ponownie.'
+                code_expired: 'Kod weryfikacyjny wygasł. Spróbuj ponownie.'
+                max_attempts_exceeded: 'Przekroczono maksymalną liczbę prób. Kod uwierzytelniający nie jest już ważny. Zacznij od nowa.'
+                too_many_requests: 'Zbyt wiele prób. Odczekaj chwilę i spróbuj ponownie.'
+        fill_the_form_step:
+            secondary_headline: 'Wybierz produkty i sprawdź swoje dane'
+            bank_account_number_headline: 'Numer rachunku bankowego'
+            bank_account_number_subheader: 'Środki zostaną zwrócone na podany rachunek'
+            additional_information_headline: 'Dodatkowe informacje'
+            additional_information_subheader: 'Podaj dane bankowe, których użyjemy do zwrotu środków'
+            comment: 'Komentarz do zwrotu'
+            add_your_comments_here: 'Dodaj tutaj swoje komentarze'
+            return_reason_headline: Powód
+            return_reason_subheader: 'Po prostu wybierz z listy'
+            selecte_items_to_return_form: 'Wybierz produkty i ilości do zwrotu'
+            verify_address: 'Sprawdź dane swojego adresu'
+        confirmation_step:
+            subheader: 'Sprawdź szczegóły zwrotu i wyślij formularz'
+            qty_to_return: 'Ilość do zwrotu'
+            section:
+                general: 'Informacje ogólne'
+                items: 'Produkty do zwrotu'
+        success:
+            thank_you: Dziękujemy
+            return_form_created: 'Formularz zwrotu został utworzony'
+            print_order_return_form: 'Wydrukuj formularz zwrotu'
+            order_return_instruction: 'Wydrukuj i podpisz wygenerowany formularz. Formularz musi być dołączony do przesyłki zwrotnej'
+            configuration_updated: 'Konfiguracja została zaktualizowana'
+    admin:
+        flashes:
+            success_added_note: 'Uwaga została dodana'
+        configuration:
+            select_channel: 'Wybierz kanał'
+            change_return_addresss_to_channel: 'Zmień adres dla kanału'
+            form:
+                error:
+                    channel_not_exist: 'Kanał nie istnieje'
+                    form_not_save: 'Nie zapisano formularza'
+        reasons:
+            form:
+                header: 'Powody zwrotu'
+                enabled: Włączony
+                name: Nazwa
+                days_to_deadline_to_return: 'Okres ważności powodu w dniach'
+                position: Pozycja
+                description: Opis
+                slug: Slug
+        history:
+            status_changed_to: 'Status zmieniono na'
+            status_changed_from: 'Status zmieniono z'
+            to: na
+            accepted_return_form: 'zaakceptował formularz zwrotu'
+            created_draft_order: 'utworzył szkic zwrotu'
+            completed_return: 'zakończył zwrot'
+            cancelled_return: 'anulował zwrot'
+            added_new_note: 'dodał nową uwagę'
+            withdrawal_requested: 'zażądał odstąpienia'
+            withdrawal_confirmed: 'potwierdził odstąpienie'
+            withdrawal_fallback: 'przekierował odstąpienie do procesu zwrotu'
+            withdrawn: 'odstąpił od zamówienia'
+        return_details_header: 'Szczegóły zwrotu'
+        return_consent:
+            form:
+                enabled: Włączony
+                name: Nazwa
+                position: Pozycja
+                slug: Slug
+                description: Opis
+                require: Wymagane
+                field_type:
+                    label: 'Typ pola'
+                    help: 'Wybierz, jak ta zgoda jest wyświetlana obok pola wyboru.'
+                    external_page: 'Strona zewnętrzna'
+                    inline: 'Kod HTML inline'
+                    instruction_header: 'Jak działa typ pola'
+                    instruction_external_page: '<strong>Strona zewnętrzna</strong>: pole wyboru pokazuje <em>nazwę</em>. <em>Slug</em> jest wymagany i wskazuje osobną stronę z pełną treścią zgody (<em>opis</em>).'
+                    instruction_inline: '<strong>Kod HTML inline</strong>: <em>slug</em> nie jest potrzebny. <em>Opis</em> jest renderowany jako HTML bezpośrednio w etykiecie pola wyboru - użyj go dla krótkiej zgody z linkiem, np. <code>Akceptuję &lt;a href="..."&gt;regulamin&lt;/a&gt;</code>.'
+    pdf:
+        return_to_address: 'Zwrot do'
+        header: 'Formularz zwrotu'
+        customer_information: 'Dane klienta'
+        items_list: Produkty
+        return_qty: SZT.
+        place_for_signature: Podpis
+        bank_account_number: 'Numer rachunku bankowego (IBAN)'
+        account_holder_name: 'Właściciel rachunku'
+        bank_name: 'Nazwa banku / BIC-SWIFT'
     email:
         order_return_form:
             subject: 'Zwrot zamówienia #%returnNumber%'
             greeting: 'Dzień dobry %name%'
             info_pdf: 'Twoje zgłoszenie zwrotu zostało zarejestrowane. Wydrukuj załączony formularz zwrotu i odeślij go wraz z paczką.'
             info_no_pdf: 'Twoje zgłoszenie zwrotu zostało zarejestrowane. Zachowaj tę wiadomość jako potwierdzenie zwrotu - nie musisz niczego drukować ani wysyłać. Skontaktujemy się z Tobą w sprawie kolejnych kroków.'
-
         order_return_auth_email:
             subject: 'Kod weryfikacyjny zwrotu zamówienia'
             order_info: 'Ten kod weryfikacyjny dotyczy zamówienia %orderNumber%.'
             auth_code_info: 'aby kontynuować proces zwrotu, wprowadź kod %auth_code% na'
             verification_page: 'stronie weryfikacji'
-
         summary:
             return_number: 'Numer zwrotu'
             order_number: 'Numer zamówienia'
-            status: 'Status'
-            items: 'Produkty'
-            item: 'Produkt'
-            sku: 'SKU'
-            quantity: 'Ilość'
-            reason: 'Powód'
+            status: Status
+            items: Produkty
+            item: Produkt
+            sku: SKU
+            quantity: Ilość
+            reason: Powód
             refund_details: 'Dane do zwrotu środków'
-            bank_account_number: 'IBAN'
+            bank_account_number: IBAN
             account_holder_name: 'Właściciel rachunku'
-            bank_name: 'Bank'
+            bank_name: Bank
             state:
-                draft: 'Szkic'
-                new: 'Nowy'
-                completed: 'Zakończony'
-                canceled: 'Anulowany'
+                draft: Szkic
+                new: Nowy
+                completed: Zakończony
+                canceled: Anulowany
                 withdrawal_request: 'Żądanie odstąpienia'
-                withdrawn: 'Odstąpiono'
-
+                withdrawn: Odstąpiono
         withdrawal_requested:
             subject: 'Otrzymano żądanie odstąpienia #%returnNumber%'
             greeting: 'Dzień dobry'
             info: 'Otrzymaliśmy Twoje żądanie odstąpienia od zamówienia %orderNumber%. Nasz zespół wkrótce je rozpatrzy i potwierdzi odstąpienie.'
-
         withdrawal_confirmed:
             subject: 'Potwierdzono odstąpienie od zamówienia #%returnNumber%'
             greeting: 'Dzień dobry'
             info: 'Twoje odstąpienie od zamówienia %orderNumber% zostało potwierdzone, a zamówienie zostało anulowane.'
-
         withdrawal_fallback:
             subject: 'Twoje odstąpienie zostanie obsłużone jako zwrot #%returnNumber%'
             greeting: 'Dzień dobry'
             info: 'Twoje żądanie odstąpienia od zamówienia %orderNumber% zostanie obsłużone w ramach standardowego procesu zwrotu. Skontaktujemy się z Tobą w sprawie kolejnych kroków.'
-
         withdrawal_cancelled:
             subject: 'Odstąpiono od zamówienia #%returnNumber%'
             greeting: 'Dzień dobry'
             info: 'Twoje zamówienie %orderNumber% zostało wycofane. Ponieważ nie zostało opłacone, nie są wymagane żadne dalsze działania.'
+    state:
+        draft: Szkic
+        new: Nowy
+        completed: Zakończony
+        cancelled: Anulowany
+        withdrawal_request: 'Żądanie odstąpienia'
+        withdrawn: Odstąpiono
+    form:
+        product:
+            non_returnable: 'Bez możliwości zwrotu'

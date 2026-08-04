@@ -34,6 +34,12 @@ Architects of this package:
 
         <field name="enabled" column="enabled" type="boolean" />
         <field name="consentRequire" column="consent_require" type="boolean"/>
+        <field name="fieldType" column="field_type" type="string">
+            <options>
+                <option name="default">external_page</option>
+            </options>
+        </field>
+
 
         <field name="createdAt" column="created_at" type="datetime">
             <gedmo:timestampable on="create"/>

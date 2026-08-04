@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'Das Feld darf nicht leer sein'
+        return_qty_less_or_equal: 'Die maximale Rücksendemenge beträgt {{ compared_value }}.'
+        return_qty_greater_or_equal: 'Die Rücksendemenge darf nicht negativ sein.'
+        order_number:
+            not_blank: 'Bitte geben Sie eine gültige Bestellnummer an'
+        bank_account_number:
+            not_blank: 'Bitte geben Sie die Bankkontonummer ein'
+            not_a_valid: 'Dies ist keine gültige internationale Bankkontonummer (IBAN).'
+        account_holder_name:
+            not_blank: 'Bitte geben Sie den Kontoinhaber ein'
+        bank_name:
+            not_blank: 'Bitte geben Sie den Namen der Bank / BIC-SWIFT ein'
+        email:
+            not_a_valid: 'Bitte geben Sie eine gültige E-Mail-Adresse ein'
+        notes:
+            not_blank: 'Dieses Feld darf nicht leer sein'
+        days_to_deadline_to_return:
+            not_blank: 'Bitte geben Sie die Anzahl der Tage ein'
+        name:
+            not_blank: 'Bitte geben Sie den Namen ein'
+        slug:
+            not_blank: 'Bitte geben Sie den Slug ein'
+        code:
+            not_blank: 'Bitte geben Sie den Code ein'

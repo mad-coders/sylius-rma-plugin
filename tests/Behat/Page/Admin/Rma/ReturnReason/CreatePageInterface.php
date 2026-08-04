@@ -23,4 +23,6 @@ interface CreatePageInterface extends BaseCreatePageInterface
 {
     /** @throws ElementNotFoundException */
     public function choosesFormElement(string $name, string $element): void;
+
+    public function isCodeFieldEditable(): bool;
 }

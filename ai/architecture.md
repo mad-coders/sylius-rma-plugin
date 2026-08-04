@@ -10,8 +10,8 @@ grounded in the real structure. Paths are relative to the repository root.
 | | Version |
 | :--- | :--- |
 | PHP | `^8.2` |
-| Symfony | `^6.4` |
-| Sylius | `~1.12.0` |
+| Symfony | `^6.4 \|\| ^7.x` |
+| Sylius | `^2.2` |
 
 (Pre-upgrade the plugin targeted PHP `^7.3`, Symfony `^4.4 || ^5.2`, Sylius `~1.8 || ~1.9`.)
 

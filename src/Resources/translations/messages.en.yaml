@@ -2,6 +2,8 @@ madcoders_rma:
     ui:
         order_return_reasons: 'Order return reasons'
         return_reason_list: 'Order return reasons'
+        new_order_return_reason: 'New order return reason'
+        edit_order_return_reason: 'Edit order return reason'
         return:
             session_not_valid: 'Your session has expired'
             pdf_disabled: 'Return form PDF download is currently disabled.'
@@ -138,8 +140,8 @@ madcoders_rma:
                 name: 'Name'
                 days_to_deadline_to_return: 'Reason validity period in days'
                 position: 'Position'
-                descriptin: 'Descriptin'
-                slug: 'Code'
+                description: 'Description'
+                slug: 'Slug'
 
         history:
             status_changed_to: 'Status changed to'
@@ -164,6 +166,14 @@ madcoders_rma:
                 slug: 'Slug'
                 description: 'Description'
                 require: 'Require'
+                field_type:
+                    label: 'Field type'
+                    help: 'Choose how this consent is shown next to its checkbox.'
+                    external_page: 'External page'
+                    inline: 'Inline HTML'
+                    instruction_header: 'How the field type works'
+                    instruction_external_page: '<strong>External page</strong>: the checkbox shows the <em>name</em>. The <em>slug</em> is required and identifies the separate page with the full consent text (the <em>description</em>).'
+                    instruction_inline: '<strong>Inline HTML</strong>: the <em>slug</em> is not needed. The <em>description</em> is rendered as HTML directly in the checkbox label - use it for a short consent with a link, e.g. <code>I accept the &lt;a href="..."&gt;terms&lt;/a&gt;</code>.'
 
     pdf:
         return_to_address: "Return to"

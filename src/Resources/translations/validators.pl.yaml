@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'Pole nie może być puste'
+        return_qty_less_or_equal: 'Maksymalna ilość zwrotu to {{ compared_value }}.'
+        return_qty_greater_or_equal: 'Ilość zwrotu nie może być ujemna.'
+        order_number:
+            not_blank: 'Podaj prawidłowy numer zamówienia'
+        bank_account_number:
+            not_blank: 'Podaj numer rachunku bankowego'
+            not_a_valid: 'To nie jest prawidłowy międzynarodowy numer rachunku bankowego (IBAN).'
+        account_holder_name:
+            not_blank: 'Podaj właściciela rachunku'
+        bank_name:
+            not_blank: 'Podaj nazwę banku / BIC-SWIFT'
+        email:
+            not_a_valid: 'Podaj prawidłowy adres e-mail'
+        notes:
+            not_blank: 'To pole nie może być puste'
+        days_to_deadline_to_return:
+            not_blank: 'Podaj liczbę dni'
+        name:
+            not_blank: 'Podaj nazwę'
+        slug:
+            not_blank: 'Podaj slug'
+        code:
+            not_blank: 'Podaj kod'

@@ -49,6 +49,7 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
         Assert::string($options['name']);
         Assert::string($options['slug']);
         Assert::nullOrString($options['description']);
+        Assert::string($options['field_type']);
 
         $orderReturnConsent = new OrderReturnConsent();
         $orderReturnConsent->setCurrentLocale($options['current_locale']);
@@ -60,6 +61,7 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
         $orderReturnConsent->setName($options['name']);
         $orderReturnConsent->setSlug($options['slug']);
         $orderReturnConsent->setDescription($options['description']);
+        $orderReturnConsent->setFieldType($options['field_type']);
 
         return $orderReturnConsent;
     }
@@ -73,10 +75,12 @@ final class OrderReturnConsentFixtureFactory extends AbstractExampleFactory impl
             ->setAllowedTypes('code', 'string')
             ->setRequired('name')
             ->setAllowedTypes('name', 'string')
-            ->setRequired('slug')
+            ->setDefault('slug', '')
             ->setAllowedTypes('slug', 'string')
             ->setDefault('description', null)
             ->setAllowedTypes('description', ['string', 'null'])
+            ->setDefault('field_type', OrderReturnConsentInterface::FIELD_TYPE_EXTERNAL_PAGE)
+            ->setAllowedValues('field_type', OrderReturnConsentInterface::FIELD_TYPES)
             ->setDefault('current_locale', 'en_US')
             ->setAllowedTypes('current_locale', 'string');
     }

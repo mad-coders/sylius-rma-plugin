@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'Fältet får inte vara tomt'
+        return_qty_less_or_equal: 'Maximal returkvantitet är {{ compared_value }}.'
+        return_qty_greater_or_equal: 'Returkvantiteten får inte vara negativ.'
+        order_number:
+            not_blank: 'Ange ett giltigt ordernummer'
+        bank_account_number:
+            not_blank: 'Ange bankkontonumret'
+            not_a_valid: 'Detta är inte ett giltigt internationellt bankkontonummer (IBAN).'
+        account_holder_name:
+            not_blank: 'Ange kontoinnehavaren'
+        bank_name:
+            not_blank: 'Ange bankens namn / BIC-SWIFT'
+        email:
+            not_a_valid: 'Ange en giltig e-postadress'
+        notes:
+            not_blank: 'Detta fält får inte vara tomt'
+        days_to_deadline_to_return:
+            not_blank: 'Ange antal dagar'
+        name:
+            not_blank: 'Ange namnet'
+        slug:
+            not_blank: 'Ange slug'
+        code:
+            not_blank: 'Ange koden'

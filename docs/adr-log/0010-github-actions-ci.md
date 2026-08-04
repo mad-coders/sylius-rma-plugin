@@ -41,6 +41,31 @@ the Sylius plugin CI but driven through this project's **Make targets**.
 
 `bitbucket-pipelines.yml` is removed.
 
+## Update (2026-08): Sylius version matrix
+
+Since the plugin supports `sylius/sylius: >=1.12,<1.14`, a single `composer update` run only ever
+proved the version the solver happened to pick (1.13), leaving 1.12 - the line most existing
+installs are on - untested. Every job therefore runs in a **`sylius: ["1.12", "1.13"]` matrix**
+with `fail-fast: false`, so one broken line does not hide the state of the other.
+
+- The per-job preamble (setup-php, Sylius pinning, Composer cache, `composer update`) lives in a
+  reusable **composite action**, `.github/actions/setup`, because GitHub Actions has no YAML
+  anchors and the four jobs would otherwise repeat it eight times. Jobs that do not need the
+  Composer scripts pass `composer-options: "--no-scripts"`, matching the previous behaviour.
+- Pinning is `composer require --no-update "sylius/sylius:<line>.*"` before the install, which
+  narrows the root constraint for that job only (the checkout is ephemeral). The Composer cache
+  key includes the Sylius line so the two legs do not fight over one cache entry, and the action
+  prints the resolved version so a run can be checked at a glance.
+- Supporting both lines from one branch needs two version-conditional bits, both of which the
+  matrix now guards:
+  - `phpstan.neon` ignores `generics.notGeneric` for the Order/Channel/ProductVariant
+    repositories. Those interfaces became generic in 1.13 and the type parameters are required
+    there, while on 1.12 the same annotations are reported as errors. `reportUnmatchedIgnoredErrors:
+    false` (already set) keeps the entry silent on 1.13.
+  - `tests/Application/config/bundles.php` registers
+    `Sylius\Abstraction\StateMachine\SyliusStateMachineAbstractionBundle` behind a `class_exists()`
+    check: 1.13's `sylius.fixture.order` requires it, and it does not exist on 1.12.
+
 ## Consequences
 
 - CI status is reported on GitHub pull requests; the pipeline stays in lock-step with local
@@ -51,3 +76,7 @@ the Sylius plugin CI but driven through this project's **Make targets**.
   8081) is a follow-up that would warrant its own update to this ADR.
 - A single PHP version (8.2) is exercised, matching the project's supported stack; the matrix
   can be widened later if more versions are supported.
+- The matrix doubles the job count (four jobs x two Sylius lines) and therefore the CI minutes;
+  that is the price of proving the `>=1.12,<1.14` constraint rather than asserting it. Adding a
+  Sylius line means adding one matrix entry - and dropping 1.12 means removing the two
+  version-conditional workarounds above.

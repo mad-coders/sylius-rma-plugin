@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'Il campo non può essere vuoto'
+        return_qty_less_or_equal: 'La quantità massima di reso è {{ compared_value }}.'
+        return_qty_greater_or_equal: 'La quantità di reso non può essere negativa.'
+        order_number:
+            not_blank: "Fornisci un numero d'ordine valido"
+        bank_account_number:
+            not_blank: 'Inserisci il numero di conto bancario'
+            not_a_valid: 'Questo non è un codice IBAN valido.'
+        account_holder_name:
+            not_blank: "Inserisci l'intestatario del conto"
+        bank_name:
+            not_blank: 'Inserisci il nome della banca / BIC-SWIFT'
+        email:
+            not_a_valid: 'Inserisci un indirizzo e-mail valido'
+        notes:
+            not_blank: 'Questo campo non può essere vuoto'
+        days_to_deadline_to_return:
+            not_blank: 'Inserisci il numero di giorni'
+        name:
+            not_blank: 'Inserisci il nome'
+        slug:
+            not_blank: 'Inserisci lo slug'
+        code:
+            not_blank: 'Inserisci il codice'

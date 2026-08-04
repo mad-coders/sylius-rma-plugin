@@ -22,4 +22,11 @@ use Tests\Madcoders\SyliusRmaPlugin\Behat\Behaviour\ChoosesFormElement;
 class UpdatePage extends BaseUpdatePage implements UpdatePageInterface
 {
     use ChoosesFormElement;
+
+    public function isCodeFieldEditable(): bool
+    {
+        $code = $this->getDocument()->findField('madcoders_rma_return_reason_code');
+
+        return null !== $code && !$code->hasAttribute('disabled') && !$code->hasAttribute('readonly');
+    }
 }

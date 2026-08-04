@@ -20,6 +20,7 @@ default:
                 # setup
                 - sylius.behat.context.setup.channel
                 - sylius.behat.context.setup.admin_security
+                - sylius.behat.context.setup.locale
                 - sylius.behat.context.setup.shop_security
                 - madcoders.rma.context.setup.return_reason
 
