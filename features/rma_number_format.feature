@@ -23,14 +23,19 @@ Feature: Default RMA number format
                 | code         | name                     | deadline_to_return |
                 | reason_360   | Reason 360               | 360                |
             And there is a customer "john.doe@madcoders.pl" that placed order with "Product A" product to "United States" based billing address with "Standard shipping" shipping method and "Offline" payment method
+            # Three units, so a second return is legitimately possible once the first is approved:
+            # every non-draft return claims the quantity it records, and a single-unit order would
+            # be fully claimed by the first return.
+            And the order contains 3 units of "Product A"
             And this order has already been shipped
             And the order's state is "fulfilled"
 
         @ui
         Scenario: Two consecutive returns for one order are numbered sequentially
-            # first return for the order
+            # first return for the order, claiming 1 of the 3 units so units remain for a second one
             Given I am on order return page for latest order
             When I choose reason with code "reason_360"
+            And I choose to return 1 unit of the first item
             And I fill in my bank account in IBAN format
             And I click submit button for return form
             Then I should be redirected to return review page for latest order

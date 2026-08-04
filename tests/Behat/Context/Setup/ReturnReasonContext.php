@@ -47,6 +47,9 @@ class ReturnReasonContext implements Context
     {
         $reason = new OrderReturnReason();
         $reason->setCurrentLocale('en_US');
+        // Sylius 2 / doctrine-collections rejects a null fallback locale in getTranslation(),
+        // so the fallback must be set alongside the current locale.
+        $reason->setFallbackLocale('en_US');
         $reason->setSlug(StringInflector::nameToSlug($name));
         $reason->setCode($code);
         $reason->setName($name);
