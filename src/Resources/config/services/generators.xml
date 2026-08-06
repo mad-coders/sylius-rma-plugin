@@ -18,7 +18,7 @@ Architects of this package:
 
         <service id="madcoders.sylius_rma_plugin.generator.order_return_form_pdf_file_generator" class="Madcoders\SyliusRmaPlugin\Generator\OrderReturnFormPdfFileGenerator">
             <argument type="service" id="twig" />
-            <argument type="service" id="knp_snappy.pdf" />
+            <argument type="service" id="Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGeneratorInterface" />
             <argument type="service" id="file_locator" />
             <argument>@MadcodersSyliusRmaPlugin/Return/Download/pdf.html.twig</argument>
             <argument>@MadcodersSyliusRmaPlugin/Resources/pdf/sylius-logo.png</argument>
@@ -32,6 +32,14 @@ Architects of this package:
 
         <!-- Alias the interface to the default generator so integrators can replace or decorate it. -->
         <service id="Madcoders\SyliusRmaPlugin\Generator\ReturnNumberGeneratorInterface" alias="madcoders.sylius_rma_plugin.generator.return_number_generator" />
+
+        <service id="madcoders.sylius_rma_plugin.services.pdf.gotenberg_pdf_generator" class="Madcoders\SyliusRmaPlugin\Services\Pdf\GotenbergPdfGenerator">
+            <argument type="service" id="http_client" />
+            <argument>%madcoders_rma.gotenberg_url%</argument>
+        </service>
+
+        <!-- Alias the interface to the default Gotenberg-backed generator so integrators can replace or decorate it. -->
+        <service id="Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGeneratorInterface" alias="madcoders.sylius_rma_plugin.services.pdf.gotenberg_pdf_generator" />
 
      </services>
 </container>

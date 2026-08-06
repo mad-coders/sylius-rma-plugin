@@ -17,19 +17,11 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Twig;
 
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnChangeLog;
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Attribute\AsTwigFunction;
 
-class RmaTimeLineExtension extends AbstractExtension
+class RmaTimeLineExtension
 {
-    /** @inheritdoc */
-    public function getFunctions()
-    {
-        return [
-            new TwigFunction('rma_time_line_item_view', $this->createTimeLineItemView(...)),
-        ];
-    }
-
+    #[AsTwigFunction(name: 'rma_time_line_item_view')]
     public function createTimeLineItemView(OrderReturnChangeLog $changeLog): string
     {
         $changeLogType = $changeLog->getType();

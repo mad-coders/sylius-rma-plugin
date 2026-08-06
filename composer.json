@@ -23,8 +23,10 @@
     ],
     "require": {
         "php": "^8.2",
-        "knplabs/knp-snappy-bundle": "^1.8",
-        "sylius/sylius": ">=1.12,<1.14"
+        "sylius/sylius": ">=1.12,<1.14",
+        "symfony/http-client": "^6.4 || ^7.0",
+        "symfony/mime": "^6.4 || ^7.0",
+        "twig/twig": "^3.21"
     },
     "require-dev": {
         "behat/behat": "^3.7",
@@ -70,7 +72,20 @@
                 "PKSA-3ncz-km6v-5vjr",
                 "PKSA-gs8r-6kz6-pp56",
                 "PKSA-gnn4-pxdg-q76m",
-                "PKSA-4g5g-4rkv-myqs"
+                "PKSA-4g5g-4rkv-myqs",
+                "PKSA-cnw1-2ytm-cgr8",
+                "PKSA-gcrk-3vtt-1r14",
+                "PKSA-bbs6-q5q9-f3t4",
+                "PKSA-qxvb-2bpp-dnk6",
+                "PKSA-fy2t-3c5f-827y",
+                "PKSA-bcdd-5xc7-gwfb",
+                "PKSA-pwsk-hy21-4gby",
+                "PKSA-93qv-9n9h-6k6p",
+                "PKSA-k22t-f949-t9g6",
+                "PKSA-vznr-tgp9-fd7d",
+                "PKSA-7qs6-zvnz-h66r",
+                "PKSA-gm5x-j3mz-71n9",
+                "PKSA-jj5t-2zs1-dcfm"
             ]
         },
         "policy": {

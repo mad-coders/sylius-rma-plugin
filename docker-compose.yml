@@ -1,12 +1,13 @@
-# Docker services for running the plugin test suite (PHPUnit, Behat).
+# Docker services for running the plugin test suite (PHPUnit, Behat) and local dev.
 #
 # PHP is run from the host (PHP 8.2). These containers provide the external
-# services the test application needs: a MySQL 8 database and a headless Chrome
-# for the Behat @javascript suite.
+# services the test application needs: a MySQL 8 database, a headless Chrome
+# for the Behat @javascript suite, and Gotenberg for return-form PDF generation
+# (only needed when madcoders_rma.return_form_pdf_enabled is true - see ADR 0013).
 #
 # Usage:
 #   docker compose up -d mysql            # database only (unit/component + non-JS Behat)
-#   docker compose up -d                  # database + chrome (for @javascript Behat)
+#   docker compose up -d                  # database + chrome + gotenberg
 #
 # The test application connects with
 # DATABASE_URL=mysql://root:rma@127.0.0.1:3307/... (see tests/Application/.env).
@@ -41,6 +42,12 @@ services:
             - --window-size=1920,1080
         ports:
             - "${CHROME_PORT:-9222}:9222"
+
+    gotenberg:
+        image: gotenberg/gotenberg:8
+        platform: linux/amd64
+        ports:
+            - "${GOTENBERG_PORT:-3000}:3000"
 
 volumes:
     mysql_data: {}
