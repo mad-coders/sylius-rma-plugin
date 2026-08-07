@@ -43,6 +43,32 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   release on that line, already an accepted risk per the pre-existing `audit.ignore` /
   `policy.advisories.ignore` entries). A future advisory in any other dependency now still stops
   CI, rather than resolving silently.
+- **CI now resolves the dependency floor as well as the ceiling.** The plugin ships no
+  `composer.lock`, so every CI job ran plain `composer update` and only ever exercised the newest
+  releases; a constraint that was too loose (or missing) stayed green here and broke at consumers
+  pinned to older versions. The `unit` job gained a `dependencies: [highest, lowest]` matrix
+  dimension, where the `lowest` leg runs
+  `composer update --prefer-lowest --prefer-stable`. `static`, `fixtures` and `behat` deliberately
+  stay on `highest` only, because at their floors the dev tooling itself
+  (`symplify/easy-coding-standard`, `babdev/pagerfanta-bundle`) is incompatible with PHP 8.2 and
+  reports nothing about the plugin's own constraints.
+- **`doctrine/collections: ^1.8 || ^2.1` is now an explicit requirement.** `src/Entity/OrderReturn.php`
+  uses `Doctrine\Common\Collections\ArrayCollection` directly but declared no constraint, so the
+  floor came from `sylius/sylius` (`^1.6`). `doctrine/collections` 1.6.5 predates PHP 8.1 tentative
+  return types and fatals on this plugin's required PHP (`^8.2`) with `Return type of
+  ArrayCollection::count() should either be compatible with Countable::count(): int`. 1.8.0 is the
+  first release in the 1.x line that is safe on PHP 8.1+.
+
+### Fixed
+
+- `Tests\...\Unit\Form\Type\OrderReturnConsentFormTypeTest` doubled
+  `Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface` (the Sylius 2.x
+  namespace) while `OrderReturnConsentFormType` type-hints the Sylius 1.x
+  `Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface`. It only
+  passed because recent `sylius/resource-bundle` releases ship both names; against the oldest
+  supported release the double silently degraded to `stdClass` and the test errored with
+  `Method Double\stdClass\P33::getDefaultLocaleCode() is not defined`. The test now doubles the same
+  interface the production code depends on.
 
 ## [1.3.0-rc.7] - 2026-08-03
 

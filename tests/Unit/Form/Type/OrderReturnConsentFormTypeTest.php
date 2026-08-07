@@ -20,7 +20,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsent;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnConsentInterface;
 use Madcoders\SyliusRmaPlugin\Form\Type\OrderReturnConsentFormType;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Sylius\Resource\Translation\Provider\TranslationLocaleProviderInterface;
+use Sylius\Component\Resource\Translation\Provider\TranslationLocaleProviderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;

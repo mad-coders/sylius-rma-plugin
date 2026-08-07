@@ -4,6 +4,11 @@ description: "Installs PHP with the plugin's extensions and resolves Composer de
 # Shared by every CI job so that the Sylius version under test is decided in exactly one place.
 # The plugin ships no composer.lock (library convention), so each job resolves dependencies with
 # `composer update` after pinning `sylius/sylius` to the requested minor line.
+#
+# `dependencies: lowest` adds `--prefer-lowest --prefer-stable`, which resolves the *floor* of every
+# constraint in composer.json instead of the ceiling. Without it CI only ever exercises the newest
+# releases, so a constraint that is too loose (or missing entirely) stays green here while breaking
+# consumers who sit on older versions.
 
 inputs:
     php-version:
@@ -12,6 +17,10 @@ inputs:
     sylius-version:
         description: "Sylius minor line to resolve against, e.g. 1.12"
         required: true
+    dependencies:
+        description: "Dependency resolution preference: 'highest' (default) or 'lowest'"
+        required: false
+        default: "highest"
     composer-options:
         description: "Extra flags for the composer update call, e.g. --no-scripts"
         required: false
@@ -41,13 +50,21 @@ runs:
           uses: actions/cache@v4
           with:
               path: ${{ steps.composer-cache.outputs.dir }}
-              key: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-${{ hashFiles('composer.json') }}
-              restore-keys: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-
+              key: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-${{ inputs.dependencies }}-${{ hashFiles('composer.json') }}
+              restore-keys: composer-${{ inputs.php-version }}-sylius-${{ inputs.sylius-version }}-${{ inputs.dependencies }}-
 
         - name: Install dependencies
           shell: bash
-          run: composer update --no-interaction --no-progress --prefer-dist ${{ inputs.composer-options }}
+          env:
+              DEPENDENCIES: "${{ inputs.dependencies }}"
+              COMPOSER_OPTIONS: "${{ inputs.composer-options }}"
+          run: |
+              PREFER=""
+              if [ "$DEPENDENCIES" = "lowest" ]; then
+                  PREFER="--prefer-lowest --prefer-stable"
+              fi
+              composer update --no-interaction --no-progress --prefer-dist $PREFER $COMPOSER_OPTIONS
 
-        - name: Show the resolved Sylius version
+        - name: Show the resolved versions of the constrained packages
           shell: bash
-          run: composer show sylius/sylius | head -n 5
+          run: composer show --direct

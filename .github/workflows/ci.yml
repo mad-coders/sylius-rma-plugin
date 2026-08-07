@@ -6,6 +6,10 @@ name: CI
 # Every job runs once per supported Sylius line (see the `sylius` matrix below), because the
 # plugin supports `>=1.12,<1.14` and the two lines differ (generic repository interfaces,
 # the state-machine abstraction bundle).
+# The plugin ships no composer.lock, so every job resolves dependencies fresh. By default that
+# means the HIGHEST available versions; the `unit` job additionally runs a `lowest` leg
+# (`composer update --prefer-lowest --prefer-stable`) so a constraint that is too loose fails here
+# rather than at a consumer sitting on older dependencies.
 # Decision recorded in docs/adr-log/0010-github-actions-ci.md.
 
 on:
@@ -29,6 +33,11 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
+                # No `lowest` leg here: at their floors the analysis tools themselves break on PHP
+                # 8.2 (symplify/easy-coding-standard from 2021 emits fatal-level deprecations, and
+                # babdev/pagerfanta-bundle is incompatible with the resolved symfony/http-kernel).
+                # Those are third-party dev-tool floors that say nothing about the plugin's own
+                # constraints, so the floor is exercised by the `unit` job instead.
                 sylius: ["1.12", "1.13"]
         steps:
             - uses: actions/checkout@v4
@@ -49,12 +58,18 @@ jobs:
               run: make ecs
 
     unit:
-        name: Unit tests (PHPUnit, Sylius ${{ matrix.sylius }})
+        name: Unit tests (PHPUnit, Sylius ${{ matrix.sylius }}, ${{ matrix.dependencies }} deps)
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
                 sylius: ["1.12", "1.13"]
+                # `lowest` resolves the floor of every constraint in composer.json rather than the
+                # ceiling, so a missing or too-loose constraint fails here instead of at a consumer.
+                # Only the unit job carries this dimension: it is the cheapest suite and needs no
+                # database or built assets, so it is the natural place to catch dependency-floor
+                # regressions. `static`, `fixtures` and `behat` stay on `highest` only.
+                dependencies: ["highest", "lowest"]
         steps:
             - uses: actions/checkout@v4
 
@@ -62,6 +77,7 @@ jobs:
               with:
                   php-version: "${{ env.PHP_VERSION }}"
                   sylius-version: "${{ matrix.sylius }}"
+                  dependencies: "${{ matrix.dependencies }}"
                   composer-options: "--no-scripts"
 
             - name: PHPUnit
