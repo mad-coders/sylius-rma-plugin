@@ -20,6 +20,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   1.3.0-rc.5, rc.6 and rc.7 is now on the 2.0 line as well (see those sections below). The
   Sylius 1.13 constraint widening from rc.7 does not apply here; its CI work does, and the
   `.github/actions/setup` composite action is now shared by both lines.
+- **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
+  is removed (archived upstream, unpatched CVEs including SSRF/local-file-disclosure). PDF
+  generation now POSTs the rendered HTML to a [Gotenberg](https://gotenberg.dev/) instance over
+  HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
+  New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
+  `docker-compose.yml` gained a `gotenberg` service for local development. The
+  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. The
+  return-form logo is inlined as a base64 `data:` URI rather than an absolute host filesystem
+  path, since Gotenberg renders in its own container and cannot resolve (or is denied) that path.
+  The Gotenberg request carries an explicit timeout/max-duration and the response is checked for
+  a valid PDF header; failures raise
+  `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException` rather than leaking Symfony
+  HttpClient's exception types. See
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md). Carried up from the 1.3 line.
+- `composer.json` now requires `twig/twig: ^3.21` explicitly. The Twig extensions on this line
+  already declare their functions with `#[Twig\Attribute\AsTwigFunction]` (applied during the
+  Sylius 2 / Twig 3 modernization) and are registered through the `twig.attribute_extension` tag,
+  but the attribute itself only arrived in twig/twig 3.21.0, so the floor is now declared rather
+  than relied on transitively. The 1.x branches wrap each class in a
+  `Twig\Extension\AttributeExtension` service instead, because Symfony 6.4's twig-bridge has no
+  such tag.
 
 ### Fixed
 
@@ -35,6 +56,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   ([#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
   [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
   [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+
 ## [1.3.0-rc.7] - 2026-08-03
 
 Seventh release candidate for the 1.3 line, adding Sylius 1.13 support and bringing every shipped

@@ -63,7 +63,8 @@ optional; the defaults below match the plugin's out-of-the-box behaviour.
 
 | Setting | Env var | Type | Default | Effect |
 | :--- | :--- | :--- | :--- | :--- |
-| `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires wkhtmltopdf. See [below](#optional-enable-the-return-form-pdf). |
+| `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires a reachable Gotenberg instance. See [below](#optional-enable-the-return-form-pdf). |
+| `gotenberg_url` | `GOTENBERG_URL` | string | `http://127.0.0.1:3000` | Base URL of the Gotenberg instance used to render the PDF. Only used when `return_form_pdf_enabled` is true. |
 | `allow_unpaid_withdrawal` | `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL` | bool | `true` | Offer instant withdrawal of unpaid, not-yet-shipped orders (cancels the Sylius order). When `false`, unpaid orders are not offered withdrawal. See [below](#optional-instant-withdrawal-of-unpaid-orders). |
 | `require_additional_information` | `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` | bool | `false` | Show and require the "Additional information" section (bank account number, account holder name, bank name / BIC-SWIFT) for refund handling on the return **and** withdrawal forms. When `false`, the section is hidden and not required. See [below](#optional-require-additional-information-on-the-return-form). |
 | `resources.*` | - | map | Sylius defaults | Standard Sylius ResourceBundle overrides (model / interface / controller / factory / repository / form) for the plugin's entities. |
@@ -74,15 +75,21 @@ return reasons (with optional time-since-shipment deadlines), and the consents a
 ### Optional: enable the return-form PDF
 
 PDF generation (the confirmation-email attachment and the print/download links) is **off by
-default** and requires a working [wkhtmltopdf](https://wkhtmltopdf.org/) binary. To enable it:
+default** and requires a reachable [Gotenberg](https://gotenberg.dev/) instance (a Docker-based
+HTTP API for document conversion, built on headless Chromium). To enable it:
 
 ```yaml
 # config/packages/madcoders_rma.yaml
 madcoders_rma:
     return_form_pdf_enabled: true
+    gotenberg_url: '%env(GOTENBERG_URL)%' # defaults to http://127.0.0.1:3000
 ```
 
-See [ADR 0011](docs/adr-log/0011-return-form-pdf-feature-flag.md).
+For local development, `docker-compose.yml` includes a `gotenberg` service - `make docker-up-all`
+starts it alongside MySQL and Chrome. In production, run Gotenberg as its own container/service
+and point `GOTENBERG_URL` at it.
+
+See [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
 
 ### Optional: instant withdrawal of unpaid orders
 

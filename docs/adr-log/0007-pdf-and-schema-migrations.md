@@ -1,6 +1,6 @@
 # 0007 - PDFs via knp_snappy; schema via Doctrine migrations
 
-- **Status:** Accepted
+- **Status:** Superseded by [0013](0013-gotenberg-pdf-generation.md) (PDF rendering engine only; the Doctrine-migrations decision below still stands)
 - **Date:** pre-upgrade
 
 ## Context

@@ -3436,24 +3436,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     default_adapter?: scalar|Param|null, // Default: "symfony_workflow"
  *     graphs_to_adapters_mapping?: array<string, scalar|Param|null>,
  * }
- * @psalm-type KnpSnappyConfig = array{
- *     temporary_folder?: scalar|Param|null,
- *     process_timeout?: int|Param, // Generator process timeout in seconds.
- *     pdf?: array{
- *         enabled?: bool|Param, // Default: true
- *         binary?: scalar|Param|null, // Default: "wkhtmltopdf"
- *         options?: array<string, scalar|Param|null>,
- *         env?: list<scalar|Param|null>,
- *     },
- *     image?: array{
- *         enabled?: bool|Param, // Default: true
- *         binary?: scalar|Param|null, // Default: "wkhtmltoimage"
- *         options?: array<string, scalar|Param|null>,
- *         env?: list<scalar|Param|null>,
- *     },
- * }
  * @psalm-type MadcodersSyliusRmaConfig = array{
- *     return_form_pdf_enabled?: bool|Param, // When false (default), the return-form PDF is not generated: the confirmation email is sent without it and the print/download endpoints and links are disabled. Enable to generate PDFs (requires wkhtmltopdf). // Default: false
+ *     return_form_pdf_enabled?: bool|Param, // When false (default), the return-form PDF is not generated: the confirmation email is sent without it and the print/download endpoints and links are disabled. Enable to generate PDFs (requires a reachable Gotenberg instance, see gotenberg_url). // Default: false
+ *     gotenberg_url?: scalar|Param|null, // Base URL of the Gotenberg instance used to render the return-form PDF (e.g. http://gotenberg:3000). Only used when return_form_pdf_enabled is true. Backed by the GOTENBERG_URL env var; accepts a URL or an %env(...)% placeholder (scalar rather than a plain default so env placeholders are allowed). // Default: "%env(GOTENBERG_URL)%"
  *     allow_unpaid_withdrawal?: scalar|Param|null, // When true (default), an unpaid not-yet-shipped order is offered the withdrawal flow: because it is not paid it is withdrawn instantly (the Sylius order is cancelled and the return resolves directly to the terminal "withdrawn" state with no admin step). When false, an unpaid order is not offered withdrawal at all. Paid orders are always withdrawable via admin approval regardless of this flag. Backed by the MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed). // Default: "%env(bool:MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL)%"
  *     require_additional_information?: scalar|Param|null, // When false (default), the "Additional information" section (bank account number, account holder name and bank name / BIC-SWIFT) is not rendered on the customer return form and none of its fields are required. When true, the section is rendered and all three fields are required (the bank account number additionally keeps IBAN validation). Backed by the MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed). // Default: "%env(bool:MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION)%"
  *     limit_auth_attempts?: scalar|Param|null, // When true (default), the auth-code endpoints (code request and verification) are rate limited per client IP + order number to make brute forcing the emailed code infeasible; exceeding the limit returns HTTP 429 with a Retry-After header. Set to false to disable the built-in limiter (e.g. when the application is already fronted by its own rate limiter). Backed by the MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed). // Default: "%env(bool:MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS)%"
@@ -3627,7 +3612,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     live_component?: LiveComponentConfig,
  *     stimulus?: StimulusConfig,
  *     sylius_state_machine_abstraction?: SyliusStateMachineAbstractionConfig,
- *     knp_snappy?: KnpSnappyConfig,
  *     madcoders_sylius_rma?: MadcodersSyliusRmaConfig,
  *     white_october_pagerfanta?: WhiteOctoberPagerfantaConfig,
  *     "when@dev"?: array{
@@ -3688,7 +3672,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         live_component?: LiveComponentConfig,
  *         stimulus?: StimulusConfig,
  *         sylius_state_machine_abstraction?: SyliusStateMachineAbstractionConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         madcoders_sylius_rma?: MadcodersSyliusRmaConfig,
  *     },
  *     "when@test"?: array{
@@ -3749,7 +3732,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         live_component?: LiveComponentConfig,
  *         stimulus?: StimulusConfig,
  *         sylius_state_machine_abstraction?: SyliusStateMachineAbstractionConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         madcoders_sylius_rma?: MadcodersSyliusRmaConfig,
  *     },
  *     "when@test_cached"?: array{
@@ -3810,7 +3792,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         live_component?: LiveComponentConfig,
  *         stimulus?: StimulusConfig,
  *         sylius_state_machine_abstraction?: SyliusStateMachineAbstractionConfig,
- *         knp_snappy?: KnpSnappyConfig,
  *         madcoders_sylius_rma?: MadcodersSyliusRmaConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
