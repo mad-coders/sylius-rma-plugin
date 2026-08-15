@@ -23,7 +23,6 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Iban;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Tests\Madcoders\SyliusRmaPlugin\Unit\UnitTestCase;
 
@@ -49,9 +48,10 @@ class ReturnFormTypeTest extends UnitTestCase
     }
 
     /** @test */
-    function the_withdrawal_form_always_keeps_the_bank_account_field_regardless_of_the_flag()
+    function the_withdrawal_form_does_not_add_the_additional_information_fields_itself()
     {
-        // the type extension does not reach this subtype, so the withdrawal form adds the field itself
+        // the gated section lives in ReturnFormTypeExtension, which now covers this subtype too, so
+        // the withdrawal form must not add any of the refund fields on its own terms
         $builder = $this->prophesize(FormBuilderInterface::class);
         $double = $builder->reveal();
         $builder->add(Argument::cetera())->willReturn($double);
@@ -60,9 +60,7 @@ class ReturnFormTypeTest extends UnitTestCase
         $withdrawalForm = new WithdrawalReturnFormType($this->prophesize(ChoiceProviderInterface::class)->reveal());
         $withdrawalForm->buildForm($double, []);
 
-        // then the bank account field stays required, but the new fields are not added
-        $builder->add('bankAccountNumber', Argument::any(), Argument::that($this->hasConstraints(NotBlank::class, Iban::class)))
-            ->shouldHaveBeenCalled();
+        $builder->add('bankAccountNumber', Argument::cetera())->shouldNotHaveBeenCalled();
         $builder->add('accountHolderName', Argument::cetera())->shouldNotHaveBeenCalled();
         $builder->add('bankName', Argument::cetera())->shouldNotHaveBeenCalled();
     }

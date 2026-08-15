@@ -18,6 +18,7 @@ namespace Madcoders\SyliusRmaPlugin\Form\Extension;
 
 use Madcoders\SyliusRmaPlugin\Form\Type\AdditionalInformationFieldsTrait;
 use Madcoders\SyliusRmaPlugin\Form\Type\ReturnFormType;
+use Madcoders\SyliusRmaPlugin\Form\Type\WithdrawalReturnFormType;
 use Madcoders\SyliusRmaPlugin\Services\AdditionalInformation\AdditionalInformationCheckerInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,9 +32,9 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * It is a form type extension rather than fields baked into {@see ReturnFormType} so the feature is
  * self-contained and can be enabled, tested or removed in isolation. Symfony resolves type
- * extensions by exact type name, so this extension applies only to the standard return form and not
- * to {@see \Madcoders\SyliusRmaPlugin\Form\Type\WithdrawalReturnFormType}, which collects the bank
- * account on its own, flag-independent terms.
+ * extensions by exact type name and {@see \Madcoders\SyliusRmaPlugin\Form\Type\WithdrawalReturnFormType}
+ * only extends {@see ReturnFormType} in PHP (its form parent is the plain form type), so the
+ * withdrawal form has to be listed explicitly for the flag to govern it as well.
  */
 final class ReturnFormTypeExtension extends AbstractTypeExtension
 {
@@ -57,6 +58,6 @@ final class ReturnFormTypeExtension extends AbstractTypeExtension
 
     public static function getExtendedTypes(): iterable
     {
-        return [ReturnFormType::class];
+        return [ReturnFormType::class, WithdrawalReturnFormType::class];
     }
 }

@@ -12,10 +12,43 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 ### Changed
 
 - **Sylius 2 line begins (2.0 branch)**: the plugin now targets `sylius/sylius ^2.2`
-  (Symfony ^6.4 || ^7.x, PHP ^8.2). The migration is phased and tracked in
-  [docs/upgrade-sylius-2/ROADMAP.md](docs/upgrade-sylius-2/ROADMAP.md); until it completes,
-  the 2.0 branch is not installable and CI runs a reduced pipeline. Sylius 1.12 support
-  continues on the 1.x branches.
+  (Symfony ^6.4 || ^7.x, PHP ^8.2). The migration is tracked in
+  [docs/upgrade-sylius-2/ROADMAP.md](docs/upgrade-sylius-2/ROADMAP.md); phases 1-8 are done,
+  so the branch installs and the full CI pipeline (static analysis, PHPUnit, fixtures, Behat)
+  runs ungated. Sylius 1.12 and 1.13 support continues on the 1.x branches.
+- **The 1.3 line is merged up through 1.3.0-rc.7**: every fix and feature released as
+  1.3.0-rc.5, rc.6 and rc.7 is now on the 2.0 line as well (see those sections below). The
+  Sylius 1.13 constraint widening from rc.7 does not apply here; its CI work does, and the
+  `.github/actions/setup` composite action is now shared by both lines.
+- **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
+  is removed (archived upstream, unpatched CVEs including SSRF/local-file-disclosure). PDF
+  generation now POSTs the rendered HTML to a [Gotenberg](https://gotenberg.dev/) instance over
+  HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
+  New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
+  `docker-compose.yml` gained a `gotenberg` service for local development. The
+  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. The
+  return-form logo is inlined as a base64 `data:` URI rather than an absolute host filesystem
+  path, since Gotenberg renders in its own container and cannot resolve (or is denied) that path.
+  The Gotenberg request carries an explicit timeout/max-duration and the response is checked for
+  a valid PDF header; failures raise
+  `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException` rather than leaking Symfony
+  HttpClient's exception types. See
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md). Carried up from the 1.3 line.
+- `composer.json` now requires `twig/twig: ^3.21` explicitly. The Twig extensions on this line
+  already declare their functions with `#[Twig\Attribute\AsTwigFunction]` (applied during the
+  Sylius 2 / Twig 3 modernization) and are registered through the `twig.attribute_extension` tag,
+  but the attribute itself only arrived in twig/twig 3.21.0, so the floor is now declared rather
+  than relied on transitively. The 1.x branches wrap each class in a
+  `Twig\Extension\AttributeExtension` service instead, because Symfony 6.4's twig-bridge has no
+  such tag.
+
+### Fixed
+
+- **`composer audit` policy is honest again**: `composer.json` carried a
+  `config.policy.advisories.ignore` block that is not part of Composer's schema and therefore
+  never suppressed anything, alongside four advisory IDs inherited from the Sylius 1.12/1.13
+  dependency tree that do not apply to Sylius 2.2. Both are removed; the Sylius 2 tree needs no
+  suppressions at all ([#30](https://github.com/mad-coders/sylius-rma-plugin/issues/30)).
 
 ### Security
 
@@ -23,6 +56,132 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   ([#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
   [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
   [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+
+## [1.3.0-rc.7] - 2026-08-03
+
+Seventh release candidate for the 1.3 line, adding Sylius 1.13 support and bringing every shipped
+locale to full translation parity on top of rc.6.
+
+### Added
+
+- **Sylius 1.13 support**: widened the `sylius/sylius` constraint from `~1.12.0` to
+  `>=1.12,<1.14`, so the plugin can now be installed against Sylius 1.13 as well as 1.12.
+  Verified against a real `sylius/sylius v1.13.16` install: full suite green (105 PHPUnit
+  tests, 60 Behat scenarios, ECS, PHPStan). The plugin still uses `winzou_state_machine`
+  directly (unaffected by 1.13's state-machine changes) and none of the 1.13 deprecations
+  (promotion/shipping rule validation groups, order repository query builder renames,
+  `ProductOptionChoiceType`) touch code this plugin depends on. Added type parameters to six
+  `@param` annotations (`OrderRepositoryInterface<OrderInterface>`,
+  `ChannelRepositoryInterface<ChannelInterface>`,
+  `ProductVariantRepositoryInterface<ProductVariantInterface>`) since 1.13 made these Sylius
+  repository interfaces generic and PHPStan (`missingType.generics`, strict rules) now
+  requires them specified.
+- **CI runs against both supported Sylius lines**: every job (static analysis, PHPUnit,
+  fixtures, Behat) now runs in a `sylius: [1.12, 1.13]` matrix, so the widened constraint is
+  actually exercised on both ends instead of only on whatever the solver happens to pick. The
+  per-job setup (PHP, Sylius pinning, Composer cache, install) moved into a reusable composite
+  action, `.github/actions/setup`.
+
+### Fixed
+
+- **The plugin UI is no longer English-only in the other locales**: only the e-mail content (#23)
+  and the return-reason admin screens (#54) existed outside English, so the seven non-English
+  locales (pl, de, fr, it, es, sv, da) fell back to English across almost the entire customer
+  return/withdrawal flow, the PDF, the order-return state labels and the admin RMA screens - 131 of
+  180 message keys and 10 of 14 validator keys were missing per locale. Every catalogue is now at
+  full parity with `en`, and a `TranslationParityTest` guards against future drift. The new
+  non-English strings are machine-generated and should be reviewed by native speakers before the
+  1.3.0 stable release ([#59](https://github.com/mad-coders/sylius-rma-plugin/issues/59)).
+
+## [1.3.0-rc.6] - 2026-07-24
+
+Sixth release candidate for the 1.3 line, adding a consent field type and finishing the admin
+return-reason fixes on top of rc.5.
+
+### Added
+
+- **Return consent field type (external page or inline HTML)**: each return consent now has a field
+  type that controls how it is presented next to its checkbox. `external_page` (the default) keeps
+  the current behaviour - the checkbox shows the consent name and the required `slug` identifies a
+  separate page with the full text. `inline` drops the slug requirement and renders the consent's
+  `description` as HTML directly in the checkbox label, for a short consent with a link. The admin
+  form gains a field-type selector with a short instruction, and the field type shows on the consent
+  grid. Ships a Doctrine migration adding `field_type` with a default of `external_page`, so existing
+  consents are unchanged. The inline description is rendered as trusted admin-authored HTML (no
+  sanitizer) ([#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+
+### Fixed
+
+- **A return consent can be created in the admin with its code**: the consent code field was rendered
+  disabled on the create form for the same reason return reasons were (see #51) -
+  `AddCodeFormSubscriber` locks the field whenever `getCode()` is not null, and `OrderReturnConsent`
+  initialises its code to an empty string. The field is now added by the form type itself and only
+  locked once the consent has a code, so a consent is no longer silently created with an empty code
+  ([#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+- **A return reason no longer requires every locale to be filled in**: `ReturnReasonTranslationType`
+  attached `NotBlank` to `name` and `slug` on every translation entry, while Sylius's
+  `ResourceTranslationsType` marks only the default locale as required in the rendered form. In a
+  store with more than one defined locale the form therefore looked optional for the extra languages
+  but was rejected server-side, and the reason was never created. Only the default locale is
+  required now; the other locales stay optional and fall back to it
+  ([#54](https://github.com/mad-coders/sylius-rma-plugin/issues/54)).
+- **The return reason admin screens are translated**: the `madcoders_rma.admin.*` and admin-facing
+  `madcoders_rma.ui.*` keys used by the return reason index/new/edit pages, and their validator
+  messages, existed only in `en`, so every other locale fell back to English (or rendered raw keys
+  where the host application defines no `en` fallback). They are now provided in all eight locales
+  the plugin ships (en, pl, de, fr, it, es, sv, da). The translated `slug` field is also relabelled
+  from "Code" so it no longer collides with the resource's own code field, and the `"Not blank"`
+  placeholder validator messages are replaced with real sentences
+  ([#54](https://github.com/mad-coders/sylius-rma-plugin/issues/54)).
+
+## [1.3.0-rc.5] - 2026-07-23
+
+Fifth release candidate for the 1.3 line, a bug-fix pass over the customer return form and the
+admin return reasons on top of rc.4, plus one deliberate behaviour change to the withdrawal form.
+
+### Changed
+
+- **`require_additional_information` now governs the withdrawal form too**: the flag had no effect
+  there in either direction - the pre-shipment withdrawal form always collected the bank account
+  number and never offered the account holder name or bank name, because Symfony resolves form type
+  extensions by exact type name and `ReturnFormTypeExtension` listed only `ReturnFormType`
+  (`WithdrawalReturnFormType` extends it in PHP, but its *form* parent is the plain form type). The
+  extension now lists both types and `WithdrawalReturnFormType` no longer adds the bank account
+  field itself, so the withdrawal form collects exactly what the return form collects: nothing when
+  the flag is off (the default), all three refund fields when it is on. **Behavior change:** a shop
+  relying on every withdrawal carrying a bank account number must now set
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true`
+  ([#52](https://github.com/mad-coders/sylius-rma-plugin/pull/52)).
+
+### Fixed
+
+- **Return form no longer 500s when a quantity is blank or missing from the submission**: the
+  `returnQty` field was a `NumberType`, which reverse-transforms an empty or absent input to `null`.
+  The form maps data into the entity before validation runs, so that `null` reached the int-typed
+  `OrderReturnItem::setReturnQty()` and surfaced as an uncaught `TypeError` (HTTP 500) instead of a
+  form error - `NotBlank` never got a chance to run. This hit the second return on an order whose
+  items were already partly returned: a fully returned item has `maxQty = 0`, its row is hidden in
+  the form, and its quantity input may not reach the submitted payload. The field is now an
+  `IntegerType` (matching the `int` property and `integer` column, so a decimal input cannot reach
+  the setter either) with `empty_data` of `0`, so a blank or missing quantity means "nothing
+  returned for this item", consistent with how the summary, e-mail and PDF views already filter on
+  `returnQty > 0`. A `GreaterThanOrEqual(0)` constraint rejects negative quantities
+  ([#50](https://github.com/mad-coders/sylius-rma-plugin/pull/50)).
+- **A return reason can be created in the admin again**: the code field on the create form was
+  rendered disabled and required at the same time, so the form could not be completed. Sylius's
+  `AddCodeFormSubscriber` locks the field whenever `getCode()` is not null, but `OrderReturnReason`
+  initialises its code to an empty string, so the lock also applied to a brand new reason. The field
+  is now added by the form type itself and only locked once the reason actually has a code, keeping
+  the code immutable on the update form. Submitting the create form previously produced a reason
+  with an empty code ([#51](https://github.com/mad-coders/sylius-rma-plugin/pull/51)).
+- **Admin return reason form labels and messages are translated**: the form type asked for
+  `madcoders_rma.admin.reason.form.*` while the catalogue defines `madcoders_rma.admin.reasons.form.*`,
+  so every field label on the create/edit page rendered as a raw translation key. The code field's
+  `NotBlank` message also pointed at a key copied from another project
+  (`vsf_navi.admin.vsf_navi_item.form.code.not_blank`) and is now
+  `madcoders_rma.validator.code.not_blank`. Adds the missing page headers
+  (`madcoders_rma.ui.new_order_return_reason`, `madcoders_rma.ui.edit_order_return_reason`) and
+  fixes the misspelled `descriptin` key ([#51](https://github.com/mad-coders/sylius-rma-plugin/pull/51)).
 
 ## [1.3.0-rc.4] - 2026-07-05
 
@@ -220,7 +379,11 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...HEAD
+[1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
+[1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
+[1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5
+[1.3.0-rc.4]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.3...1.3.0-rc.4
 [1.3.0-rc.3]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.2...1.3.0-rc.3
 [1.3.0-rc.2]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.1...1.3.0-rc.2
 [1.3.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0-rc.1

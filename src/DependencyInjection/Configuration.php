@@ -56,8 +56,12 @@ final class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('return_form_pdf_enabled')
-                    ->info('When false (default), the return-form PDF is not generated: the confirmation email is sent without it and the print/download endpoints and links are disabled. Enable to generate PDFs (requires wkhtmltopdf).')
+                    ->info('When false (default), the return-form PDF is not generated: the confirmation email is sent without it and the print/download endpoints and links are disabled. Enable to generate PDFs (requires a reachable Gotenberg instance, see gotenberg_url).')
                     ->defaultFalse()
+                ->end()
+                ->scalarNode('gotenberg_url')
+                    ->info('Base URL of the Gotenberg instance used to render the return-form PDF (e.g. http://gotenberg:3000). Only used when return_form_pdf_enabled is true. Backed by the GOTENBERG_URL env var; accepts a URL or an %env(...)% placeholder (scalar rather than a plain default so env placeholders are allowed).')
+                    ->defaultValue('%env(GOTENBERG_URL)%')
                 ->end()
                 ->scalarNode('allow_unpaid_withdrawal')
                     ->info('When true (default), an unpaid not-yet-shipped order is offered the withdrawal flow: because it is not paid it is withdrawn instantly (the Sylius order is cancelled and the return resolves directly to the terminal "withdrawn" state with no admin step). When false, an unpaid order is not offered withdrawal at all. Paid orders are always withdrawable via admin approval regardless of this flag. Backed by the MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL env var; accepts a bool or an %env(bool:...)% placeholder (scalar rather than boolean node so env placeholders are allowed).')

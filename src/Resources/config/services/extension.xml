@@ -18,6 +18,14 @@ Architects of this package:
 
     <services>
 
+        <!--
+        The Twig extensions below declare their functions with the #[Twig\Attribute\AsTwigFunction]
+        PHP attribute. On this line (Symfony 7.3+) the "twig.attribute_extension" tag registers them
+        directly. The 1.x branches instead wrap each class in a Twig\Extension\AttributeExtension
+        service tagged "twig.extension", because Symfony 6.4's twig-bridge has no such tag - do not
+        carry that wrapper over in an upmerge, it would register every function twice.
+        -->
+
         <service id="madcoders.sylius_rma_plugin.rma_product_view_extension"
                  class="Madcoders\SyliusRmaPlugin\Twig\RmaProductViewExtension">
             <argument type="service" id="sylius.repository.product_variant" />

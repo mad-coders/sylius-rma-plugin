@@ -17,14 +17,16 @@ declare(strict_types=1);
 namespace Madcoders\SyliusRmaPlugin\Generator;
 
 use Exception;
-use Knp\Snappy\GeneratorInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Model\OrderReturnFormPdf;
 use Madcoders\SyliusRmaPlugin\Services\Configuration\ReturnAddressConfigurator;
+use Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGeneratorInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Mime\MimeTypes;
 use Twig\Environment;
+use Webmozart\Assert\Assert;
 
 final readonly class OrderReturnFormPdfFileGenerator implements OrderReturnFormPdfFileGeneratorInterface
 {
@@ -37,7 +39,7 @@ final readonly class OrderReturnFormPdfFileGenerator implements OrderReturnFormP
      */
     public function __construct(
         private Environment $templatingEngine,
-        private GeneratorInterface $pdfGenerator,
+        private PdfGeneratorInterface $pdfGenerator,
         private FileLocatorInterface $fileLocator,
         private string $template,
         private string $orderReturnFormLogoPath,
@@ -60,15 +62,31 @@ final readonly class OrderReturnFormPdfFileGenerator implements OrderReturnFormP
 
         $filename = str_replace('/', '_', $orderReturnForm->getReturnNumber()) . self::FILE_EXTENSION;
 
-        $pdf = $this->pdfGenerator->getOutputFromHtml(
+        $pdf = $this->pdfGenerator->generateFromHtml(
             $this->templatingEngine->render($this->template, [
                 'orderReturnForm' => $orderReturnForm,
                 'channel' => $orderReturnForm->getChannelCode(),
-                'orderReturnFormLogoPath' => $this->fileLocator->locate($this->orderReturnFormLogoPath),
+                'orderReturnFormLogoDataUri' => $this->buildLogoDataUri(),
                 'returnAddress' => $returnAddress,
             ]),
         );
 
         return new OrderReturnFormPdf($filename, $pdf);
+    }
+
+    /**
+     * Inlines the logo as a base64 `data:` URI rather than an absolute host filesystem path:
+     * Gotenberg renders the template in its own container, where that path does not resolve
+     * and is additionally blocked by Gotenberg's default file-access deny list.
+     */
+    private function buildLogoDataUri(): string
+    {
+        $path = $this->fileLocator->locate($this->orderReturnFormLogoPath);
+
+        $mimeType = MimeTypes::getDefault()->guessMimeType($path) ?? 'application/octet-stream';
+        $contents = file_get_contents($path);
+        Assert::string($contents);
+
+        return sprintf('data:%s;base64,%s', $mimeType, base64_encode($contents));
     }
 }

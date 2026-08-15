@@ -36,9 +36,10 @@ final class OrderReturnConsentFixture extends AbstractResourceFixture
     {
         $nodeBuilder = $resourceNode->children();
         $nodeBuilder->scalarNode('code')->cannotBeEmpty();
-        $nodeBuilder->scalarNode('slug')->cannotBeEmpty();
+        $nodeBuilder->scalarNode('slug');
         $nodeBuilder->scalarNode('name')->cannotBeEmpty();
         $nodeBuilder->scalarNode('description');
+        $nodeBuilder->scalarNode('field_type');
         $nodeBuilder->scalarNode('enabled');
     }
 }

@@ -26,3 +26,12 @@ parameters:
         - '/Parameter #1 \$configuration of method Symfony\\Component\\DependencyInjection\\Extension\\Extension::processConfiguration\(\) expects Symfony\\Component\\Config\\Definition\\ConfigurationInterface, Symfony\\Component\\Config\\Definition\\ConfigurationInterface\|null given\./'
         # Untyped iterables are accepted by the Sylius PHPStan standard.
         - identifier: missingType.iterableValue
+
+        # Sylius 1.13 made the Order/Channel/ProductVariant repository interfaces generic and
+        # PHPStan then demands the type parameters. On 1.12 those interfaces are not generic yet,
+        # so the very same annotations are reported as `generics.notGeneric`. The plugin supports
+        # both lines, so the annotations stay and the 1.12-only complaint is ignored here
+        # (`reportUnmatchedIgnoredErrors: false` keeps this entry quiet on 1.13).
+        -
+            identifier: generics.notGeneric
+            message: '#(class|interface) Sylius\\[A-Za-z\\]+\\(Order|Channel|ProductVariant)Repository(Interface)? is not generic\.$#'

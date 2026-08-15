@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'Feltet må ikke være tomt'
+        return_qty_less_or_equal: 'Maksimal returmængde er {{ compared_value }}.'
+        return_qty_greater_or_equal: 'Returmængden må ikke være negativ.'
+        order_number:
+            not_blank: 'Angiv et gyldigt ordrenummer'
+        bank_account_number:
+            not_blank: 'Indtast bankkontonummeret'
+            not_a_valid: 'Dette er ikke et gyldigt internationalt bankkontonummer (IBAN).'
+        account_holder_name:
+            not_blank: 'Indtast kontohaveren'
+        bank_name:
+            not_blank: 'Indtast bankens navn / BIC-SWIFT'
+        email:
+            not_a_valid: 'Indtast en gyldig e-mailadresse'
+        notes:
+            not_blank: 'Dette felt må ikke være tomt'
+        days_to_deadline_to_return:
+            not_blank: 'Indtast antal dage'
+        name:
+            not_blank: 'Indtast navnet'
+        slug:
+            not_blank: 'Indtast slug'
+        code:
+            not_blank: 'Indtast koden'

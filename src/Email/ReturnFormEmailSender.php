@@ -54,7 +54,7 @@ final readonly class ReturnFormEmailSender implements ReturnFormEmailSenderInter
         ];
 
         // The return-form PDF is opt-in (madcoders_rma.return_form_pdf_enabled). When disabled,
-        // the confirmation email is sent without the PDF attachment, so wkhtmltopdf is not required.
+        // the confirmation email is sent without the PDF attachment, so Gotenberg is not required.
         if (!$this->returnFormPdfEnabled) {
             $this->emailSender->send(Emails::RETURN_GENERATED, [$customerEmail], $emailData);
 

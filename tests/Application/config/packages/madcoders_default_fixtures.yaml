@@ -63,4 +63,10 @@ sylius_fixtures:
                                 slug: consent_2
                                 name: "Consent label xyz xyz xyz 2"
                                 enabled: true
+                            madcoders_rma_order_return_consent_inline:
+                                code: consent_inline
+                                name: "Inline consent"
+                                field_type: inline
+                                description: 'I accept the <a href="#">terms and conditions</a>'
+                                enabled: true
 

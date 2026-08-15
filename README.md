@@ -25,8 +25,8 @@ form and submit a return request from a delivered order.
 | | Version |
 | :--- | :--- |
 | PHP  | 8.2 |
-| Sylius | 1.12 |
-| Symfony | 6.4 |
+| Sylius | 2.2 |
+| Symfony | 6.4 - 7.x |
 
 ## Installation
 
@@ -63,9 +63,10 @@ optional; the defaults below match the plugin's out-of-the-box behaviour.
 
 | Setting | Env var | Type | Default | Effect |
 | :--- | :--- | :--- | :--- | :--- |
-| `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires wkhtmltopdf. See [below](#optional-enable-the-return-form-pdf). |
+| `return_form_pdf_enabled` | - | bool | `false` | Generate the return-form PDF (email attachment + print/download links); requires a reachable Gotenberg instance. See [below](#optional-enable-the-return-form-pdf). |
+| `gotenberg_url` | `GOTENBERG_URL` | string | `http://127.0.0.1:3000` | Base URL of the Gotenberg instance used to render the PDF. Only used when `return_form_pdf_enabled` is true. |
 | `allow_unpaid_withdrawal` | `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL` | bool | `true` | Offer instant withdrawal of unpaid, not-yet-shipped orders (cancels the Sylius order). When `false`, unpaid orders are not offered withdrawal. See [below](#optional-instant-withdrawal-of-unpaid-orders). |
-| `require_additional_information` | `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` | bool | `false` | Show and require the return form's "Additional information" section (bank account number, account holder name, bank name / BIC-SWIFT) for refund handling. When `false`, the section is hidden and not required. See [below](#optional-require-additional-information-on-the-return-form). |
+| `require_additional_information` | `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` | bool | `false` | Show and require the "Additional information" section (bank account number, account holder name, bank name / BIC-SWIFT) for refund handling on the return **and** withdrawal forms. When `false`, the section is hidden and not required. See [below](#optional-require-additional-information-on-the-return-form). |
 | `resources.*` | - | map | Sylius defaults | Standard Sylius ResourceBundle overrides (model / interface / controller / factory / repository / form) for the plugin's entities. |
 
 Store data managed in the **Sylius admin** rather than config files: the return address per channel,
@@ -74,15 +75,21 @@ return reasons (with optional time-since-shipment deadlines), and the consents a
 ### Optional: enable the return-form PDF
 
 PDF generation (the confirmation-email attachment and the print/download links) is **off by
-default** and requires a working [wkhtmltopdf](https://wkhtmltopdf.org/) binary. To enable it:
+default** and requires a reachable [Gotenberg](https://gotenberg.dev/) instance (a Docker-based
+HTTP API for document conversion, built on headless Chromium). To enable it:
 
 ```yaml
 # config/packages/madcoders_rma.yaml
 madcoders_rma:
     return_form_pdf_enabled: true
+    gotenberg_url: '%env(GOTENBERG_URL)%' # defaults to http://127.0.0.1:3000
 ```
 
-See [ADR 0011](docs/adr-log/0011-return-form-pdf-feature-flag.md).
+For local development, `docker-compose.yml` includes a `gotenberg` service - `make docker-up-all`
+starts it alongside MySQL and Chrome. In production, run Gotenberg as its own container/service
+and point `GOTENBERG_URL` at it.
+
+See [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
 
 ### Optional: instant withdrawal of unpaid orders
 
@@ -107,12 +114,29 @@ madcoders_rma:
 
 When disabled, an unpaid order is not offered the withdrawal flow at all.
 
+### Return consents: external page vs inline HTML
+
+Each return consent (managed in the Sylius admin) has a **field type** that controls how it is shown
+next to its checkbox on the return form:
+
+- **External page** (default): the checkbox shows the consent **name**, and the **slug** identifies a
+  separate page holding the full consent text (the **description**). The slug is required. This is the
+  behaviour every existing consent keeps - the field type is added with a migration that defaults to
+  `external_page`, so nothing changes until you opt a consent into `inline`.
+- **Inline HTML**: the **slug** is not required, and the **description** is rendered as HTML directly in
+  the checkbox label - use it for a short consent with a link, e.g.
+  `I accept the <a href="...">terms</a>`. The description is rendered as-is (the admin is trusted), so
+  only enter HTML you control.
+
+The admin create/edit consent form carries a short instruction describing both options.
+
 ### Optional: require additional information on the return form
 
 The return form can collect the bank details needed to handle a refund: **bank account number**
 (validated as an IBAN), **account holder name**, and **bank name / BIC-SWIFT**. This "Additional
 information" section is **off by default** - the section is hidden and none of its fields are
-required, so a customer can submit a return without bank details.
+required, so a customer can submit a return without bank details. The same applies to the
+withdrawal form, which the flag governs identically.
 
 Enable it with the `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` environment variable:
 
@@ -129,10 +153,14 @@ madcoders_rma:
     require_additional_information: true
 ```
 
-When enabled, the section is rendered on the return form and all three fields are required. The
-values are persisted on the `OrderReturn` and shown (when present) in the admin and shop account
-return views. This flag does not affect the withdrawal flow, which always collects the bank account
-number regardless of the setting.
+When enabled, the section is rendered on the return form and on the pre-shipment withdrawal form,
+and all three fields are required on both. The values are persisted on the `OrderReturn` and shown
+(when present) in the admin and shop account return views.
+
+> **Note for upgrades:** before 1.3.0-rc.5 the withdrawal form always collected the bank account
+> number regardless of this flag. It now follows the flag like the return form does, so with the
+> flag off (the default) a withdrawal no longer asks for bank details at all. If your refund process
+> depends on having an account number for every withdrawal, turn the flag on.
 
 ### Optional: mark products as non-returnable
 

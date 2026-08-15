@@ -1,0 +1,26 @@
+madcoders_rma:
+    validator:
+        not_blank: 'El campo no puede estar vacío'
+        return_qty_less_or_equal: 'La cantidad máxima de devolución es {{ compared_value }}.'
+        return_qty_greater_or_equal: 'La cantidad de devolución no puede ser negativa.'
+        order_number:
+            not_blank: 'Proporciona un número de pedido válido'
+        bank_account_number:
+            not_blank: 'Introduce el número de cuenta bancaria'
+            not_a_valid: 'Este no es un número de cuenta bancaria internacional (IBAN) válido.'
+        account_holder_name:
+            not_blank: 'Introduce el titular de la cuenta'
+        bank_name:
+            not_blank: 'Introduce el nombre del banco / BIC-SWIFT'
+        email:
+            not_a_valid: 'Introduce una dirección de correo electrónico válida'
+        notes:
+            not_blank: 'Este campo no puede estar vacío'
+        days_to_deadline_to_return:
+            not_blank: 'Introduce el número de días'
+        name:
+            not_blank: 'Introduce el nombre'
+        slug:
+            not_blank: 'Introduce el slug'
+        code:
+            not_blank: 'Introduce el código'
