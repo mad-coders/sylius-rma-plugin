@@ -30,31 +30,45 @@ form and submit a return request from a delivered order.
 
 ## Installation
 
-1. Add as dependency in `composer.json`
+These steps assume a Sylius 2.2 application created from the standard skeleton. The plugin ships
+no assets, so there is nothing to add to Webpack Encore or AssetMapper, and its Doctrine mappings
+and migrations are registered by the bundle itself.
+
+1. Require the package:
 ```shell
 composer require madcoders/sylius-rma-plugin
 ```
 
-2. Enable plugin in `config/bundles.php`:
+2. Register the bundle in `config/bundles.php`:
 ```php
 Madcoders\SyliusRmaPlugin\MadcodersSyliusRmaPlugin::class => ['all' => true],
-```    
+```
 
-3. Import required config in `config/packages/_sylius.yaml` file:
+3. Import the plugin configuration in `config/packages/_sylius.yaml`:
 ```yaml
 imports:
     - { resource: "@MadcodersSyliusRmaPlugin/Resources/config/config.yml" }
-```  
+```
+This one import pulls in the grids, the Twig hooks that render the plugin's admin and shop
+screens, the e-mail definitions, and the `return_status` workflow. There is no template-event
+wiring to add: Sylius 2 replaced `sylius_ui.events` with [Twig hooks](https://github.com/Sylius/TwigHooks),
+which the plugin configures itself.
 
-4. Import routes `config/routes.yaml` file:
+4. Import the routes in `config/routes.yaml`:
 ```yaml
 madcoders_sylius_rma_plugin:
     resource: "@MadcodersSyliusRmaPlugin/Resources/config/routing.yml"
 ```
-5. Run migrations:
+
+5. Run the migrations:
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
+
+That is the whole contract for the default feature set. Two optional features need extra work in
+the host application: the [return-form PDF](#optional-enable-the-return-form-pdf) additionally
+requires a reachable Gotenberg instance, and [marking products as non-returnable](#optional-mark-products-as-non-returnable)
+requires extending the Sylius `Product` entity.
 
 ## Configuration
 

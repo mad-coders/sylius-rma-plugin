@@ -9,6 +9,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [2.0.0-rc.1] - 2026-08-16
+
+First release candidate for the Sylius 2 line. See
+[UPGRADE.md](UPGRADE.md#upgrade-from-1x-to-20) for the integrator-facing migration: template
+events to Twig hooks, winzou to symfony/workflow, removed Sonata bridge events, and template
+override changes.
+
+### Added
+
+- **UPGRADE.md now documents the 1.x to 2.0 migration**: platform requirements, the full
+  Sylius 1 event to Sylius 2.2 Twig hook mapping table, the list of removed
+  `_legacySonataEvent` bridge events, the winzou callback to Symfony Workflow event mapping,
+  template override guidance, and the Gotenberg switch.
+- **README installation instructions target the Sylius 2.2 skeleton**, and state the
+  installation contract explicitly: the plugin ships no assets, and registers its own Doctrine
+  mappings, migrations and Twig hooks.
+
 ### Changed
 
 - **Sylius 2 line begins (2.0 branch)**: the plugin now targets `sylius/sylius ^2.2`
@@ -34,16 +51,23 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException` rather than leaking Symfony
   HttpClient's exception types. See
   [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md). Carried up from the 1.3 line.
-- `composer.json` now requires `twig/twig: ^3.21` explicitly. The Twig extensions on this line
-  already declare their functions with `#[Twig\Attribute\AsTwigFunction]` (applied during the
-  Sylius 2 / Twig 3 modernization) and are registered through the `twig.attribute_extension` tag,
-  but the attribute itself only arrived in twig/twig 3.21.0, so the floor is now declared rather
-  than relied on transitively. The 1.x branches wrap each class in a
-  `Twig\Extension\AttributeExtension` service instead, because Symfony 6.4's twig-bridge has no
-  such tag.
+- **BC break: the seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension`**; they declare their functions with the
+  `#[Twig\Attribute\AsTwigFunction]` attribute and are exposed to Twig through a
+  `Twig\Extension\AttributeExtension` wrapper. All 11 function names and signatures are
+  unchanged, and escaping is unaffected, so templates need no edits. Only code that extended,
+  decorated or type-hinted these classes as Twig extensions is affected. `composer.json` now
+  requires `twig/twig: ^3.21`, the release that introduced the attribute.
 
 ### Fixed
 
+- **The plugin's Twig functions no longer go silently unregistered on Symfony 6.4.** The Twig
+  extensions were registered with Symfony's `twig.attribute_extension` tag, which only exists
+  from symfony/twig-bundle 7.3. Sylius 2.2 permits Symfony 6.4, where an unknown tag is ignored
+  without error, so all 11 functions would be missing at render time on an otherwise supported
+  configuration. They are now wired explicitly through a `Twig\Extension\AttributeExtension`
+  wrapper tagged `twig.extension`, which works on both, and matches how the 1.x branches wire
+  the same classes.
 - **`composer audit` policy is honest again**: `composer.json` carried a
   `config.policy.advisories.ignore` block that is not part of Composer's schema and therefore
   never suppressed anything, alongside four advisory IDs inherited from the Sylius 1.12/1.13
@@ -379,7 +403,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/2.0.0-rc.1...HEAD
+[2.0.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...2.0.0-rc.1
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
 [1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
 [1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5

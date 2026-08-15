@@ -1,3 +1,135 @@
+# UPGRADE FROM `1.x` TO `2.0`
+
+This release moves the plugin to Sylius 2.2. It is a major upgrade: the template-event system,
+the state machine and the PDF renderer all changed. Read this whole section before upgrading a
+live shop.
+
+### Platform requirements
+
+- PHP `^8.2`
+- Sylius `^2.2`
+- Symfony `^6.4 || ^7.x`
+
+### Composer
+
+- `composer require madcoders/sylius-rma-plugin:^2.0`
+- `knplabs/knp-snappy-bundle` is no longer required by the plugin. If your application uses it
+  for its own PDFs, require it directly.
+- New requirements: `symfony/http-client`, `symfony/mime` and `twig/twig: ^3.21`.
+
+### Template events are replaced by Twig hooks
+
+Sylius 2 removed the `sylius_ui.events` / `sylius_template_event()` system. The plugin now
+configures [sylius/twig-hooks](https://github.com/Sylius/TwigHooks) in
+`src/Resources/config/twig_hooks.yaml`, imported by `Resources/config/config.yml`. If you added
+your own blocks to any of the plugin's events, move them to the corresponding hook.
+
+| Sylius 1 event (and block) | Sylius 2.2 hook |
+|---|---|
+| `sylius.admin.product.tab_details`, block `madcoders_rma_non_returnable` | `sylius_admin.product.create.content.form.sections.general` **and** `sylius_admin.product.update.content.form.sections.general`, hookable `madcoders_rma_non_returnable` |
+| `sylius.shop.layout.footer`, block `madcoders_rma_return_link` | `sylius_shop.base.footer.content`, hookable `madcoders_rma_return_link` |
+| `madcoders_rma.shop.account.order_return.show.subcontent`, blocks `header` / `summary` | `sylius_shop.madcoders_rma_account_return.show.content.main`, hookables `header` / `details` |
+| (no equivalent; the account index was a plain template) | `sylius_shop.madcoders_rma_account_return.index.content` and `.index.content.main` |
+| `madcoders_rma.admin.order_return.show.content`, blocks `header` / `breadcrumb` / `content` | `sylius_admin.madcoders_rma_order_return.show.content` (hookable `details`), with the title and actions under `sylius_admin.madcoders_rma_order_return.show.content.header.title_block` |
+| `madcoders_rma.admin.configuration.content` | `sylius_admin.madcoders_rma_configuration.show.content` (hookable `details`), title and actions under `sylius_admin.madcoders_rma_configuration.show.content.header.title_block` |
+
+Hook names are verifiable in the running application with `bin/console debug:twig-hooks`; prefer
+that over copying names from documentation.
+
+### Removed legacy Sonata bridge events
+
+The `@SyliusUi/Block/_legacySonataEvent.html.twig` bridges are gone along with the events they
+re-dispatched. Nothing listens to these any more, and no replacement event is dispatched:
+
+- `madcoders_rma.shop.account.order_return.show.after_content_header`
+- `madcoders_rma.shop.account.order_return.show.after_summary`
+- `sylius.admin.order_return.show.before_header`
+- `sylius.admin.order_return.show.after_header`
+- `sylius.admin.order_return.show.after_breadcrumb`
+- `sylius.admin.order.show.after_content`
+- `sylius.admin.configuration.before_header`
+- `sylius.admin.configuration.after_header`
+- `sylius.admin.configuration.after_breadcrumb`
+- `sylius.admin.configuration.after_content`
+
+If you rendered anything through these, re-attach it as a hookable on the corresponding hook in
+the table above.
+
+### State machine: winzou is replaced by symfony/workflow
+
+The `return_status` graph moved from `winzou/state-machine` to `symfony/workflow`, behind Sylius
+2's state-machine abstraction. **The graph name, places and transition names are unchanged**, so
+`OrderReturnInterface::GRAPH`, the `TRANSITION_*` constants and the `_sylius.state_machine` routes
+keep working.
+
+What changes for integrator code is how you obtain and drive the machine:
+
+```php
+// 1.x
+use SM\Factory\FactoryInterface;
+
+$sm = $this->stateMachineFactory->get($orderReturn, OrderReturnInterface::GRAPH);
+if ($sm->can(OrderReturnInterface::TRANSITION_COMPLETE)) {
+    $sm->apply(OrderReturnInterface::TRANSITION_COMPLETE);
+}
+
+// 2.0
+use Sylius\Abstraction\StateMachine\StateMachineInterface;
+
+if ($this->stateMachine->can($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_COMPLETE)) {
+    $this->stateMachine->apply($orderReturn, OrderReturnInterface::GRAPH, OrderReturnInterface::TRANSITION_COMPLETE);
+}
+```
+
+Inject `Sylius\Abstraction\StateMachine\StateMachineInterface` where you injected
+`SM\Factory\FactoryInterface`.
+
+The `winzou_state_machine.callbacks` the plugin used to declare are now Symfony Workflow event
+listeners in `Workflow\OrderReturnWorkflowSubscriber`. If you registered your own callbacks
+against the `return_status` graph, re-register them as listeners:
+
+| 1.x winzou callback on transition | 2.0 event |
+|---|---|
+| `cancel` | `workflow.return_status.completed.cancel` |
+| `complete` | `workflow.return_status.completed.complete` |
+| `request_withdrawal` | `workflow.return_status.completed.request_withdrawal` |
+| `withdraw` | `workflow.return_status.completed.withdraw` |
+| `fallback_to_return` | `workflow.return_status.completed.fallback_to_return` |
+
+Note that both withdrawal transitions (instant from `draft`, and admin-approved from
+`withdrawal_request`) dispatch the same `withdraw` event; distinguish them by the transition's
+from-place, as the plugin's own subscriber does.
+
+### Template overrides
+
+Admin templates were rewritten for Sylius 2's Bootstrap/Tabler admin, and the shop account
+screens now compose Sylius' own `@SyliusShop/account/common/...` templates through hooks. Template
+paths under `@MadcodersSyliusRmaPlugin/` are unchanged in name, but their markup is not. Any
+override you carried from 1.x will need re-checking against the new markup, and overrides that
+targeted SemanticUI classes will need rewriting.
+
+### Return-form PDF: wkhtmltopdf is replaced by Gotenberg
+
+PDF generation no longer shells out to a local `wkhtmltopdf` binary. It POSTs the rendered HTML to
+a [Gotenberg](https://gotenberg.dev/) instance over HTTP.
+
+- Set `madcoders_rma.gotenberg_url` (or the `GOTENBERG_URL` env var, default
+  `http://127.0.0.1:3000`) to a reachable Gotenberg instance.
+- The feature remains opt-in via `madcoders_rma.return_form_pdf_enabled`, still `false` by
+  default. If you never enabled it, there is nothing to do.
+- To swap the renderer, decorate or replace
+  `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGeneratorInterface`. Failures now raise
+  `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`.
+
+### Twig extensions no longer implement `ExtensionInterface`
+
+The seven `Madcoders\SyliusRmaPlugin\Twig\*` classes declare their functions with the
+`#[Twig\Attribute\AsTwigFunction]` attribute instead of extending `Twig\Extension\AbstractExtension`.
+All 11 function names and signatures are unchanged, so templates need no edits. Only code that
+extended, decorated or type-hinted these classes as Twig extensions is affected.
+
+---
+
 # UPGRADE TO Sylius 1.12 (PHP 8.2 / Symfony 6.4)
 
 This release moves the plugin to Sylius 1.12 on PHP 8.2 and Symfony 6.4.
