@@ -55,6 +55,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   optional and not saved), and a slug already used by another return reason in the same locale is
   reported on the slug field. New validator key `madcoders_rma.validator.slug.unique` in every
   shipped locale.
+- **A second return consent without a slug no longer crashes the admin with an HTTP 500**
+  ([#69](https://github.com/mad-coders/sylius-rma-plugin/issues/69)): an inline consent does not
+  need a slug, but it was stored as an empty string, so the second one in a locale (or any consent
+  reusing a slug) hit the `(locale, slug)` unique index (`slug_uidx`) on
+  `madcoders_rma_order_return_consent_translation`. The `slug` column is now nullable and a missing
+  slug is stored as `NULL`, which the index ignores, so any number of consents can leave it empty;
+  a slug already used by another consent in the same locale is reported on the slug field.
+  **Run the new migration** (`Version20260914000000`): it makes the column nullable and converts
+  existing empty slugs to `NULL`. `OrderReturnConsentTranslation::getSlug()` (and
+  `OrderReturnConsent::getSlug()`) now return `null` instead of `''` for a consent without a slug.
 
 ## [1.3.0-rc.7] - 2026-08-03
 

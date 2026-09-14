@@ -151,6 +151,17 @@ class ReturnConsentContext implements Context
     }
 
     /**
+     * @Then I should see the validation message :message
+     */
+    public function iShouldSeeTheValidationMessage(string $message): void
+    {
+        Assert::true(
+            $this->returnConsentCreatePage->hasValidationMessage($message),
+            sprintf('Expected to see the validation message "%s", but it was not found on the page.', $message),
+        );
+    }
+
+    /**
      * @When I click submit button
      */
     public function iClickSubmitButton()
