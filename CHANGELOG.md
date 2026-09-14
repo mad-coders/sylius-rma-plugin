@@ -44,6 +44,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   `policy.advisories.ignore` entries). A future advisory in any other dependency now still stops
   CI, rather than resolving silently.
 
+### Fixed
+
+- **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
+  with an HTTP 500** ([#66](https://github.com/mad-coders/sylius-rma-plugin/issues/66)): only the
+  default locale's slug was validated, so a translation filled in for another locale was saved
+  with an empty slug, and the next empty (or any already used) slug in that locale hit the
+  `(locale, slug)` unique index (`slug_uidx`) as an unhandled `UniqueConstraintViolationException`.
+  Every translation that gets saved now requires a slug (a locale left completely empty is still
+  optional and not saved), and a slug already used by another return reason in the same locale is
+  reported on the slug field. New validator key `madcoders_rma.validator.slug.unique` in every
+  shipped locale.
+
 ## [1.3.0-rc.7] - 2026-08-03
 
 Seventh release candidate for the 1.3 line, adding Sylius 1.13 support and bringing every shipped

@@ -22,5 +22,6 @@ madcoders_rma:
             not_blank: 'Introduce el nombre'
         slug:
             not_blank: 'Introduce el slug'
+            unique: 'Este slug ya está en uso en este idioma'
         code:
             not_blank: 'Introduce el código'

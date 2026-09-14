@@ -29,4 +29,9 @@ class CreatePage extends BaseCreatePage implements CreatePageInterface
 
         return null !== $code && !$code->hasAttribute('disabled') && !$code->hasAttribute('readonly');
     }
+
+    public function hasValidationMessage(string $message): bool
+    {
+        return str_contains($this->getDocument()->getText(), $message);
+    }
 }

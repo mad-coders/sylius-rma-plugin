@@ -22,6 +22,21 @@ Feature: Editing a return reason
         Then I should be notified that it has been successfully edited
 
     @ui
+    Scenario: Adding a translation with an empty slug shows a validation error instead of crashing
+        Given the store has locale "pl_PL"
+        And there are return reasons:
+          | code         | name                     | deadline_to_return |
+          | reason_360   | Reason 360               | 360                |
+          | reason_720   | Reason 720               | 720                |
+        And the return reason "reason_360" has a "pl_PL" translation named "Powód 360" without a slug
+        And I am on return reason edit page for reason code "reason_720"
+        When I change the "pl_PL" translation of the edit form with following data:
+            | field               | value          |
+            | name                | Powód 720      |
+        And I click Save changes button
+        Then I should see the validation message "Please enter the slug"
+
+    @ui
     Scenario: The code cannot be edited once the reason exists
         Given there are return reasons:
           | code         | name                     | deadline_to_return |
