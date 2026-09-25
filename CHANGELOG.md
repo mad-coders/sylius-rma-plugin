@@ -9,41 +9,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
-### Changed
-
-- **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
-  is removed (archived upstream, unpatched CVEs including SSRF/local-file-disclosure). PDF
-  generation now POSTs the rendered HTML to a [Gotenberg](https://gotenberg.dev/) instance over
-  HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
-  New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
-  `docker-compose.yml` gained a `gotenberg` service for local development. The
-  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. The
-  return-form logo is now inlined as a base64 `data:` URI instead of an absolute host filesystem
-  path, since Gotenberg renders in its own container and cannot resolve (or is denied) that path.
-  The Gotenberg request now carries an explicit timeout/max-duration and the response is checked
-  for a valid PDF header; failures raise the new `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`
-  rather than leaking Symfony HttpClient's exception types. See
-  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
-- **BC break: seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
-  `Twig\Extension\AbstractExtension` or implement `getFunctions()`**; they are now plain services
-  exposing their functions via the `#[Twig\Attribute\AsTwigFunction]` PHP attribute, wired through
-  `Twig\Extension\AttributeExtension` (see `src/Resources/config/services/extension.xml`). All 12
-  Twig function names are unchanged, and neither registration path sets `is_safe`, so escaping is
-  unaffected. This is a BC break for anyone who directly extended, decorated, or type-hinted
-  against `AbstractExtension`/`ExtensionInterface` for one of these classes. It also raises the
-  plugin's effective `twig/twig` floor: `composer.json` now requires `twig/twig: ^3.21` explicitly,
-  since `Twig\Attribute\AsTwigFunction` and `Twig\Extension\AttributeExtension` were both added in
-  that release; an app with an existing lock on an older Twig, previously satisfying
-  `sylius/sylius`'s transitive `^2.12 || ^3.3` floor, would otherwise fatal
-  (`Class "Twig\Extension\AttributeExtension" not found`) building the `twig` service.
-- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): replaced
-  `composer.json`'s blanket `audit.block-insecure: false` with specific advisory IDs added to the
-  existing `audit.ignore` list, covering `guzzlehttp/guzzle` 6.5.x and `guzzlehttp/psr7` 1.x
-  (both required transitively by `sylius/sylius` on the 1.12 line, EOL upstream with no fixed
-  release on that line, already an accepted risk per the pre-existing `audit.ignore` /
-  `policy.advisories.ignore` entries). A future advisory in any other dependency now still stops
-  CI, rather than resolving silently.
-
 ### Fixed
 
 - **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
@@ -65,6 +30,92 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   **Run the new migration** (`Version20260914000000`): it makes the column nullable and converts
   existing empty slugs to `NULL`. `OrderReturnConsentTranslation::getSlug()` (and
   `OrderReturnConsent::getSlug()`) now return `null` instead of `''` for a consent without a slug.
+
+## [1.3.0] - 2026-09-25
+
+First stable release of the 1.3 line. It contains everything shipped in `1.3.0-rc.1` through
+`1.3.0-rc.8` (listed in detail in the release candidate sections below) and no further code
+changes. Upgrading from 1.2.x: see [UPGRADE.md](UPGRADE.md#upgrade-from-12x-to-130).
+
+### Highlights
+
+- **Pre-shipment withdrawal** (EU right of withdrawal) with instant withdrawal of unpaid orders,
+  admin-resolved withdrawal requests for paid orders and partial item selection (rc.1,
+  [#7](https://github.com/mad-coders/sylius-rma-plugin/issues/7)).
+- **Non-returnable products**, configurable refund bank details on the return form and a pluggable
+  return-number format (rc.2).
+- **Self-contained, branded, localized RMA e-mails** with overridable header/footer partials
+  (rc.3, [#23](https://github.com/mad-coders/sylius-rma-plugin/issues/23)).
+- **Security hardening of the return and withdrawal flows**: auth-code brute-force lockout and rate
+  limiting, the return document sent only to the order's customer, and an authorized withdrawal
+  success page (rc.4, [#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
+  [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
+  [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+- **Return consent field type** (external page or inline HTML) (rc.6,
+  [#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+- **Sylius 1.13 support** (`sylius/sylius: >=1.12,<1.14`) and full translation parity across the
+  eight shipped locales (rc.7, [#59](https://github.com/mad-coders/sylius-rma-plugin/issues/59)).
+- **Return-form PDF rendered by Gotenberg** instead of wkhtmltopdf (rc.8,
+  [#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
+- Many admin and return-form bug fixes (rc.1, rc.5, rc.6).
+
+### Upgrade notes
+
+- **Four Doctrine migrations** ship in 1.3.0 (`Version20260612000000`, `Version20260615000000`,
+  `Version20260621000000`, `Version20260723000000`); run `doctrine:migrations:migrate`. The first
+  renames the stored `cancellation_request` return status to `withdrawal_request`.
+- **Gotenberg is required to render the return-form PDF** (`return_form_pdf_enabled: true`), via
+  `gotenberg_url` / `GOTENBERG_URL`; `knplabs/knp-snappy-bundle` is no longer a dependency (rc.8).
+- **BC break:** the seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension`, and `twig/twig: ^3.21` is now required (rc.8).
+- **Behaviour change:** the withdrawal form collects refund bank details only when
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true` (rc.5).
+- The auth-code endpoints are rate limited by default (`MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS`, backed
+  by `cache.app`) and respond with HTTP 429 when the limit is exceeded (rc.4).
+- The RMA e-mail templates were rewritten; re-check any application overrides of them (rc.3).
+
+## [1.3.0-rc.8] - 2026-09-25
+
+Eighth release candidate for the 1.3 line, replacing wkhtmltopdf with Gotenberg for the
+return-form PDF on top of rc.7. Rendering the PDF now needs a reachable Gotenberg instance
+(`GOTENBERG_URL`), and the Twig extension classes changed shape (BC break, see below). No
+Doctrine migration ships in rc.8.
+
+### Changed
+
+- **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
+  is removed (archived upstream, unpatched CVEs including SSRF/local-file-disclosure). PDF
+  generation now POSTs the rendered HTML to a [Gotenberg](https://gotenberg.dev/) instance over
+  HTTP (`symfony/http-client` + `symfony/mime`, no new client library dependency for consumers).
+  New `gotenberg_url` config key / `GOTENBERG_URL` env var (default `http://127.0.0.1:3000`);
+  `docker-compose.yml` gained a `gotenberg` service for local development. The
+  `return_form_pdf_enabled` feature flag behaviour and PDF content/layout are unchanged. The
+  return-form logo is now inlined as a base64 `data:` URI instead of an absolute host filesystem
+  path, since Gotenberg renders in its own container and cannot resolve (or is denied) that path.
+  The Gotenberg request now carries an explicit timeout/max-duration and the response is checked
+  for a valid PDF header; failures raise the new `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`
+  rather than leaking Symfony HttpClient's exception types. See
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md)
+  ([#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
+- **BC break: seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension` or implement `getFunctions()`**; they are now plain services
+  exposing their functions via the `#[Twig\Attribute\AsTwigFunction]` PHP attribute, wired through
+  `Twig\Extension\AttributeExtension` (see `src/Resources/config/services/extension.xml`). All 12
+  Twig function names are unchanged, and neither registration path sets `is_safe`, so escaping is
+  unaffected. This is a BC break for anyone who directly extended, decorated, or type-hinted
+  against `AbstractExtension`/`ExtensionInterface` for one of these classes. It also raises the
+  plugin's effective `twig/twig` floor: `composer.json` now requires `twig/twig: ^3.21` explicitly,
+  since `Twig\Attribute\AsTwigFunction` and `Twig\Extension\AttributeExtension` were both added in
+  that release; an app with an existing lock on an older Twig, previously satisfying
+  `sylius/sylius`'s transitive `^2.12 || ^3.3` floor, would otherwise fatal
+  (`Class "Twig\Extension\AttributeExtension" not found`) building the `twig` service.
+- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): replaced
+  `composer.json`'s blanket `audit.block-insecure: false` with specific advisory IDs added to the
+  existing `audit.ignore` list, covering `guzzlehttp/guzzle` 6.5.x and `guzzlehttp/psr7` 1.x
+  (both required transitively by `sylius/sylius` on the 1.12 line, EOL upstream with no fixed
+  release on that line, already an accepted risk per the pre-existing `audit.ignore` /
+  `policy.advisories.ignore` entries). A future advisory in any other dependency now still stops
+  CI, rather than resolving silently.
 
 ## [1.3.0-rc.7] - 2026-08-03
 
@@ -388,7 +439,9 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
+[1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
 [1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
 [1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5
