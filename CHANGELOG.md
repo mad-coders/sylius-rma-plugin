@@ -9,6 +9,49 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-25
+
+First stable release of the 1.3 line. It contains everything shipped in `1.3.0-rc.1` through
+`1.3.0-rc.8` (listed in detail in the release candidate sections below) and no further code
+changes. Upgrading from 1.2.x: see [UPGRADE.md](UPGRADE.md#upgrade-from-12x-to-130).
+
+### Highlights
+
+- **Pre-shipment withdrawal** (EU right of withdrawal) with instant withdrawal of unpaid orders,
+  admin-resolved withdrawal requests for paid orders and partial item selection (rc.1,
+  [#7](https://github.com/mad-coders/sylius-rma-plugin/issues/7)).
+- **Non-returnable products**, configurable refund bank details on the return form and a pluggable
+  return-number format (rc.2).
+- **Self-contained, branded, localized RMA e-mails** with overridable header/footer partials
+  (rc.3, [#23](https://github.com/mad-coders/sylius-rma-plugin/issues/23)).
+- **Security hardening of the return and withdrawal flows**: auth-code brute-force lockout and rate
+  limiting, the return document sent only to the order's customer, and an authorized withdrawal
+  success page (rc.4, [#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
+  [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
+  [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+- **Return consent field type** (external page or inline HTML) (rc.6,
+  [#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+- **Sylius 1.13 support** (`sylius/sylius: >=1.12,<1.14`) and full translation parity across the
+  eight shipped locales (rc.7, [#59](https://github.com/mad-coders/sylius-rma-plugin/issues/59)).
+- **Return-form PDF rendered by Gotenberg** instead of wkhtmltopdf (rc.8,
+  [#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
+- Many admin and return-form bug fixes (rc.1, rc.5, rc.6).
+
+### Upgrade notes
+
+- **Four Doctrine migrations** ship in 1.3.0 (`Version20260612000000`, `Version20260615000000`,
+  `Version20260621000000`, `Version20260723000000`); run `doctrine:migrations:migrate`. The first
+  renames the stored `cancellation_request` return status to `withdrawal_request`.
+- **Gotenberg is required to render the return-form PDF** (`return_form_pdf_enabled: true`), via
+  `gotenberg_url` / `GOTENBERG_URL`; `knplabs/knp-snappy-bundle` is no longer a dependency (rc.8).
+- **BC break:** the seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension`, and `twig/twig: ^3.21` is now required (rc.8).
+- **Behaviour change:** the withdrawal form collects refund bank details only when
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true` (rc.5).
+- The auth-code endpoints are rate limited by default (`MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS`, backed
+  by `cache.app`) and respond with HTTP 429 when the limit is exceeded (rc.4).
+- The RMA e-mail templates were rewritten; re-check any application overrides of them (rc.3).
+
 ## [1.3.0-rc.8] - 2026-09-25
 
 Eighth release candidate for the 1.3 line, replacing wkhtmltopdf with Gotenberg for the
@@ -374,7 +417,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.8...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
 [1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
 [1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
