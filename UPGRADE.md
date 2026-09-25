@@ -1,3 +1,93 @@
+# UPGRADE FROM 1.2.x TO 1.3.0
+
+This section covers upgrading the plugin itself from `1.2.x` to `1.3.0`. See
+[CHANGELOG.md](CHANGELOG.md) for the full list of changes.
+
+### Platform requirements
+
+- PHP `^8.2`
+- Sylius `>=1.12,<1.14` (Sylius 1.13 is now supported)
+- `twig/twig` `^3.21` (new explicit requirement)
+
+### Composer
+
+- `composer require madcoders/sylius-rma-plugin:^1.3`
+- `knplabs/knp-snappy-bundle` is no longer required by the plugin. If your application does not
+  use it elsewhere and it was registered in your app (for example by its Flex recipe: an entry in
+  `config/bundles.php` and `config/packages/knp_snappy.yaml`), remove those so the kernel does not
+  reference a bundle that is no longer installed.
+
+### Database
+
+Run the plugin migrations:
+
+```bash
+php bin/console doctrine:migrations:migrate
+```
+
+Four migrations ship in 1.3.0:
+
+- `Version20260612000000` renames the stored return status `cancellation_request` to
+  `withdrawal_request`. Update any application code, templates or state machine callbacks that
+  reference `cancellation_request`.
+- `Version20260615000000` adds `non_returnable` to `sylius_product` (default `0`). To use the
+  feature, make your `Product` implement `NonReturnableProductInterface` and use
+  `NonReturnableProductTrait` (see README).
+- `Version20260621000000` adds `account_holder_name` and `bank_name` to
+  `madcoders_rma_order_return`.
+- `Version20260723000000` adds `field_type` to `madcoders_rma_order_return_consent` (default
+  `external_page`, so existing consents are unchanged).
+
+### Return-form PDF: wkhtmltopdf replaced by Gotenberg
+
+If you enable `return_form_pdf_enabled`, the PDF is now rendered by a
+[Gotenberg](https://gotenberg.dev/) instance over HTTP instead of a local wkhtmltopdf binary:
+
+- run Gotenberg as its own service/container and set `GOTENBERG_URL` (or the `gotenberg_url` config
+  key) to its base URL; the default is `http://127.0.0.1:3000`;
+- the wkhtmltopdf binary is no longer used;
+- rendering failures now raise `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`.
+
+See [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
+
+### Twig extensions (BC break)
+
+The seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+`Twig\Extension\AbstractExtension` or implement `getFunctions()`; they expose their functions via
+`#[Twig\Attribute\AsTwigFunction]`. Twig function names are unchanged, so templates need no change.
+Code that extends, decorates or type-hints these classes as `AbstractExtension` /
+`ExtensionInterface` must be updated.
+
+### Behaviour changes
+
+- **Withdrawal form refund details**: the withdrawal form now follows
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION` like the return form. It no longer always asks for
+  a bank account number; set the variable to `true` to collect the account number, account holder
+  name and bank name on both forms.
+- **Auth-code rate limiting**: the code request and verification endpoints are rate limited per
+  client IP and order number (backed by `cache.app`) and return HTTP 429 with `Retry-After` when the
+  limit is exceeded. Set `MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS=false` to disable it, for example when
+  the application already has its own rate limiter.
+- **Return-form e-mail recipient**: the return document is always sent to the order's customer; the
+  e-mail address submitted on the return form is no longer used as the recipient.
+- **Pre-shipment withdrawal**: not-yet-shipped orders are offered withdrawal instead of a return.
+  Unpaid orders are withdrawn instantly (the Sylius order is cancelled); set
+  `MADCODERS_RMA_ALLOW_UNPAID_WITHDRAWAL=false` to disable that.
+
+### E-mail templates
+
+All RMA e-mail templates were rewritten and now render through shared `_header` / `_footer` /
+`_returnSummary` partials. If you override any plugin e-mail template under
+`templates/bundles/MadcodersSyliusRmaPlugin/Email/`, re-check your overrides; for branding, prefer
+overriding only `_header.html.twig` and `_footer.html.twig`.
+
+### Translations
+
+Every shipped locale (en, pl, de, fr, it, es, sv, da) now has full translation parity. If you
+override plugin translation keys in your application, check them against the new catalogues.
+
+---
+
 # UPGRADE TO Sylius 1.12 (PHP 8.2 / Symfony 6.4)
 
 This release moves the plugin to Sylius 1.12 on PHP 8.2 and Symfony 6.4.
@@ -41,6 +131,12 @@ Run `(cd tests/Application && APP_ENV=test bin/console doctrine:schema:create)` 
 `doctrine:schema:update --force`) to (re)create the test application's database schema.
 
 ---
+
+# Legacy Sylius PluginSkeleton upgrade notes
+
+> The sections below are inherited from the Sylius PluginSkeleton and describe upgrading the
+> **Sylius** version of the test application (Sylius 1.2 to 1.4). They do not refer to versions
+> of this plugin; for upgrading the plugin see [UPGRADE FROM 1.2.x TO 1.3.0](#upgrade-from-12x-to-130).
 
 # UPGRADE FROM `v1.3.X` TO `v1.4.0`
 
