@@ -9,6 +9,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.0-rc.8] - 2026-09-25
+
+Eighth release candidate for the 1.3 line, replacing wkhtmltopdf with Gotenberg for the
+return-form PDF on top of rc.7. Rendering the PDF now needs a reachable Gotenberg instance
+(`GOTENBERG_URL`), and the Twig extension classes changed shape (BC break, see below). No
+Doctrine migration ships in rc.8.
+
 ### Changed
 
 - **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
@@ -23,7 +30,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   The Gotenberg request now carries an explicit timeout/max-duration and the response is checked
   for a valid PDF header; failures raise the new `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`
   rather than leaking Symfony HttpClient's exception types. See
-  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md)
+  ([#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
 - **BC break: seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
   `Twig\Extension\AbstractExtension` or implement `getFunctions()`**; they are now plain services
   exposing their functions via the `#[Twig\Attribute\AsTwigFunction]` PHP attribute, wired through
@@ -366,7 +374,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.8...HEAD
+[1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
 [1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
 [1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5
