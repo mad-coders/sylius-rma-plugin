@@ -9,6 +9,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Fixed
+
+- **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
+  with an HTTP 500** ([#66](https://github.com/mad-coders/sylius-rma-plugin/issues/66)): only the
+  default locale's slug was validated, so a translation filled in for another locale was saved
+  with an empty slug, and the next empty (or any already used) slug in that locale hit the
+  `(locale, slug)` unique index (`slug_uidx`) as an unhandled `UniqueConstraintViolationException`.
+  Every translation that gets saved now requires a slug (a locale left completely empty is still
+  optional and not saved), and a slug already used by another return reason in the same locale is
+  reported on the slug field. New validator key `madcoders_rma.validator.slug.unique` in every
+  shipped locale.
+
 ## [1.3.0] - 2026-09-25
 
 First stable release of the 1.3 line. It contains everything shipped in `1.3.0-rc.1` through
