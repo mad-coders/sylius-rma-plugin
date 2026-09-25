@@ -36,4 +36,9 @@ class CreatePage extends BaseCreatePage implements CreatePageInterface
 
         return null !== $slug && $slug->hasAttribute('required');
     }
+
+    public function hasValidationMessage(string $message): bool
+    {
+        return str_contains($this->getDocument()->getText(), $message);
+    }
 }
