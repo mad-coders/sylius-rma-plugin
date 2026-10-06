@@ -25,4 +25,6 @@ interface CreatePageInterface extends BaseCreatePageInterface
     public function choosesFormElement(string $name, string $element): void;
 
     public function isCodeFieldEditable(): bool;
+
+    public function hasValidationMessage(string $message): bool;
 }

@@ -55,6 +55,39 @@ Feature: Adding new return reason
       Then a return reason with code "code-ghi" should not exist
 
     @ui
+    Scenario: A translation filled in for another locale also requires a slug
+      Given the store has locale "pl_PL"
+      And I want to create a new return reason
+      When I fill create form with following data:
+        | field               | type              | value                               |
+        | code                | field             | code-jkl                            |
+        | slug                | translations      | slug-jkl                            |
+        | name                | translations      | Reason JKL                          |
+        | deadlineToReturn    | field             | 16                                  |
+      And I fill the "pl_PL" translation of the create form with following data:
+        | field               | value                               |
+        | name                | Powód JKL                           |
+      And I click submit button
+      Then I should see the validation message "Please enter the slug"
+      And a return reason with code "code-jkl" should not exist
+
+    @ui
+    Scenario: The slug has to be unique within a locale
+      Given there are return reasons:
+        | code         | name                     | deadline_to_return |
+        | reason_360   | Reason 360               | 360                |
+      And I want to create a new return reason
+      When I fill create form with following data:
+        | field               | type              | value                               |
+        | code                | field             | code-mno                            |
+        | slug                | translations      | reason-360                          |
+        | name                | translations      | Reason MNO                          |
+        | deadlineToReturn    | field             | 16                                  |
+      And I click submit button
+      Then I should see the validation message "This slug is already used in this locale"
+      And a return reason with code "code-mno" should not exist
+
+    @ui
     Scenario: The code is editable while creating a reason
       Given I want to create a new return reason
       Then the code field should be editable
