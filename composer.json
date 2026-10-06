@@ -31,7 +31,7 @@
     "require-dev": {
         "behat/behat": "^3.7",
         "dmore/behat-chrome-extension": "^1.3",
-        "dmore/chrome-mink-driver": "^2.7",
+        "dmore/chrome-mink-driver": "^2.7 <2.11",
         "friends-of-behat/mink": "^1.8",
         "friends-of-behat/mink-browserkit-driver": "^1.4",
         "friends-of-behat/mink-debug-extension": "^2.0",
@@ -85,13 +85,13 @@
                 "PKSA-vznr-tgp9-fd7d",
                 "PKSA-7qs6-zvnz-h66r",
                 "PKSA-gm5x-j3mz-71n9",
-                "PKSA-jj5t-2zs1-dcfm",
-                "PKSA-w9tt-7782-78jx"
+                "PKSA-jj5t-2zs1-dcfm"
             ]
         },
         "policy": {
             "advisories": {
-                "ignore": ["api-platform/core", "enshrined/svg-sanitize", "guzzlehttp/guzzle", "guzzlehttp/psr7"]
+                "ignore": ["api-platform/core", "enshrined/svg-sanitize", "guzzlehttp/guzzle", "guzzlehttp/psr7"],
+                "ignore-id": ["PKSA-w9tt-7782-78jx"]
             }
         }
     },
