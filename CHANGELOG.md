@@ -36,6 +36,16 @@ Doctrine migration (`Version20260914000000`).
   existing empty slugs to `NULL`. `OrderReturnConsentTranslation::getSlug()` (and
   `OrderReturnConsent::getSlug()`) now return `null` instead of `''` for a consent without a slug.
 
+### Changed
+
+- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): added
+  `PKSA-w9tt-7782-78jx` (CVE-2026-102601, `league/flysystem <=3.35.2`) to `composer.json`'s
+  `audit.ignore`. Composer blocks every affected Flysystem release, and the fixed ones (3.35.3+)
+  conflict with the `guzzlehttp/guzzle ^6.5` that Sylius 1.12 requires, so the Sylius 1.12 CI
+  leg could not install at all. The plugin does not use Flysystem; it comes in through Sylius.
+  Applications on Sylius 1.12 face the same conflict and must make their own decision about this
+  advisory. Sylius 1.13 (Guzzle 7) installs the fixed Flysystem.
+
 ## [1.3.0] - 2026-09-25
 
 First stable release of the 1.3 line. It contains everything shipped in `1.3.0-rc.1` through
