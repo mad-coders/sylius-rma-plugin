@@ -29,4 +29,6 @@ interface CreatePageInterface extends BaseCreatePageInterface
     public function selectFieldType(string $value): void;
 
     public function isSlugFieldMarkedRequired(string $localeCode): bool;
+
+    public function hasValidationMessage(string $message): bool;
 }
