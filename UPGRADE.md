@@ -1,3 +1,31 @@
+# UPGRADE FROM 1.3.0 TO 1.3.1
+
+A patch release with two admin bug fixes. See [CHANGELOG.md](CHANGELOG.md) for details.
+
+### Database
+
+Run the new plugin migration:
+
+```bash
+php bin/console doctrine:migrations:migrate
+```
+
+`Version20260914000000` makes `madcoders_rma_order_return_consent_translation.slug` nullable and
+converts existing empty slugs to `NULL`. Its `down()` aborts when one locale has several consents
+without a slug, since restoring `NOT NULL` would collide on the `(locale, slug)` unique index.
+
+### Behaviour changes
+
+- `OrderReturnConsentTranslation::getSlug()` and `OrderReturnConsent::getSlug()` now return `null`
+  instead of `''` for a consent without a slug (the return type was already `?string`). Code that
+  compares the slug with `''` should check for `null` (or use an empty check) instead.
+- A return reason translation saved for a non-default locale now requires a slug, and a slug already
+  used by another reason in the same locale is rejected on the slug field. A reason that already has
+  such a translation saved with an empty slug must have that slug filled in the next time it is
+  edited. A locale left completely empty stays optional.
+
+---
+
 # UPGRADE FROM 1.2.x TO 1.3.0
 
 This section covers upgrading the plugin itself from `1.2.x` to `1.3.0`. See

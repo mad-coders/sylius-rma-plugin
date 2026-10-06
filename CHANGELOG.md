@@ -9,6 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-06
+
+Patch release fixing two admin HTTP 500s on return reason and return consent slugs. Ships one
+Doctrine migration (`Version20260914000000`).
+
 ### Fixed
 
 - **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
@@ -30,6 +35,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   **Run the new migration** (`Version20260914000000`): it makes the column nullable and converts
   existing empty slugs to `NULL`. `OrderReturnConsentTranslation::getSlug()` (and
   `OrderReturnConsent::getSlug()`) now return `null` instead of `''` for a consent without a slug.
+
+### Changed
+
+- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): added
+  `PKSA-w9tt-7782-78jx` (CVE-2026-102601, `league/flysystem <=3.35.2`) to `composer.json`'s
+  `policy.advisories.ignore-id`. Composer blocks every affected Flysystem release, and the fixed
+  ones (3.35.3+) conflict with the `guzzlehttp/guzzle ^6.5` that Sylius 1.12 requires, so the
+  Sylius 1.12 CI leg could not install at all. The plugin does not use Flysystem; it comes in
+  through Sylius. Applications on Sylius 1.12 face the same conflict and must make their own
+  decision about this advisory. Sylius 1.13 (Guzzle 7) installs the fixed Flysystem.
+- Repo-internal only (dev dependency): capped `dmore/chrome-mink-driver` at `<2.11`. 2.11.0 connects
+  to Chrome when the driver is constructed, so the non-JavaScript Behat suite, which runs without
+  Chrome, failed before running any scenario.
 
 ## [1.3.0] - 2026-09-25
 
@@ -439,7 +457,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
 [1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7

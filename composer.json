@@ -31,7 +31,7 @@
     "require-dev": {
         "behat/behat": "^3.7",
         "dmore/behat-chrome-extension": "^1.3",
-        "dmore/chrome-mink-driver": "^2.7",
+        "dmore/chrome-mink-driver": "^2.7 <2.11",
         "friends-of-behat/mink": "^1.8",
         "friends-of-behat/mink-browserkit-driver": "^1.4",
         "friends-of-behat/mink-debug-extension": "^2.0",
@@ -90,7 +90,8 @@
         },
         "policy": {
             "advisories": {
-                "ignore": ["api-platform/core", "enshrined/svg-sanitize", "guzzlehttp/guzzle", "guzzlehttp/psr7"]
+                "ignore": ["api-platform/core", "enshrined/svg-sanitize", "guzzlehttp/guzzle", "guzzlehttp/psr7"],
+                "ignore-id": ["PKSA-w9tt-7782-78jx"]
             }
         }
     },
