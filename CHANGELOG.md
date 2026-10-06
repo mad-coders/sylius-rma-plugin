@@ -9,6 +9,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-06
+
+Patch release fixing two admin HTTP 500s on return reason and return consent slugs. Ships one
+Doctrine migration (`Version20260914000000`).
+
 ### Fixed
 
 - **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
@@ -439,7 +444,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
 [1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
