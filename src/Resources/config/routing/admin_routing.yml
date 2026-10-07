@@ -163,3 +163,28 @@ madcoders_rma_admin_order_return_show_fallback_to_return:
       state_machine:
         graph: return_status
         transition: fallback_to_return
+
+# Per-order grace periods for return reason deadlines (#67), posted from the panel on the Sylius
+# admin order page.
+madcoders_rma_admin_order_grace_period_grant:
+  path: /orders/{orderId}/rma-grace-periods
+  methods: [ POST ]
+  controller: madcoders.sylius_rma_plugin.controller.admin_grace_period_grant
+  requirements:
+    orderId: '\d+'
+  defaults:
+    _sylius:
+      section: admin
+      permission: true
+
+madcoders_rma_admin_order_grace_period_revoke:
+  path: /orders/{orderId}/rma-grace-periods/{id}/revoke
+  methods: [ POST ]
+  controller: madcoders.sylius_rma_plugin.controller.admin_grace_period_revoke
+  requirements:
+    orderId: '\d+'
+    id: '\d+'
+  defaults:
+    _sylius:
+      section: admin
+      permission: true

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This file is part of package:
+Sylius RMA Plugin
+
+@copyright MADCODERS Team (www.madcoders.co)
+@licence For the full copyright and license information, please view the LICENSE
+
+Architects of this package:
+@author Leonid Moshko <l.moshko@madcoders.pl>
+@author Piotr Lewandowski <p.lewandowski@madcoders.pl>
+-->
+
+<!-- Per-order grace periods for return reason deadlines (#67). -->
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autoconfigure="true" autowire="true" public="true" />
+
+        <service id="madcoders.sylius_rma_plugin.services.grace_period.manager"
+                 class="Madcoders\SyliusRmaPlugin\Services\GracePeriod\GracePeriodManager">
+            <argument type="service" id="madcoders_rma.repository.order_return_reason_grace_period" />
+            <argument type="service" id="madcoders_rma.factory.order_return_reason_grace_period" />
+            <argument type="service" id="madcoders_rma.factory.order_return_reason_grace_period_log" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
+        <service id="Madcoders\SyliusRmaPlugin\Services\GracePeriod\GracePeriodManagerInterface"
+                 alias="madcoders.sylius_rma_plugin.services.grace_period.manager" />
+
+        <service id="madcoders.sylius_rma_plugin.services.grace_period.overview_provider"
+                 class="Madcoders\SyliusRmaPlugin\Services\GracePeriod\OrderGracePeriodOverviewProvider">
+            <argument type="service" id="madcoders_rma.repository.order_return_reason" />
+            <argument type="service" id="madcoders_rma.repository.order_return_reason_grace_period" />
+            <argument type="service" id="madcoders_rma.repository.order_return_reason_grace_period_log" />
+        </service>
+    </services>
+</container>
