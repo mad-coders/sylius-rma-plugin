@@ -32,6 +32,10 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItem;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnItemInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReason;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonGracePeriod;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonGracePeriodInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonGracePeriodLog;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonGracePeriodLogInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslationInterface;
@@ -239,6 +243,40 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
                                 ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('order_return_reason_grace_period')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(OrderReturnReasonGracePeriod::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(OrderReturnReasonGracePeriodInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+
+                        ->arrayNode('order_return_reason_grace_period_log')
+                            ->addDefaultsIfNotSet()
+                                ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(OrderReturnReasonGracePeriodLog::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('interface')->defaultValue(OrderReturnReasonGracePeriodLogInterface::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()
