@@ -22,4 +22,6 @@ use Sylius\Component\Core\Model\OrderInterface;
 interface OrderIndexPageInterface extends SymfonyPageInterface
 {
     public function clickReturnButtonForLatestOrder(OrderInterface $order);
+
+    public function hasReturnButtonForOrder(OrderInterface $order): bool;
 }

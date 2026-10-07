@@ -151,6 +151,22 @@ class OrderContext implements Context
     }
 
     /**
+     * Moves the first shipment's shipped date into the past, so return deadlines can be tested.
+     *
+     * @Given /^(the order) was shipped (\d+) days ago$/
+     */
+    public function theOrderWasShippedDaysAgo(OrderInterface $order, int $days): void
+    {
+        $shipment = $order->getShipments()->first();
+        if (!$shipment instanceof ShipmentInterface) {
+            throw new \RuntimeException('The order has no shipment.');
+        }
+
+        $shipment->setShippedAt(new \DateTime(sprintf('-%d days', $days)));
+        $this->orderRepository->add($order);
+    }
+
+    /**
      * @Given /^(the order) has single shipment with ("[^"]+" shipping method)/
      */
     public function addSingleShipment(OrderInterface $order, ShippingMethodInterface $shippingMethod): void
