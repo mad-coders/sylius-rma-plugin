@@ -47,9 +47,7 @@ final class ReturnReasonGracePeriodResolver implements ReturnReasonGracePeriodRe
             return 0;
         }
 
-        if (!isset($this->extraDaysByOrder[$orderId])) {
-            $this->extraDaysByOrder[$orderId] = $this->loadExtraDays($order);
-        }
+        $this->extraDaysByOrder[$orderId] ??= $this->loadExtraDays($order);
 
         return $this->extraDaysByOrder[$orderId][$reasonCode] ?? 0;
     }
