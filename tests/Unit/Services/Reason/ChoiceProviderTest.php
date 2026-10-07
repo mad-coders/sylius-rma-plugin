@@ -21,6 +21,7 @@ use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ChoiceProvider;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ElapsedDaysReturnDeadlineChecker;
 use Madcoders\SyliusRmaPlugin\Services\Reason\ReturnReasonEligibilityChecker;
+use Madcoders\SyliusRmaPlugin\Services\Reason\ReturnReasonGracePeriodResolverInterface;
 use Madcoders\SyliusRmaPlugin\Services\ReturnEligibilityChecker;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -76,7 +77,26 @@ class ChoiceProviderTest extends UnitTestCase
         $this->assertSame([], $reasons);
     }
 
-    private function fulfilledOrderShippedDaysAgo(int $days): OrderInterface
+    /** @test */
+    function it_offers_an_expired_reason_again_only_for_the_order_with_a_grace_period()
+    {
+        // given two orders shipped 30 days ago, a 14 day reason and 20 grace days granted for the first order only
+        $orderWithGrace = $this->fulfilledOrderShippedDaysAgo(30, 1);
+        $orderWithoutGrace = $this->fulfilledOrderShippedDaysAgo(30, 2);
+        $reason = $this->reason('reason_14', 'Reason 14', 14);
+
+        $resolver = $this->prophesize(ReturnReasonGracePeriodResolverInterface::class);
+        $resolver->getExtraDays($orderWithGrace, $reason)->willReturn(20);
+        $resolver->getExtraDays($orderWithoutGrace, $reason)->willReturn(0);
+
+        $provider = $this->providerWithReasons([$reason], $resolver->reveal());
+
+        // then 30 elapsed days fit in 14 + 20 for the first order but not in 14 for the second
+        $this->assertSame(['reason_14' => 'Reason 14'], $provider->createAvailableReasons($orderWithGrace));
+        $this->assertSame([], $provider->createAvailableReasons($orderWithoutGrace));
+    }
+
+    private function fulfilledOrderShippedDaysAgo(int $days, ?int $id = null): OrderInterface
     {
         $shippedAt = (new \DateTime())->modify(sprintf('-%d days', $days));
 
@@ -84,6 +104,7 @@ class ChoiceProviderTest extends UnitTestCase
         $shipment->getShippedAt()->willReturn($shippedAt);
 
         $order = $this->prophesize(OrderInterface::class);
+        $order->getId()->willReturn($id);
         $order->getShipments()->willReturn(new ArrayCollection([$shipment->reveal()]));
         $order->getState()->willReturn(OrderInterface::STATE_FULFILLED);
         $order->getCheckoutState()->willReturn(OrderCheckoutStates::STATE_COMPLETED);
@@ -104,15 +125,17 @@ class ChoiceProviderTest extends UnitTestCase
     /**
      * @param OrderReturnReasonInterface[] $reasons
      */
-    private function providerWithReasons(array $reasons): ChoiceProvider
-    {
+    private function providerWithReasons(
+        array $reasons,
+        ?ReturnReasonGracePeriodResolverInterface $gracePeriodResolver = null,
+    ): ChoiceProvider {
         $reasonRepository = $this->prophesize(RepositoryInterface::class);
         $reasonRepository->findBy(['enabled' => true])->willReturn($reasons);
 
         return new ChoiceProvider(
             $reasonRepository->reveal(),
             $this->prophesize(OrderRepositoryInterface::class)->reveal(),
-            new ReturnReasonEligibilityChecker(new ElapsedDaysReturnDeadlineChecker()),
+            new ReturnReasonEligibilityChecker(new ElapsedDaysReturnDeadlineChecker(), $gracePeriodResolver),
             new ReturnEligibilityChecker(),
         );
     }
