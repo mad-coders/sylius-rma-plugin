@@ -10,7 +10,7 @@ name: CI
 
 on:
     push:
-        branches: ["1.0", "1.1", "master", "main"]
+        branches: ["1.0", "1.1", "1.3", "1.4", "master", "main"]
     pull_request: ~
     workflow_dispatch: ~
 
