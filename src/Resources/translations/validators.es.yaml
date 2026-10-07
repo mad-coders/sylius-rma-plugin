@@ -1,5 +1,12 @@
 madcoders_rma:
     validator:
+        grace_period:
+            reason:
+                not_blank: 'Elige un motivo'
+            extra_days:
+                not_blank: 'Introduce el número de días adicionales'
+                integer: 'Introduce un número entero de días'
+                range: 'Introduce un número de días entre {{ min }} y {{ max }}'
         not_blank: 'El campo no puede estar vacío'
         return_qty_less_or_equal: 'La cantidad máxima de devolución es {{ compared_value }}.'
         return_qty_greater_or_equal: 'La cantidad de devolución no puede ser negativa.'

@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Wydrukuj i podpisz wygenerowany formularz. Formularz musi być dołączony do przesyłki zwrotnej'
             configuration_updated: 'Konfiguracja została zaktualizowana'
     admin:
+        grace_period:
+            header: 'Dodatkowy czas na zwrot'
+            description: 'Przyznaj temu zamówieniu dodatkowe dni na zwrot dla wybranego powodu. Pozostałe zamówienia zachowują standardowy termin.'
+            reason: 'Powód'
+            choose_reason: 'Wybierz powód'
+            base_days: 'Termin (dni)'
+            extra_days: 'Dodatkowe dni'
+            last_return_day: 'Ostatni dzień zwrotu'
+            not_shipped: 'Jeszcze nie wysłano'
+            none: 'Brak'
+            note: 'Uwaga (opcjonalnie)'
+            save: 'Przyznaj lub zmień'
+            revoke: 'Cofnij'
+            history_header: 'Historia dodatkowego czasu'
+            no_history: 'Dla tego zamówienia nie przyznano jeszcze dodatkowego czasu.'
+            flashes:
+                granted: 'Dodatkowy czas został przyznany.'
+                updated: 'Dodatkowy czas został zmieniony.'
+                unchanged: 'Dodatkowy czas nie został zmieniony.'
+                revoked: 'Dodatkowy czas został cofnięty.'
+                invalid: 'Nie udało się zapisać dodatkowego czasu.'
+            history:
+                granted: 'przyznał %days% dodatkowych dni dla powodu %reason%'
+                updated: 'zmienił dodatkowe dni dla powodu %reason% z %previous% na %days%'
+                revoked: 'cofnął %previous% dodatkowych dni dla powodu %reason%'
+
         flashes:
             success_added_note: 'Uwaga została dodana'
         configuration:

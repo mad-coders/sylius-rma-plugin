@@ -1,5 +1,12 @@
 madcoders_rma:
     validator:
+        grace_period:
+            reason:
+                not_blank: 'Vælg en årsag'
+            extra_days:
+                not_blank: 'Angiv antallet af ekstra dage'
+                integer: 'Angiv et helt antal dage'
+                range: 'Angiv et antal dage mellem {{ min }} og {{ max }}'
         not_blank: 'Feltet må ikke være tomt'
         return_qty_less_or_equal: 'Maksimal returmængde er {{ compared_value }}.'
         return_qty_greater_or_equal: 'Returmængden må ikke være negativ.'

@@ -1,5 +1,12 @@
 madcoders_rma:
     validator:
+        grace_period:
+            reason:
+                not_blank: 'Please choose a reason'
+            extra_days:
+                not_blank: 'Please enter the number of extra days'
+                integer: 'Please enter a whole number of days'
+                range: 'Please enter a number of days between {{ min }} and {{ max }}'
         not_blank: 'Field cannot be empty'
         return_qty_less_or_equal: 'Max return qty is {{ compared_value }}.'
         return_qty_greater_or_equal: 'Return qty cannot be negative.'

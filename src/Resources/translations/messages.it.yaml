@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Stampa e firma il modulo generato. Il modulo deve essere allegato al pacco di reso'
             configuration_updated: 'Configurazione aggiornata'
     admin:
+        grace_period:
+            header: 'Proroghe per il reso'
+            description: 'Concedi a questo ordine giorni aggiuntivi per il reso per un motivo scelto. Gli altri ordini mantengono il termine standard.'
+            reason: 'Motivo'
+            choose_reason: 'Scegli un motivo'
+            base_days: 'Termine (giorni)'
+            extra_days: 'Giorni aggiuntivi'
+            last_return_day: 'Ultimo giorno per il reso'
+            not_shipped: 'Non ancora spedito'
+            none: 'Nessuno'
+            note: 'Nota (facoltativa)'
+            save: 'Concedi o modifica'
+            revoke: 'Revoca'
+            history_header: 'Cronologia delle proroghe'
+            no_history: 'Non è ancora stata concessa alcuna proroga per questo ordine.'
+            flashes:
+                granted: 'La proroga è stata concessa.'
+                updated: 'La proroga è stata modificata.'
+                unchanged: 'La proroga non è stata modificata.'
+                revoked: 'La proroga è stata revocata.'
+                invalid: 'Non è stato possibile salvare la proroga.'
+            history:
+                granted: 'ha concesso %days% giorni aggiuntivi per il motivo %reason%'
+                updated: 'ha modificato i giorni aggiuntivi per il motivo %reason% da %previous% a %days%'
+                revoked: 'ha revocato i %previous% giorni aggiuntivi per il motivo %reason%'
+
         flashes:
             success_added_note: 'La nota è stata aggiunta'
         configuration:

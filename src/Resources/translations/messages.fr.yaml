@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Veuillez imprimer et signer le formulaire généré. Le formulaire doit être joint au colis de retour'
             configuration_updated: 'Configuration mise à jour'
     admin:
+        grace_period:
+            header: 'Délais supplémentaires de retour'
+            description: 'Accordez à cette commande des jours supplémentaires pour retourner des articles pour un motif choisi. Les autres commandes conservent le délai standard.'
+            reason: 'Motif'
+            choose_reason: 'Choisissez un motif'
+            base_days: 'Délai (jours)'
+            extra_days: 'Jours supplémentaires'
+            last_return_day: 'Dernier jour de retour'
+            not_shipped: 'Pas encore expédiée'
+            none: 'Aucun'
+            note: 'Note (facultative)'
+            save: 'Accorder ou modifier'
+            revoke: 'Révoquer'
+            history_header: 'Historique des délais supplémentaires'
+            no_history: 'Aucun délai supplémentaire n''a encore été accordé pour cette commande.'
+            flashes:
+                granted: 'Le délai supplémentaire a été accordé.'
+                updated: 'Le délai supplémentaire a été modifié.'
+                unchanged: 'Le délai supplémentaire n''a pas été modifié.'
+                revoked: 'Le délai supplémentaire a été révoqué.'
+                invalid: 'Le délai supplémentaire n''a pas pu être enregistré.'
+            history:
+                granted: 'a accordé %days% jours supplémentaires pour le motif %reason%'
+                updated: 'a modifié les jours supplémentaires pour le motif %reason% de %previous% à %days%'
+                revoked: 'a révoqué les %previous% jours supplémentaires pour le motif %reason%'
+
         flashes:
             success_added_note: 'La note a été ajoutée'
         configuration:

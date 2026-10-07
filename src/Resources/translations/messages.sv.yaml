@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Skriv ut och skriv under det genererade formuläret. Formuläret måste bifogas returpaketet'
             configuration_updated: 'Konfigurationen har uppdaterats'
     admin:
+        grace_period:
+            header: 'Förlängd returtid'
+            description: 'Ge den här beställningen extra dagar för retur av en vald anledning. Andra beställningar behåller standardfristen.'
+            reason: 'Anledning'
+            choose_reason: 'Välj en anledning'
+            base_days: 'Frist (dagar)'
+            extra_days: 'Extra dagar'
+            last_return_day: 'Sista returdag'
+            not_shipped: 'Inte skickad än'
+            none: 'Ingen'
+            note: 'Anteckning (valfri)'
+            save: 'Bevilja eller ändra'
+            revoke: 'Återkalla'
+            history_header: 'Historik för förlängd returtid'
+            no_history: 'Ingen förlängd returtid har beviljats för den här beställningen än.'
+            flashes:
+                granted: 'Den förlängda returtiden har beviljats.'
+                updated: 'Den förlängda returtiden har ändrats.'
+                unchanged: 'Den förlängda returtiden ändrades inte.'
+                revoked: 'Den förlängda returtiden har återkallats.'
+                invalid: 'Den förlängda returtiden kunde inte sparas.'
+            history:
+                granted: 'beviljade %days% extra dagar för anledningen %reason%'
+                updated: 'ändrade de extra dagarna för anledningen %reason% från %previous% till %days%'
+                revoked: 'återkallade de %previous% extra dagarna för anledningen %reason%'
+
         flashes:
             success_added_note: 'Anteckningen har lagts till'
         configuration:
