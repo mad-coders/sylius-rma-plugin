@@ -49,3 +49,4 @@ flip the old one's status.
 | [0011](0011-return-form-pdf-feature-flag.md) | Return-form PDF generation is opt-in (feature flag, default off) | Accepted |
 | [0012](0012-rector-and-php82-modernization.md) | Rector for PHP 8.2 modernization and a baseline-free PHPStan target | Accepted |
 | [0013](0013-gotenberg-pdf-generation.md) | Return-form PDF rendering moves from wkhtmltopdf to Gotenberg | Accepted |
+| [0014](0014-per-order-grace-periods.md) | Per-order return grace periods: order-linked storage and a grace-aware deadline checker | Accepted |

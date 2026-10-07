@@ -2,8 +2,9 @@
 
 **Goal:** Let an admin grant extra days on a specific return reason for a specific order, so a
 support-agreed extension reopens the return window for that one order without raising the reason's
-global `deadlineToReturn`. Grants are editable, revocable and fully audited. Status: **planned.**
-Tracking issue: [mad-coders/sylius-rma-plugin#67](https://github.com/mad-coders/sylius-rma-plugin/issues/67).
+global `deadlineToReturn`. Grants are editable, revocable and fully audited. Status: **implemented**
+(target line `1.4`). Tracking issue: [mad-coders/sylius-rma-plugin#67](https://github.com/mad-coders/sylius-rma-plugin/issues/67).
+Decision record: [ADR 0014](../../docs/adr-log/0014-per-order-grace-periods.md).
 
 ## Background
 Each `OrderReturnReason` has a single global `deadlineToReturn` (days since the order's first
@@ -86,6 +87,24 @@ note is optional.
   - Behat: admin grants, edits and revokes on the order page with audit entries and the 1-365
     validation; on an order past its deadline a customer regains the Return button and reason after the
     grant (account + guest form) and loses them after revocation.
+
+## Implementation notes
+Where the implementation differs from the outline above:
+- Migration `Version20261007000000`; the log's `author_id` is `NOT NULL` (every entry has an author).
+- `ReturnReasonEligibilityChecker` takes the resolver as an **optional** second argument, so existing
+  `new ReturnReasonEligibilityChecker($checker)` calls keep working (without grace periods).
+- Extra days is a text field validated as digits only (`Regex` + `Range` 1-365): an `IntegerType`
+  would round "10.5" instead of rejecting it.
+- The panel sits on `sylius.admin.order.show.summary` (priority 5) and embeds
+  `AdminGracePeriodPanelController` via `render(controller())`; one grant form edits by re-submitting
+  for the same reason; grant and revoke are POST routes under `/admin/orders/{orderId}/rma-grace-periods`.
+- Translations live under `madcoders_rma.admin.grace_period.*` and
+  `madcoders_rma.validator.grace_period.*` (8 locales).
+- Behat: `features/managing_return_reason_grace_periods.feature` (new admin suite
+  `madcoders_rma_managing_return_grace_periods`), `return_reason_grace_period_as_signed_in_customer.feature`
+  (customer area suite) and `return_reason_grace_period_as_guest.feature` (submit form suite).
+- Local runs on a non-English machine need `LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8` for the guest
+  suites: the "Store return address" step looks the country up by its localized name.
 
 ## Out of scope
 - Customer e-mail about the extension and showing the extended deadline in the shop.

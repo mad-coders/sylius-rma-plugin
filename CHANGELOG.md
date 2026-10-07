@@ -9,6 +9,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+### Added
+
+- **Per-order grace periods for return reason deadlines**
+  ([#67](https://github.com/mad-coders/sylius-rma-plugin/issues/67)): an admin can give one order
+  extra days (1-365, with an optional note) on a return reason from a new panel on the Sylius admin
+  order page, change them, or revoke them. The extended reason is offered on the account and guest
+  return forms and brings back the Return button until `deadlineToReturn + extra days` have passed
+  since the first shipment; other orders and other reasons are unaffected, and a grace period never
+  bypasses the shipment, order state, returnable quantity or enabled-reason rules. Every grant,
+  change and revocation is audited (admin, time, previous and new days, note) on the same panel.
+  **Run the new migration** (`Version20261007000000`): it creates
+  `madcoders_rma_order_return_reason_grace_period` and
+  `madcoders_rma_order_return_reason_grace_period_log`. Applications that replaced
+  `ReturnDeadlineCheckerInterface` must implement the new `GraceAwareReturnDeadlineCheckerInterface`
+  for grace periods to apply.
+
 ## [1.3.1] - 2026-10-06
 
 Patch release fixing two admin HTTP 500s on return reason and return consent slugs. Ships one

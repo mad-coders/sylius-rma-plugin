@@ -18,6 +18,8 @@ form and submit a return request from a delivered order.
 - customers are notified by e-mail at each step of the process
 - optional PDF return form (opt-in, off by default - see [below](#optional-enable-the-return-form-pdf))
 - merchant-defined return reasons, optionally limited by time since shipment
+- per-order grace periods: an admin can give one order extra days on a return reason (see
+  [below](#per-order-return-grace-periods))
 - merchant-defined terms and conditions the customer must accept before submitting the form
 - return management area in the Sylius admin
 
@@ -202,6 +204,32 @@ checkbox is added to the admin product form automatically (a form-type extension
 `sylius.admin.product.tab_details` template event) once the model implements the interface. To
 source the flag from somewhere other than the product entity, replace
 [`ProductReturnabilityCheckerInterface`](#customizations).
+
+### Per-order return grace periods
+
+A return reason is available while the number of days since the order's first shipment does not
+exceed the reason's deadline. When support agrees an exception with one customer (the parcel was
+delayed, the customer was abroad), an admin can extend a reason **for that order only** instead of
+raising the deadline for everyone.
+
+The Sylius admin order page shows a **"Return grace periods"** panel listing every enabled reason
+with its deadline, the extra days granted for the order and the resulting last return day. From
+there an admin can:
+
+- grant extra days (a whole number from 1 to 365, with an optional note) on one reason - granting
+  again on the same reason changes the existing grant;
+- revoke a grant, so the reason falls back to its normal deadline immediately.
+
+With a 14-day reason and 10 extra days, the reason is offered until day 24 after shipment for that
+order; other orders and other reasons keep their normal deadline. A grace period never makes an
+unshipped, unfulfilled or fully returned order returnable, and never re-enables a disabled reason.
+Every grant, change and revocation is recorded with the admin's name, the time and the note, and
+listed on the same panel.
+
+Grace periods are stored in their own tables (run the plugin migrations). If you replaced the
+deadline checker (`ReturnDeadlineCheckerInterface`), implement
+[`GraceAwareReturnDeadlineCheckerInterface`](src/Services/Reason/GraceAwareReturnDeadlineCheckerInterface.php)
+for grace periods to apply; a checker that does not implement it keeps the base deadline.
 
 ## Returns state machine
 
