@@ -20,8 +20,10 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReason;
 use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonInterface;
+use Madcoders\SyliusRmaPlugin\Entity\OrderReturnReasonTranslation;
 use Sylius\Component\Core\Formatter\StringInflector;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Webmozart\Assert\Assert;
 
 class ReturnReasonContext implements Context
 {
@@ -41,6 +43,26 @@ class ReturnReasonContext implements Context
         foreach ($table as $row) {
             $this->createOrderReturnReason($row['code'], $row['name'], $row['deadline_to_return']);
         }
+    }
+
+    /**
+     * Stores the translation directly, the way the admin form used to save it before a slug was
+     * required on every persisted translation.
+     *
+     * @Given the return reason :code has a :localeCode translation named :name without a slug
+     */
+    public function theReturnReasonHasATranslationWithoutASlug(string $code, string $localeCode, string $name): void
+    {
+        $reason = $this->returnReasonRepository->findOneBy(['code' => $code]);
+        Assert::isInstanceOf($reason, OrderReturnReasonInterface::class);
+
+        $translation = new OrderReturnReasonTranslation();
+        $translation->setLocale($localeCode);
+        $translation->setName($name);
+        $translation->setSlug('');
+        $reason->addTranslation($translation);
+
+        $this->returnReasonRepository->add($reason);
     }
 
     private function createOrderReturnReason(string $code, string $name, string $days): OrderReturnReasonInterface

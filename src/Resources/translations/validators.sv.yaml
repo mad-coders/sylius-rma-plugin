@@ -22,5 +22,6 @@ madcoders_rma:
             not_blank: 'Ange namnet'
         slug:
             not_blank: 'Ange slug'
+            unique: 'Denna slug används redan för det här språket'
         code:
             not_blank: 'Ange koden'

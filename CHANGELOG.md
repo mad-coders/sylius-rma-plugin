@@ -9,6 +9,96 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-06
+
+Patch release fixing two admin HTTP 500s on return reason and return consent slugs. Ships one
+Doctrine migration (`Version20260914000000`).
+
+### Fixed
+
+- **Saving a return reason translation with an empty or duplicate slug no longer crashes the admin
+  with an HTTP 500** ([#66](https://github.com/mad-coders/sylius-rma-plugin/issues/66)): only the
+  default locale's slug was validated, so a translation filled in for another locale was saved
+  with an empty slug, and the next empty (or any already used) slug in that locale hit the
+  `(locale, slug)` unique index (`slug_uidx`) as an unhandled `UniqueConstraintViolationException`.
+  Every translation that gets saved now requires a slug (a locale left completely empty is still
+  optional and not saved), and a slug already used by another return reason in the same locale is
+  reported on the slug field. New validator key `madcoders_rma.validator.slug.unique` in every
+  shipped locale.
+- **A second return consent without a slug no longer crashes the admin with an HTTP 500**
+  ([#69](https://github.com/mad-coders/sylius-rma-plugin/issues/69)): an inline consent does not
+  need a slug, but it was stored as an empty string, so the second one in a locale (or any consent
+  reusing a slug) hit the `(locale, slug)` unique index (`slug_uidx`) on
+  `madcoders_rma_order_return_consent_translation`. The `slug` column is now nullable and a missing
+  slug is stored as `NULL`, which the index ignores, so any number of consents can leave it empty;
+  a slug already used by another consent in the same locale is reported on the slug field.
+  **Run the new migration** (`Version20260914000000`): it makes the column nullable and converts
+  existing empty slugs to `NULL`. `OrderReturnConsentTranslation::getSlug()` (and
+  `OrderReturnConsent::getSlug()`) now return `null` instead of `''` for a consent without a slug.
+
+### Changed
+
+- Repo-internal only (not consumer-facing, `config` is ignored for non-root packages): added
+  `PKSA-w9tt-7782-78jx` (CVE-2026-102601, `league/flysystem <=3.35.2`) to `composer.json`'s
+  `policy.advisories.ignore-id`. Composer blocks every affected Flysystem release, and the fixed
+  ones (3.35.3+) conflict with the `guzzlehttp/guzzle ^6.5` that Sylius 1.12 requires, so the
+  Sylius 1.12 CI leg could not install at all. The plugin does not use Flysystem; it comes in
+  through Sylius. Applications on Sylius 1.12 face the same conflict and must make their own
+  decision about this advisory. Sylius 1.13 (Guzzle 7) installs the fixed Flysystem.
+- Repo-internal only (dev dependency): capped `dmore/chrome-mink-driver` at `<2.11`. 2.11.0 connects
+  to Chrome when the driver is constructed, so the non-JavaScript Behat suite, which runs without
+  Chrome, failed before running any scenario.
+
+## [1.3.0] - 2026-09-25
+
+First stable release of the 1.3 line. It contains everything shipped in `1.3.0-rc.1` through
+`1.3.0-rc.8` (listed in detail in the release candidate sections below) and no further code
+changes. Upgrading from 1.2.x: see [UPGRADE.md](UPGRADE.md#upgrade-from-12x-to-130).
+
+### Highlights
+
+- **Pre-shipment withdrawal** (EU right of withdrawal) with instant withdrawal of unpaid orders,
+  admin-resolved withdrawal requests for paid orders and partial item selection (rc.1,
+  [#7](https://github.com/mad-coders/sylius-rma-plugin/issues/7)).
+- **Non-returnable products**, configurable refund bank details on the return form and a pluggable
+  return-number format (rc.2).
+- **Self-contained, branded, localized RMA e-mails** with overridable header/footer partials
+  (rc.3, [#23](https://github.com/mad-coders/sylius-rma-plugin/issues/23)).
+- **Security hardening of the return and withdrawal flows**: auth-code brute-force lockout and rate
+  limiting, the return document sent only to the order's customer, and an authorized withdrawal
+  success page (rc.4, [#26](https://github.com/mad-coders/sylius-rma-plugin/issues/26),
+  [#27](https://github.com/mad-coders/sylius-rma-plugin/issues/27),
+  [#28](https://github.com/mad-coders/sylius-rma-plugin/issues/28)).
+- **Return consent field type** (external page or inline HTML) (rc.6,
+  [#56](https://github.com/mad-coders/sylius-rma-plugin/issues/56)).
+- **Sylius 1.13 support** (`sylius/sylius: >=1.12,<1.14`) and full translation parity across the
+  eight shipped locales (rc.7, [#59](https://github.com/mad-coders/sylius-rma-plugin/issues/59)).
+- **Return-form PDF rendered by Gotenberg** instead of wkhtmltopdf (rc.8,
+  [#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
+- Many admin and return-form bug fixes (rc.1, rc.5, rc.6).
+
+### Upgrade notes
+
+- **Four Doctrine migrations** ship in 1.3.0 (`Version20260612000000`, `Version20260615000000`,
+  `Version20260621000000`, `Version20260723000000`); run `doctrine:migrations:migrate`. The first
+  renames the stored `cancellation_request` return status to `withdrawal_request`.
+- **Gotenberg is required to render the return-form PDF** (`return_form_pdf_enabled: true`), via
+  `gotenberg_url` / `GOTENBERG_URL`; `knplabs/knp-snappy-bundle` is no longer a dependency (rc.8).
+- **BC break:** the seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
+  `Twig\Extension\AbstractExtension`, and `twig/twig: ^3.21` is now required (rc.8).
+- **Behaviour change:** the withdrawal form collects refund bank details only when
+  `MADCODERS_RMA_REQUIRE_ADDITIONAL_INFORMATION=true` (rc.5).
+- The auth-code endpoints are rate limited by default (`MADCODERS_RMA_LIMIT_AUTH_ATTEMPTS`, backed
+  by `cache.app`) and respond with HTTP 429 when the limit is exceeded (rc.4).
+- The RMA e-mail templates were rewritten; re-check any application overrides of them (rc.3).
+
+## [1.3.0-rc.8] - 2026-09-25
+
+Eighth release candidate for the 1.3 line, replacing wkhtmltopdf with Gotenberg for the
+return-form PDF on top of rc.7. Rendering the PDF now needs a reachable Gotenberg instance
+(`GOTENBERG_URL`), and the Twig extension classes changed shape (BC break, see below). No
+Doctrine migration ships in rc.8.
+
 ### Changed
 
 - **Return-form PDF rendering moved from wkhtmltopdf to Gotenberg**: `knplabs/knp-snappy-bundle`
@@ -23,7 +113,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   The Gotenberg request now carries an explicit timeout/max-duration and the response is checked
   for a valid PDF header; failures raise the new `Madcoders\SyliusRmaPlugin\Services\Pdf\PdfGenerationException`
   rather than leaking Symfony HttpClient's exception types. See
-  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md).
+  [ADR 0013](docs/adr-log/0013-gotenberg-pdf-generation.md)
+  ([#5](https://github.com/mad-coders/sylius-rma-plugin/issues/5)).
 - **BC break: seven `Madcoders\SyliusRmaPlugin\Twig\*` extension classes no longer extend
   `Twig\Extension\AbstractExtension` or implement `getFunctions()`**; they are now plain services
   exposing their functions via the `#[Twig\Attribute\AsTwigFunction]` PHP attribute, wired through
@@ -366,7 +457,10 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...1.3.1
+[1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
+[1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
 [1.3.0-rc.7]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.6...1.3.0-rc.7
 [1.3.0-rc.6]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.5...1.3.0-rc.6
 [1.3.0-rc.5]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.4...1.3.0-rc.5

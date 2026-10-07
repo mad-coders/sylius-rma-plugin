@@ -22,5 +22,6 @@ madcoders_rma:
             not_blank: 'Indtast navnet'
         slug:
             not_blank: 'Indtast slug'
+            unique: 'Denne slug bruges allerede på dette sprog'
         code:
             not_blank: 'Indtast koden'

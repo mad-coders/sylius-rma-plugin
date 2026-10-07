@@ -26,7 +26,7 @@ Architects of this package:
         </id>
 
         <field name="name" column="name" type="string" />
-        <field name="slug" column="slug" type="string" unique="false" />
+        <field name="slug" column="slug" type="string" unique="false" nullable="true" />
         <field name="description" column="description" type="text" nullable="true" />
         <unique-constraints>
             <unique-constraint columns="locale,slug" name="slug_uidx" />
