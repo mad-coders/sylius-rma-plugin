@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Imprime y firma el formulario generado. El formulario debe adjuntarse al paquete de devolución'
             configuration_updated: 'Configuración actualizada'
     admin:
+        grace_period:
+            header: 'Prórrogas de devolución'
+            description: 'Concede a este pedido días adicionales para devolver artículos por un motivo elegido. Los demás pedidos mantienen el plazo estándar.'
+            reason: 'Motivo'
+            choose_reason: 'Elige un motivo'
+            base_days: 'Plazo (días)'
+            extra_days: 'Días adicionales'
+            last_return_day: 'Último día de devolución'
+            not_shipped: 'Aún no enviado'
+            none: 'Ninguno'
+            note: 'Nota (opcional)'
+            save: 'Conceder o cambiar'
+            revoke: 'Revocar'
+            history_header: 'Historial de prórrogas'
+            no_history: 'Todavía no se ha concedido ninguna prórroga para este pedido.'
+            flashes:
+                granted: 'La prórroga se ha concedido.'
+                updated: 'La prórroga se ha cambiado.'
+                unchanged: 'La prórroga no se ha cambiado.'
+                revoked: 'La prórroga se ha revocado.'
+                invalid: 'No se ha podido guardar la prórroga.'
+            history:
+                granted: 'concedió %days% días adicionales para el motivo %reason%'
+                updated: 'cambió los días adicionales para el motivo %reason% de %previous% a %days%'
+                revoked: 'revocó los %previous% días adicionales para el motivo %reason%'
+
         flashes:
             success_added_note: 'La nota se ha añadido'
         configuration:

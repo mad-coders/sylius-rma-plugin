@@ -1,5 +1,12 @@
 madcoders_rma:
     validator:
+        grace_period:
+            reason:
+                not_blank: 'Wybierz powód'
+            extra_days:
+                not_blank: 'Podaj liczbę dodatkowych dni'
+                integer: 'Podaj liczbę dni jako liczbę całkowitą'
+                range: 'Podaj liczbę dni od {{ min }} do {{ max }}'
         not_blank: 'Pole nie może być puste'
         return_qty_less_or_equal: 'Maksymalna ilość zwrotu to {{ compared_value }}.'
         return_qty_greater_or_equal: 'Ilość zwrotu nie może być ujemna.'

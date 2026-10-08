@@ -1,3 +1,42 @@
+# UPGRADE FROM 1.3.x TO 1.4.0
+
+A minor release adding per-order grace periods for return reason deadlines. See
+[CHANGELOG.md](CHANGELOG.md) for details.
+
+```bash
+composer require madcoders/sylius-rma-plugin:^1.4
+```
+
+### Database
+
+Run the new plugin migration:
+
+```bash
+php bin/console doctrine:migrations:migrate
+```
+
+`Version20261007000000` creates two tables:
+
+- `madcoders_rma_order_return_reason_grace_period` - extra days granted on a return reason for one
+  order (one row per order and reason);
+- `madcoders_rma_order_return_reason_grace_period_log` - the audit history of grants, changes and
+  revocations.
+
+Both reference `sylius_order` with `ON DELETE CASCADE`. No existing data changes: orders without a
+grace period behave exactly as before.
+
+### Behaviour changes
+
+- If your application replaced the return deadline checker (`ReturnDeadlineCheckerInterface`, service
+  `madcoders.sylius_rma_plugin.services.reason.return_deadline_checker`), it keeps working unchanged
+  but ignores grace periods. Implement `GraceAwareReturnDeadlineCheckerInterface` (it extends
+  `ReturnDeadlineCheckerInterface` with `isWithinDeadlineWithGrace()`) for grace periods to apply.
+- `ReturnReasonEligibilityChecker` takes an optional second constructor argument, the
+  `ReturnReasonGracePeriodResolverInterface`. Code constructing it with the deadline checker only
+  keeps working, without grace periods.
+
+---
+
 # UPGRADE FROM 1.3.0 TO 1.3.1
 
 A patch release with two admin bug fixes. See [CHANGELOG.md](CHANGELOG.md) for details.

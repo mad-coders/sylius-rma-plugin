@@ -21,4 +21,5 @@ imports:
     - suites/ui/admin/rma/managing_return_status.yml
     - suites/ui/admin/rma/managing_withdrawal_resolution.yml
     - suites/ui/admin/rma/managing_return_notes.yml
+    - suites/ui/admin/rma/managing_return_grace_periods.yml
     - suites/ui/admin/rma/managing_address_in_configuration.yml

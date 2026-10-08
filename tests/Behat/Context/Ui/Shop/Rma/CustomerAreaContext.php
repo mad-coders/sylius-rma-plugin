@@ -60,6 +60,26 @@ class CustomerAreaContext implements Context
     }
 
     /**
+     * @Then /^I should see the return button for (latest order)$/
+     */
+    public function iShouldSeeTheReturnButtonFor(OrderInterface $order): void
+    {
+        if (!$this->orderIndexPage->hasReturnButtonForOrder($order)) {
+            throw new \RuntimeException(sprintf('Expected a return button for order %s, but there is none.', $order->getNumber()));
+        }
+    }
+
+    /**
+     * @Then /^I should not see the return button for (latest order)$/
+     */
+    public function iShouldNotSeeTheReturnButtonFor(OrderInterface $order): void
+    {
+        if ($this->orderIndexPage->hasReturnButtonForOrder($order)) {
+            throw new \RuntimeException(sprintf('Expected no return button for order %s, but there is one.', $order->getNumber()));
+        }
+    }
+
+    /**
      * @When I click return button
      */
     public function iClickReturnButton(): void

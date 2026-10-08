@@ -137,6 +137,28 @@ class ReturnFormContext implements Context
     }
 
     /**
+     * @Then the return reason :reasonCode should be available
+     */
+    public function theReturnReasonShouldBeAvailable(string $reasonCode): void
+    {
+        Assert::true(
+            $this->returnFormPage->hasReturnReasonOption($reasonCode),
+            sprintf('Expected the return reason "%s" to be offered on the return form.', $reasonCode),
+        );
+    }
+
+    /**
+     * @Then the return reason :reasonCode should not be available
+     */
+    public function theReturnReasonShouldNotBeAvailable(string $reasonCode): void
+    {
+        Assert::false(
+            $this->returnFormPage->hasReturnReasonOption($reasonCode),
+            sprintf('Expected the return reason "%s" not to be offered on the return form.', $reasonCode),
+        );
+    }
+
+    /**
      * @When I fill in my bank account in IBAN format
      */
     public function iFillInMyBankAccount(): void

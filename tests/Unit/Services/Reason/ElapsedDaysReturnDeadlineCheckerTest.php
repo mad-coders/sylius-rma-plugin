@@ -66,6 +66,50 @@ class ElapsedDaysReturnDeadlineCheckerTest extends UnitTestCase
         $this->assertFalse($checker->isWithinDeadline($this->reasonWithDeadline(null), $this->daysAgo(1)));
     }
 
+    /** @test */
+    function it_extends_the_deadline_by_the_grace_days()
+    {
+        $checker = new ElapsedDaysReturnDeadlineChecker();
+
+        // deadline 14 + grace 10: the last allowed day is day 24
+        $this->assertTrue($checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(14), $this->daysAgo(24), 10));
+    }
+
+    /** @test */
+    function it_rejects_a_return_the_day_after_the_extended_deadline()
+    {
+        $checker = new ElapsedDaysReturnDeadlineChecker();
+
+        $this->assertFalse($checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(14), $this->daysAgo(25), 10));
+    }
+
+    /** @test */
+    function it_treats_zero_grace_days_as_the_base_deadline()
+    {
+        $checker = new ElapsedDaysReturnDeadlineChecker();
+
+        $this->assertTrue($checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(14), $this->daysAgo(14), 0));
+        $this->assertFalse($checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(14), $this->daysAgo(15), 0));
+    }
+
+    /** @test */
+    function it_does_not_let_grace_days_rescue_a_reason_without_deadline()
+    {
+        $checker = new ElapsedDaysReturnDeadlineChecker();
+
+        $this->assertFalse($checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(null), $this->daysAgo(1), 30));
+    }
+
+    /** @test */
+    function it_rejects_negative_grace_days()
+    {
+        $checker = new ElapsedDaysReturnDeadlineChecker();
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $checker->isWithinDeadlineWithGrace($this->reasonWithDeadline(14), $this->daysAgo(1), -1);
+    }
+
     private function reasonWithDeadline(?int $deadlineToReturn): OrderReturnReasonInterface
     {
         $reason = $this->prophesize(OrderReturnReasonInterface::class);

@@ -136,6 +136,16 @@ class ReturnFormPage extends SymfonyPage implements ReturnFormPageInterface, Fla
         $this->getElement('rma_submit_return_form')->click();
     }
 
+    public function hasReturnReasonOption(string $reasonCode): bool
+    {
+        $select = $this->getDocument()->findField('madcoders_rma_return_item_returnReason');
+        if (null === $select) {
+            return false;
+        }
+
+        return null !== $select->find('css', sprintf('option[value="%s"]', $reasonCode));
+    }
+
     public function hasItemWithProductName(string $productName): bool
     {
         return str_contains($this->getElement('rma_return_items')->getText(), $productName);

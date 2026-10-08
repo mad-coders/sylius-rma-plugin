@@ -44,6 +44,14 @@ sylius_ui:
           template: "@MadcodersSyliusRmaPlugin/Admin/Product/_nonReturnable.html.twig"
           priority: 10
 
+    # Grace period panel on the admin order page (#67): grant, change or revoke extra days on a
+    # return reason for this order. Below the core notes block (priority 10).
+    sylius.admin.order.show.summary:
+      blocks:
+        madcoders_rma_grace_periods:
+          template: "@MadcodersSyliusRmaPlugin/Admin/Order/_gracePeriods.html.twig"
+          priority: 5
+
     sylius.shop.layout.footer:
       blocks:
         madcoders_rma_return_link:

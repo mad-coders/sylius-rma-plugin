@@ -1,0 +1,83 @@
+<h4 class="ui top attached styled header">
+    {{ 'madcoders_rma.admin.grace_period.header'|trans }}
+</h4>
+<div class="ui attached segment" {{ sylius_test_html_attribute('madcoders-rma-grace-periods') }}>
+    <p>{{ 'madcoders_rma.admin.grace_period.description'|trans }}</p>
+
+    <table class="ui celled compact table">
+        <thead>
+            <tr>
+                <th>{{ 'madcoders_rma.admin.grace_period.reason'|trans }}</th>
+                <th>{{ 'madcoders_rma.admin.grace_period.base_days'|trans }}</th>
+                <th>{{ 'madcoders_rma.admin.grace_period.extra_days'|trans }}</th>
+                <th>{{ 'madcoders_rma.admin.grace_period.last_return_day'|trans }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+            <tr {{ sylius_test_html_attribute('grace-period-row', row.reason.code) }}>
+                <td>{{ row.reason.name }}</td>
+                <td>{{ row.baseDays }}</td>
+                <td {{ sylius_test_html_attribute('grace-period-extra-days', row.reason.code) }}>
+                    {{ row.extraDays ?? 'madcoders_rma.admin.grace_period.none'|trans }}
+                </td>
+                <td>
+                    {% if row.lastReturnDay is not null %}
+                        {{ row.lastReturnDay|date('Y-m-d') }}
+                    {% else %}
+                        {{ 'madcoders_rma.admin.grace_period.not_shipped'|trans }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if row.gracePeriod is not null %}
+                        <form method="post" action="{{ path('madcoders_rma_admin_order_grace_period_revoke', {'orderId': order.id, 'id': row.gracePeriod.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('madcoders_rma_grace_period_revoke_' ~ row.gracePeriod.id) }}" />
+                            <button type="submit" class="ui tiny red labeled icon button" {{ sylius_test_html_attribute('grace-period-revoke', row.reason.code) }}>
+                                <i class="icon remove"></i>
+                                {{ 'madcoders_rma.admin.grace_period.revoke'|trans }}
+                            </button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ form_start(form, {'attr': {'class': 'ui form', 'novalidate': 'novalidate'}}) }}
+        <div class="three fields">
+            {{ form_row(form.reason) }}
+            {{ form_row(form.extraDays) }}
+            {{ form_row(form.note) }}
+        </div>
+        {{ form_row(form._token) }}
+        <button type="submit" class="ui primary button" {{ sylius_test_html_attribute('grace-period-save') }}>
+            {{ 'madcoders_rma.admin.grace_period.save'|trans }}
+        </button>
+    {{ form_end(form, {'render_rest': false}) }}
+
+    <h5 class="ui header">{{ 'madcoders_rma.admin.grace_period.history_header'|trans }}</h5>
+    <div class="ui feed" {{ sylius_test_html_attribute('grace-period-history') }}>
+        {% for entry in history %}
+            <div class="event" {{ sylius_test_html_attribute('grace-period-history-entry', entry.action) }}>
+                <div class="content">
+                    <div class="date">{{ entry.createdAt|date('Y-m-d H:i') }}</div>
+                    <div class="summary">
+                        <a>{{ entry.author.firstName }} {{ entry.author.lastName }}</a>
+                        {{ ('madcoders_rma.admin.grace_period.history.' ~ entry.action)|trans({
+                            '%reason%': entry.reasonCode,
+                            '%days%': entry.extraDays,
+                            '%previous%': entry.previousExtraDays,
+                        }) }}
+                    </div>
+                    {% if entry.note is not null %}
+                        <div class="extra text">{{ entry.note }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p>{{ 'madcoders_rma.admin.grace_period.no_history'|trans }}</p>
+        {% endfor %}
+    </div>
+</div>

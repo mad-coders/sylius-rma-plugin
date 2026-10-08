@@ -48,6 +48,16 @@ class OrderIndexPage extends SymfonyPage implements OrderIndexPageInterface
         $link->click();
     }
 
+    public function hasReturnButtonForOrder(OrderInterface $order): bool
+    {
+        $row = $this->tableAccessor->getRowWithFields(
+            $this->getElement('customer_orders'),
+            ['number' => $order->getNumber()],
+        );
+
+        return null !== $row->find('css', '[data-test-button="madcoders_rma.ui.action.create_new_return"]');
+    }
+
     public function getRouteName(): string
     {
         return 'sylius_shop_account_order_index';

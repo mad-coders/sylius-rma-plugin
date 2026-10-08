@@ -123,6 +123,32 @@ madcoders_rma:
             configuration_updated: 'Configuration updated'
 
     admin:
+        grace_period:
+            header: 'Return grace periods'
+            description: 'Give this order extra days to return items for a chosen reason. Other orders keep the standard deadline.'
+            reason: 'Reason'
+            choose_reason: 'Choose a reason'
+            base_days: 'Deadline (days)'
+            extra_days: 'Extra days'
+            last_return_day: 'Last return day'
+            not_shipped: 'Not shipped yet'
+            none: 'None'
+            note: 'Note (optional)'
+            save: 'Grant or change'
+            revoke: 'Revoke'
+            history_header: 'Grace period history'
+            no_history: 'No grace periods have been granted for this order yet.'
+            flashes:
+                granted: 'The grace period has been granted.'
+                updated: 'The grace period has been changed.'
+                unchanged: 'The grace period was not changed.'
+                revoked: 'The grace period has been revoked.'
+                invalid: 'The grace period could not be saved.'
+            history:
+                granted: 'granted %days% extra days for reason %reason%'
+                updated: 'changed the extra days for reason %reason% from %previous% to %days%'
+                revoked: 'revoked the %previous% extra days for reason %reason%'
+
         flashes:
             success_added_note: 'The note has been added'
         configuration:

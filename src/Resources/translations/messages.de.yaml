@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Bitte drucken und unterschreiben Sie das erstellte Formular. Das Formular muss der Rücksendung beigelegt werden'
             configuration_updated: 'Konfiguration aktualisiert'
     admin:
+        grace_period:
+            header: 'Fristverlängerungen für Rücksendungen'
+            description: 'Geben Sie dieser Bestellung für einen gewählten Grund zusätzliche Tage für die Rücksendung. Andere Bestellungen behalten die Standardfrist.'
+            reason: 'Grund'
+            choose_reason: 'Grund wählen'
+            base_days: 'Frist (Tage)'
+            extra_days: 'Zusätzliche Tage'
+            last_return_day: 'Letzter Rückgabetag'
+            not_shipped: 'Noch nicht versandt'
+            none: 'Keine'
+            note: 'Notiz (optional)'
+            save: 'Gewähren oder ändern'
+            revoke: 'Widerrufen'
+            history_header: 'Verlauf der Fristverlängerungen'
+            no_history: 'Für diese Bestellung wurden noch keine Fristverlängerungen gewährt.'
+            flashes:
+                granted: 'Die Fristverlängerung wurde gewährt.'
+                updated: 'Die Fristverlängerung wurde geändert.'
+                unchanged: 'Die Fristverlängerung wurde nicht geändert.'
+                revoked: 'Die Fristverlängerung wurde widerrufen.'
+                invalid: 'Die Fristverlängerung konnte nicht gespeichert werden.'
+            history:
+                granted: 'hat %days% zusätzliche Tage für den Grund %reason% gewährt'
+                updated: 'hat die zusätzlichen Tage für den Grund %reason% von %previous% auf %days% geändert'
+                revoked: 'hat die %previous% zusätzlichen Tage für den Grund %reason% widerrufen'
+
         flashes:
             success_added_note: 'Die Notiz wurde hinzugefügt'
         configuration:

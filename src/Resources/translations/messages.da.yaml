@@ -105,6 +105,32 @@ madcoders_rma:
             order_return_instruction: 'Udskriv og underskriv den genererede formular. Formularen skal vedlægges returpakken'
             configuration_updated: 'Konfigurationen er opdateret'
     admin:
+        grace_period:
+            header: 'Forlænget returfrist'
+            description: 'Giv denne ordre ekstra dage til returnering for en valgt årsag. Andre ordrer beholder standardfristen.'
+            reason: 'Årsag'
+            choose_reason: 'Vælg en årsag'
+            base_days: 'Frist (dage)'
+            extra_days: 'Ekstra dage'
+            last_return_day: 'Sidste returdag'
+            not_shipped: 'Ikke afsendt endnu'
+            none: 'Ingen'
+            note: 'Note (valgfri)'
+            save: 'Giv eller ændr'
+            revoke: 'Tilbagekald'
+            history_header: 'Historik for forlænget returfrist'
+            no_history: 'Der er endnu ikke givet en forlænget returfrist for denne ordre.'
+            flashes:
+                granted: 'Den forlængede returfrist er givet.'
+                updated: 'Den forlængede returfrist er ændret.'
+                unchanged: 'Den forlængede returfrist blev ikke ændret.'
+                revoked: 'Den forlængede returfrist er tilbagekaldt.'
+                invalid: 'Den forlængede returfrist kunne ikke gemmes.'
+            history:
+                granted: 'gav %days% ekstra dage for årsagen %reason%'
+                updated: 'ændrede de ekstra dage for årsagen %reason% fra %previous% til %days%'
+                revoked: 'tilbagekaldte de %previous% ekstra dage for årsagen %reason%'
+
         flashes:
             success_added_note: 'Noten er tilføjet'
         configuration:

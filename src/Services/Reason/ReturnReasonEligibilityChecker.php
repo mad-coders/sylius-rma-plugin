@@ -23,15 +23,20 @@ use Sylius\Component\Core\Model\ShipmentInterface;
 /**
  * Decides whether a reason can be used to return an order.
  *
- * Owns the order-aware part - resolving the order's shipment and its shipped
- * date - and delegates the actual time-window decision to a
- * ReturnDeadlineCheckerInterface, which keeps the deadline rule reusable and
+ * Owns the order-aware part - resolving the order's shipment, its shipped date and any grace
+ * period granted for this order and reason (#67) - and delegates the actual time-window
+ * decision to a ReturnDeadlineCheckerInterface, which keeps the deadline rule reusable and
  * independently testable.
+ *
+ * A grace period only extends the deadline: the shipment checks run first, so an order that
+ * was not shipped stays ineligible whatever grace it has. A replaced deadline checker that does
+ * not implement GraceAwareReturnDeadlineCheckerInterface keeps the base deadline.
  */
 final readonly class ReturnReasonEligibilityChecker implements ReturnReasonEligibilityCheckerInterface
 {
     public function __construct(
         private ReturnDeadlineCheckerInterface $returnDeadlineChecker,
+        private ?ReturnReasonGracePeriodResolverInterface $gracePeriodResolver = null,
     ) {
     }
 
@@ -45,6 +50,11 @@ final readonly class ReturnReasonEligibilityChecker implements ReturnReasonEligi
         $shippedAt = $shipment->getShippedAt();
         if (null === $shippedAt) {
             return false;
+        }
+
+        $graceDays = $this->gracePeriodResolver?->getExtraDays($order, $reason) ?? 0;
+        if ($graceDays > 0 && $this->returnDeadlineChecker instanceof GraceAwareReturnDeadlineCheckerInterface) {
+            return $this->returnDeadlineChecker->isWithinDeadlineWithGrace($reason, $shippedAt, $graceDays);
         }
 
         return $this->returnDeadlineChecker->isWithinDeadline($reason, $shippedAt);

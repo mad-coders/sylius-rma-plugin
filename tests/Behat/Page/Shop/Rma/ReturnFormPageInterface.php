@@ -51,4 +51,6 @@ interface ReturnFormPageInterface extends SymfonyPageInterface
     public function submitThisOrderReturnForm(): void;
 
     public function hasItemWithProductName(string $productName): bool;
+
+    public function hasReturnReasonOption(string $reasonCode): bool;
 }
