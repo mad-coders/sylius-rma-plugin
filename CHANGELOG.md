@@ -9,6 +9,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
 
 ## [Unreleased]
 
+## [1.4.0-rc.1] - 2026-10-08
+
+First release candidate for the 1.4 line, adding per-order grace periods for return reason
+deadlines on top of 1.3.1. Ships one Doctrine migration (`Version20261007000000`). Upgrading from
+1.3.x: see [UPGRADE.md](UPGRADE.md#upgrade-from-13x-to-140).
+
 ### Added
 
 - **Per-order grace periods for return reason deadlines**
@@ -24,6 +30,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   `madcoders_rma_order_return_reason_grace_period_log`. Applications that replaced
   `ReturnDeadlineCheckerInterface` must implement the new `GraceAwareReturnDeadlineCheckerInterface`
   for grace periods to apply.
+
+### Changed
+
+- Repo-internal only: CI now also runs on pushes to the `1.3` and `1.4` release lines, so every
+  merge into them is verified, not only the pull request.
 
 ## [1.3.1] - 2026-10-06
 
@@ -473,7 +484,8 @@ pre-shipment orders.
 
 - Initial release of the RMA plugin for Sylius `~1.8 || ~1.9`.
 
-[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.1...HEAD
+[Unreleased]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.4.0-rc.1...HEAD
+[1.4.0-rc.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.1...1.4.0-rc.1
 [1.3.1]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.2.0...1.3.0
 [1.3.0-rc.8]: https://github.com/mad-coders/sylius-rma-plugin/compare/1.3.0-rc.7...1.3.0-rc.8
