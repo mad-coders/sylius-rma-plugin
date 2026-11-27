@@ -55,6 +55,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html), and commi
   dependency tree that do not apply to Sylius 2.2. Both are removed; the Sylius 2 tree needs no
   suppressions at all ([#30](https://github.com/mad-coders/sylius-rma-plugin/issues/30)).
 
+- **Shop error messages no longer show raw translation keys**: four shop flashes (no access to
+  an order or return, not logged in, return in an invalid state, expired session) were added
+  untranslated and rendered as keys such as `madcoders_rma.ui.return.user_not_privileges_to_this_order`.
+  They are now translated, and the three keys that had no translation at all exist in all 8
+  locales ([#80](https://github.com/mad-coders/sylius-rma-plugin/issues/80)).
+
+### Tests
+
+- **The return-form PDF path is covered by Behat**: a `test_pdf` kernel environment and a `pdf`
+  Behat profile run the PDF-enabled scenarios (success-page print link, account download, access
+  to another customer's return, no-session access) with a recording PDF generator in place of
+  Gotenberg, and the default profile covers the PDF-disabled behaviour. `make backend-test` creates
+  the extra `madcoders_rma_test_pdf` database and `make behat` runs both profiles
+  ([#80](https://github.com/mad-coders/sylius-rma-plugin/issues/80)).
+
 ### Security
 
 - Carried up from the 1.3 line (rc.4): the three return/withdrawal security fixes below

@@ -44,9 +44,11 @@ backend: ## Create the dev database and schema (APP_ENV=dev)
 	APP_ENV=dev $(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
 	APP_ENV=dev $(TEST_APP)/bin/console doctrine:schema:create --no-interaction
 
-backend-test: ## Create the test database and schema (APP_ENV=test; used by Behat and CI)
+backend-test: ## Create the test databases and schemas (APP_ENV=test and test_pdf; used by Behat and CI)
 	APP_ENV=test $(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
 	APP_ENV=test $(TEST_APP)/bin/console doctrine:schema:create --no-interaction
+	APP_ENV=test_pdf $(TEST_APP)/bin/console doctrine:database:create --if-not-exists --no-interaction
+	APP_ENV=test_pdf $(TEST_APP)/bin/console doctrine:schema:create --no-interaction
 
 frontend: ## Install and build the test application assets
 	(cd $(TEST_APP) && yarn install --ignore-engines)
@@ -92,8 +94,9 @@ test: phpunit behat ## Run PHPUnit and the non-JS Behat suite
 phpunit: ## Run PHPUnit (unit/component) tests
 	vendor/bin/phpunit -c phpunit.xml.dist
 
-behat: ## Run the non-JavaScript Behat suite
+behat: ## Run the non-JavaScript Behat suites (default profile, then the return-form PDF profile)
 	$(BEHAT) --tags="~@javascript"
+	$(BEHAT) --profile=pdf --suite=madcoders_rma_return_form_pdf --tags="~@javascript"
 
 behat-js: ## Run the JavaScript Behat suite (needs docker-up-all + a running server)
 	$(BEHAT) --tags="@javascript"

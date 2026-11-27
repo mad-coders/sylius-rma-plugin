@@ -13,6 +13,7 @@ imports:
     - suites/ui/credits.yml
     - suites/ui/shop/rma/auth.yml
     - suites/ui/shop/rma/submit_form.yml
+    - suites/ui/shop/rma/return_form_pdf.yml
     - suites/ui/shop/rma/customer_area.yml
     - suites/ui/shop/rma/withdrawal.yml
     - suites/ui/shop/rma/non_returnable.yml

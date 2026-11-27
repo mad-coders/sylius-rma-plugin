@@ -1,0 +1,6 @@
+# Same as the test environment, plus the opt-in return-form PDF (Behat profile "pdf").
+imports:
+    - { resource: "../test/*.yaml" }
+
+madcoders_sylius_rma:
+    return_form_pdf_enabled: true
