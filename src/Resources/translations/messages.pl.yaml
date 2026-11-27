@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Twoja sesja wygasła'
             pdf_disabled: 'Pobieranie formularza zwrotu w PDF jest obecnie wyłączone.'
+            user_not_privileges_to_this_order: 'Nie masz dostępu do tego zamówienia ani zwrotu.'
+            user_not_login: 'Zaloguj się, aby zobaczyć swoje zwroty.'
+            invalid_state: 'Tego zwrotu nie można przetworzyć w jego obecnym stanie.'
         footer:
             start_return: 'Zwróć zamówienie'
         action:

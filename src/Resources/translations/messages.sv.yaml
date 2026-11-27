@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Din session har gått ut'
             pdf_disabled: 'Nedladdning av returformuläret som PDF är för närvarande inaktiverad.'
+            user_not_privileges_to_this_order: 'Du har inte åtkomst till den här ordern eller returen.'
+            user_not_login: 'Logga in för att se dina returer.'
+            invalid_state: 'Den här returen kan inte hanteras i sin nuvarande status.'
         footer:
             start_return: 'Returnera en beställning'
         action:

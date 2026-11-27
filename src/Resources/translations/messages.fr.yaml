@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Votre session a expiré'
             pdf_disabled: 'Le téléchargement du formulaire de retour en PDF est actuellement désactivé.'
+            user_not_privileges_to_this_order: 'Vous n''avez pas accès à cette commande ni à ce retour.'
+            user_not_login: 'Veuillez vous connecter pour voir vos retours.'
+            invalid_state: 'Ce retour ne peut pas être traité dans son état actuel.'
         footer:
             start_return: 'Retourner une commande'
         action:

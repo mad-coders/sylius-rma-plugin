@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Your session has expired'
             pdf_disabled: 'Return form PDF download is currently disabled.'
+            user_not_privileges_to_this_order: 'You do not have access to this order or return.'
+            user_not_login: 'Please log in to see your returns.'
+            invalid_state: 'This return cannot be processed in its current state.'
         footer:
             start_return: 'Return an order'
         action:

@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Ihre Sitzung ist abgelaufen'
             pdf_disabled: 'Der PDF-Download des Rücksendeformulars ist derzeit deaktiviert.'
+            user_not_privileges_to_this_order: 'Sie haben keinen Zugriff auf diese Bestellung oder Rücksendung.'
+            user_not_login: 'Bitte melden Sie sich an, um Ihre Rücksendungen zu sehen.'
+            invalid_state: 'Diese Rücksendung kann in ihrem aktuellen Status nicht bearbeitet werden.'
         footer:
             start_return: 'Bestellung zurücksenden'
         action:

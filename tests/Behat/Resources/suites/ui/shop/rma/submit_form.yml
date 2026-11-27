@@ -50,6 +50,7 @@ default:
                 - madcoders.rma.context.ui.shop.rma.additional_information
                 - madcoders.rma.context.ui.shop.rma.return_review
                 - madcoders.rma.context.ui.shop.rma.return_success
+                - madcoders.rma.context.ui.shop.rma.return_form_pdf
 
             filters:
                 tags: "@madcoders_rma_submit_form && @ui"

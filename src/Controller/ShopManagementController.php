@@ -158,7 +158,7 @@ final class ShopManagementController extends AbstractController
 
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
-        $flashBag->add('error', $errorMessage);
+        $flashBag->add('error', $this->translator->trans($errorMessage));
 
         return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }
@@ -173,7 +173,7 @@ final class ShopManagementController extends AbstractController
 
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
-        $flashBag->add('error', $errorMessage);
+        $flashBag->add('error', $this->translator->trans($errorMessage));
 
         return new RedirectResponse($this->router->generate('sylius_shop_homepage'));
     }

@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'Tu sesión ha caducado'
             pdf_disabled: 'La descarga del formulario de devolución en PDF está deshabilitada actualmente.'
+            user_not_privileges_to_this_order: 'No tienes acceso a este pedido ni a esta devolución.'
+            user_not_login: 'Inicia sesión para ver tus devoluciones.'
+            invalid_state: 'Esta devolución no se puede procesar en su estado actual.'
         footer:
             start_return: 'Devolver un pedido'
         action:

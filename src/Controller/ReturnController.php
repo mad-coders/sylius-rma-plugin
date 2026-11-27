@@ -281,7 +281,7 @@ final class ReturnController extends AbstractController
 
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
-        $flashBag->add('error', $errorMessage);
+        $flashBag->add('error', $this->translator->trans($errorMessage));
 
         return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }
@@ -296,7 +296,7 @@ final class ReturnController extends AbstractController
 
         /** @var FlashBagInterface $flashBag */
         $flashBag = $request->getSession()->getBag('flashes');
-        $flashBag->add('error', $errorMessage);
+        $flashBag->add('error', $this->translator->trans($errorMessage));
 
         return new RedirectResponse($this->router->generate('madcoders_rma_start'));
     }
