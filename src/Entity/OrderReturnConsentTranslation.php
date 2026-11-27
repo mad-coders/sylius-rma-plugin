@@ -25,7 +25,7 @@ class OrderReturnConsentTranslation extends AbstractTranslation implements Order
 
     private string $name = '';
 
-    private string $slug = '';
+    private ?string $slug = null;
 
     private ?string $description = null;
 
@@ -56,7 +56,9 @@ class OrderReturnConsentTranslation extends AbstractTranslation implements Order
 
     public function setSlug(?string $slug): void
     {
-        $this->slug = $slug ?? '';
+        // An inline consent has no slug. It is stored as NULL rather than '' so any number of them fit
+        // the (locale, slug) unique index, which ignores NULLs (#69).
+        $this->slug = null === $slug || '' === trim($slug) ? null : $slug;
     }
 
     public function getDescription(): ?string
