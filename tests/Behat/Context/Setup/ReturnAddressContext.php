@@ -97,7 +97,9 @@ class ReturnAddressContext implements Context
 
     private function getCountryCodeByName(string $countryName): string
     {
-        $countryList = array_flip(Countries::getNames());
+        // Feature files name countries in English; without an explicit locale the lookup follows
+        // the process default (e.g. pl_PL on a developer machine) until a request resets it.
+        $countryList = array_flip(Countries::getNames('en'));
         Assert::keyExists(
             $countryList,
             $countryName,
