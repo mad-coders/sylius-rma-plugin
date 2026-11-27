@@ -22,5 +22,6 @@ madcoders_rma:
             not_blank: 'Please enter the name'
         slug:
             not_blank: 'Please enter the slug'
+            unique: 'This slug is already used in this locale'
         code:
             not_blank: 'Please enter the code'

@@ -127,6 +127,38 @@ class ReturnReasonContext implements Context
     }
 
     /**
+     * @When I fill the :localeCode translation of the create form with following data:
+     */
+    public function iFillTranslationOfCreateForm(string $localeCode, TableNode $table): void
+    {
+        foreach ($table as $row) {
+            $this->returnReasonCreatePage->choosesFormElement($row['value'], $this->translationLocator($localeCode, $row['field']));
+        }
+    }
+
+    /**
+     * @When I change the :localeCode translation of the edit form with following data:
+     */
+    public function iChangeTranslationOfEditForm(string $localeCode, TableNode $table): void
+    {
+        foreach ($table as $row) {
+            $this->returnReasonUpdatePage->choosesFormElement($row['value'], $this->translationLocator($localeCode, $row['field']));
+        }
+    }
+
+    /**
+     * @Then I should see the validation message :message
+     */
+    public function iShouldSeeTheValidationMessage(string $message): void
+    {
+        // the create and update pages share the Mink session, so either one reads the current document
+        Assert::true(
+            $this->returnReasonCreatePage->hasValidationMessage($message),
+            sprintf('Expected to see the validation message "%s", but it was not found on the page.', $message),
+        );
+    }
+
+    /**
      * @When I delete the :returnReasonName return reason
      */
     public function iDeleteReturnReason(string $returnReasonName)
@@ -210,6 +242,11 @@ class ReturnReasonContext implements Context
         Assert::notNull($returnReason);
 
         return $returnReason->getId();
+    }
+
+    private function translationLocator(string $localeCode, string $field): string
+    {
+        return sprintf('madcoders_rma_return_reason_translations_%s_%s', $localeCode, $field);
     }
 
     private function getAdminLocaleCode(): string
