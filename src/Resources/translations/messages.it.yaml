@@ -7,6 +7,9 @@ madcoders_rma:
         return:
             session_not_valid: 'La tua sessione è scaduta'
             pdf_disabled: 'Il download del modulo di reso in PDF è attualmente disabilitato.'
+            user_not_privileges_to_this_order: 'Non hai accesso a questo ordine o a questo reso.'
+            user_not_login: 'Accedi per vedere i tuoi resi.'
+            invalid_state: 'Questo reso non può essere elaborato nel suo stato attuale.'
         footer:
             start_return: 'Restituisci un ordine'
         action:
